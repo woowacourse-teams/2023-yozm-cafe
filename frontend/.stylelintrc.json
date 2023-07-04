@@ -4,8 +4,8 @@
   ],
   "customSyntax": "postcss-styled-syntax",
   "plugins": [
-		"stylelint-order"
-	],
+    "stylelint-order"
+  ],
   "rules": {
     "order/order": [
       "custom-properties",
