@@ -14,9 +14,13 @@ export default {
   module: {
     rules: [
       {
-        test: /\.[tj]sx?/,
+        test: /\.[tj]sx?$/i,
         exclude: /node_modules/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
