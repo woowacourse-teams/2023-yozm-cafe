@@ -19,6 +19,7 @@ server/bin/
 
 ### IntelliJ IDEA ###
 server/.idea
+.idea
 server/*.iws
 server/*.iml
 server/*.ipr
