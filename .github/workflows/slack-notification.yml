@@ -1,0 +1,21 @@
+name: Slack Notification
+on:
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  slack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            PR 작성됨! 
+            ${{ github.actor }} 님이 새로운 PR을 만들었습니다. 
+            PR 링크: ${{ github.event.pull_request.html_url }}
+          fields: repo,message,commit,author,eventName,ref,workflow
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.YOZM_CAFE_SLACK }}
+        if: always()
