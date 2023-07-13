@@ -13,6 +13,10 @@ const theme = {
       primary: '#777777',
       secondary: '#BABABA',
     },
+    background: {
+      primary: '#f8f8f8',
+      secondary: '#FFFFFF',
+    },
   },
   fontSize: {
     xs: '0.75rem',
