@@ -1,0 +1,23 @@
+{
+  "[typescriptreact]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+  "stylelint.validate": [
+    "css",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.rulers": [120],
+  "files.exclude": {
+    "**/node_modules": true
+  }
+}
