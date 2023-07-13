@@ -14,9 +14,13 @@ export default {
   module: {
     rules: [
       {
-        test: /\.[tj]sx?/,
+        test: /\.[tj]sx?$/i,
         exclude: /node_modules/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
@@ -32,5 +36,7 @@ export default {
   devServer: {
     hot: true,
     port: 3000,
+    allowedHosts: 'all',
+    historyApiFallback: true,
   },
 };
