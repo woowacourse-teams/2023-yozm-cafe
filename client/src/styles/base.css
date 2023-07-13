@@ -1,5 +1,19 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 * {
   font-family: 'Pretendard', sans-serif;
+}
+
+body {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  width: 100vw;
+  height: 100svh;
+}
+
+#root {
+  max-width: 495px;
+  width: 100%;
+  border: 2px solid black;
 }
