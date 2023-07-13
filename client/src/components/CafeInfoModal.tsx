@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import { SlArrowDown } from 'react-icons/sl';
 
-type CafeInfoModal = {
+type CafeInfoModalProps = {
   title: string;
   address: string;
   content: string;
 };
 
-const CafeInfoModal = ({ title, address, content }: CafeInfoModal) => {
+const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
