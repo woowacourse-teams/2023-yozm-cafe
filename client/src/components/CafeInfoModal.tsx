@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { SlArrowDown } from 'react-icons/sl';
 
 type CafeInfoModal = {
   title: string;
@@ -15,6 +16,11 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModal) => {
       <Container className={isOpen ? 'active' : ''} onClick={() => setIsOpen(!isOpen)}>
         <Title>{title}</Title>
         <Address>{address}</Address>
+        {!isOpen && (
+          <ArrowDownContainer>
+            <StyledArrowDown />
+          </ArrowDownContainer>
+        )}
         <Content>{content}</Content>
       </Container>
     </>
@@ -22,6 +28,16 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModal) => {
 };
 
 export default CafeInfoModal;
+
+const StyledArrowDown = styled(SlArrowDown)`
+  color: ${({ theme }) => theme.color.line.secondary};
+  font-size: ${({ theme }) => theme.fontSize['2xl']};
+`;
+
+const ArrowDownContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSize['3xl']};
