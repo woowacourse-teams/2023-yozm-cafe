@@ -2,10 +2,12 @@ import CafeInfoModal from './CafeInfoModal';
 import type { Meta, StoryObj } from '@storybook/react';
 
 type Story = StoryObj<typeof CafeInfoModal>;
+
 const meta: Meta<typeof CafeInfoModal> = {
   title: 'CafeInfoModal',
   component: CafeInfoModal,
 };
+
 export default meta;
 
 export const Default: Story = {
