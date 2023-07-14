@@ -3,16 +3,23 @@ import { styled } from 'styled-components';
 
 const CommentButton = () => {
   return (
-    <Button>
-      <FaRegComment size={40} />
-    </Button>
+    <Wrapper>
+      <Button>
+        <FaRegComment />
+      </Button>
+    </Wrapper>
   );
 };
 
 export default CommentButton;
 
-const Button = styled.button`
+const Wrapper = styled.aside`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Button = styled(FaRegComment)`
   cursor: pointer;
-  background: transparent;
-  border: none;
+  font-size: ${({ theme }) => theme.fontSize['3xl']};
 `;

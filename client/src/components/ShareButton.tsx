@@ -4,15 +4,14 @@ import { styled } from 'styled-components';
 const ShareButton = () => {
   return (
     <Button>
-      <FaShare size={45} />
+      <FaShare />
     </Button>
   );
 };
 
 export default ShareButton;
 
-const Button = styled.button`
+const Button = styled(FaShare)`
   cursor: pointer;
-  background: transparent;
-  border: none;
+  font-size: ${({ theme }) => theme.fontSize['3xl']};
 `;
