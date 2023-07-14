@@ -7,11 +7,11 @@ const Navbar = () => {
 
   return (
     <Container>
-      <IconContainer to="/" isactive={pathname === '/' ? 'true' : 'false'}>
+      <IconContainer to="/" $isActive={pathname === '/'}>
         <Icon as={PiHouseLight} />
         <IconName>홈</IconName>
       </IconContainer>
-      <IconContainer to="/login" isactive={pathname === '/login' ? 'true' : 'false'}>
+      <IconContainer to="/login" $isActive={pathname === '/login'}>
         <Icon as={PiUserCircleLight} />
         <IconName>로그인</IconName>
       </IconContainer>
@@ -25,13 +25,13 @@ const IconName = styled.span`
   font-size: small;
 `;
 
-const IconContainer = styled(Link)<{ isactive: string }>`
+const IconContainer = styled(Link)<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
 
-  color: ${({ isactive, theme }) => (isactive === 'true' ? theme.color.primary : theme.color.text.secondary)};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.color.primary : theme.color.text.secondary)};
   text-decoration: none;
 `;
 
