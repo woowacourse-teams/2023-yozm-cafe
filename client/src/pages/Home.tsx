@@ -11,8 +11,8 @@ const Home = () => {
       <AppHeader />
       <CardList></CardList>
       <Aside>
-        <CommentButton></CommentButton>
-        <ShareButton></ShareButton>
+        <CommentButton />
+        <ShareButton />
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
       <BottomNavbar />
