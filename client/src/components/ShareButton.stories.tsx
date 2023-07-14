@@ -7,6 +7,7 @@ const meta: Meta<typeof ShareButton> = {
   title: 'ShareButton',
   component: ShareButton,
 };
+
 export default meta;
 
 export const Default: Story = {

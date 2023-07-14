@@ -7,6 +7,7 @@ const meta: Meta<typeof CommentButton> = {
   title: 'CommentButton',
   component: CommentButton,
 };
+
 export default meta;
 
 export const Default: Story = {
