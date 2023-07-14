@@ -3,21 +3,13 @@ import { styled } from 'styled-components';
 
 const CommentButton = () => {
   return (
-    <Wrapper>
-      <Button>
-        <FaRegComment size={45} />
-      </Button>
-    </Wrapper>
+    <Button>
+      <FaRegComment size={40} />
+    </Button>
   );
 };
 
 export default CommentButton;
-
-const Wrapper = styled.aside`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 const Button = styled.button`
   cursor: pointer;
