@@ -1,8 +1,9 @@
 import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
-import AsideActionBar from '../components/AsideActionBar';
 import BottomNavbar from '../components/BottomNavbar';
 import CafeInfoModal from '../components/CafeInfoModal';
+import CommentButton from '../components/CommentButton';
+import ShareButton from '../components/ShareButton';
 
 const Home = () => {
   return (
@@ -10,7 +11,8 @@ const Home = () => {
       <AppHeader />
       <CardList></CardList>
       <Aside>
-        <AsideActionBar />
+        <CommentButton></CommentButton>
+        <ShareButton></ShareButton>
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
       <BottomNavbar />
@@ -48,10 +50,11 @@ const CardList = styled.ul`
 const Aside = styled.div`
   position: absolute;
   right: 0;
-  bottom: 240px;
+  bottom: 250px;
 
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 40px;
 
   padding: 20px;
 `;
