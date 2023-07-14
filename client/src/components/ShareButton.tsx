@@ -2,9 +2,13 @@ import { FaShare } from 'react-icons/Fa';
 import { styled } from 'styled-components';
 
 const ShareButton = () => {
+  const handleClick = () => {
+    alert('아직 준비중입니다!');
+  };
+
   return (
     <Wrapper>
-      <Button />
+      <Button onClick={handleClick} />
     </Wrapper>
   );
 };
