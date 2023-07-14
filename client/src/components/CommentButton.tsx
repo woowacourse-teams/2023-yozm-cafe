@@ -4,9 +4,7 @@ import { styled } from 'styled-components';
 const CommentButton = () => {
   return (
     <Wrapper>
-      <Button>
-        <FaRegComment />
-      </Button>
+      <Button />
     </Wrapper>
   );
 };

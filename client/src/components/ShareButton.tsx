@@ -3,13 +3,19 @@ import { styled } from 'styled-components';
 
 const ShareButton = () => {
   return (
-    <Button>
-      <FaShare />
-    </Button>
+    <Wrapper>
+      <Button />
+    </Wrapper>
   );
 };
 
 export default ShareButton;
+
+const Wrapper = styled.aside`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Button = styled(FaShare)`
   cursor: pointer;
