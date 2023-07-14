@@ -1,9 +1,11 @@
 import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
-import BottomNavbar from '../components/BottomNavbar';
+import Navbar from '../components/Navbar';
 import CafeInfoModal from '../components/CafeInfoModal';
 import CommentButton from '../components/CommentButton';
 import ShareButton from '../components/ShareButton';
+
+
 
 const Home = () => {
   return (
@@ -15,7 +17,7 @@ const Home = () => {
         <ShareButton />
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
-      <BottomNavbar />
+      <Navbar />
     </Container>
   );
 };
