@@ -7,15 +7,15 @@ const ShareButton = () => {
   };
 
   return (
-    <Wrapper>
+    <Container>
       <Button onClick={handleClick} />
-    </Wrapper>
+    </Container>
   );
 };
 
 export default ShareButton;
 
-const Wrapper = styled.aside`
+const Container = styled.aside`
   display: flex;
   flex-direction: column;
   align-items: center;
