@@ -1,6 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
-import com.project.yozmcafe.domain.Member;
+import com.project.yozmcafe.domain.member.Member;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
