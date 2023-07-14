@@ -1,8 +1,8 @@
 import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
 import AsideActionBar from '../components/AsideActionBar';
-import BottomNavbar from '../components/BottomNavbar';
 import CafeInfoModal from '../components/CafeInfoModal';
+import Navbar from '../components/Navbar';
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
         <AsideActionBar />
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
-      <BottomNavbar />
+      <Navbar />
     </Container>
   );
 };
