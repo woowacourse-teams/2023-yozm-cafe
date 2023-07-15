@@ -1,13 +1,26 @@
+type CafeImage = {
+  urls: string[];
+};
+
+type AvailableTime = {
+  day: string;
+  open: string;
+  close: string;
+  opened: boolean;
+};
+
+type CafeDetail = {
+  availableTimes: AvailableTime[];
+  mapUrl: string;
+  description: string;
+};
+
 export type Cafe = {
   id: number;
-  title: string;
+  name: string;
   address: string;
-  images: string[];
-  like: number | null;
+  images: CafeImage;
+  isLiked: boolean;
   likeCount: number;
-  detail: {
-    available: string;
-    addressUrl: string;
-    etc: string;
-  };
+  detail: CafeDetail;
 };
