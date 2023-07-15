@@ -34,5 +34,6 @@ export default {
     port: 3000,
     allowedHosts: 'all',
     historyApiFallback: true,
+    open: true,
   },
 };
