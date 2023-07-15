@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
 import AsideActionBar from '../components/AsideActionBar';
 import CafeInfoModal from '../components/CafeInfoModal';
+import LikeButton from '../components/LikeButton';
 import Navbar from '../components/Navbar';
 
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
       <AppHeader />
       <CardList></CardList>
       <Aside>
+        <LikeButton currentLikeCount={1} />
         <AsideActionBar />
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
