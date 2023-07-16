@@ -9,8 +9,8 @@ const customViewports = {
   Default: {
     name: 'Default',
     styles: {
-      width: '1280px',
-      height: '832px',
+      width: '390px',
+      height: '844px',
     },
   },
 };
