@@ -1,9 +1,13 @@
 import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
 import AsideActionBar from '../components/AsideActionBar';
-import CafeInfoModal from '../components/CafeInfoModal';
 import LikeButton from '../components/LikeButton';
 import Navbar from '../components/Navbar';
+import CafeInfoModal from '../components/CafeInfoModal';
+import CommentButton from '../components/CommentButton';
+import ShareButton from '../components/ShareButton';
+
+
 
 const Home = () => {
   return (
@@ -13,6 +17,8 @@ const Home = () => {
       <Aside>
         <LikeButton likeCount={1} />
         <AsideActionBar />
+        <CommentButton />
+        <ShareButton />
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
       <Navbar />
@@ -50,10 +56,11 @@ const CardList = styled.ul`
 const Aside = styled.div`
   position: absolute;
   right: 0;
-  bottom: 240px;
+  bottom: 250px;
 
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 40px;
 
   padding: 20px;
 `;
