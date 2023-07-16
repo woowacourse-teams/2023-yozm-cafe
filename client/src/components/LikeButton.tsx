@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 
 type LikeButtonProps = {
   likeCount: number;
+  onChange: (likeCount: number) => void;
 };
 
 const LikeButton = ({ likeCount }: LikeButtonProps) => {
