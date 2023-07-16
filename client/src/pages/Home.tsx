@@ -1,11 +1,9 @@
 import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
-import Navbar from '../components/Navbar';
 import CafeInfoModal from '../components/CafeInfoModal';
 import CommentButton from '../components/CommentButton';
+import Navbar from '../components/Navbar';
 import ShareButton from '../components/ShareButton';
-
-
 
 const Home = () => {
   return (
