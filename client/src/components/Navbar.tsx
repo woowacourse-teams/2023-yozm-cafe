@@ -41,9 +41,8 @@ const Container = styled.nav`
 
   width: 100%;
   height: 72px;
-  padding: ${({ theme }) => theme.space['2']} ${({ theme }) => theme.space['24']};
 
-  background-color: ${({ theme }) => theme.color.background.secondary};
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 const Icon = styled.div`
