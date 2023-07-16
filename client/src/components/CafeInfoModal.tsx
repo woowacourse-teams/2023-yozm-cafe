@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { styled } from 'styled-components';
 import { SlArrowDown } from 'react-icons/sl';
+import { styled } from 'styled-components';
 
 type CafeInfoModalProps = {
   title: string;
@@ -30,8 +30,8 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
 export default CafeInfoModal;
 
 const StyledArrowDown = styled(SlArrowDown)`
-  color: ${({ theme }) => theme.color.line.secondary};
   font-size: ${({ theme }) => theme.fontSize['2xl']};
+  color: ${({ theme }) => theme.color.line.secondary};
 `;
 
 const ArrowDownContainer = styled.div`
