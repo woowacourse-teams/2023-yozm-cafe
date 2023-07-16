@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import { styled } from 'styled-components';
 import theme from '../styles/theme';
 
@@ -13,7 +13,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 const Button = ({ children, ...rest }: ButtonProps) => {
   return <StyledButton {...rest}>{children}</StyledButton>;
 };
-export default React.memo(Button);
+export default Button;
 
 const StyledButton = styled.button<ButtonProps>`
   width: ${(props) => props.width};
