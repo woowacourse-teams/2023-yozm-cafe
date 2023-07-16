@@ -1,4 +1,4 @@
-import { FaShare } from 'react-icons/Fa';
+import { FaShare } from 'react-icons/fa';
 import { styled } from 'styled-components';
 
 const ShareButton = () => {

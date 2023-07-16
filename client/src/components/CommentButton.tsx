@@ -1,4 +1,4 @@
-import { FaRegComment } from 'react-icons/Fa';
+import { FaRegComment } from 'react-icons/fa';
 import { styled } from 'styled-components';
 
 const CommentButton = () => {
