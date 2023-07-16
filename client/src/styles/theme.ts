@@ -61,6 +61,9 @@ const theme = {
     '4': '0 0 8px 8px rgba(0, 0, 0, 0.2)',
     '5': '0 0 10px 10px rgba(0, 0, 0, 0.2)',
   },
+
+  lightTheme: {},
+  darkTheme: {},
 } as const;
 
 export default theme;
