@@ -1,15 +1,32 @@
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import AppHeader from '../components/AppHeader';
+import AsideActionBar from '../components/AsideActionBar';
 import CafeInfoModal from '../components/CafeInfoModal';
 import CommentButton from '../components/CommentButton';
+import LikeButton from '../components/LikeButton';
+import Navbar from '../components/Navbar';
 import ShareButton from '../components/ShareButton';
 
 const Home = () => {
+  const [likeCount, setLikeCount] = useState(1);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleLikeChange = () => {
+    if (isLiked) {
+      setLikeCount(likeCount - 1);
+    } else {
+      setLikeCount(likeCount + 1);
+    }
+    setIsLiked(!isLiked);
+  };
   return (
     <Container>
       <AppHeader />
       <CardList></CardList>
       <Aside>
+        <LikeButton likeCount={1} onChange={handleLikeChange} />
+        <AsideActionBar />
         <CommentButton />
         <ShareButton />
       </Aside>
