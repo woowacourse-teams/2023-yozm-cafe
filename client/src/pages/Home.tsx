@@ -20,7 +20,6 @@ const Home = () => {
     }
     setIsLiked(!isLiked);
   };
-
   return (
     <Container>
       <AppHeader />
@@ -32,7 +31,6 @@ const Home = () => {
         <ShareButton />
       </Aside>
       <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
-      <Navbar />
     </Container>
   );
 };

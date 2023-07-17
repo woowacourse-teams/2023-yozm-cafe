@@ -88,7 +88,7 @@ const Container = styled.main`
     height: 700px;
 
     opacity: 1;
-    background: ${({ theme }) => theme.color.background.secondary};
+    background: ${({ theme }) => theme.color.white};
     backdrop-filter: none;
   }
 
