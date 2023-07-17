@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 import theme, { Theme } from '../styles/theme';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  color: keyof Theme['color'];
-  border?: string;
+  $color: keyof Theme['color'];
+  $border?: string;
 };
 
 const LoginButton = ({ children, ...rest }: ButtonProps) => {
@@ -23,7 +23,7 @@ const Container = styled.button<ButtonProps>`
   font-size: ${({ theme }) => theme.fontSize.base};
   font-weight: 600;
 
-  background-color: ${(props) => theme.color[props.color]};
-  border: ${(props) => props.border};
+  background-color: ${(props) => theme.color[props.$color]};
+  border: ${(props) => props.$border};
   border-radius: 40px;
 `;
