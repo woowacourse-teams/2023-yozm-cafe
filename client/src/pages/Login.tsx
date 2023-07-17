@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import Button from '../components/Button';
+import Button from '../components/LoginButton';
 import Logo from '../components/Logo';
 
 const Login = () => {
@@ -10,7 +10,7 @@ const Login = () => {
       </LogoContainer>
       <ButtonContainer>
         <KakaoLoginButton>
-          <Button width="20rem" height="50px" color="yellow" border="none" fontWeight="600">
+          <Button color="yellow" border="none">
             <ButtonContent>
               <img src="/assets/kakao.svg" alt="카카오 로고" />
               <ButtonText>카카오 계정으로 로그인</ButtonText>
@@ -18,7 +18,7 @@ const Login = () => {
           </Button>
         </KakaoLoginButton>
         <GoogleLoginButton>
-          <Button width="20rem" height="50px" color="white" border="solid" fontWeight="600">
+          <Button color="white">
             <ButtonContent>
               <img src="/assets/google.svg" alt="카카오 로고" />
               <ButtonText>구글 계정으로 로그인</ButtonText>
@@ -54,8 +54,6 @@ const ButtonContainer = styled.section`
 const ButtonContent = styled.div`
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  padding: ${({ theme }) => theme.space[3]} ${({ theme }) => theme.space[4]};
 `;
 
 const ButtonText = styled.span`
