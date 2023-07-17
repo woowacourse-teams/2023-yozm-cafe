@@ -14,6 +14,12 @@ public class Cafes {
     }
 
     public List<Cafe> pickRandomCafe() {
+        if (cafes.isEmpty()) {
+            return new ArrayList<>();
+        }
+        if (cafes.size() < CARD_LIMIT_SIZE) {
+            return List.copyOf(cafes);
+        }
         Set<Cafe> randomCafes = new HashSet<>();
         while (randomCafes.size() < CARD_LIMIT_SIZE) {
             final int randomIdx = (int) Math.floor(Math.random() * (cafes.size() - 1));
