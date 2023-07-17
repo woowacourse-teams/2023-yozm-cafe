@@ -1,4 +1,4 @@
-type CafeImage = {
+type CafeImages = {
   urls: string[];
 };
 
@@ -19,7 +19,7 @@ export type Cafe = {
   id: number;
   name: string;
   address: string;
-  images: CafeImage;
+  images: CafeImages;
   isLiked: boolean;
   likeCount: number;
   detail: CafeDetail;
