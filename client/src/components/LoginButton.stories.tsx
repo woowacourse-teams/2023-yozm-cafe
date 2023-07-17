@@ -12,7 +12,7 @@ export default meta;
 
 export const Default: Story = {
   args: {
-    border: 'none',
-    color: 'yellow',
+    $border: 'none',
+    $color: 'yellow',
   },
 };

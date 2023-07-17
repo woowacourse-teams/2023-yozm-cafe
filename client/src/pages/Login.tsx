@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import Button from '../components/LoginButton';
+import LoginButton from '../components/LoginButton';
 import Logo from '../components/Logo';
 
 const Login = () => {
@@ -10,20 +10,20 @@ const Login = () => {
       </LogoContainer>
       <ButtonContainer>
         <KakaoLoginButton>
-          <Button color="yellow" border="none">
+          <LoginButton $color="yellow" $border="none">
             <ButtonContent>
               <img src="/assets/kakao.svg" alt="카카오 로고" />
               <ButtonText>카카오 계정으로 로그인</ButtonText>
             </ButtonContent>
-          </Button>
+          </LoginButton>
         </KakaoLoginButton>
         <GoogleLoginButton>
-          <Button color="white">
+          <LoginButton $color="white">
             <ButtonContent>
               <img src="/assets/google.svg" alt="카카오 로고" />
               <ButtonText>구글 계정으로 로그인</ButtonText>
             </ButtonContent>
-          </Button>
+          </LoginButton>
         </GoogleLoginButton>
       </ButtonContainer>
     </Container>
