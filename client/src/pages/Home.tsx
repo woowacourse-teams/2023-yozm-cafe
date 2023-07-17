@@ -1,37 +1,34 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
-import AppHeader from '../components/AppHeader';
-import AsideActionBar from '../components/AsideActionBar';
-import CafeInfoModal from '../components/CafeInfoModal';
-import CommentButton from '../components/CommentButton';
-import LikeButton from '../components/LikeButton';
+import CafeCard from '../components/CafeCard';
 import Navbar from '../components/Navbar';
-import ShareButton from '../components/ShareButton';
+import useCafes from '../hooks/useCafes';
+
+const PREFETCH_OFFSET = 2;
 
 const Home = () => {
-  const [likeCount, setLikeCount] = useState(1);
-  const [isLiked, setIsLiked] = useState(false);
+  const { isFetching, cafes, fetchNextPage } = useCafes();
+  const [activeCafe, setActiveCafe] = useState(cafes[0]);
 
-  const handleLikeChange = () => {
-    if (isLiked) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
-    }
-    setIsLiked(!isLiked);
-  };
+  const handleCafeChange = useMemo(() => {
+    return cafes.map((cafe) => (intersection: IntersectionObserverEntry) => {
+      if (intersection.isIntersecting) {
+        setActiveCafe(cafe);
+      }
+    });
+  }, [cafes]);
+
+  if (!isFetching && cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length) {
+    fetchNextPage();
+  }
 
   return (
     <Container>
-      <AppHeader />
-      <CardList></CardList>
-      <Aside>
-        <LikeButton likeCount={1} onChange={handleLikeChange} />
-        <AsideActionBar />
-        <CommentButton />
-        <ShareButton />
-      </Aside>
-      <CafeInfoModal title="성수동 카페" address="서울 성동구 연무장3길 6" content="안녕하세요안녕하세요..." />
+      <CardList>
+        {cafes.map((cafe, index) => (
+          <CafeCard key={cafe.id} cafe={cafe} onIntersect={handleCafeChange[index]} />
+        ))}
+      </CardList>
       <Navbar />
     </Container>
   );
@@ -62,16 +59,4 @@ const CardList = styled.ul`
     scroll-snap-align: start;
     margin-bottom: 40px;
   }
-`;
-
-const Aside = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: 250px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-
-  padding: 20px;
 `;
