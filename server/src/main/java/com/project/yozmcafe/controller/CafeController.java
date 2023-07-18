@@ -2,6 +2,8 @@ package com.project.yozmcafe.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ public class CafeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CafeDto>> getCafes() {
+    public ResponseEntity<List<CafeDto>> getCafes(@PageableDefault(size = 5, page = 1) Pageable pageable) {
         final List<CafeDto> cafeDtos = cafeService.pickRandomCafesForUnLoginMember();
         // TODO: 2023/07/17 로그인 된 사용자인 경우 분기처리
         return ResponseEntity.ok(cafeDtos);
