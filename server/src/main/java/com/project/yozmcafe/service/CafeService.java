@@ -2,13 +2,13 @@ package com.project.yozmcafe.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeDto;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.Cafes;
 
 @Service
 @Transactional
@@ -20,10 +20,9 @@ public class CafeService {
         this.cafes = cafes;
     }
 
-    public List<CafeDto> pickRandomCafesForUnLoginMember() {
-        final Cafes allCafes = new Cafes(cafes.findAll());
-        final List<Cafe> randomCafes = allCafes.pickRandomCafe();
-        return randomCafes.stream()
+    public List<CafeDto> getCafesForUnLoginMember(Pageable pageable) {
+        final List<Cafe> cafes = this.cafes.findSliceBy(pageable).getContent();
+        return cafes.stream()
                 .map(CafeDto::of)
                 .toList();
     }

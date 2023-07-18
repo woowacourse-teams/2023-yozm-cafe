@@ -23,8 +23,8 @@ public class CafeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CafeDto>> getCafes(@PageableDefault(size = 5, page = 1) Pageable pageable) {
-        final List<CafeDto> cafeDtos = cafeService.pickRandomCafesForUnLoginMember();
+    public ResponseEntity<List<CafeDto>> getCafes(@PageableDefault(size = 5) Pageable pageable) {
+        final List<CafeDto> cafeDtos = cafeService.getCafesForUnLoginMember(pageable);
         // TODO: 2023/07/17 로그인 된 사용자인 경우 분기처리
         return ResponseEntity.ok(cafeDtos);
     }

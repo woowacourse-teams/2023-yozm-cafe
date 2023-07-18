@@ -33,12 +33,10 @@ public class CafeAcceptanceTest {
     }
 
     @Test
-    @DisplayName("로그인 되지 않은 사용자가 /cafes 에 GET요청을 보내면 랜덤한 카페 정보들을 응답한다.")
+    @DisplayName("로그인 되지 않은 사용자가 /cafes?page=? 에 GET요청을 보내면 페이지에 해당하는 카페 정보들을 응답한다.")
     void getCafesSuccessByUnLoginUser() {
-        //given
-
         //when
-        context.invokeHttpGet("/cafes");
+        context.invokeHttpGet("/cafes?page=1");
         final ExtractableResponse<Response> response = context
                 .response
                 .then()
@@ -46,6 +44,21 @@ public class CafeAcceptanceTest {
 
         //then
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.jsonPath().getList("$")).hasSize(3);
+        assertThat(response.jsonPath().getList("$")).hasSize(5);
+    }
+
+    @Test
+    @DisplayName("로그인 되지 않은 사용자가 /cafes?page=? 에 GET요청을 보낸 경우 page가 최대 page를 초과하는 경우 빈배열을 반환한다.")
+    void getCafesEmptyByUnLoginUser() {
+        //when
+        context.invokeHttpGet("/cafes?page=2000");
+        final ExtractableResponse<Response> response = context
+                .response
+                .then()
+                .extract();
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.jsonPath().getList("$")).isEmpty();
     }
 }
