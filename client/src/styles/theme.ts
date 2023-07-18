@@ -4,6 +4,7 @@ const theme = {
     secondary: '#FFD3D8',
 
     yellow: '#F7E600',
+    gray: '#787878',
     white: '#FFFFFF',
 
     error: '#F14646',
@@ -12,7 +13,6 @@ const theme = {
 
     text: {
       primary: '#212121',
-      secondary: '#787878',
     },
 
     line: {
