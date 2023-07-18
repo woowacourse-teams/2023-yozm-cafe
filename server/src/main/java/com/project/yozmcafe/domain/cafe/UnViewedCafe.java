@@ -20,4 +20,25 @@ public class UnViewedCafe {
 
     @ManyToOne
     private Member member;
+
+    protected UnViewedCafe() {
+    }
+
+    public UnViewedCafe(final Long id, final Cafe cafe, final Member member) {
+        this.id = id;
+        this.cafe = cafe;
+        this.member = member;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Cafe getCafe() {
+        return cafe;
+    }
+
+    public Member getMember() {
+        return member;
+    }
 }
