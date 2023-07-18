@@ -11,10 +11,10 @@ const MyProfile = () => {
       <ProfileInfo userImage="/images/profile-example.png" userName="김고니" />
       <ButtonContainer>
         <EditButtonContainer>
-          <Button $fullWidth={true}>프로필 수정하기</Button>
+          <Button fullWidth={true}>프로필 수정하기</Button>
         </EditButtonContainer>
         <LogOutButton>
-          <Button variant="outlined" $fullWidth={true}>
+          <Button variant="outlined" fullWidth={true}>
             로그아웃
           </Button>
         </LogOutButton>
