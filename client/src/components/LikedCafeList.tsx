@@ -41,7 +41,7 @@ const Container = styled.section`
 
 const Title = styled.h1`
   margin-bottom: ${({ theme }) => theme.space['3']};
-  color: ${({ theme }) => theme.color.text.secondary};
+  color: ${({ theme }) => theme.color.gray};
 `;
 
 const TitleContainer = styled.article`
