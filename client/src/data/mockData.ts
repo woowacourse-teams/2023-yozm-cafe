@@ -13,7 +13,7 @@ export const cafes: Cafe[] = [
     detail: {
       mapUrl: 'https://map.kakao/~~',
       description: '우리 카페는 이뻐용',
-      availableTimes: [
+      openingHours: [
         {
           day: 'MONDAY',
           open: '2023-07-14T15:27:48.222433',
@@ -71,7 +71,7 @@ export const cafes: Cafe[] = [
     detail: {
       mapUrl: 'https://map.kakao/~~',
       description: '우리 카페는 귀여워용',
-      availableTimes: [
+      openingHours: [
         {
           day: 'MONDAY',
           open: '2023-07-14T15:27:48.222433',
@@ -129,7 +129,7 @@ export const cafes: Cafe[] = [
     detail: {
       mapUrl: 'https://map.kakao/~~',
       description: '우리 카페는 귀여워용',
-      availableTimes: [
+      openingHours: [
         {
           day: 'MONDAY',
           open: '2023-07-14T15:27:48.222433',
@@ -187,7 +187,7 @@ export const cafes: Cafe[] = [
     detail: {
       mapUrl: 'https://map.kakao/~~',
       description: '우리 카페는 귀여워용',
-      availableTimes: [
+      openingHours: [
         {
           day: 'MONDAY',
           open: '2023-07-14T15:27:48.222433',
@@ -245,7 +245,7 @@ export const cafes: Cafe[] = [
     detail: {
       mapUrl: 'https://map.kakao/~~',
       description: '우리 카페는 귀여워용',
-      availableTimes: [
+      openingHours: [
         {
           day: 'MONDAY',
           open: '2023-07-14T15:27:48.222433',

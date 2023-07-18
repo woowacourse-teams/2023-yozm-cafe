@@ -2,7 +2,7 @@ type CafeImages = {
   urls: string[];
 };
 
-type AvailableTime = {
+type OpeningHours = {
   day: string;
   open: string;
   close: string;
@@ -10,7 +10,7 @@ type AvailableTime = {
 };
 
 type CafeDetail = {
-  availableTimes: AvailableTime[];
+  openingHours: OpeningHours[];
   mapUrl: string;
   description: string;
 };
