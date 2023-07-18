@@ -19,12 +19,17 @@ const MyProfile = () => {
           </Button>
         </LogOutButton>
       </ButtonContainer>
-      <LikedCafeList />
+      <LikedCafeListContainer>
+        <LikedCafeList />
+      </LikedCafeListContainer>
     </Container>
   );
 };
 
 const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: ${({ theme }) => theme.space['7']} ${({ theme }) => theme.space['4']} 0 ${({ theme }) => theme.space['4']};
 `;
 
@@ -40,6 +45,11 @@ const EditButtonContainer = styled.div`
 
 const LogOutButton = styled.div`
   width: 40%;
+`;
+
+const LikedCafeListContainer = styled.div`
+  overflow-y: hidden;
+  flex: 1;
 `;
 
 export default MyProfile;

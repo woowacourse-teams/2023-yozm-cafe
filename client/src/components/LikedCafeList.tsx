@@ -16,20 +16,18 @@ const LikedCafeList = () => {
   ];
 
   return (
-    <>
+    <Container>
       <TitleContainer>
         <Title>좋아요한 카페 리스트</Title>
       </TitleContainer>
-      <Container>
-        <ScrollContainer>
-          <GridContainer>
-            {cafes.map((cafe) => (
-              <CafeImage key={cafe.id} src={cafe.image} alt={`Cafe ${cafe.id}`} />
-            ))}
-          </GridContainer>
-        </ScrollContainer>
-      </Container>
-    </>
+      <ScrollContainer>
+        <GridContainer>
+          {cafes.map((cafe) => (
+            <CafeImage key={cafe.id} src={cafe.image} alt={`Cafe ${cafe.id}`} />
+          ))}
+        </GridContainer>
+      </ScrollContainer>
+    </Container>
   );
 };
 
@@ -38,10 +36,7 @@ export default LikedCafeList;
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
+  height: 100%;
 `;
 
 const Title = styled.h1`
@@ -58,7 +53,7 @@ const TitleContainer = styled.article`
 
 const ScrollContainer = styled.div`
   overflow-y: scroll;
-  max-height: calc(100vh - 400px); /* 뷰포트 높이에서 다른 요소들의 높이를 제외한 값으로 설정 */
+  flex: 1;
 
   &::-webkit-scrollbar {
     width: 0; /* 스크롤 바 너비 설정 */
