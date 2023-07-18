@@ -39,12 +39,12 @@ const ButtonContainer = styled.article`
 `;
 
 const EditButtonContainer = styled.div`
-  width: 60%;
+  flex: 6;
   margin-right: ${({ theme }) => theme.space['2.5']};
 `;
 
 const LogOutButton = styled.div`
-  width: 40%;
+  flex: 4;
 `;
 
 const LikedCafeListContainer = styled.div`
