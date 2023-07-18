@@ -92,7 +92,7 @@ const Modal = styled.main`
     height: 500px;
 
     opacity: 1;
-    background: ${({ theme }) => theme.color.background.secondary};
+    background: ${({ theme }) => theme.color.white};
     backdrop-filter: none;
   }
 

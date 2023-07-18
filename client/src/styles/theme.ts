@@ -2,20 +2,26 @@ const theme = {
   color: {
     primary: '#F08080',
     secondary: '#FFD3D8',
+
+    yellow: '#F7E600',
+    white: '#FFFFFF',
+
     error: '#F14646',
     warning: '#EF8523',
     success: '#31A115',
+
     text: {
       primary: '#212121',
       secondary: '#787878',
     },
+
     line: {
       primary: '#777777',
       secondary: '#BABABA',
     },
+
     background: {
       primary: '#f8f8f8',
-      secondary: '#FFFFFF',
     },
   },
   fontSize: {
@@ -62,5 +68,7 @@ const theme = {
     '5': '0 0 10px 10px rgba(0, 0, 0, 0.2)',
   },
 } as const;
+
+export type Theme = typeof theme;
 
 export default theme;
