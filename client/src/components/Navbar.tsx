@@ -31,7 +31,7 @@ const IconContainer = styled(Link)<{ $isActive: boolean }>`
   align-items: center;
   justify-content: space-evenly;
 
-  color: ${({ $isActive, theme }) => ($isActive ? theme.color.primary : theme.color.text.secondary)};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.color.primary : theme.color.gray)};
   text-decoration: none;
 `;
 

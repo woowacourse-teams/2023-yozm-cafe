@@ -55,7 +55,7 @@ const Address = styled.h2`
 
 const Content = styled.p`
   margin-top: 20px;
-  color: ${({ theme }) => theme.color.text.secondary};
+  color: ${({ theme }) => theme.color.gray};
 `;
 
 const Modal = styled.main`

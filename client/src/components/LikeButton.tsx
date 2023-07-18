@@ -32,7 +32,7 @@ const HeartIcon = styled(PiHeartFill)<{ $isActive: boolean }>`
 
 const LikeCount = styled.span`
   font-size: small;
-  color: ${({ theme }) => theme.color.text.secondary};
+  color: ${({ theme }) => theme.color.gray};
 `;
 
 const Container = styled.div`

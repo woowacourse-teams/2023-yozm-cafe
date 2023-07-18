@@ -5,22 +5,17 @@ import Navbar from '../components/Navbar';
 const Root = () => {
   return (
     <>
-      <Outlet />
-      <FixedNavbar>
-        <Navbar />
-      </FixedNavbar>
+      <PageContent>
+        <Outlet />
+      </PageContent>
+      <Navbar />
     </>
   );
 };
 
-const FixedNavbar = styled.div`
-  position: fixed;
-  z-index: 999;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%);
-
-  width: 491px;
+const PageContent = styled.main`
+  overflow-y: auto;
+  flex: 1;
 `;
 
 export default Root;
