@@ -21,9 +21,9 @@ public class JwtTokenProvider {
     private final long accessTokenExpired;
     private final long refreshTokenExpired;
 
-    public JwtTokenProvider(@Value("spring.auth.key") final String key,
-                            @Value("spring.auth.accessTokenExpired") final long accessTokenExpired,
-                            @Value("spring.auth.refreshTokenExpired") final long refreshTokenExpired) {
+    public JwtTokenProvider(@Value("${spring.auth.key}") final String key,
+                            @Value("${spring.auth.accessTokenExpired}") final long accessTokenExpired,
+                            @Value("${spring.auth.refreshTokenExpired}") final long refreshTokenExpired) {
         this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         this.accessTokenExpired = accessTokenExpired;
         this.refreshTokenExpired = refreshTokenExpired;
