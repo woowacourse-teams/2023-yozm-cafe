@@ -14,7 +14,7 @@
   font-size: ${({theme})=>theme.fontSize.lg};
 `,Content=styled_components_browser_esm.zo.p`
   margin-top: 20px;
-  color: ${({theme})=>theme.color.text.secondary};
+  color: ${({theme})=>theme.color.gray};
 `,Modal=styled_components_browser_esm.zo.main`
   will-change: transform;
 
@@ -62,4 +62,4 @@
     opacity: 1;
   }
 `;try{CafeInfoModal.displayName="CafeInfoModal",CafeInfoModal.__docgenInfo={description:"",displayName:"CafeInfoModal",props:{title:{defaultValue:null,description:"",name:"title",required:!0,type:{name:"string"}},address:{defaultValue:null,description:"",name:"address",required:!0,type:{name:"string"}},content:{defaultValue:null,description:"",name:"content",required:!0,type:{name:"string"}}}},"undefined"!=typeof STORYBOOK_REACT_CLASSES&&(STORYBOOK_REACT_CLASSES["src/components/CafeInfoModal.tsx#CafeInfoModal"]={docgenInfo:CafeInfoModal.__docgenInfo,name:"CafeInfoModal",path:"src/components/CafeInfoModal.tsx#CafeInfoModal"})}catch(__react_docgen_typescript_loader_error){}const CafeInfoModal_stories={title:"CafeInfoModal",component:components_CafeInfoModal},Default={args:{title:"성수동 카페",address:"서울 성동구 연무장3길 6",content:"안녕하세요~!!!!!"}};Default.parameters={...Default.parameters,docs:{...Default.parameters?.docs,source:{originalSource:"{\n  args: {\n    title: '성수동 카페',\n    address: '서울 성동구 연무장3길 6',\n    content: '안녕하세요~!!!!!'\n  }\n}",...Default.parameters?.docs?.source}}};const __namedExportsOrder=["Default"]}}]);
-//# sourceMappingURL=components-CafeInfoModal-stories.9a7afc28.iframe.bundle.js.map
+//# sourceMappingURL=components-CafeInfoModal-stories.ebcfd583.iframe.bundle.js.map
