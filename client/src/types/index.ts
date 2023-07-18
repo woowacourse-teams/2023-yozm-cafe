@@ -1,8 +1,8 @@
-type CafeImage = {
+type CafeImages = {
   urls: string[];
 };
 
-type AvailableTime = {
+type OpeningHours = {
   day: string;
   open: string;
   close: string;
@@ -10,7 +10,7 @@ type AvailableTime = {
 };
 
 type CafeDetail = {
-  availableTimes: AvailableTime[];
+  openingHours: OpeningHours[];
   mapUrl: string;
   description: string;
 };
@@ -19,7 +19,7 @@ export type Cafe = {
   id: number;
   name: string;
   address: string;
-  images: CafeImage;
+  images: CafeImages;
   isLiked: boolean;
   likeCount: number;
   detail: CafeDetail;

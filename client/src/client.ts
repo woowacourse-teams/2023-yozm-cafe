@@ -27,8 +27,8 @@ class Client {
     }
   }
 
-  getCafes() {
-    return this.fetch<Cafe[]>('/cafes');
+  getCafes(page = 1) {
+    return this.fetch<Cafe[]>(`/cafes?page=${page}`);
   }
 
   addFavoriteCafe(cafeId: Cafe['id']) {
