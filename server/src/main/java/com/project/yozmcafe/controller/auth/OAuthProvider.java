@@ -1,6 +1,7 @@
 package com.project.yozmcafe.controller.auth;
 
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.service.auth.OAuthClient;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Objects;
 
 public enum OAuthProvider {
-    GOOGLE;
+    GOOGLE,
+    KAKAO;
 
     private OAuthClient oAuthClient = null;
 
@@ -31,9 +33,11 @@ public enum OAuthProvider {
     @Configuration
     private static class DependencyInjector {
         private final GoogleOAuthClient googleOAuthClient;
+        private final KakaoOAuthClient kakaoOAuthClient;
 
-        public DependencyInjector(final GoogleOAuthClient googleOAuthClient) {
+        public DependencyInjector(final GoogleOAuthClient googleOAuthClient, final KakaoOAuthClient kakaoOAuthClient) {
             this.googleOAuthClient = googleOAuthClient;
+            this.kakaoOAuthClient = kakaoOAuthClient;
         }
 
         @PostConstruct
@@ -42,7 +46,9 @@ public enum OAuthProvider {
                 if (oAuthProvider.equals(OAuthProvider.GOOGLE)) {
                     oAuthProvider.setoAuthClient(googleOAuthClient);
                 }
-
+                if (oAuthProvider.equals(OAuthProvider.KAKAO)) {
+                    oAuthProvider.setoAuthClient(kakaoOAuthClient);
+                }
                 if (Objects.isNull(oAuthProvider.oAuthClient)) {
                     throw new IllegalStateException("OAuthProvider에게 맞는 OAuthClient가 존재하지 않습니다.");
                 }
