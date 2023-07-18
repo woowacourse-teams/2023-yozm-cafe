@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: ['main', 'build/11-storybook-ci-cd']
+    branches: ['main']
     paths: client/**
 
   workflow_dispatch:
