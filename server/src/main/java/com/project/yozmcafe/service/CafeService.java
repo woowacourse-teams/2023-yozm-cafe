@@ -15,21 +15,21 @@ import com.project.yozmcafe.domain.member.Member;
 @Transactional(readOnly = true)
 public class CafeService {
 
-    private final CafeRepository cafes;
+    private final CafeRepository cafeRepository;
 
-    public CafeService(final CafeRepository cafes) {
-        this.cafes = cafes;
+    public CafeService(final CafeRepository cafeRepository) {
+        this.cafeRepository = cafeRepository;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
-        final List<Cafe> foundCafes = cafes.findSliceBy(pageable).getContent();
+        final List<Cafe> foundCafes = cafeRepository.findSliceBy(pageable).getContent();
         return foundCafes.stream()
                 .map(CafeResponse::from)
                 .toList();
     }
 
     public List<CafeResponse> getCafesForLoginMember(final Pageable pageable, final Member member) {
-        final List<Cafe> unViewedCafes = cafes.findUnViewedCafesByMember(pageable, member.getId()).getContent();
+        final List<Cafe> unViewedCafes = cafeRepository.findUnViewedCafesByMember(pageable, member.getId()).getContent();
         return unViewedCafes.stream()
                 .map(CafeResponse::from)
                 .toList();

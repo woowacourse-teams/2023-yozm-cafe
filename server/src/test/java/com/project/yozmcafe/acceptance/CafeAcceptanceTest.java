@@ -32,15 +32,15 @@ public class CafeAcceptanceTest {
     private AcceptanceContext context;
 
     @Autowired
-    private CafeRepository cafes;
+    private CafeRepository cafeRepository;
 
     @BeforeEach
     void setUp() {
-        cafes.save(CAFE_1);
-        cafes.save(CAFE_2);
-        cafes.save(CAFE_3);
-        cafes.save(CAFE_4);
-        cafes.save(CAFE_5);
+        cafeRepository.save(CAFE_1);
+        cafeRepository.save(CAFE_2);
+        cafeRepository.save(CAFE_3);
+        cafeRepository.save(CAFE_4);
+        cafeRepository.save(CAFE_5);
         RestAssured.port = port;
     }
 

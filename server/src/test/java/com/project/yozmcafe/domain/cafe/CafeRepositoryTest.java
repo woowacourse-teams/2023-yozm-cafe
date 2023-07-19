@@ -27,13 +27,13 @@ import com.project.yozmcafe.util.UnViewedCafeRepository;
 class CafeRepositoryTest {
 
     @Autowired
-    private CafeRepository cafes;
+    private CafeRepository cafeRepository;
 
     @Autowired
-    private MemberRepository members;
+    private MemberRepository memberRepository;
 
     @Autowired
-    private UnViewedCafeRepository unViewedCafes;
+    private UnViewedCafeRepository unViewedCafeRepository;
 
     private Cafe cafe1;
     private Cafe cafe2;
@@ -43,11 +43,11 @@ class CafeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        cafe1 = cafes.save(CAFE_1);
-        cafe2 = cafes.save(CAFE_2);
-        cafe3 = cafes.save(CAFE_3);
-        cafe4 = cafes.save(CAFE_4);
-        cafe5 = cafes.save(CAFE_5);
+        cafe1 = cafeRepository.save(CAFE_1);
+        cafe2 = cafeRepository.save(CAFE_2);
+        cafe3 = cafeRepository.save(CAFE_3);
+        cafe4 = cafeRepository.save(CAFE_4);
+        cafe5 = cafeRepository.save(CAFE_5);
     }
 
     @Test
@@ -57,7 +57,7 @@ class CafeRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         //when
-        final List<Cafe> cafes = this.cafes.findSliceBy(pageRequest).getContent();
+        final List<Cafe> cafes = this.cafeRepository.findSliceBy(pageRequest).getContent();
 
         //then
         assertThat(cafes).hasSize(5);
@@ -69,15 +69,15 @@ class CafeRepositoryTest {
     void findUnViewedCafesByMember() {
         //given
         PageRequest pageRequest = PageRequest.of(0, 5);
-        final Member member = members.save(new Member(null));
-        unViewedCafes.save(new UnViewedCafe(null, cafe1, member));
-        unViewedCafes.save(new UnViewedCafe(null, cafe2, member));
-        unViewedCafes.save(new UnViewedCafe(null, cafe3, member));
-        unViewedCafes.save(new UnViewedCafe(null, cafe4, member));
-        unViewedCafes.save(new UnViewedCafe(null, cafe5, member));
+        final Member member = memberRepository.save(new Member(null));
+        unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
+        unViewedCafeRepository.save(new UnViewedCafe(null, cafe2, member));
+        unViewedCafeRepository.save(new UnViewedCafe(null, cafe3, member));
+        unViewedCafeRepository.save(new UnViewedCafe(null, cafe4, member));
+        unViewedCafeRepository.save(new UnViewedCafe(null, cafe5, member));
 
         //when
-        final List<Cafe> result = cafes.findUnViewedCafesByMember(pageRequest, member.getId()).getContent();
+        final List<Cafe> result = cafeRepository.findUnViewedCafesByMember(pageRequest, member.getId()).getContent();
 
         //then
         assertThat(result).hasSize(5);
