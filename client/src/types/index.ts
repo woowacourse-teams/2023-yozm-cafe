@@ -24,3 +24,5 @@ export type Cafe = {
   likeCount: number;
   detail: CafeDetail;
 };
+
+export type AuthProvider = 'kakao' | 'google';

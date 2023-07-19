@@ -1,4 +1,4 @@
-import { Cafe } from './types';
+import { AuthProvider, Cafe } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -27,6 +27,10 @@ class Client {
     }
   }
 
+  setAccessToken(accessToken: string | null) {
+    this.accessToken = accessToken;
+  }
+
   getCafes(page = 1) {
     return this.fetch<Cafe[]>(`/cafes?page=${page}`);
   }
@@ -37,6 +41,10 @@ class Client {
 
   removeFavoriteCafe(cafeId: Cafe['id']) {
     return this.fetch<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
+  }
+
+  requestAccessToken(provider: AuthProvider, code: string) {
+    return this.fetch<{ accessToken: string }>(`/auth/${provider}?code=${code}`, { method: 'POST' });
   }
 }
 
