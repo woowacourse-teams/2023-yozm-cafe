@@ -21,13 +21,12 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/{providerName}")
+    @PostMapping("/{providerName}")
     public ResponseEntity<TokenResponse> login(@RequestParam("code") final String code,
                                                @PathVariable("providerName") final OAuthProvider oAuthProvider,
                                                final HttpServletResponse response) {
         final TokenResponse accessTokenResponse = authService.createAccessToken(code, oAuthProvider);
         setRefreshTokenCookie(response);
-
         return ResponseEntity.ok(accessTokenResponse);
     }
 
@@ -39,11 +38,14 @@ public class AuthController {
         response.addCookie(cookie);
     }
 
-    @GetMapping("/auth")
-    public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request, @CookieValue final String REFRESH_TOKEN) {
-        final String accessToken = request.getHeader(AUTHORIZATION);
-        final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, REFRESH_TOKEN);
 
+    @GetMapping
+    public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request,
+                                                      final HttpServletResponse response,
+                                                      @CookieValue(name = REFRESH_TOKEN) final String refreshToken) {
+        final String accessToken = request.getHeader(AUTHORIZATION);
+        final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, refreshToken);
+        setRefreshTokenCookie(response);
         return ResponseEntity.ok(tokenResponse);
     }
 }
