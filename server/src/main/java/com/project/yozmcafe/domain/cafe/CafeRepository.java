@@ -10,8 +10,8 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     Slice<Cafe> findSliceBy(Pageable pageable);
 
 
-    @Query(value = "SELECT DISTINCT c FROM Cafe AS c "
-            + "LEFT JOIN UnViewedCafe AS u "
+    @Query(value = "SELECT c FROM Cafe AS c "
+            + "INNER JOIN UnViewedCafe AS u "
             + "ON c.id = u.cafe.id "
             + "WHERE u.member.id = :memberId")
     Slice<Cafe> findUnViewedCafesByMember(Pageable pageable, @Param("memberId") Long memberId);
