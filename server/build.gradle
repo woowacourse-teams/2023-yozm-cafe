@@ -22,7 +22,6 @@ dependencies {
 
 	//DB
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	runtimeOnly 'com.h2database:h2:1.4.199'
 
 	//JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
