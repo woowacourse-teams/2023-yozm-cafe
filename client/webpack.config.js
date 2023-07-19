@@ -7,6 +7,7 @@ export default {
   entry: './src/index',
   output: {
     filename: 'bundle.js',
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],

@@ -41,4 +41,26 @@ export const handlers = [
     });
     return res(ctx.status(200), ctx.json(updatedCafes));
   }),
+
+  // 인증 코드를 accessToken으로 교환
+  rest.post('/auth/kakao', async (req, res, ctx) => {
+    const code = req.url.searchParams.get('code');
+    if ((code?.length ?? 0) <= 0) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: 'Access Token을 발급하려면 Authorization Code가 필요합니다.',
+        }),
+      );
+    }
+    // 여기에서 모킹된 액세스 토큰을 생성하고 받은 리프레시 토큰을 사용
+    const accessToken = 'VeryGoodSalmonKingFuckingKoreanILoveCoffee';
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        accessToken,
+      }),
+    );
+  }),
 ];
