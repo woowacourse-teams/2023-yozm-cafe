@@ -1,5 +1,6 @@
-package com.project.yozmcafe;
+package com.project.yozmcafe.config;
 
+import com.project.yozmcafe.controller.LoginArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
