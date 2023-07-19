@@ -12,7 +12,7 @@ public enum OAuthProvider {
     GOOGLE,
     KAKAO;
 
-    private OAuthClient oAuthClient = null;
+    private OAuthClient oAuthClient;
 
     public static OAuthProvider from(final String providerName) {
         try {
@@ -22,7 +22,7 @@ public enum OAuthProvider {
         }
     }
 
-    public void setoAuthClient(final OAuthClient oAuthClient) {
+    private void setOAuthClient(final OAuthClient oAuthClient) {
         this.oAuthClient = oAuthClient;
     }
 
@@ -44,10 +44,10 @@ public enum OAuthProvider {
         private void setUp() {
             for (OAuthProvider oAuthProvider : OAuthProvider.values()) {
                 if (oAuthProvider.equals(OAuthProvider.GOOGLE)) {
-                    oAuthProvider.setoAuthClient(googleOAuthClient);
+                    oAuthProvider.setOAuthClient(googleOAuthClient);
                 }
                 if (oAuthProvider.equals(OAuthProvider.KAKAO)) {
-                    oAuthProvider.setoAuthClient(kakaoOAuthClient);
+                    oAuthProvider.setOAuthClient(kakaoOAuthClient);
                 }
                 if (Objects.isNull(oAuthProvider.oAuthClient)) {
                     throw new IllegalStateException("OAuthProvider에게 맞는 OAuthClient가 존재하지 않습니다.");
