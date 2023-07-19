@@ -29,4 +29,16 @@ class MemberTest {
         assertThat(member.getUnViewedCafes()).hasSize(2);
     }
 
+    @Test
+    @DisplayName("멤버의 unViewedCafes가 비어있으면 true를 반환한다.")
+    void isEmptyUnViewedCafe() {
+        //given
+        final Member member = new Member(1L);
+
+        //when
+        final boolean result = member.isEmptyUnViewedCafe();
+
+        //then
+        assertThat(result).isTrue();
+    }
 }

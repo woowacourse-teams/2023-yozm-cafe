@@ -50,6 +50,10 @@ public class Member {
         foundUnviewedCafe.remove();
     }
 
+    public boolean isEmptyUnViewedCafe() {
+        return this.unViewedCafes.isEmpty();
+    }
+
     public Long getId() {
         return id;
     }
