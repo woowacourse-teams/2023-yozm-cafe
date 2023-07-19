@@ -24,7 +24,6 @@ public class CafeController {
 
     @GetMapping
     public ResponseEntity<List<CafeDto>> getCafes(final @PageableDefault(size = 5) Pageable pageable) {
-        // TODO: 2023/07/18 회원에 대한 분기처리 추가 
         List<CafeDto> cafeDtos = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeDtos);
     }
