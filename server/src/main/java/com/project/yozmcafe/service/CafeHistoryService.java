@@ -19,9 +19,9 @@ public class CafeHistoryService {
     private final CafeRepository cafeRepository;
     private final UnViewedCafeRepository unViewedCafeRepository;
 
-    public CafeHistoryService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViews) {
+    public CafeHistoryService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViewedCafeRepository) {
         this.cafeRepository = cafeRepository;
-        this.unViewedCafeRepository = unViews;
+        this.unViewedCafeRepository = unViewedCafeRepository;
     }
 
     @Transactional
