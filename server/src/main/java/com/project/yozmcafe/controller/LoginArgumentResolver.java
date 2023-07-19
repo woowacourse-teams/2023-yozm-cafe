@@ -24,12 +24,12 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
+    public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.getParameterType().equals(Member.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
         String header = webRequest.getHeader("Authorization");
 
         if (header == null) {
@@ -38,6 +38,4 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         return memberRepository.findById(jwtTokenProvider.getPayload(header))
                 .orElseThrow(() -> new AuthenticationException("유효하지 않은 토큰입니다."));
     }
-
-
 }
