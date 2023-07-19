@@ -20,8 +20,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenResponse createAccessToken(final String code, final String providerName) {
-        final OAuthProvider provider = OAuthProvider.from(providerName);
+    public TokenResponse createAccessToken(final String code, final OAuthProvider provider) {
         final MemberInfo memberInfo = provider.getUserInfo(code);
 
         final Member member = memberRepository.findById(memberInfo.openId())

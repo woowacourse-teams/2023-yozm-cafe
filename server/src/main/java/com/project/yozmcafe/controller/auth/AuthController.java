@@ -22,14 +22,19 @@ public class AuthController {
 
     @GetMapping("/{providerName}")
     public ResponseEntity<TokenResponse> login(@RequestParam("code") final String code,
-                                               @PathVariable("providerName") final String providerName,
+                                               @PathVariable("providerName") final OAuthProvider oAuthProvider,
                                                final HttpServletResponse response) {
-        final TokenResponse accessTokenResponse = authService.createAccessToken(code, providerName);
+        final TokenResponse accessTokenResponse = authService.createAccessToken(code, oAuthProvider);
+        setRefreshTokenCookie(response);
+
+        return ResponseEntity.ok(accessTokenResponse);
+    }
+
+    private void setRefreshTokenCookie(final HttpServletResponse response) {
         final TokenResponse refreshTokenResponse = authService.createRefreshToken();
+
         final Cookie cookie = new Cookie("refreshToken", refreshTokenResponse.token());
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
-
-        return ResponseEntity.ok(accessTokenResponse);
     }
 }
