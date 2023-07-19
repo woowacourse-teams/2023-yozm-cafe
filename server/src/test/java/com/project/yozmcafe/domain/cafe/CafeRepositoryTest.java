@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
+import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.util.UnViewedCafeRepository;
 
@@ -61,5 +62,25 @@ class CafeRepositoryTest {
         //then
         assertThat(cafes).hasSize(5);
         assertThat(cafes).containsExactlyInAnyOrder(cafe1, cafe2, cafe3, cafe4, cafe5);
+    }
+
+    @Test
+    @DisplayName("멤버별 조회하지 않은 카페정보를 반환한다.")
+    void findUnViewedCafesByMember() {
+        //given
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        final Member member = members.save(new Member(null));
+        unViewedCafes.save(new UnViewedCafe(null, cafe1, member));
+        unViewedCafes.save(new UnViewedCafe(null, cafe2, member));
+        unViewedCafes.save(new UnViewedCafe(null, cafe3, member));
+        unViewedCafes.save(new UnViewedCafe(null, cafe4, member));
+        unViewedCafes.save(new UnViewedCafe(null, cafe5, member));
+
+        //when
+        final List<Cafe> result = cafes.findUnViewedCafesByMember(pageRequest, member.getId()).getContent();
+
+        //then
+        assertThat(result).hasSize(5);
+        assertThat(result).containsExactlyInAnyOrder(cafe1, cafe2, cafe3, cafe4, cafe5);
     }
 }
