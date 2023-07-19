@@ -9,22 +9,26 @@ const Login = () => {
         <Logo fontSize="7xl" />
       </LogoContainer>
       <ButtonContainer>
-        <KakaoLoginButton>
-          <LoginButton $color="yellow" $border="none">
-            <ButtonContent>
-              <img src="/assets/kakao.svg" alt="카카오 로고" />
-              <ButtonText>카카오 계정으로 로그인</ButtonText>
-            </ButtonContent>
-          </LoginButton>
-        </KakaoLoginButton>
-        <GoogleLoginButton>
-          <LoginButton $color="white">
-            <ButtonContent>
-              <img src="/assets/google.svg" alt="카카오 로고" />
-              <ButtonText>구글 계정으로 로그인</ButtonText>
-            </ButtonContent>
-          </LoginButton>
-        </GoogleLoginButton>
+        <a href="/api/auth/kakao">
+          <KakaoLoginButton>
+            <LoginButton $color="yellow" $border="none">
+              <ButtonContent>
+                <img src="/assets/kakao.svg" alt="카카오 로고" />
+                <ButtonText>카카오 계정으로 로그인</ButtonText>
+              </ButtonContent>
+            </LoginButton>
+          </KakaoLoginButton>
+        </a>
+        <a href="/api/auth/google">
+          <GoogleLoginButton>
+            <LoginButton $color="white">
+              <ButtonContent>
+                <img src="/assets/google.svg" alt="카카오 로고" />
+                <ButtonText>구글 계정으로 로그인</ButtonText>
+              </ButtonContent>
+            </LoginButton>
+          </GoogleLoginButton>
+        </a>
       </ButtonContainer>
     </Container>
   );
