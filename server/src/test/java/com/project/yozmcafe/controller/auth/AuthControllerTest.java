@@ -25,9 +25,9 @@ class AuthControllerTest {
 
     @LocalServerPort
     int port;
+
     @MockBean
     GoogleOAuthClient googleOAuthClient;
-
     @MockBean
     MemberRepository memberRepository;
 
