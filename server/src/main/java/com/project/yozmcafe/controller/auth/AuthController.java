@@ -2,6 +2,8 @@ package com.project.yozmcafe.controller.auth;
 
 import com.project.yozmcafe.controller.dto.TokenResponse;
 import com.project.yozmcafe.service.auth.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,14 @@ public class AuthController {
 
     @GetMapping("/{providerName}")
     public ResponseEntity<TokenResponse> login(@RequestParam("code") final String code,
-                                               @PathVariable("providerName") final String providerName) {
-        final TokenResponse tokenResponse = authService.login(code, providerName);
-        return ResponseEntity.ok(tokenResponse);
+                                               @PathVariable("providerName") final String providerName,
+                                               final HttpServletResponse response) {
+        final TokenResponse accessTokenResponse = authService.createAccessToken(code, providerName);
+        final TokenResponse refreshTokenResponse = authService.createRefreshToken();
+        final Cookie cookie = new Cookie("refreshToken", refreshTokenResponse.token());
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(accessTokenResponse);
     }
 }

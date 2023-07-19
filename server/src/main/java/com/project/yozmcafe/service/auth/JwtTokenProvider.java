@@ -1,6 +1,5 @@
 package com.project.yozmcafe.service.auth;
 
-import com.project.yozmcafe.controller.dto.TokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -29,14 +28,7 @@ public class JwtTokenProvider {
         this.refreshTokenExpired = refreshTokenExpired;
     }
 
-    public TokenResponse createToken(final String payload) {
-        final String accessToken = createAccessToken(payload);
-        final String refreshToken = createRefreshToken();
-
-        return new TokenResponse(accessToken, refreshToken);
-    }
-
-    private String createAccessToken(final String payload) {
+    public String createAccessToken(final String payload) {
         final Date validity = new Date(System.currentTimeMillis() + accessTokenExpired);
 
         return Jwts.builder()
@@ -47,7 +39,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private String createRefreshToken() {
+    public String createRefreshToken() {
         final Date validity = new Date(System.currentTimeMillis() + refreshTokenExpired);
 
         return Jwts.builder()

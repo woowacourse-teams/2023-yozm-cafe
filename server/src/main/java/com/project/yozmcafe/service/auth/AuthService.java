@@ -20,13 +20,17 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenResponse login(final String code, final String providerName) {
+    public TokenResponse createAccessToken(final String code, final String providerName) {
         final OAuthProvider provider = OAuthProvider.from(providerName);
         final MemberInfo memberInfo = provider.getUserInfo(code);
 
         final Member member = memberRepository.findById(memberInfo.openId())
                 .orElseGet(() -> memberRepository.save(memberInfo.toMember()));
 
-        return jwtTokenProvider.createToken(member.getId());
+        return new TokenResponse(jwtTokenProvider.createAccessToken(member.getId()));
+    }
+
+    public TokenResponse createRefreshToken() {
+        return new TokenResponse(jwtTokenProvider.createRefreshToken());
     }
 }
