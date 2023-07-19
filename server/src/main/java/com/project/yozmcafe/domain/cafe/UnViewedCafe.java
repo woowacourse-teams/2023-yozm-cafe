@@ -20,4 +20,34 @@ public class UnViewedCafe {
 
     @ManyToOne
     private Member member;
+
+    protected UnViewedCafe() {
+    }
+
+    public UnViewedCafe(final Long id, final Cafe cafe, final Member member) {
+        this.id = id;
+        this.cafe = cafe;
+        this.member = member;
+    }
+
+    public void remove() {
+        this.member = null;
+        this.cafe = null;
+    }
+
+    public boolean isMatch(Member member, Cafe cafe) {
+        return this.member.equals(member) && this.cafe.equals(cafe);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Cafe getCafe() {
+        return cafe;
+    }
+
+    public Member getMember() {
+        return member;
+    }
 }
