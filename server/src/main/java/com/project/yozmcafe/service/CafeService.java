@@ -12,7 +12,7 @@ import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class CafeService {
 
     private final CafeRepository cafes;
