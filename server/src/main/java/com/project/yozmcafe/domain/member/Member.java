@@ -35,9 +35,8 @@ public class Member {
         this.likedCafes = new ArrayList<>();
     }
 
-    public void addUnViewedCafe(final UnViewedCafe unViewedCafe) {
-        unViewedCafe.setMember(this);
-        this.unViewedCafes.add(unViewedCafe);
+    public void addUnViewedCafes(final List<UnViewedCafe> unViewedCafes) {
+        this.unViewedCafes.addAll(unViewedCafes);
     }
 
     public void removeUnViewedCafe(final Cafe cafe) {

@@ -3,6 +3,8 @@ package com.project.yozmcafe.domain.member;
 import static com.project.yozmcafe.fixture.Fixture.CAFE_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +20,7 @@ class MemberTest {
         final UnViewedCafe unViewedCafe1 = new UnViewedCafe(null, CAFE_1, member);
         final UnViewedCafe unViewedCafe2 = new UnViewedCafe(null, CAFE_1, member);
         final UnViewedCafe unViewedCafe3 = new UnViewedCafe(null, CAFE_1, member);
-        member.addUnViewedCafe(unViewedCafe1);
-        member.addUnViewedCafe(unViewedCafe2);
-        member.addUnViewedCafe(unViewedCafe3);
+        member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2, unViewedCafe3));
 
         //when
         member.removeUnViewedCafe(CAFE_1);
