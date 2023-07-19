@@ -5,9 +5,9 @@ import java.util.List;
 import com.project.yozmcafe.domain.cafe.Detail;
 
 public record DetailResponse(List<AvailableTimeResponse> openingHours, String mapUrl, String description) {
-    public static DetailResponse of(final Detail detail) {
+    public static DetailResponse from(final Detail detail) {
         final List<AvailableTimeResponse> availableTimes = detail.getAvailableTimes().stream()
-                .map(AvailableTimeResponse::of)
+                .map(AvailableTimeResponse::from)
                 .toList();
         return new DetailResponse(availableTimes, detail.getMapUrl(), detail.getDescription());
     }

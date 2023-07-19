@@ -24,14 +24,14 @@ public class CafeService {
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
         final List<Cafe> foundCafes = cafes.findSliceBy(pageable).getContent();
         return foundCafes.stream()
-                .map(CafeResponse::of)
+                .map(CafeResponse::from)
                 .toList();
     }
 
     public List<CafeResponse> getCafesForLoginMember(final Pageable pageable, final Member member) {
         final List<Cafe> unViewedCafes = cafes.findUnViewedCafesByMember(pageable, member.getId()).getContent();
         return unViewedCafes.stream()
-                .map(CafeResponse::of)
+                .map(CafeResponse::from)
                 .toList();
     }
 }

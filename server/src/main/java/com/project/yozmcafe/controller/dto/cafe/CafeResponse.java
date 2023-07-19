@@ -7,7 +7,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 public record CafeResponse(Long id, String name, String address, List<String> images, boolean isLiked, int likeCount,
                            DetailResponse detail) {
 
-    public static CafeResponse of(Cafe cafe) {
+    public static CafeResponse from(final Cafe cafe) {
         return new CafeResponse(
                 cafe.getId(),
                 cafe.getName(),
@@ -15,6 +15,6 @@ public record CafeResponse(Long id, String name, String address, List<String> im
                 cafe.getImages().getUrls(),
                 false,
                 cafe.getLikeCount(),
-                DetailResponse.of(cafe.getDetail()));
+                DetailResponse.from(cafe.getDetail()));
     }
 }
