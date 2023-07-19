@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import CafeCard from '../components/CafeCard';
-import Navbar from '../components/Navbar';
 import useCafes from '../hooks/useCafes';
 
 const PREFETCH_OFFSET = 2;
@@ -31,33 +30,20 @@ const Home = () => {
   }
 
   return (
-    <Container>
-      <CardList>
-        {cafes.map((cafe, index) => (
-          <CafeCard key={cafe.id} cafe={cafe} onIntersect={handleCafeChange[index]} />
-        ))}
-      </CardList>
-      <Navbar />
-    </Container>
+    <CardList>
+      {cafes.map((cafe, index) => (
+        <CafeCard key={cafe.id} cafe={cafe} onIntersect={handleCafeChange[index]} />
+      ))}
+    </CardList>
   );
 };
 
 export default Home;
 
-const Container = styled.main`
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  height: 100%;
-`;
-
 const CardList = styled.ul`
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
-  flex: 1;
+  height: 100%;
 
   &::-webkit-scrollbar {
     display: none;
