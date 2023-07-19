@@ -3,17 +3,18 @@ package com.project.yozmcafe.controller.auth;
 import com.project.yozmcafe.controller.dto.TokenResponse;
 import com.project.yozmcafe.service.auth.AuthService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+    private static final String REFRESH_TOKEN = "refreshToken";
+    private static final String AUTHORIZATION = "Authorization";
+
     private final AuthService authService;
 
     public AuthController(final AuthService authService) {
@@ -33,8 +34,16 @@ public class AuthController {
     private void setRefreshTokenCookie(final HttpServletResponse response) {
         final TokenResponse refreshTokenResponse = authService.createRefreshToken();
 
-        final Cookie cookie = new Cookie("refreshToken", refreshTokenResponse.token());
+        final Cookie cookie = new Cookie(REFRESH_TOKEN, refreshTokenResponse.token());
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
+    }
+
+    @GetMapping("/auth")
+    public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request, @CookieValue final String REFRESH_TOKEN) {
+        final String accessToken = request.getHeader(AUTHORIZATION);
+        final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, REFRESH_TOKEN);
+
+        return ResponseEntity.ok(tokenResponse);
     }
 }

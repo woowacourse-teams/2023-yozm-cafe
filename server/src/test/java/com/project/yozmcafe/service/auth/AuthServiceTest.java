@@ -34,7 +34,7 @@ class AuthServiceTest {
     void createAccessToken() {
         //given
         given(googleOAuthClient.getUserInfo(anyString())).willReturn(new MemberInfo("1234", "", ""));
-        given(jwtTokenProvider.createAccessToken(anyString())).willReturn("토큰");
+        given(jwtTokenProvider.createAccess(anyString())).willReturn("토큰");
         memberRepository.save(new Member("1234", "연어", "image"));
 
         //when
@@ -49,7 +49,7 @@ class AuthServiceTest {
     void createAccessToken2() {
         //given
         given(googleOAuthClient.getUserInfo(anyString())).willReturn(new MemberInfo("1234", "", ""));
-        given(jwtTokenProvider.createAccessToken(anyString())).willReturn("토큰");
+        given(jwtTokenProvider.createAccess(anyString())).willReturn("토큰");
 
         //when
         authService.createAccessToken("135", OAuthProvider.GOOGLE);

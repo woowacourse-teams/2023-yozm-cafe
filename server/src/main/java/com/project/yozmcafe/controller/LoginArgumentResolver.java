@@ -30,12 +30,13 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
-        String header = webRequest.getHeader("Authorization");
-
-        if (header == null) {
+        String token = webRequest.getHeader("Authorization");
+        if (token == null) {
             throw new AuthenticationException("유효한 사용자만 접근 가능합니다.");
         }
-        return memberRepository.findById(jwtTokenProvider.getPayload(header))
+
+        jwtTokenProvider.validate(token);
+        return memberRepository.findById(jwtTokenProvider.getMemberId(token))
                 .orElseThrow(() -> new AuthenticationException("유효하지 않은 토큰입니다."));
     }
 }

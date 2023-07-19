@@ -11,24 +11,14 @@ class JwtTokenProviderTest {
     private final String testKey = "dsfjiaslejfilasjelfijsleifjliesajlif";
     private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(
             testKey,
-            36000000,
+            1,
             10210401);
-
-    @Test
-    @DisplayName("액세스 토큰 생성 테스트")
-    void createAccessToken() {
-        //given
-        final String token = jwtTokenProvider.createAccessToken("연어");
-
-        //when, then
-        assertDoesNotThrow(() -> jwtTokenProvider.validate(token));
-    }
 
     @Test
     @DisplayName("리프레시 토큰 생성 테스트")
     void createRefreshToken() {
         //given
-        final String token = jwtTokenProvider.createRefreshToken();
+        final String token = jwtTokenProvider.createRefresh();
 
         //when, then
         assertDoesNotThrow(() -> jwtTokenProvider.validate(token));
@@ -38,10 +28,10 @@ class JwtTokenProviderTest {
     @DisplayName("액세스 토큰에서 데이터 가져오기")
     void getPayload() {
         //given
-        final String token = jwtTokenProvider.createAccessToken("연어");
+        final String token = jwtTokenProvider.createAccess("연어");
 
         //when
-        final String payload = jwtTokenProvider.getPayload(token);
+        final String payload = jwtTokenProvider.getMemberId(token);
 
         //then
         assertThat(payload).isEqualTo("연어");

@@ -26,10 +26,15 @@ public class AuthService {
         final Member member = memberRepository.findById(memberInfo.openId())
                 .orElseGet(() -> memberRepository.save(memberInfo.toMember()));
 
-        return new TokenResponse(jwtTokenProvider.createAccessToken(member.getId()));
+        return new TokenResponse(jwtTokenProvider.createAccess(member.getId()));
     }
 
     public TokenResponse createRefreshToken() {
-        return new TokenResponse(jwtTokenProvider.createRefreshToken());
+        return new TokenResponse(jwtTokenProvider.createRefresh());
+    }
+
+    public TokenResponse refreshAccessToken(final String access, final String refresh) {
+        final String token = jwtTokenProvider.refreshAccessToken(access, refresh);
+        return new TokenResponse(token);
     }
 }
