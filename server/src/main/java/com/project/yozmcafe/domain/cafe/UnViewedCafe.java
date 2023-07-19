@@ -35,8 +35,12 @@ public class UnViewedCafe {
         this.cafe = null;
     }
 
-    public boolean isMatch(Member member, Cafe cafe) {
+    public boolean isMatch(final Member member, final Cafe cafe) {
         return this.member.equals(member) && this.cafe.equals(cafe);
+    }
+
+    public void setMember(final Member member) {
+        this.member = member;
     }
 
     public Long getId() {
