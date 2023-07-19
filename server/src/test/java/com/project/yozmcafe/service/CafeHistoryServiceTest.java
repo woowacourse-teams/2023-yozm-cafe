@@ -31,17 +31,17 @@ class CafeHistoryServiceTest {
     private CafeHistoryService cafeHistoryService;
 
     @Autowired
-    private CafeRepository cafes;
+    private CafeRepository cafeRepository;
 
     @Autowired
-    private UnViewedCafeRepository unViewedCafes;
+    private UnViewedCafeRepository unViewedCafeRepository;
 
     @Autowired
-    private MemberRepository members;
+    private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
-        cafeHistoryService = new CafeHistoryService(cafes, unViewedCafes);
+        cafeHistoryService = new CafeHistoryService(cafeRepository, unViewedCafeRepository);
     }
 
     @Test
@@ -49,10 +49,10 @@ class CafeHistoryServiceTest {
     void removeUnViewedCafe() {
         //given
         final Member member = new Member(null);
-        final Cafe cafe1 = cafes.save(CAFE_4);
-        final Cafe cafe2 = cafes.save(CAFE_5);
-        final UnViewedCafe unViewedCafe1 = unViewedCafes.save(new UnViewedCafe(null, cafe1, member));
-        final UnViewedCafe unViewedCafe2 = unViewedCafes.save(new UnViewedCafe(null, cafe2, member));
+        final Cafe cafe1 = cafeRepository.save(CAFE_4);
+        final Cafe cafe2 = cafeRepository.save(CAFE_5);
+        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
+        final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(null, cafe2, member));
         member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2));
 
         //when
@@ -65,11 +65,11 @@ class CafeHistoryServiceTest {
     @Test
     @DisplayName("사용자의 unViewedCafe를 삭제하고 unViewedCafe가 비어있다면, 모든 카페를 넣는다.")
     void removeUnViewedCafeWhenEmpty() {
-        final Member member = members.save(new Member(null));
-        final Cafe cafe1 = cafes.save(CAFE_1);
-        final Cafe cafe2 = cafes.save(CAFE_2);
-        final Cafe cafe3 = cafes.save(CAFE_3);
-        final UnViewedCafe unViewedCafe1 = unViewedCafes.save(new UnViewedCafe(null, cafe1, member));
+        final Member member = memberRepository.save(new Member(null));
+        final Cafe cafe1 = cafeRepository.save(CAFE_1);
+        final Cafe cafe2 = cafeRepository.save(CAFE_2);
+        final Cafe cafe3 = cafeRepository.save(CAFE_3);
+        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
         member.addUnViewedCafes(List.of(unViewedCafe1));
 
         //when

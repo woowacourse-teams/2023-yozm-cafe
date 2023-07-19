@@ -16,17 +16,17 @@ import com.project.yozmcafe.domain.member.Member;
 @Transactional(readOnly = true)
 public class CafeHistoryService {
 
-    private final CafeRepository cafes;
-    private final UnViewedCafeRepository unViewedCafes;
+    private final CafeRepository cafeRepository;
+    private final UnViewedCafeRepository unViewedCafeRepository;
 
-    public CafeHistoryService(final CafeRepository cafes, final UnViewedCafeRepository unViews) {
-        this.cafes = cafes;
-        this.unViewedCafes = unViews;
+    public CafeHistoryService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViews) {
+        this.cafeRepository = cafeRepository;
+        this.unViewedCafeRepository = unViews;
     }
 
     @Transactional
     public void removeUnViewedCafe(final Member member, final long cafeId) {
-        final Cafe cafe = cafes.findById(cafeId)
+        final Cafe cafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카페입니다."));
         member.removeUnViewedCafe(cafe);
 
@@ -36,12 +36,12 @@ public class CafeHistoryService {
     }
 
     private void updateUnViewedCafes(final Member member) {
-        final List<Cafe> allCafes = cafes.findAll();
+        final List<Cafe> allCafes = cafeRepository.findAll();
         Collections.shuffle(allCafes);
         final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
                 .map(savedCafe -> new UnViewedCafe(null, savedCafe, member))
                 .toList();
-        this.unViewedCafes.saveAll(allUnViewedCafes);
+        this.unViewedCafeRepository.saveAll(allUnViewedCafes);
         member.addUnViewedCafes(allUnViewedCafes);
     }
 }
