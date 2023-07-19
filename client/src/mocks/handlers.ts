@@ -3,8 +3,19 @@ import { cafes } from '../data/mockData';
 
 export const handlers = [
   // 카페 조회
-  rest.get('/cards', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(cafes));
+  rest.get('/cafes', (req, res, ctx) => {
+    const page = Number(req.url.searchParams.get('page') || 1);
+
+    return res(
+      ctx.status(200),
+      ctx.json(
+        cafes.map((cafe) => ({
+          ...cafe,
+          id: cafes.length * Number(page - 1) + cafe.id,
+          name: `${cafe.name} (${page}번째 지점)`,
+        })),
+      ),
+    );
   }),
 
   // 좋아요 추가

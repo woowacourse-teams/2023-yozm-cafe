@@ -1,5 +1,10 @@
 package com.project.yozmcafe.acceptance;
 
+import static com.project.yozmcafe.fixture.Fixture.CAFE_1;
+import static com.project.yozmcafe.fixture.Fixture.CAFE_2;
+import static com.project.yozmcafe.fixture.Fixture.CAFE_3;
+import static com.project.yozmcafe.fixture.Fixture.CAFE_4;
+import static com.project.yozmcafe.fixture.Fixture.CAFE_5;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,15 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.jdbc.Sql;
 
+import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.util.AcceptanceContext;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 
-@Sql("/cafeInit.sql")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class CafeAcceptanceTest {
 
@@ -27,8 +31,16 @@ public class CafeAcceptanceTest {
     @Autowired
     private AcceptanceContext context;
 
+    @Autowired
+    private CafeRepository cafes;
+
     @BeforeEach
     void setUp() {
+        cafes.save(CAFE_1);
+        cafes.save(CAFE_2);
+        cafes.save(CAFE_3);
+        cafes.save(CAFE_4);
+        cafes.save(CAFE_5);
         RestAssured.port = port;
     }
 

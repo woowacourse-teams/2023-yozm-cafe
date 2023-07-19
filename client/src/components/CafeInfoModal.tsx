@@ -12,8 +12,8 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <Container className={isOpen ? 'active' : ''} onClick={() => setIsOpen(!isOpen)}>
+    <Container>
+      <Modal className={isOpen ? 'active' : ''} onClick={() => setIsOpen(!isOpen)}>
         <Title>{title}</Title>
         <Address>{address}</Address>
         {!isOpen && (
@@ -22,12 +22,17 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
           </ArrowDownContainer>
         )}
         <Content>{content}</Content>
-      </Container>
-    </>
+      </Modal>
+    </Container>
   );
 };
 
 export default CafeInfoModal;
+
+const Container = styled.div`
+  height: 120px;
+  max-height: 120px;
+`;
 
 const StyledArrowDown = styled(SlArrowDown)`
   font-size: ${({ theme }) => theme.fontSize['2xl']};
@@ -50,21 +55,20 @@ const Address = styled.h2`
 
 const Content = styled.p`
   margin-top: 20px;
-  color: ${({ theme }) => theme.color.text.secondary};
+  color: ${({ theme }) => theme.color.gray};
 `;
 
-const Container = styled.main`
+const Modal = styled.main`
   will-change: transform;
 
   position: absolute;
-  right: 20px;
-  bottom: 100px;
-  left: 20px;
+  bottom: 0;
 
   display: flex;
   flex-direction: column;
   gap: 8px;
 
+  width: 100%;
   height: 120px;
   padding: 16px;
 
@@ -85,10 +89,10 @@ const Container = styled.main`
     bottom: 0;
     left: 0;
 
-    height: 700px;
+    height: 500px;
 
     opacity: 1;
-    background: ${({ theme }) => theme.color.background.secondary};
+    background: ${({ theme }) => theme.color.white};
     backdrop-filter: none;
   }
 

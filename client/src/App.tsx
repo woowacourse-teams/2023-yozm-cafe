@@ -6,7 +6,13 @@ import GlobalStyle from './styles/GlobalStyle';
 import ResetStyle from './styles/ResetStyle';
 import theme from './styles/theme';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 const App = () => {
   return (

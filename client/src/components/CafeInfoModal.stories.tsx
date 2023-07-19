@@ -1,5 +1,5 @@
-import CafeInfoModal from './CafeInfoModal';
 import type { Meta, StoryObj } from '@storybook/react';
+import CafeInfoModal from './CafeInfoModal';
 
 type Story = StoryObj<typeof CafeInfoModal>;
 
