@@ -44,7 +44,15 @@ export const handlers = [
 
   // 인증 코드를 accessToken으로 교환
   rest.post('/auth/kakao', async (req, res, ctx) => {
-    req.url.searchParams.get('code');
+    const code = req.url.searchParams.get('code');
+    if ((code?.length ?? 0) <= 0) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: 'Access Token을 발급하려면 Authorization Code가 필요합니다.',
+        }),
+      );
+    }
     // 여기에서 모킹된 액세스 토큰을 생성하고 받은 리프레시 토큰을 사용
     const accessToken = 'VeryGoodSalmonKingFuckingKoreanILoveCoffee';
 
