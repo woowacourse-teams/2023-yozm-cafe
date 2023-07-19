@@ -3,6 +3,7 @@ package com.project.yozmcafe.controller.auth;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,8 @@ class AuthControllerTest {
     GoogleOAuthClient googleOAuthClient;
     @MockBean
     MemberRepository memberRepository;
+    @MockBean
+    JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     void setUp() {
@@ -51,11 +54,33 @@ class AuthControllerTest {
                 .queryParam("code", "googleCode")
                 .pathParam("providerName", "google")
                 .when()
-                .get("/auth/{providerName}");
+                .post("/auth/{providerName}");
 
         //then
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.cookie("refreshToken")).isNotNull()
+        );
+    }
+
+    @Test
+    @DisplayName("토큰을 갱신한다.")
+    void refreshToken() {
+        //given
+        given(jwtTokenProvider.refreshAccessToken(anyString(), anyString()))
+                .willReturn("goodOceanAccessToken");
+
+        //when
+        final Response response = RestAssured.given().log().all()
+                .header("Authorization", "goodOceanAccessToken")
+                .cookie("refreshToken", "handSomeOceanRefreshToken")
+                .when()
+                .log().all()
+                .get("/auth");
+
+        //then
+        assertAll(
+                () -> assertThat(response.jsonPath().getString("token")).isEqualTo("goodOceanAccessToken"),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
