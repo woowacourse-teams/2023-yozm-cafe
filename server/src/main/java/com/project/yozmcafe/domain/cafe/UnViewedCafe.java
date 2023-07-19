@@ -39,10 +39,6 @@ public class UnViewedCafe {
         return this.member.equals(member) && this.cafe.equals(cafe);
     }
 
-    public void setMember(final Member member) {
-        this.member = member;
-    }
-
     public Long getId() {
         return id;
     }

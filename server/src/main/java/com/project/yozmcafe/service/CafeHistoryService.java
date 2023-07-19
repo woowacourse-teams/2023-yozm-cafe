@@ -38,10 +38,10 @@ public class CafeHistoryService {
     private void updateUnViewedCafes(final Member member) {
         final List<Cafe> allCafes = cafes.findAll();
         Collections.shuffle(allCafes);
-        final List<UnViewedCafe> unViewedCafes = allCafes.stream()
+        final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
                 .map(savedCafe -> new UnViewedCafe(null, savedCafe, member))
                 .toList();
-        this.unViewedCafes.saveAll(unViewedCafes);
-        member.addUnViewedCafes(unViewedCafes);
+        this.unViewedCafes.saveAll(allUnViewedCafes);
+        member.addUnViewedCafes(allUnViewedCafes);
     }
 }
