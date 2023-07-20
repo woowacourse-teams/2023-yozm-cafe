@@ -20,7 +20,7 @@ class JwtTokenProviderTest {
     @DisplayName("액세스 토큰 생성 테스트")
     void createAccessToken() {
         //given
-        final String token = provider.createAccess("멤버 아이디");
+        final String token = provider.createAccessFrom("멤버 아이디");
 
         //when, then
         assertDoesNotThrow(() -> provider.validate(token));
@@ -40,7 +40,7 @@ class JwtTokenProviderTest {
     @DisplayName("액세스 토큰에서 데이터 가져오기")
     void getPayload() {
         //given
-        final String token = provider.createAccess("연어");
+        final String token = provider.createAccessFrom("연어");
 
         //when
         final String payload = provider.getMemberId(token);
@@ -54,7 +54,7 @@ class JwtTokenProviderTest {
     void getPayload2() {
         //given
         final JwtTokenProvider provider = new JwtTokenProvider(testKey, 1, 10210401);
-        final String token = provider.createAccess("연어");
+        final String token = provider.createAccessFrom("연어");
 
         //when
         final String payload = provider.getMemberId(token);
@@ -73,7 +73,7 @@ class JwtTokenProviderTest {
     void refreshAccessToken() {
         //given
         final JwtTokenProvider provider = new JwtTokenProvider(testKey, 1, 10210401);
-        final String access = provider.createAccess("연어");
+        final String access = provider.createAccessFrom("연어");
         final String refresh = provider.createRefresh();
 
         //when
@@ -93,7 +93,7 @@ class JwtTokenProviderTest {
     @DisplayName("만료되지 않은 액세스 토큰으로 토큰 재생성")
     void refreshAccessToken2() {
         //given
-        final String access = provider.createAccess("연어");
+        final String access = provider.createAccessFrom("연어");
         final String refresh = provider.createRefresh();
 
         //when

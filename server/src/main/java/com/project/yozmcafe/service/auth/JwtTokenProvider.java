@@ -25,9 +25,9 @@ public class JwtTokenProvider {
         this.refreshTokenExpired = refreshTokenExpired;
     }
 
-    public String createAccess(final String payload) {
+    public String createAccessFrom(final String memberId) {
         return builder(accessTokenExpired)
-                .setSubject(payload)
+                .setSubject(memberId)
                 .compact();
     }
 
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
 
     public String refreshAccessToken(final String access, final String refresh) {
         validate(refresh);
-        return createAccess(getMemberId(access));
+        return createAccessFrom(getMemberId(access));
     }
 
     public void validate(final String token) {
