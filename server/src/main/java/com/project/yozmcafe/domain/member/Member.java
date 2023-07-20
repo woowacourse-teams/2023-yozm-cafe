@@ -46,7 +46,6 @@ public class Member {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 내역입니다."));
 
         unViewedCafes.remove(foundUnviewedCafe);
-        foundUnviewedCafe.remove();
     }
 
     public boolean isEmptyUnViewedCafe() {

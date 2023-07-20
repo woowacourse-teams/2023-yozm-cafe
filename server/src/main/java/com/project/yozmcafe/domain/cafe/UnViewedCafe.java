@@ -34,11 +34,6 @@ public class UnViewedCafe {
         this(null, cafe, member);
     }
 
-    public void remove() {
-        this.member = null;
-        this.cafe = null;
-    }
-
     public boolean isMatch(final Member member, final Cafe cafe) {
         return this.member.equals(member) && this.cafe.equals(cafe);
     }

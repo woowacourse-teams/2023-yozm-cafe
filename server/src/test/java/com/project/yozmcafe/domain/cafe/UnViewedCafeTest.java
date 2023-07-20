@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,17 +22,6 @@ class UnViewedCafeTest {
     @BeforeEach
     void setUp() {
         unViewedCafe = new UnViewedCafe(CAFE_1, MEMBER);
-    }
-
-    @Test
-    @DisplayName("멤버와 카페를 null로 변경한다.")
-    void remove() {
-        //when
-        unViewedCafe.remove();
-
-        //then
-        assertThat(unViewedCafe.getCafe()).isNull();
-        assertThat(unViewedCafe.getMember()).isNull();
     }
 
     @MethodSource("provideExpectAndParams")
