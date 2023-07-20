@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
-import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 
 @Service
@@ -17,12 +15,9 @@ import com.project.yozmcafe.domain.member.Member;
 public class CafeHistoryService {
 
     private final CafeRepository cafeRepository;
-    private final UnViewedCafeRepository unViewedCafeRepository;
 
-    public CafeHistoryService(final CafeRepository cafeRepository,
-                              final UnViewedCafeRepository unViewedCafeRepository) {
+    public CafeHistoryService(final CafeRepository cafeRepository) {
         this.cafeRepository = cafeRepository;
-        this.unViewedCafeRepository = unViewedCafeRepository;
     }
 
     @Transactional
@@ -39,10 +34,6 @@ public class CafeHistoryService {
     private void updateUnViewedCafes(final Member member) {
         final List<Cafe> allCafes = cafeRepository.findAll();
         Collections.shuffle(allCafes);
-        final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
-                .map(savedCafe -> new UnViewedCafe(savedCafe, member))
-                .toList();
-        unViewedCafeRepository.saveAll(allUnViewedCafes);
-        member.addUnViewedCafes(allUnViewedCafes);
+        member.addUnViewedCafes(allCafes);
     }
 }

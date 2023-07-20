@@ -15,10 +15,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
+import com.project.yozmcafe.util.UnViewedCafeRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -40,7 +40,7 @@ class CafeHistoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        cafeHistoryService = new CafeHistoryService(cafeRepository, unViewedCafeRepository);
+        cafeHistoryService = new CafeHistoryService(cafeRepository);
     }
 
     @Test
@@ -50,8 +50,6 @@ class CafeHistoryServiceTest {
         final Member member = memberRepository.save(new Member(null));
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
-//        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
-//        final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
         member.addUnViewedCafes(List.of(cafe1, cafe2));
         em.flush();
 
@@ -59,7 +57,6 @@ class CafeHistoryServiceTest {
         cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
-
         assertThat(member.getUnViewedCafes()).hasSize(1);
         assertThat(unViewedCafeRepository.findAll()).hasSize(1);
     }
@@ -71,7 +68,6 @@ class CafeHistoryServiceTest {
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
         final Cafe cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
-//        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
         member.addUnViewedCafes(List.of(cafe1));
         em.flush();
 
