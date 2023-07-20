@@ -1,9 +1,16 @@
+import { useQuery } from '@tanstack/react-query';
 import { PiHouseLight, PiUserCircleLight } from 'react-icons/pi';
 import { Link, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
+import client from '../client';
 
 const Navbar = () => {
   const { pathname } = useLocation();
+
+  const { data: isLoggedIn } = useQuery<boolean>(['isLoggedIn'], {
+    enabled: false,
+    initialData: client.accessToken !== null,
+  });
 
   return (
     <Container>
@@ -11,10 +18,17 @@ const Navbar = () => {
         <Icon as={PiHouseLight} />
         <IconName>홈</IconName>
       </IconContainer>
-      <IconContainer to="/login" $isActive={pathname === '/login'}>
-        <Icon as={PiUserCircleLight} />
-        <IconName>로그인</IconName>
-      </IconContainer>
+      {isLoggedIn ? (
+        <IconContainer to="/my-profile" $isActive={pathname === '/profile'}>
+          <ProfileImage src="/images/profile-example.png" alt="Profile" />
+          <IconName>프로필</IconName>
+        </IconContainer>
+      ) : (
+        <IconContainer to="/login" $isActive={pathname === '/login'}>
+          <Icon as={PiUserCircleLight} />
+          <IconName>로그인</IconName>
+        </IconContainer>
+      )}
     </Container>
   );
 };
@@ -40,11 +54,17 @@ const Container = styled.nav`
   justify-content: space-evenly;
 
   width: 100%;
-  height: 72px;
+  height: 66px;
 
-  background-color: ${({ theme }) => theme.color.white};
+  border-top: 1px solid ${({ theme }) => theme.color.line.secondary};
 `;
 
 const Icon = styled.div`
   font-size: ${({ theme }) => theme.fontSize['4xl']};
+`;
+
+const ProfileImage = styled.img`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 `;
