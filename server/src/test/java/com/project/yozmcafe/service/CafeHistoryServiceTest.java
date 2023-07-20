@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -39,6 +40,9 @@ class CafeHistoryServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private TestEntityManager em;
+
     @BeforeEach
     void setUp() {
         cafeHistoryService = new CafeHistoryService(cafeRepository, unViewedCafeRepository);
@@ -48,18 +52,21 @@ class CafeHistoryServiceTest {
     @DisplayName("사용자의 unViewedCafe를 삭제한다.")
     void removeUnViewedCafe() {
         //given
-        final Member member = new Member(null);
+        final Member member = memberRepository.save(new Member(null));
         final Cafe cafe1 = cafeRepository.save(CAFE_4);
         final Cafe cafe2 = cafeRepository.save(CAFE_5);
         final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
         final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
         member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2));
+        em.flush();
 
         //when
         cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
+
         assertThat(member.getUnViewedCafes()).hasSize(1);
+        assertThat(unViewedCafeRepository.findAll()).hasSize(1);
     }
 
     @Test
@@ -71,11 +78,13 @@ class CafeHistoryServiceTest {
         final Cafe cafe3 = cafeRepository.save(CAFE_3);
         final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
         member.addUnViewedCafes(List.of(unViewedCafe1));
+        em.flush();
 
         //when
         cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
+        assertThat(unViewedCafeRepository.findAll()).hasSize(3);
     }
 }
