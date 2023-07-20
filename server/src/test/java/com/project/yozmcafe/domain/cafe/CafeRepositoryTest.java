@@ -65,7 +65,7 @@ class CafeRepositoryTest {
     void findUnViewedCafesByMember() {
         //given
         PageRequest pageRequest = PageRequest.of(0, 5);
-        final Member member = memberRepository.save(new Member(null));
+        final Member member = memberRepository.save(new Member("id", "연어", "image"));
         unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
         unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
         unViewedCafeRepository.save(new UnViewedCafe(cafe3, member));

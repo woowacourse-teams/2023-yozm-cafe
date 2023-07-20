@@ -9,18 +9,14 @@ const CafeActionBar = () => {
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLikeCountIncrease = () => {
-    if (isLiked) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
-    }
     setIsLiked(!isLiked);
+    setLikeCount(likeCount + (isLiked ? -1 : +1));
   };
 
   return (
     <Container>
       <Action>
-        <LikeButton likeCount={1} onChange={handleLikeCountIncrease} />
+        <LikeButton likeCount={likeCount} active={isLiked} onChange={handleLikeCountIncrease} />
       </Action>
       <Action>
         <CommentButton />

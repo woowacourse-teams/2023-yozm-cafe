@@ -8,31 +8,34 @@ import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
 public class Member {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String image;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<UnViewedCafe> unViewedCafes;
+    private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<LikedCafe> likedCafes;
+    private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
     }
 
-    public Member(final Long id) {
+    public Member(final String id, final String name, final String image) {
         this.id = id;
-        this.unViewedCafes = new ArrayList<>();
-        this.likedCafes = new ArrayList<>();
+        this.name = name;
+        this.image = image;
     }
 
     public void addUnViewedCafes(final List<Cafe> cafes) {
@@ -55,8 +58,16 @@ public class Member {
         return unViewedCafes.isEmpty();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public List<UnViewedCafe> getUnViewedCafes() {

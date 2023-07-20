@@ -43,7 +43,7 @@ class CafeHistoryServiceTest {
     @DisplayName("사용자의 unViewedCafe를 삭제한다.")
     void removeUnViewedCafe() {
         //given
-        final Member member = memberRepository.save(new Member(null));
+        final Member member = memberRepository.save(new Member("1", "폴로", "폴로사진"));
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
         member.addUnViewedCafes(List.of(cafe1, cafe2));
@@ -59,7 +59,7 @@ class CafeHistoryServiceTest {
     @Test
     @DisplayName("사용자의 unViewedCafe를 삭제하고 unViewedCafe가 비어있다면, 모든 카페를 넣는다.")
     void removeUnViewedCafeWhenEmpty() {
-        final Member member = memberRepository.save(new Member(null));
+        final Member member = memberRepository.save(new Member("2", "도치", "도치사진"));
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
         final Cafe cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));

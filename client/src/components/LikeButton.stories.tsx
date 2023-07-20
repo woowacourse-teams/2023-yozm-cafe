@@ -11,5 +11,7 @@ const meta: Meta<typeof LikeButton> = {
 export default meta;
 
 export const Default: Story = {
-  args: { currentLikeCount: 1 },
+  args: {
+    likeCount: 1,
+  },
 };

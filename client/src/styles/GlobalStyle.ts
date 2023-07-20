@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     max-width: 495px;
 
-    border: 2px solid black;
+    box-shadow: ${({ theme }) => theme.shadow['2']};
   }
 `;
 
