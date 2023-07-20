@@ -15,6 +15,9 @@ import javax.naming.AuthenticationException;
 @Component
 public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer ";
+
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
@@ -30,13 +33,20 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
-        String token = webRequest.getHeader("Authorization");
-        if (token == null) {
-            throw new AuthenticationException("유효한 사용자만 접근 가능합니다.");
-        }
+        final String token = parseTokenFrom(webRequest);
 
         jwtTokenProvider.validate(token);
         return memberRepository.findById(jwtTokenProvider.getMemberId(token))
                 .orElseThrow(() -> new AuthenticationException("유효하지 않은 토큰입니다."));
     }
+
+    private String parseTokenFrom(final NativeWebRequest webRequest) throws AuthenticationException {
+        String value = webRequest.getHeader(AUTHORIZATION);
+        if (value == null) {
+            throw new AuthenticationException("유효한 사용자만 접근 가능합니다.");
+        }
+
+        return value.replace(BEARER, "");
+    }
+
 }

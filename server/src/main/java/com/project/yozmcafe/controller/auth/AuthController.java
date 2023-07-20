@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final String AUTHORIZATION = "Authorization";
 
@@ -37,7 +38,6 @@ public class AuthController {
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
     }
-
 
     @GetMapping
     public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request,

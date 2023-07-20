@@ -8,6 +8,7 @@ import java.util.Base64;
 import java.util.List;
 
 public abstract class OAuthToken {
+
     private static final String JWT_TOKEN_DELIMITER = "\\.";
     private static final String PAYLOADS_DELIMITER = ",";
     private static final String ENTRY_DELIMITER = "\"";
