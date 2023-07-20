@@ -36,5 +36,3 @@ server/.nb-gradle/
 
 ### VS Code ###
 server/.vscode/
-
-server/src/main/resources/application.properties
