@@ -22,7 +22,6 @@ const GlobalStyle = createGlobalStyle`
 
     width: 100vw;
     height: 100svh;
-
   }
 
   #root {
