@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -35,9 +34,6 @@ class CafeHistoryServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private TestEntityManager em;
-
     @BeforeEach
     void setUp() {
         cafeHistoryService = new CafeHistoryService(cafeRepository);
@@ -51,7 +47,6 @@ class CafeHistoryServiceTest {
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
         member.addUnViewedCafes(List.of(cafe1, cafe2));
-        em.flush();
 
         //when
         cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
@@ -69,7 +64,6 @@ class CafeHistoryServiceTest {
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
         final Cafe cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
         member.addUnViewedCafes(List.of(cafe1));
-        em.flush();
 
         //when
         cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());

@@ -1,5 +1,7 @@
 package com.project.yozmcafe.domain.cafe;
 
+import java.util.Objects;
+
 import com.project.yozmcafe.domain.member.Member;
 
 import jakarta.persistence.Entity;
@@ -34,10 +36,6 @@ public class UnViewedCafe {
         this(null, cafe, member);
     }
 
-    public boolean isMatch(final Member member, final Cafe cafe) {
-        return this.member.equals(member) && this.cafe.equals(cafe);
-    }
-
     public Long getId() {
         return id;
     }
@@ -48,5 +46,22 @@ public class UnViewedCafe {
 
     public Member getMember() {
         return member;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final UnViewedCafe that = (UnViewedCafe) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

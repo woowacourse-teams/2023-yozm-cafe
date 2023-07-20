@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.fixture.Fixture;
 
 class MemberTest {
@@ -21,9 +22,10 @@ class MemberTest {
         final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 4);
         final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
         member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+        final UnViewedCafe unViewedCafe = member.getUnViewedCafes().get(0);
 
         //when
-        member.removeUnViewedCafe(cafe1);
+        member.removeUnViewedCafe(unViewedCafe);
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(2);

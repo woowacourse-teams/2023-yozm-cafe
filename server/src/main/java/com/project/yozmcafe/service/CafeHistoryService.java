@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
 
 @Service
@@ -22,9 +23,9 @@ public class CafeHistoryService {
 
     @Transactional
     public void removeUnViewedCafe(final Member member, final long cafeId) {
-        final Cafe cafe = cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카페입니다."));
-        member.removeUnViewedCafe(cafe);
+        final UnViewedCafe unViewedCafe = cafeRepository.findUnViewedCafeByMemberAndCafe(member.getId(), cafeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 UnViewedCafe가 없습니다."));
+        member.removeUnViewedCafe(unViewedCafe);
 
         if (member.isEmptyUnViewedCafe()) {
             updateUnViewedCafes(member);
