@@ -1,8 +1,9 @@
 package com.project.yozmcafe.domain.cafe;
 
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.util.UnViewedCafeRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
-
-import static com.project.yozmcafe.fixture.Fixture.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.fixture.Fixture;
+import com.project.yozmcafe.util.UnViewedCafeRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -38,11 +39,11 @@ class CafeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        cafe1 = cafeRepository.save(CAFE_1);
-        cafe2 = cafeRepository.save(CAFE_2);
-        cafe3 = cafeRepository.save(CAFE_3);
-        cafe4 = cafeRepository.save(CAFE_4);
-        cafe5 = cafeRepository.save(CAFE_5);
+        cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
+        cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
+        cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
+        cafe4 = cafeRepository.save(Fixture.getCafe("카페4", "주소4", 6));
+        cafe5 = cafeRepository.save(Fixture.getCafe("카페5", "주소5", 7));
     }
 
     @Test
@@ -52,7 +53,7 @@ class CafeRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         //when
-        final List<Cafe> cafes = this.cafeRepository.findSliceBy(pageRequest).getContent();
+        final List<Cafe> cafes = cafeRepository.findSliceBy(pageRequest).getContent();
 
         //then
         assertThat(cafes).hasSize(5);
@@ -65,11 +66,11 @@ class CafeRepositoryTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 5);
         final Member member = memberRepository.save(new Member("id", "연어", "image"));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe2, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe3, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe4, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe5, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe3, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe4, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe5, member));
 
         //when
         final List<Cafe> result = cafeRepository.findUnViewedCafesByMember(pageRequest, member.getId()).getContent();

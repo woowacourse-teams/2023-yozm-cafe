@@ -1,14 +1,17 @@
 package com.project.yozmcafe.domain.member;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Member {
@@ -20,7 +23,7 @@ public class Member {
     @Column(nullable = false)
     private String image;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
@@ -35,6 +38,26 @@ public class Member {
         this.image = image;
     }
 
+    public void addUnViewedCafes(final List<Cafe> cafes) {
+        final List<UnViewedCafe> allUnViewedCafes = cafes.stream()
+                .map(savedCafe -> new UnViewedCafe(savedCafe, this))
+                .toList();
+        unViewedCafes.addAll(allUnViewedCafes);
+    }
+
+    public void removeUnViewedCafe(final UnViewedCafe unViewedCafe) {
+        final UnViewedCafe foundUnviewedCafe = unViewedCafes.stream()
+                .filter(unViewedCafe::equals)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 내역입니다."));
+
+        unViewedCafes.remove(foundUnviewedCafe);
+    }
+
+    public boolean isEmptyUnViewedCafe() {
+        return unViewedCafes.isEmpty();
+    }
+
     public String getId() {
         return id;
     }
@@ -45,5 +68,13 @@ public class Member {
 
     public String getImage() {
         return image;
+    }
+
+    public List<UnViewedCafe> getUnViewedCafes() {
+        return unViewedCafes;
+    }
+
+    public List<LikedCafe> getLikedCafes() {
+        return likedCafes;
     }
 }
