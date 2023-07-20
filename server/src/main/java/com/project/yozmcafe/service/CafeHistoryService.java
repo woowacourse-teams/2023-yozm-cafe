@@ -19,7 +19,8 @@ public class CafeHistoryService {
     private final CafeRepository cafeRepository;
     private final UnViewedCafeRepository unViewedCafeRepository;
 
-    public CafeHistoryService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViewedCafeRepository) {
+    public CafeHistoryService(final CafeRepository cafeRepository,
+                              final UnViewedCafeRepository unViewedCafeRepository) {
         this.cafeRepository = cafeRepository;
         this.unViewedCafeRepository = unViewedCafeRepository;
     }
@@ -39,7 +40,7 @@ public class CafeHistoryService {
         final List<Cafe> allCafes = cafeRepository.findAll();
         Collections.shuffle(allCafes);
         final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
-                .map(savedCafe -> new UnViewedCafe(null, savedCafe, member))
+                .map(savedCafe -> new UnViewedCafe(savedCafe, member))
                 .toList();
         this.unViewedCafeRepository.saveAll(allUnViewedCafes);
         member.addUnViewedCafes(allUnViewedCafes);

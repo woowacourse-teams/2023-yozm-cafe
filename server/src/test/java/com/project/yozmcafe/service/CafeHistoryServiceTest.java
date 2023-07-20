@@ -51,8 +51,8 @@ class CafeHistoryServiceTest {
         final Member member = new Member(null);
         final Cafe cafe1 = cafeRepository.save(CAFE_4);
         final Cafe cafe2 = cafeRepository.save(CAFE_5);
-        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
-        final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(null, cafe2, member));
+        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
+        final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
         member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2));
 
         //when
@@ -69,7 +69,7 @@ class CafeHistoryServiceTest {
         final Cafe cafe1 = cafeRepository.save(CAFE_1);
         final Cafe cafe2 = cafeRepository.save(CAFE_2);
         final Cafe cafe3 = cafeRepository.save(CAFE_3);
-        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
+        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
         member.addUnViewedCafes(List.of(unViewedCafe1));
 
         //when

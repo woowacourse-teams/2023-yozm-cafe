@@ -69,11 +69,11 @@ class CafeRepositoryTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 5);
         final Member member = memberRepository.save(new Member(null));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe1, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe2, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe3, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe4, member));
-        unViewedCafeRepository.save(new UnViewedCafe(null, cafe5, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe3, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe4, member));
+        unViewedCafeRepository.save(new UnViewedCafe(cafe5, member));
 
         //when
         final List<Cafe> result = cafeRepository.findUnViewedCafesByMember(pageRequest, member.getId()).getContent();

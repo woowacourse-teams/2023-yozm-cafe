@@ -17,9 +17,9 @@ class MemberTest {
     void removeUnViewedCafe() {
         //given
         Member member = new Member(1L);
-        final UnViewedCafe unViewedCafe1 = new UnViewedCafe(null, CAFE_1, member);
-        final UnViewedCafe unViewedCafe2 = new UnViewedCafe(null, CAFE_1, member);
-        final UnViewedCafe unViewedCafe3 = new UnViewedCafe(null, CAFE_1, member);
+        final UnViewedCafe unViewedCafe1 = new UnViewedCafe(CAFE_1, member);
+        final UnViewedCafe unViewedCafe2 = new UnViewedCafe(CAFE_1, member);
+        final UnViewedCafe unViewedCafe3 = new UnViewedCafe(CAFE_1, member);
         member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2, unViewedCafe3));
 
         //when

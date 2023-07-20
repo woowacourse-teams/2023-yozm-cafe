@@ -30,6 +30,10 @@ public class UnViewedCafe {
         this.member = member;
     }
 
+    public UnViewedCafe(final Cafe cafe, final Member member) {
+        this(null, cafe, member);
+    }
+
     public void remove() {
         this.member = null;
         this.cafe = null;

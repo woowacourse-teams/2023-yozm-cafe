@@ -22,7 +22,7 @@ class UnViewedCafeTest {
 
     @BeforeEach
     void setUp() {
-        unViewedCafe = new UnViewedCafe(null, CAFE_1, MEMBER);
+        unViewedCafe = new UnViewedCafe(CAFE_1, MEMBER);
     }
 
     @Test
