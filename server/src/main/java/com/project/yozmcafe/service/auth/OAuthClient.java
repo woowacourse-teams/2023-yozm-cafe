@@ -4,7 +4,6 @@ import com.project.yozmcafe.controller.auth.MemberInfo;
 import com.project.yozmcafe.domain.auth.token.OAuthToken;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -20,7 +19,7 @@ public abstract class OAuthClient {
 
     private final static RestTemplate restTemplate = new RestTemplate();
 
-    public MemberInfo getUserInfo(@RequestParam(CODE) final String code) {
+    public MemberInfo getUserInfo(final String code) {
         final MultiValueMap<String, String> parameter = setParameters(code);
 
         OAuthToken oAuthToken = restTemplate.postForObject(URI.create(requestUri()), parameter, getType());
