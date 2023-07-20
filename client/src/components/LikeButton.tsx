@@ -9,15 +9,21 @@ type LikeButtonProps = {
 
 const LikeButton = ({ likeCount }: LikeButtonProps) => {
   const [isActive, setIsActive] = useState(false);
+  const [count, setCount] = useState(likeCount);
 
   const handleLikeClick = async () => {
     setIsActive(!isActive);
+    if (likeCount === count) {
+      setCount(likeCount + 1);
+    } else {
+      setCount(count - 1);
+    }
   };
 
   return (
     <Container>
       <HeartIcon $isActive={isActive} onClick={handleLikeClick} />
-      <LikeCount>{likeCount}</LikeCount>
+      <LikeCount>{count}</LikeCount>
     </Container>
   );
 };
