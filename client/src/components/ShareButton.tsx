@@ -1,4 +1,5 @@
-import { FaShare } from 'react-icons/fa';
+import { PiShareFatFill } from 'react-icons/pi';
+
 import { styled } from 'styled-components';
 
 const ShareButton = () => {
@@ -21,7 +22,7 @@ const Container = styled.aside`
   align-items: center;
 `;
 
-const Button = styled(FaShare)`
+const Button = styled(PiShareFatFill)`
   cursor: pointer;
-  font-size: ${({ theme }) => theme.fontSize['3xl']};
+  font-size: ${({ theme }) => theme.fontSize['5xl']};
 `;
