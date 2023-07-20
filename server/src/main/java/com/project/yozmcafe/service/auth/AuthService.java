@@ -37,4 +37,8 @@ public class AuthService {
         final String token = jwtTokenProvider.refreshAccessToken(access, refresh);
         return new TokenResponse(token);
     }
+
+    public String getAuthorizationUri(final OAuthProvider provider) {
+        return provider.getAuthorizationUrl();
+    }
 }

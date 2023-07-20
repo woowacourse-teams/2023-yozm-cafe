@@ -30,6 +30,10 @@ public enum OAuthProvider {
         return oAuthClient.getUserInfo(code);
     }
 
+    public String getAuthorizationUrl(){
+        return oAuthClient.getAuthorizationUrl();
+    }
+
     @Configuration
     private static class DependencyInjector {
         private final GoogleOAuthClient googleOAuthClient;
