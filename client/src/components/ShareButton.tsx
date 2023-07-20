@@ -10,6 +10,7 @@ const ShareButton = () => {
   return (
     <Container>
       <Button onClick={handleClick} />
+      <Text>공유하기</Text>
     </Container>
   );
 };
@@ -25,4 +26,9 @@ const Container = styled.aside`
 const Button = styled(PiShareFatFill)`
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['5xl']};
+`;
+
+const Text = styled.span`
+  margin-top: 5px;
+  font-size: ${({ theme }) => theme.fontSize.sm};
 `;
