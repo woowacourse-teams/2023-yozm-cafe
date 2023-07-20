@@ -24,4 +24,16 @@ public class Detail {
         this.mapUrl = mapUrl;
         this.description = description;
     }
+
+    public List<AvailableTime> getAvailableTimes() {
+        return availableTimes;
+    }
+
+    public String getMapUrl() {
+        return mapUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
