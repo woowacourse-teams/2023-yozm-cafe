@@ -14,5 +14,5 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             + "INNER JOIN UnViewedCafe AS u "
             + "ON c.id = u.cafe.id "
             + "WHERE u.member.id = :memberId")
-    Slice<Cafe> findUnViewedCafesByMember(Pageable pageable, @Param("memberId") Long memberId);
+    Slice<Cafe> findUnViewedCafesByMember(Pageable pageable, @Param("memberId") String memberId);
 }
