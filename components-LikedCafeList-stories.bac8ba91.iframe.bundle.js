@@ -8,7 +8,7 @@
 `,TitleContainer=styled_components_browser_esm.zo.article`
   display: flex;
   justify-content: center;
-  margin-bottom: ${({theme})=>theme.space[4]};
+  margin-bottom: ${({theme})=>theme.space[3]};
   border-bottom: solid ${({theme})=>theme.color.line.secondary};
 `,ScrollContainer=styled_components_browser_esm.zo.div`
   overflow-y: scroll;
@@ -27,4 +27,4 @@
   height: 200px;
   border-radius: 20px;
 `,LikedCafeList_stories={title:"LikedCafeList",component:components_LikedCafeList},Default={args:{}};Default.parameters={...Default.parameters,docs:{...Default.parameters?.docs,source:{originalSource:"{\n  args: {}\n}",...Default.parameters?.docs?.source}}};const __namedExportsOrder=["Default"]}}]);
-//# sourceMappingURL=components-LikedCafeList-stories.977459b0.iframe.bundle.js.map
+//# sourceMappingURL=components-LikedCafeList-stories.bac8ba91.iframe.bundle.js.map
