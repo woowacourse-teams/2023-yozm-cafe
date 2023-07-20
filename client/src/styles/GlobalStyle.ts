@@ -22,6 +22,7 @@ const GlobalStyle = createGlobalStyle`
 
     width: 100vw;
     height: 100svh;
+
   }
 
   #root {
@@ -31,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     max-width: 495px;
 
-    border: 2px solid black;
+    box-shadow: ${({ theme }) => theme.shadow['2']};
   }
 `;
 
