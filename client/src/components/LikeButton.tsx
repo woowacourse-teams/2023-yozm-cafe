@@ -27,12 +27,12 @@ export default LikeButton;
 const HeartIcon = styled(PiHeartFill)<{ $isActive: boolean }>`
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['5xl']};
-  color: ${({ theme, $isActive }) => ($isActive ? theme.color.primary : theme.color.secondary)};
+  color: ${({ theme, $isActive }) => ($isActive ? theme.color.primary : theme.color.white)};
 `;
 
 const LikeCount = styled.span`
   font-size: small;
-  color: ${({ theme }) => theme.color.gray};
+  color: ${({ theme }) => theme.color.white};
 `;
 
 const Container = styled.div`
