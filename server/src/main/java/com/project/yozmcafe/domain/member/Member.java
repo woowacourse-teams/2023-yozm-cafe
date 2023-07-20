@@ -35,8 +35,11 @@ public class Member {
         this.likedCafes = new ArrayList<>();
     }
 
-    public void addUnViewedCafes(final List<UnViewedCafe> newUnViewedCafes) {
-        unViewedCafes.addAll(newUnViewedCafes);
+    public void addUnViewedCafes(final List<Cafe> cafes) {
+        final List<UnViewedCafe> allUnViewedCafes = cafes.stream()
+                .map(savedCafe -> new UnViewedCafe(savedCafe, this))
+                .toList();
+        unViewedCafes.addAll(allUnViewedCafes);
     }
 
     public void removeUnViewedCafe(final Cafe cafe) {

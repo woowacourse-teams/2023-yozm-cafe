@@ -1,10 +1,5 @@
 package com.project.yozmcafe.service;
 
-import static com.project.yozmcafe.fixture.Fixture.CAFE_1;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_2;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_3;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_4;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_5;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -20,10 +15,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.fixture.Fixture;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -53,11 +48,11 @@ class CafeHistoryServiceTest {
     void removeUnViewedCafe() {
         //given
         final Member member = memberRepository.save(new Member(null));
-        final Cafe cafe1 = cafeRepository.save(CAFE_4);
-        final Cafe cafe2 = cafeRepository.save(CAFE_5);
-        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
-        final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
-        member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2));
+        final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
+        final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
+//        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
+//        final UnViewedCafe unViewedCafe2 = unViewedCafeRepository.save(new UnViewedCafe(cafe2, member));
+        member.addUnViewedCafes(List.of(cafe1, cafe2));
         em.flush();
 
         //when
@@ -73,11 +68,11 @@ class CafeHistoryServiceTest {
     @DisplayName("사용자의 unViewedCafe를 삭제하고 unViewedCafe가 비어있다면, 모든 카페를 넣는다.")
     void removeUnViewedCafeWhenEmpty() {
         final Member member = memberRepository.save(new Member(null));
-        final Cafe cafe1 = cafeRepository.save(CAFE_1);
-        final Cafe cafe2 = cafeRepository.save(CAFE_2);
-        final Cafe cafe3 = cafeRepository.save(CAFE_3);
-        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
-        member.addUnViewedCafes(List.of(unViewedCafe1));
+        final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
+        final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
+        final Cafe cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
+//        final UnViewedCafe unViewedCafe1 = unViewedCafeRepository.save(new UnViewedCafe(cafe1, member));
+        member.addUnViewedCafes(List.of(cafe1));
         em.flush();
 
         //when

@@ -1,6 +1,5 @@
 package com.project.yozmcafe.domain.member;
 
-import static com.project.yozmcafe.fixture.Fixture.CAFE_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -8,7 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.fixture.Fixture;
 
 class MemberTest {
 
@@ -17,13 +17,13 @@ class MemberTest {
     void removeUnViewedCafe() {
         //given
         Member member = new Member(1L);
-        final UnViewedCafe unViewedCafe1 = new UnViewedCafe(CAFE_1, member);
-        final UnViewedCafe unViewedCafe2 = new UnViewedCafe(CAFE_1, member);
-        final UnViewedCafe unViewedCafe3 = new UnViewedCafe(CAFE_1, member);
-        member.addUnViewedCafes(List.of(unViewedCafe1, unViewedCafe2, unViewedCafe3));
+        final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 4);
+        final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
 
         //when
-        member.removeUnViewedCafe(CAFE_1);
+        member.removeUnViewedCafe(cafe1);
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(2);

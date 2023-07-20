@@ -1,10 +1,5 @@
 package com.project.yozmcafe.domain.cafe;
 
-import static com.project.yozmcafe.fixture.Fixture.CAFE_1;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_2;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_3;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_4;
-import static com.project.yozmcafe.fixture.Fixture.CAFE_5;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -20,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.fixture.Fixture;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -42,11 +38,11 @@ class CafeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        cafe1 = cafeRepository.save(CAFE_1);
-        cafe2 = cafeRepository.save(CAFE_2);
-        cafe3 = cafeRepository.save(CAFE_3);
-        cafe4 = cafeRepository.save(CAFE_4);
-        cafe5 = cafeRepository.save(CAFE_5);
+        cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
+        cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
+        cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
+        cafe4 = cafeRepository.save(Fixture.getCafe("카페4", "주소4", 6));
+        cafe5 = cafeRepository.save(Fixture.getCafe("카페5", "주소5", 7));
     }
 
     @Test
