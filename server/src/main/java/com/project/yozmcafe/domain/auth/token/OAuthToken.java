@@ -17,23 +17,23 @@ public abstract class OAuthToken {
     private static final int VALUE_INDEX = 3;
 
     protected final String idToken;
-    protected final String SUBJECT;
-    protected final String NAME;
-    protected final String IMAGE;
+    protected final String subject;
+    protected final String name;
+    protected final String image;
 
     protected OAuthToken(@JsonProperty("id_token") String idToken, String subject, String name, String image) {
         this.idToken = idToken;
-        SUBJECT = subject;
-        NAME = name;
-        IMAGE = image;
+        this.subject = subject;
+        this.name = name;
+        this.image = image;
     }
 
     public MemberInfo toUserInfo() {
         final List<String> payloads = getPayloads();
 
-        String openId = parse(payloads, SUBJECT);
-        String name = parse(payloads, NAME);
-        String image = parse(payloads, IMAGE);
+        String openId = parse(payloads, subject);
+        String name = parse(payloads, this.name);
+        String image = parse(payloads, this.image);
 
         return new MemberInfo(openId, name, image);
     }
