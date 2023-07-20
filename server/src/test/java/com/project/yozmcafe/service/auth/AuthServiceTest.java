@@ -57,4 +57,15 @@ class AuthServiceTest {
         //then
         assertThat(memberRepository.findAll()).hasSize(1);
     }
+
+    @Test
+    @DisplayName("Provider 별 인증 Uri를 받는다.")
+    void getAuthorizationUri() {
+        //given
+        final OAuthProvider kakao = OAuthProvider.from("kakao");
+        //when
+        final String authorizationUri = authService.getAuthorizationUri(kakao);
+        //then
+        assertThat(authorizationUri).contains("response_type","redirect_uri","client_id","scope");
+    }
 }

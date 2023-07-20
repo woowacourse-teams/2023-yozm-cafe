@@ -84,4 +84,18 @@ class AuthControllerTest {
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
+
+    @Test
+    @DisplayName("Provider 별 인증 주소로 Redirect 한다.")
+    void redirectAuthorizationUri() {
+        //when
+        final Response response = RestAssured.given().log().all()
+                .when()
+                .log().all()
+                .redirects().follow(false)
+                .get("/auth/kakao");
+
+        //then
+        assertThat(response.getHeader("Location")).contains("response_type", "redirect_uri", "client_id", "scope");
+    }
 }
