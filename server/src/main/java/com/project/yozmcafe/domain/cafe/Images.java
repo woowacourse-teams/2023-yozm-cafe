@@ -19,4 +19,8 @@ public class Images {
     public Images(List<String> urls) {
         this.urls = urls;
     }
+
+    public List<String> getUrls() {
+        return urls;
+    }
 }

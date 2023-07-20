@@ -22,4 +22,23 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<LikedCafe> likedCafes;
+
+    protected Member() {
+    }
+
+    public Member(final Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<UnViewedCafe> getUnViewedCafes() {
+        return unViewedCafes;
+    }
+
+    public List<LikedCafe> getLikedCafes() {
+        return likedCafes;
+    }
 }

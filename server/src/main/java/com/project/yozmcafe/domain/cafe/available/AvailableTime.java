@@ -25,4 +25,20 @@ public class AvailableTime {
         this.close = close;
         this.isOpened = isOpened;
     }
+
+    public Days getDay() {
+        return day;
+    }
+
+    public LocalDateTime getOpen() {
+        return open;
+    }
+
+    public LocalDateTime getClose() {
+        return close;
+    }
+
+    public boolean isOpened() {
+        return isOpened;
+    }
 }
