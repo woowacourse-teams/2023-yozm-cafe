@@ -42,7 +42,7 @@ public class Member {
     public void removeUnViewedCafe(final Cafe cafe) {
         final UnViewedCafe foundUnviewedCafe = unViewedCafes.stream()
                 .filter(unViewedCafe -> unViewedCafe.isMatch(this, cafe))
-                .findFirst()
+                .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 내역입니다."));
 
         unViewedCafes.remove(foundUnviewedCafe);
