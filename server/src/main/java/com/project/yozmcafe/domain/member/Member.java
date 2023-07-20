@@ -35,8 +35,8 @@ public class Member {
         this.likedCafes = new ArrayList<>();
     }
 
-    public void addUnViewedCafes(final List<UnViewedCafe> unViewedCafes) {
-        this.unViewedCafes.addAll(unViewedCafes);
+    public void addUnViewedCafes(final List<UnViewedCafe> newUnViewedCafes) {
+        unViewedCafes.addAll(newUnViewedCafes);
     }
 
     public void removeUnViewedCafe(final Cafe cafe) {
@@ -45,12 +45,12 @@ public class Member {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 내역입니다."));
 
-        this.unViewedCafes.remove(foundUnviewedCafe);
+        unViewedCafes.remove(foundUnviewedCafe);
         foundUnviewedCafe.remove();
     }
 
     public boolean isEmptyUnViewedCafe() {
-        return this.unViewedCafes.isEmpty();
+        return unViewedCafes.isEmpty();
     }
 
     public Long getId() {

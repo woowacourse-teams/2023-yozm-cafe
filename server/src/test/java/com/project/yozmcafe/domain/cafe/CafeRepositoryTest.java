@@ -56,7 +56,7 @@ class CafeRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         //when
-        final List<Cafe> cafes = this.cafeRepository.findSliceBy(pageRequest).getContent();
+        final List<Cafe> cafes = cafeRepository.findSliceBy(pageRequest).getContent();
 
         //then
         assertThat(cafes).hasSize(5);

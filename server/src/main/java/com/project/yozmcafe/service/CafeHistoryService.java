@@ -42,7 +42,7 @@ public class CafeHistoryService {
         final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
                 .map(savedCafe -> new UnViewedCafe(savedCafe, member))
                 .toList();
-        this.unViewedCafeRepository.saveAll(allUnViewedCafes);
+        unViewedCafeRepository.saveAll(allUnViewedCafes);
         member.addUnViewedCafes(allUnViewedCafes);
     }
 }
