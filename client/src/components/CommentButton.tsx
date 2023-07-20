@@ -1,4 +1,4 @@
-import { FaRegComment } from 'react-icons/fa';
+import { PiChatFill } from 'react-icons/pi';
 import { styled } from 'styled-components';
 
 const CommentButton = () => {
@@ -21,7 +21,7 @@ const Container = styled.aside`
   align-items: center;
 `;
 
-const Button = styled(FaRegComment)`
+const Button = styled(PiChatFill)`
   cursor: pointer;
-  font-size: ${({ theme }) => theme.fontSize['3xl']};
+  font-size: ${({ theme }) => theme.fontSize['5xl']};
 `;
