@@ -51,6 +51,5 @@ const CardList = styled.ul`
 
   & > * {
     scroll-snap-align: start;
-    margin-bottom: 40px;
   }
 `;
