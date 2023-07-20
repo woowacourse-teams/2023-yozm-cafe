@@ -20,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.util.UnViewedCafeRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
