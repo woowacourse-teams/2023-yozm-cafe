@@ -19,7 +19,7 @@ const Navbar = () => {
         <IconName>홈</IconName>
       </IconContainer>
       {isLoggedIn ? (
-        <IconContainer to="/my-profile" $isActive={pathname === '/profile'}>
+        <IconContainer to="/my-profile" $isActive={pathname === '/my-profile'}>
           <ProfileImage src="/images/profile-example.png" alt="Profile" />
           <IconName>프로필</IconName>
         </IconContainer>
