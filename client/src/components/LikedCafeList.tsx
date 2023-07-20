@@ -47,7 +47,7 @@ const Title = styled.h1`
 const TitleContainer = styled.article`
   display: flex;
   justify-content: center;
-  margin-bottom: ${({ theme }) => theme.space['4']};
+  margin-bottom: ${({ theme }) => theme.space['3']};
   border-bottom: solid ${({ theme }) => theme.color.line.secondary};
 `;
 
