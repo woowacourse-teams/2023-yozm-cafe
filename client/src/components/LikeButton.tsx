@@ -1,22 +1,18 @@
-import { useState } from 'react';
 import { PiHeartFill } from 'react-icons/pi';
 import { styled } from 'styled-components';
 
 type LikeButtonProps = {
   likeCount: number;
-  onChange: (likeCount: number) => void;
+  active: boolean;
+  onChange: () => void;
 };
 
-const LikeButton = ({ likeCount }: LikeButtonProps) => {
-  const [isActive, setIsActive] = useState(false);
-
-  const handleLikeClick = async () => {
-    setIsActive(!isActive);
-  };
+const LikeButton = ({ likeCount, active, onChange }: LikeButtonProps) => {
+  const handleLikeClick = () => onChange?.();
 
   return (
     <Container>
-      <HeartIcon $isActive={isActive} onClick={handleLikeClick} />
+      <HeartIcon $active={active} onClick={handleLikeClick} />
       <LikeCount>{likeCount}</LikeCount>
     </Container>
   );
@@ -24,15 +20,15 @@ const LikeButton = ({ likeCount }: LikeButtonProps) => {
 
 export default LikeButton;
 
-const HeartIcon = styled(PiHeartFill)<{ $isActive: boolean }>`
+const HeartIcon = styled(PiHeartFill)<{ $active: boolean }>`
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['5xl']};
-  color: ${({ theme, $isActive }) => ($isActive ? theme.color.primary : theme.color.secondary)};
+  color: ${({ theme, $active }) => ($active ? theme.color.primary : theme.color.white)};
 `;
 
 const LikeCount = styled.span`
   font-size: small;
-  color: ${({ theme }) => theme.color.gray};
+  color: ${({ theme }) => theme.color.white};
 `;
 
 const Container = styled.div`
