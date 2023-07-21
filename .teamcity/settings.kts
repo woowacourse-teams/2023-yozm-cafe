@@ -15,18 +15,9 @@ import jetbrains.buildServer.configs.kotlin.v2018_2.vcs.GitVcsRoot
 version = "2018.2"
 
 project {
-    vcsRoot(YozmCafeVcs)
     buildType(Server)
     buildType(Client)
 }
-
-object YozmCafeVcs : GitVcsRoot({
-    name = "YozmCafeVcs"
-    url = "https://github.com/woowacourse-teams/2023-yozm-cafe.git"
-    branchSpec = """
-        +:refs/heads/(main)
-    """.trimIndent()
-})
 
 object Server : BuildType({
     name = "Server"
@@ -34,10 +25,6 @@ object Server : BuildType({
     params {
         param("env.APPLICATION_DEV", """
         """.trimIndent())
-    }
-
-    vcs {
-        root(YozmCafeVcs)
     }
 
     steps {
@@ -100,10 +87,6 @@ object Server : BuildType({
 
 object Client : BuildType({
     name = "Client"
-
-    vcs {
-        root(YozmCafeVcs)
-    }
 
     steps {
         nodeJS {
