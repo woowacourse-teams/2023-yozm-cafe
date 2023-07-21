@@ -13,6 +13,19 @@ import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.sshExec
 import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.sshUpload
 import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.vcs
 
+version = "2018.2"
+
+project {
+    vcsRoot(YozmCafeVcs)
+    buildType(Server)
+    buildType(Client)
+}
+
+object YozmCafeVcs : GitVcsRoot({
+    name = "YozmCafeVcs"
+    url = "https://github.com/woowacourse-teams/2023-yozm-cafe.git"
+})
+
 object Server : BuildType({
     name = "Server"
 
