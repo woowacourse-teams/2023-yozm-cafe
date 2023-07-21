@@ -1,5 +1,7 @@
 package com.project.yozmcafe.domain.cafe;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -61,5 +63,22 @@ public class Cafe {
 
     public int getLikeCount() {
         return likeCount;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Cafe cafe = (Cafe) o;
+        return Objects.equals(id, cafe.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -58,6 +58,15 @@ public class Member {
         return unViewedCafes.isEmpty();
     }
 
+    public void addLikedCafe(Cafe cafe) {
+        likedCafes.add(new LikedCafe(cafe, this));
+    }
+
+    public boolean isLike(final Cafe cafe) {
+        return likedCafes.stream()
+                .anyMatch(likedCafe -> likedCafe.isSameCafe(cafe));
+    }
+
     public String getId() {
         return id;
     }
