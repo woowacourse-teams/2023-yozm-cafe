@@ -23,6 +23,9 @@ project {
 object YozmCafeVcs : GitVcsRoot({
     name = "YozmCafeVcs"
     url = "https://github.com/woowacourse-teams/2023-yozm-cafe.git"
+    branchSpec = """
+        +:refs/heads/(main)
+    """.trimIndent()
 })
 
 object Server : BuildType({
