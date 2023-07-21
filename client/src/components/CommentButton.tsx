@@ -28,6 +28,5 @@ const Button = styled(PiChatFill)`
 `;
 
 const Text = styled.span`
-  margin-top: 5px;
   font-size: ${({ theme }) => theme.fontSize.sm};
 `;
