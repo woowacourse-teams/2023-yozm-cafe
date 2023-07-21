@@ -12,6 +12,7 @@ import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.sshExec
 import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.sshUpload
 import jetbrains.buildServer.configs.kotlin.v2018_2.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.v2018_2.vcs.GitVcsRoot
 
 version = "2018.2"
 
