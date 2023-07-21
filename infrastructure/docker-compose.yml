@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  teamcity-server:
+    image: jetbrains/teamcity-server:2023.05.1-linux
+    ports:
+      - 80:8111
+    volumes:
+      - ./teamcity/data:/data/teamcity_server/datadir
+      - ./teamcity/logs:/opt/teamcity/logs
+
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:2023.05.1-linux-sudo
+    privileged: true
+    user: '0'
+    volumes:
+      - ./teamcity/agent/docker:/var/lib/docker
+      - ./teamcity/agent/conf:/data/teamcity_agent/conf
+    environment:
+      - DOCKER_IN_DOCKER=start
