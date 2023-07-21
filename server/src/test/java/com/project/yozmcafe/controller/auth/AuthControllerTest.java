@@ -4,13 +4,17 @@ import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
@@ -20,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthControllerTest {
@@ -27,8 +32,10 @@ class AuthControllerTest {
     @LocalServerPort
     int port;
 
-    @MockBean
+    @SpyBean
     GoogleOAuthClient googleOAuthClient;
+    @SpyBean
+    KakaoOAuthClient kakaoOAuthClient;
     @MockBean
     MemberRepository memberRepository;
     @MockBean
@@ -40,11 +47,12 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("구글 OAuth 로그인을 한다.")
-    void login() {
+    @DisplayName("Provider Google OAuth login을 한다.")
+    void loginWithGoogle() {
         //given
-        given(googleOAuthClient.getUserInfo(anyString()))
-                .willReturn(new MemberInfo("openId", "오션", "바다.img"));
+        doReturn(new MemberInfo("openId", "오션", "바다.img"))
+                .when(googleOAuthClient).getUserInfo(anyString());
+
         given(memberRepository.findById(anyString()))
                 .willReturn(Optional.of(new Member("openId", "오션", "바다.img")));
 
@@ -52,9 +60,32 @@ class AuthControllerTest {
         final Response response = RestAssured.given()
                 .log().all()
                 .queryParam("code", "googleCode")
-                .pathParam("providerName", "google")
                 .when()
-                .post("/auth/{providerName}");
+                .post("/auth/{providerName}", "google");
+
+        //then
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.cookie("refreshToken")).isNotNull()
+        );
+    }
+
+    @Test
+    @DisplayName("Provider Kakao OAuth login을 한다.")
+    void loginWithKakao() {
+        //given
+        doReturn(new MemberInfo("openId", "오션", "바다.img"))
+                .when(kakaoOAuthClient).getUserInfo(anyString());
+
+        given(memberRepository.findById(anyString()))
+                .willReturn(Optional.of(new Member("openId", "오션", "바다.img")));
+
+        //when
+        final Response response = RestAssured.given()
+                .log().all()
+                .queryParam("code", "googleCode")
+                .when()
+                .post("/auth/{providerName}", "kakao");
 
         //then
         assertAll(
@@ -85,15 +116,16 @@ class AuthControllerTest {
         );
     }
 
-    @Test
+    @ParameterizedTest(name = "{0} 인증 주소 Redirect")
+    @ValueSource(strings = {"google", "kakao"})
     @DisplayName("Provider 별 인증 주소로 Redirect 한다.")
-    void redirectAuthorizationUri() {
+    void redirectAuthorizationUri(String provider) {
         //when
         final Response response = RestAssured.given().log().all()
                 .when()
                 .log().all()
                 .redirects().follow(false)
-                .get("/auth/kakao");
+                .get("/auth/{Provider}", provider);
 
         //then
         assertThat(response.getHeader("Location")).contains("response_type", "redirect_uri", "client_id", "scope");
