@@ -35,7 +35,7 @@ object Server : BuildType({
     }
 
     vcs {
-        root(HttpsGithubComWoowacourseTeams2023yozmCafeRefsHeadsMain)
+        root(YozmCafeVcs)
     }
 
     steps {
@@ -100,7 +100,7 @@ object Client : BuildType({
     name = "Client"
 
     vcs {
-        root(HttpsGithubComWoowacourseTeams2023yozmCafeRefsHeadsMain1)
+        root(YozmCafeVcs)
     }
 
     steps {
