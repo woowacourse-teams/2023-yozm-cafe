@@ -20,5 +20,5 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
 
     @Query(value = "SELECT u FROM UnViewedCafe AS u "
             + "WHERE u.member.id = :memberId AND u.cafe.id = :cafeId")
-    Optional<UnViewedCafe> findUnViewedCafeByMemberAndCafe(final String memberId, final Long cafeId);
+    Optional<UnViewedCafe> findUnViewedCafeByMemberAndCafe(final @Param("memberId") String memberId, final @Param("cafeId") Long cafeId);
 }
