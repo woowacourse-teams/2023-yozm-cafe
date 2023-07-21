@@ -32,7 +32,6 @@ export default CafeInfoModal;
 const Container = styled.div`
   height: 120px;
   max-height: 120px;
-  box-shadow: ${({ theme }) => theme.shadow[3]};
 `;
 
 const StyledArrowDown = styled(SlArrowDown)`
