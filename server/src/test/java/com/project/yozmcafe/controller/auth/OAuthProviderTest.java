@@ -3,7 +3,7 @@ package com.project.yozmcafe.controller.auth;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +19,9 @@ class OAuthProviderTest {
     }
 
     @ParameterizedTest(name = "{0} 인증 Uri를 받아올 수 있다.")
-    @ValueSource(strings = {"google","kakao"})
+    @EnumSource(value = OAuthProvider.class)
     @DisplayName("인증 Uri 를 받아올 수 있다.")
-    void getAuthorizationUrl(String provider) {
-        final OAuthProvider authProvider = OAuthProvider.from(provider);
-        assertThat(authProvider.getAuthorizationUrl()).contains("response_type", "redirect_uri", "client_id", "scope");
+    void getAuthorizationUrl(OAuthProvider oAuthProvider) {
+        assertThat(oAuthProvider.getAuthorizationUrl()).contains("response_type", "redirect_uri", "client_id", "scope");
     }
 }

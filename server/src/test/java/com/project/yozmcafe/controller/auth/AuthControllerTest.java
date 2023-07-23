@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -117,15 +117,15 @@ class AuthControllerTest {
     }
 
     @ParameterizedTest(name = "{0} 인증 주소 Redirect")
-    @ValueSource(strings = {"google", "kakao"})
+    @EnumSource(value = OAuthProvider.class)
     @DisplayName("Provider 별 인증 주소로 Redirect 한다.")
-    void redirectAuthorizationUri(String provider) {
+    void redirectAuthorizationUri(OAuthProvider oAuthProvider) {
         //when
         final Response response = RestAssured.given().log().all()
                 .when()
                 .log().all()
                 .redirects().follow(false)
-                .get("/auth/{Provider}", provider);
+                .get("/auth/{Provider}", oAuthProvider);
 
         //then
         assertThat(response.getHeader("Location")).contains("response_type", "redirect_uri", "client_id", "scope");

@@ -7,7 +7,7 @@ import com.project.yozmcafe.domain.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,11 +67,9 @@ class AuthServiceTest {
     }
 
     @ParameterizedTest(name = "{0} 인증 URI 조회")
-    @ValueSource(strings = {"google", "kakao"})
+    @EnumSource(value = OAuthProvider.class)
     @DisplayName("Provider 별 인증 Uri를 받는다.")
-    void getAuthorizationUri(String provider) {
-        //given
-        final OAuthProvider oAuthProvider = OAuthProvider.from(provider);
+    void getAuthorizationUri(OAuthProvider oAuthProvider) {
         //when
         final String authorizationUri = authService.getAuthorizationUri(oAuthProvider);
         //then
