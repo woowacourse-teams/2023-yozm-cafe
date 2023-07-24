@@ -21,7 +21,7 @@ public class LikedCafe {
     @ManyToOne
     private Member member;
 
-    public LikedCafe() {
+    protected LikedCafe() {
     }
 
     public LikedCafe(final Long id, final Cafe cafe, final Member member) {
