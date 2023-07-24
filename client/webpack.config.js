@@ -1,4 +1,5 @@
 import CopyPlugin from 'copy-webpack-plugin';
+import DotenvWebpackPlugin from 'dotenv-webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const API_URL = process.env.API_URL ?? 'http://localhost:8080';
@@ -24,6 +25,9 @@ export default {
     ],
   },
   plugins: [
+    new DotenvWebpackPlugin({
+      systemvars: true,
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
       filename: 'index.html',
