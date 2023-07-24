@@ -21,13 +21,13 @@ public class CafeController {
     }
 
     @GetMapping("/cafes")
-    public ResponseEntity<List<CafeResponse>> getCafesWithMember(Member member, final @PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<List<CafeResponse>> getCafesWithMember(final Member member, @PageableDefault(size = 5) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(pageable, member);
         return ResponseEntity.ok(cafeResponses);
     }
 
     @GetMapping("/guest/cafes")
-    public ResponseEntity<List<CafeResponse>> getCafes(final @PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<List<CafeResponse>> getCafes(@PageableDefault(size = 5) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);
     }
