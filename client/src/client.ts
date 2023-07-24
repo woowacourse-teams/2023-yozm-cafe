@@ -11,7 +11,7 @@ class Client {
 
   async fetch<TData>(input: RequestInfo | URL, init?: RequestInit): Promise<TData> {
     try {
-      const response = await fetch(input, {
+      const response = await fetch(`/api${input}`, {
         ...init,
         headers: {
           ...init?.headers,
