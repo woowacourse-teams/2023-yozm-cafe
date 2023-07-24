@@ -24,14 +24,14 @@ public class LikedCafe {
     protected LikedCafe() {
     }
 
+    public LikedCafe(final Cafe cafe, final Member member) {
+        this(null, cafe, member);
+    }
+
     public LikedCafe(final Long id, final Cafe cafe, final Member member) {
         this.id = id;
         this.cafe = cafe;
         this.member = member;
-    }
-
-    public LikedCafe(final Cafe cafe, final Member member) {
-        this(null, cafe, member);
     }
 
     public boolean isSameCafe(final Cafe other) {
