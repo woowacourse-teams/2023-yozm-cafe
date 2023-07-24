@@ -43,7 +43,7 @@ public abstract class OAuthClient {
     public String getAuthorizationUrl() {
         return UriComponentsBuilder.fromUriString(authUri())
                 .queryParam(RESPONSE_TYPE, CODE)
-                .queryParam(REDIRECT_URI, authRedirectUri())
+                .queryParam(REDIRECT_URI, redirectUri())
                 .queryParam(CLIENT_ID, clientId())
                 .queryParam(SCOPE, scope())
                 .build()
@@ -59,8 +59,6 @@ public abstract class OAuthClient {
     protected abstract String tokenUri();
 
     protected abstract String authUri();
-
-    protected abstract String authRedirectUri();
 
     protected abstract String scope();
 

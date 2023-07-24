@@ -18,8 +18,6 @@ public class GoogleOAuthClient extends OAuthClient {
     private String redirectUri;
     @Value("${spring.auth.google.authUri}")
     private String googleAuthUri;
-    @Value("${spring.auth.google.authRedirectUri}")
-    private String authRedirectUri;
     @Value("${spring.auth.google.scope}")
     private String scope;
 
@@ -51,11 +49,6 @@ public class GoogleOAuthClient extends OAuthClient {
     @Override
     protected String authUri() {
         return googleAuthUri;
-    }
-
-    @Override
-    protected String authRedirectUri() {
-        return authRedirectUri;
     }
 
     @Override
