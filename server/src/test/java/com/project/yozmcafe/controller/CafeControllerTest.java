@@ -23,6 +23,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -70,8 +71,10 @@ class CafeControllerTest {
                 .extract();
 
         //then
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.jsonPath().getList("$")).hasSize(5);
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.jsonPath().getList("$")).hasSize(5)
+        );
     }
 
     @Test
@@ -85,8 +88,10 @@ class CafeControllerTest {
                 .extract();
 
         //then
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.jsonPath().getList("$")).isEmpty();
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.jsonPath().getList("$")).isEmpty()
+        );
     }
 
     @Test
@@ -105,8 +110,10 @@ class CafeControllerTest {
                 .extract();
 
         //then
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.jsonPath().getList("$")).hasSize(5);
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.jsonPath().getList("$")).hasSize(5)
+        );
     }
 
     @Test
@@ -124,8 +131,10 @@ class CafeControllerTest {
                 .extract();
 
         //then
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.jsonPath().getList("$")).hasSize(4);
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.jsonPath().getList("$")).hasSize(4)
+        );
     }
 
     private void saveMemberAndUnViewedCafes() {
@@ -135,7 +144,7 @@ class CafeControllerTest {
         final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
                 .map(savedCafe -> new UnViewedCafe(null, savedCafe, member))
                 .toList();
-        this.unViewedCafeCafeRepository.saveAll(allUnViewedCafes);
+        unViewedCafeCafeRepository.saveAll(allUnViewedCafes);
 
         member.addUnViewedCafes(allCafes);
     }
