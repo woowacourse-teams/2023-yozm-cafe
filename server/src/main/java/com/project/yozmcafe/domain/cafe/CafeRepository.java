@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface CafeRepository extends JpaRepository<Cafe, Long> {
     Slice<Cafe> findSliceBy(Pageable pageable);
@@ -16,7 +15,7 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             + "INNER JOIN UnViewedCafe AS u "
             + "ON c.id = u.cafe.id "
             + "WHERE u.member.id = :memberId")
-    Slice<Cafe> findUnViewedCafesByMember(final Pageable pageable, final @Param("memberId") String memberId);
+    Slice<Cafe> findUnViewedCafesByMember(final Pageable pageable, final String memberId);
 
     @Query(value = "SELECT u FROM UnViewedCafe AS u "
             + "WHERE u.member.id = :memberId AND u.cafe.id = :cafeId")

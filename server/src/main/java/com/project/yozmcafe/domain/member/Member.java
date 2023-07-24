@@ -26,7 +26,7 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
@@ -56,6 +56,15 @@ public class Member {
 
     public boolean isEmptyUnViewedCafe() {
         return unViewedCafes.isEmpty();
+    }
+
+    public void addLikedCafe(Cafe cafe) {
+        likedCafes.add(new LikedCafe(cafe, this));
+    }
+
+    public boolean isLike(final Cafe cafe) {
+        return likedCafes.stream()
+                .anyMatch(likedCafe -> likedCafe.isSameCafe(cafe));
     }
 
     public String getId() {

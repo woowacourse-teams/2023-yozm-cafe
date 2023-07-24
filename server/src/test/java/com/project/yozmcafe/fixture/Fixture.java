@@ -27,6 +27,10 @@ public class Fixture {
     }
 
     public static Cafe getCafe(String name, String address, int likeCount) {
-        return new Cafe(null, name, address, getImages(), getDetail(), likeCount);
+        return getCafe(null, name, address, likeCount);
+    }
+
+    public static Cafe getCafe(Long id, String name, String address, int likeCount) {
+        return new Cafe(id, name, address, getImages(), getDetail(), likeCount);
     }
 }

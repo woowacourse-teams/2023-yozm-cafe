@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -42,5 +43,25 @@ class MemberTest {
 
         //then
         assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("멤버의 좋아요 리스트에 포함된 카페면 true를 아니면 false를 반환한다.")
+    void isLike() {
+        //given
+        final Member member = new Member("4", "폴로", "폴로사진");
+        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 10);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 9);
+        member.addLikedCafe(cafe1);
+
+        //when
+        final boolean result1 = member.isLike(cafe1);
+        final boolean result2 = member.isLike(cafe2);
+
+        //then
+        Assertions.assertAll(
+                () -> assertThat(result1).isTrue(),
+                () -> assertThat(result2).isFalse()
+        );
     }
 }
