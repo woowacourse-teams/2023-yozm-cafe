@@ -1,4 +1,5 @@
 import CopyPlugin from 'copy-webpack-plugin';
+import DotenvWebpackPlugin from 'dotenv-webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 /** @type {import('webpack').Configuration} */
@@ -22,6 +23,9 @@ export default {
     ],
   },
   plugins: [
+    new DotenvWebpackPlugin({
+      systemvars: true,
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
       filename: 'index.html',
