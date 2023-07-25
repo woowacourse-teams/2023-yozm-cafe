@@ -1,11 +1,11 @@
 import { rest } from 'msw';
 import { cafes } from '../data/mockData';
 
-const PAGINATE_UNIT = 5;
-
 export const handlers = [
   // 카페 조회
   rest.get('/api/cafes', (req, res, ctx) => {
+    const PAGINATE_UNIT = 5;
+
     const page = Number(req.url.searchParams.get('page') || 1);
     const isPageExists = !!cafes.at(PAGINATE_UNIT * page - 1);
 
@@ -54,6 +54,25 @@ export const handlers = [
 
     cafe.isLiked = isLiked;
     return res(ctx.status(200), ctx.json({}));
+  }),
+
+  // 좋아요 한 목록 조회
+  rest.get('/api/members/:memberId/liked-cafes', (req, res, ctx) => {
+    const PAGINATE_UNIT = 20;
+
+    const memberId = Number(req.params.memberId);
+    const page = Number(req.url.searchParams.get('page') || 1);
+    const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
+
+    return res(
+      ctx.status(200),
+      ctx.json(
+        cafes
+          .filter((cafe) => cafe.isLiked)
+          .slice(start, end)
+          .map((cafe) => ({ cafeId: cafe.id, imageUrl: cafe.images.urls[0] })),
+      ),
+    );
   }),
 
   // 인증 코드를 accessToken으로 교환
