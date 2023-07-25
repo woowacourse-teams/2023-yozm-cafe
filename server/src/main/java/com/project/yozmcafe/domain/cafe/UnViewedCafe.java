@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -18,22 +19,24 @@ public class UnViewedCafe {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Cafe cafe;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Member member;
 
     protected UnViewedCafe() {
+    }
+
+    public UnViewedCafe(final Cafe cafe, final Member member) {
+        this(null, cafe, member);
     }
 
     public UnViewedCafe(final Long id, final Cafe cafe, final Member member) {
         this.id = id;
         this.cafe = cafe;
         this.member = member;
-    }
-
-    public UnViewedCafe(final Cafe cafe, final Member member) {
-        this(null, cafe, member);
     }
 
     public Long getId() {
