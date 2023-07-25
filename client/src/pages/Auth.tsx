@@ -38,7 +38,7 @@ const Auth = () => {
 
   if (!identity) return <></>;
 
-  return <Navigate to="/profile" />;
+  return <Navigate to="/" />;
 };
 
 export default Auth;
