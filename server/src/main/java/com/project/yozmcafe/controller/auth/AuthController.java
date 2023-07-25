@@ -43,7 +43,7 @@ public class AuthController {
     public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request,
                                                       final HttpServletResponse response,
                                                       @CookieValue(name = REFRESH_TOKEN) final String refreshToken) {
-        final String accessToken = request.getHeader(AUTHORIZATION);
+        final String accessToken = request.getHeader(AUTHORIZATION).replace("Bearer ","");
         final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, refreshToken);
         setRefreshTokenCookie(response);
         return ResponseEntity.ok(tokenResponse);
