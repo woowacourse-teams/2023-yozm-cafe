@@ -36,3 +36,5 @@ server/.nb-gradle/
 
 ### VS Code ###
 server/.vscode/
+
+.env
