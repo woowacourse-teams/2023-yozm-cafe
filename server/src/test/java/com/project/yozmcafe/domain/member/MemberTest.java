@@ -66,9 +66,8 @@ class MemberTest {
         final UnViewedCafe inValidUnViewedCafe = new UnViewedCafe(cafe4, member2);
 
         //when & then
-        assertThatThrownBy(() -> member.removeUnViewedCafe(inValidUnViewedCafe))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 내역입니다.");
+        assertThatThrownBy(() -> member.removeUnViewedCafe(inValidUnViewedCafe)).isInstanceOf(
+                IllegalArgumentException.class).hasMessage("존재하지 않는 내역입니다.");
     }
 
     @Test
@@ -128,8 +127,8 @@ class MemberTest {
         //then
         assertAll(
                 () -> assertThat(member.getLikedCafes()).hasSize(0),
-                () -> assertThat(member.isLike(cafe)).isFalse()
-        );
+                () -> assertThat(member.isLike(cafe)).isFalse(),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(9));
     }
 
     @Test
@@ -146,7 +145,8 @@ class MemberTest {
         //then
         assertAll(
                 () -> assertThat(member.getLikedCafes()).hasSize(1),
-                () -> assertThat(member.isLike(cafe)).isTrue()
+                () -> assertThat(member.isLike(cafe)).isTrue(),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(11)
         );
     }
 
@@ -163,7 +163,8 @@ class MemberTest {
         //then
         assertAll(
                 () -> assertThat(member.getLikedCafes()).hasSize(likedCafeCount),
-                () -> assertThat(member.isLike(cafe)).isEqualTo(isLikeExpected)
+                () -> assertThat(member.isLike(cafe)).isEqualTo(isLikeExpected),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(10)
         );
     }
 

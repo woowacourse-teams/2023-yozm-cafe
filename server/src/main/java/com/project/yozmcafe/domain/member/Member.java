@@ -64,10 +64,12 @@ public class Member {
         final boolean currentIsLike = isLike(cafe);
         if (currentIsLike != isLiked && isLiked) {
             addLikedCafe(cafe);
+            cafe.addLikeCount();
         }
 
         if (currentIsLike != isLiked && !isLiked) {
             removeLikedCafe(cafe);
+            cafe.subtractLikeCount();
         }
     }
 
