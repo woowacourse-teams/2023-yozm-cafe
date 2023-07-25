@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
-import Logo from '../components/Logo';
 import ProfileInfo from '../components/ProfileInfo';
 
 const MyProfile = () => {
   return (
     <Container>
-      <Logo fontSize="2xl" />
       <ProfileInfo userImage="/images/profile-example.png" userName="김고니" />
       <ButtonContainer>
         <EditButtonContainer>
