@@ -1,12 +1,13 @@
 package com.project.yozmcafe.controller.auth;
 
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,13 +19,14 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import java.util.Optional;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthControllerTest {
@@ -38,7 +40,7 @@ class AuthControllerTest {
     KakaoOAuthClient kakaoOAuthClient;
     @MockBean
     MemberRepository memberRepository;
-    @MockBean
+    @SpyBean
     JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
@@ -66,6 +68,7 @@ class AuthControllerTest {
         //then
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
@@ -90,6 +93,7 @@ class AuthControllerTest {
         //then
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
@@ -98,8 +102,8 @@ class AuthControllerTest {
     @DisplayName("토큰을 갱신한다.")
     void refreshToken() {
         //given
-        given(jwtTokenProvider.refreshAccessToken(anyString(), anyString()))
-                .willReturn("goodOceanAccessToken");
+        doReturn("goodOceanAccessToken")
+                .when(jwtTokenProvider).refreshAccessToken(anyString(), anyString());
 
         //when
         final Response response = RestAssured.given().log().all()

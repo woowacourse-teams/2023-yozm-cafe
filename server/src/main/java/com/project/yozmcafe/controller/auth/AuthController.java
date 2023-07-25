@@ -1,13 +1,20 @@
 package com.project.yozmcafe.controller.auth;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.project.yozmcafe.controller.dto.TokenResponse;
 import com.project.yozmcafe.service.auth.AuthService;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/auth")
@@ -47,7 +54,7 @@ public class AuthController {
         final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, refreshToken);
         setRefreshTokenCookie(response);
         return ResponseEntity.ok(tokenResponse);
-    }   
+    }
 
     @GetMapping("/{providerName}")
     public String redirectAuthorizationUri(@PathVariable("providerName") final OAuthProvider oAuthProvider) {
