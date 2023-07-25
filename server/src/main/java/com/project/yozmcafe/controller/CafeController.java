@@ -7,11 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/cafes")
 public class CafeController {
 
     private final CafeService cafeService;
@@ -20,13 +22,13 @@ public class CafeController {
         this.cafeService = cafeService;
     }
 
-    @GetMapping("/cafes")
+    @GetMapping
     public ResponseEntity<List<CafeResponse>> getCafesWithMember(final Member member, @PageableDefault(size = 5) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(pageable, member);
         return ResponseEntity.ok(cafeResponses);
     }
 
-    @GetMapping("/guest/cafes")
+    @GetMapping("/guest")
     public ResponseEntity<List<CafeResponse>> getCafes(@PageableDefault(size = 5) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);

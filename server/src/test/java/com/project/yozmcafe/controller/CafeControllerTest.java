@@ -69,13 +69,13 @@ class CafeControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 되지 않은 사용자가 /cafes?page=? 에 GET요청을 보내면 페이지에 해당하는 서로 다른 카페 정보들을 5개씩 응답한다.")
+    @DisplayName("로그인 되지 않은 사용자가 /cafes/guest?page=? 에 GET요청을 보내면 페이지에 해당하는 서로 다른 카페 정보들을 5개씩 응답한다.")
     void getCafesSuccessByUnLoginUser() {
         //given
         cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
 
         //when
-        context.invokeHttpGet("guest/cafes?page=1");
+        context.invokeHttpGet("/cafes/guest?page=1");
 
         //then
         List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
@@ -91,10 +91,10 @@ class CafeControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 되지 않은 사용자가 /cafes?page=? 에 GET요청을 보낸 경우 page가 최대 page를 초과하는 경우 빈배열을 반환한다.")
+    @DisplayName("로그인 되지 않은 사용자가 /cafes/guest?page=? 에 GET요청을 보낸 경우 page가 최대 page를 초과하는 경우 빈배열을 반환한다.")
     void getCafesEmptyByUnLoginUser() {
         //when
-        context.invokeHttpGet("guest/cafes?page=2000");
+        context.invokeHttpGet("/cafes/guest?page=2000");
 
         //then
         assertAll(
