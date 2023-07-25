@@ -11,6 +11,7 @@ export const handlers = [
 
     if (!isPageExists) {
       cafes
+        .slice(0, PAGINATE_UNIT)
         .map((cafe) => structuredClone(cafe))
         .map((cafe, index) => ({
           ...cafe,
