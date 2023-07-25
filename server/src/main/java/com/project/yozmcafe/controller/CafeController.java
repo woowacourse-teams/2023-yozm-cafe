@@ -1,8 +1,6 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.service.CafeService;
+import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
+import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.service.CafeService;
 import com.project.yozmcafe.service.MemberService;
 
 @RestController
@@ -45,8 +44,8 @@ public class CafeController {
 
     @PostMapping("/{cafeId}/likes")
     public ResponseEntity<Void> updateLikes(Member member, @PathVariable("cafeId") final long cafeId,
-                                            @RequestParam("isLiked") final String isLiked) {
-        memberService.updateLike(member, cafeId, Boolean.parseBoolean(isLiked));
+                                            @RequestParam("isLiked") final boolean isLiked) {
+        memberService.updateLike(member, cafeId, isLiked);
         return ResponseEntity.ok().build();
     }
 

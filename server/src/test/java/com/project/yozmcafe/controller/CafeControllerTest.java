@@ -50,7 +50,7 @@ class CafeControllerTest {
     @Autowired
     private CafeRepository cafeRepository;
     @Autowired
-    private UnViewedCafeRepository unViewedCafeCafeRepository;
+    private UnViewedCafeRepository unViewedCafeRepository;
     @Autowired
     private LikeCafeRepository likeCafeRepository;
     @MockBean
@@ -217,7 +217,7 @@ class CafeControllerTest {
         final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
                 .map(savedCafe -> new UnViewedCafe(savedCafe, member))
                 .toList();
-        unViewedCafeCafeRepository.saveAll(allUnViewedCafes);
+        unViewedCafeRepository.saveAll(allUnViewedCafes);
 
         member.addUnViewedCafes(allCafes);
     }
