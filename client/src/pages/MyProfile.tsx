@@ -38,7 +38,6 @@ const ButtonContainer = styled.article`
 
 const EditButtonContainer = styled.div`
   flex: 6;
-  height: 20%;
   margin-right: ${({ theme }) => theme.space['2.5']};
 `;
 
