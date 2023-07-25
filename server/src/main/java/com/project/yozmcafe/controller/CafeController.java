@@ -23,7 +23,7 @@ public class CafeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CafeResponse>> getCafes(final @PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<List<CafeResponse>> getCafes(@PageableDefault(size = 5) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);
     }
