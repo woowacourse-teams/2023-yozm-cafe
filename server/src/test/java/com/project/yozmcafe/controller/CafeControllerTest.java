@@ -5,9 +5,9 @@ import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,20 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-import com.project.yozmcafe.controller.auth.MemberInfo;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.util.AcceptanceContext;
+import com.project.yozmcafe.util.LikeCafeRepository;
 import com.project.yozmcafe.util.UnViewedCafeRepository;
 
 import io.restassured.RestAssured;
@@ -40,27 +39,22 @@ import io.restassured.response.Response;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CafeControllerTest {
 
+    public static final String MEMBER_ID = "memberId";
+
     @LocalServerPort
     private int port;
-
-    @SpyBean
-    KakaoOAuthClient kakaoOAuthClient;
-
     @Autowired
     private AcceptanceContext context;
-
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private CafeRepository cafeRepository;
-
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
-
     @Autowired
     private UnViewedCafeRepository unViewedCafeCafeRepository;
-
+    @Autowired
+    private LikeCafeRepository likeCafeRepository;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
     private Cafe cafe1, cafe2, cafe3, cafe4, cafe5;
 
     @BeforeEach
@@ -79,33 +73,58 @@ class CafeControllerTest {
     }
 
     @Test
-    @DisplayName("카페에 좋아요를 누르고, 해당 카페를 조회하는 경우 isLike가 true로 매핑되어 응답한다.")
+    @DisplayName("카페에 좋아요를 추가하고, 해당 카페를 조회하는 경우 isLike가 true로 매핑되어 응답한다.")
+    void updateLikesAdd() {
+        //given
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
+        saveMemberAndUnViewedCafes();
+
+        //when
+        context.invokeHttpPostWithToken("/cafes/" + cafe1.getId() + "/likes?isLiked=true");
+        final Response likeResponse = context.response;
+
+        context.invokeHttpGetWithToken("/cafes");
+        final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
+        final CafeResponse cafeResponse = cafeResponses.stream()
+                .filter(cur -> Objects.equals(cur.id(), cafe1.getId()))
+                .findAny()
+                .get();
+
+        //then
+        assertAll(
+                () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
+                () -> assertThat(cafeResponses).hasSize(4),
+                () -> assertThat(cafeResponse.likeCount()).isEqualTo(2),
+                () -> assertThat(cafeResponse.isLiked()).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("카페에 좋아요를 취소하고, 해당 카페를 조회하는 경우 isLike가 false로 매핑되어 응답한다.")
     void updateLikes() {
-//        //given
-//        final Member member = memberRepository.save(new Member("openId", "오션", "바다.img"));
-//        final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
-//        member.addUnViewedCafes(List.of(cafe));
-//
-//        final String token = getAccessToken().jsonPath().getString("token");
-//        context.setAccessToken(token);
-//
-//        //when
-//        context.invokeHttpPostWithToken("/cafes/" + cafe.getId() + "/likes?isLiked=true");
-//        System.out.println("asdfasdfasdfas : " + member.getLikedCafes().size());
-//        final Response likeResponse = context.response;
-//
-//        context.invokeHttpGetWithToken("/cafes");
-//        final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
-//
-//        System.out.println("asdfasdfasdfas : " + member.getLikedCafes().size());
-//
-//        //then
-//        assertAll(
-//                () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
-//                () -> assertThat(cafeResponses).hasSize(1),
-//                () -> assertThat(cafeResponses.get(0).likeCount()).isEqualTo(12)
-////                () -> assertThat(cafeResponses.get(0).isLiked()).isTrue(),
-//        );
+        //given
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
+        saveMemberAndUnViewedCafes();
+        addLikedCafes();
+
+        //when
+        context.invokeHttpPostWithToken("/cafes/" + cafe1.getId() + "/likes?isLiked=false");
+        final Response likeResponse = context.response;
+
+        context.invokeHttpGetWithToken("/cafes");
+        final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
+        final CafeResponse cafeResponse = cafeResponses.stream()
+                .filter(cur -> Objects.equals(cur.id(), cafe1.getId()))
+                .findAny()
+                .get();
+
+        //then
+        assertAll(
+                () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
+                () -> assertThat(cafeResponses).hasSize(4),
+                () -> assertThat(cafeResponse.likeCount()).isEqualTo(0),
+                () -> assertThat(cafeResponse.isLiked()).isFalse()
+        );
     }
 
     @Test
@@ -148,7 +167,7 @@ class CafeControllerTest {
     void getCafesWithMember() {
         //given
         cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn("토큰");
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
         saveMemberAndUnViewedCafes();
 
         //when
@@ -172,7 +191,7 @@ class CafeControllerTest {
     @DisplayName("로그인한 사용자가 /cafes?page=?에 GET 요청을 보낼 때, 아직보지 않은 카페가 5개 미만이면 그 수만큼의 서로 다른 카페를 응답한다.")
     void getCafesWithMemberWhenCafeLessThan() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn("토큰");
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
         saveMemberAndUnViewedCafes();
 
         //when
@@ -191,19 +210,8 @@ class CafeControllerTest {
         );
     }
 
-    private Response getAccessToken() {
-        doReturn(new MemberInfo("openId", "오션", "바다.img"))
-                .when(kakaoOAuthClient).getUserInfo(anyString());
-
-        return RestAssured.given()
-                .log().all()
-                .queryParam("code", "googleCode")
-                .when()
-                .post("/auth/{providerName}", "kakao");
-    }
-
     private void saveMemberAndUnViewedCafes() {
-        Member member = memberRepository.save(new Member("토큰", "name1", "image"));
+        Member member = memberRepository.save(new Member(MEMBER_ID, "name1", "image"));
 
         final List<Cafe> allCafes = cafeRepository.findAll();
         final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
@@ -212,5 +220,14 @@ class CafeControllerTest {
         unViewedCafeCafeRepository.saveAll(allUnViewedCafes);
 
         member.addUnViewedCafes(allCafes);
+    }
+
+    private void addLikedCafes() {
+        Member member = memberRepository.findById(MEMBER_ID).get();
+        final List<Cafe> allCafes = cafeRepository.findAll();
+        final List<LikedCafe> likedCafes = allCafes.stream()
+                .map(savedCafe -> new LikedCafe(savedCafe, member))
+                .toList();
+        likeCafeRepository.saveAll(likedCafes);
     }
 }
