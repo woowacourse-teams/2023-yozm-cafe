@@ -29,14 +29,14 @@ public class UnViewedCafe {
     protected UnViewedCafe() {
     }
 
+    public UnViewedCafe(final Cafe cafe, final Member member) {
+        this(null, cafe, member);
+    }
+
     public UnViewedCafe(final Long id, final Cafe cafe, final Member member) {
         this.id = id;
         this.cafe = cafe;
         this.member = member;
-    }
-
-    public UnViewedCafe(final Cafe cafe, final Member member) {
-        this(null, cafe, member);
     }
 
     public Long getId() {

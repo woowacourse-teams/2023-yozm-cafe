@@ -1,6 +1,5 @@
 package com.project.yozmcafe.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,7 @@ import com.project.yozmcafe.domain.member.Member;
 public class CafeService {
 
     public static final boolean UN_LOGIN_USER_IS_LIKED = false;
+
     private final CafeRepository cafeRepository;
 
     public CafeService(final CafeRepository cafeRepository) {
@@ -33,11 +33,8 @@ public class CafeService {
     public List<CafeResponse> getCafesForLoginMember(final Pageable pageable, final Member member) {
         final List<Cafe> unViewedCafes = cafeRepository.findUnViewedCafesByMember(pageable, member.getId())
                 .getContent();
-        final List<CafeResponse> cafeResponses = new ArrayList<>();
-        for (final Cafe cafe : unViewedCafes) {
-            final boolean isLike = member.isLike(cafe);
-            cafeResponses.add(CafeResponse.of(cafe, isLike));
-        }
-        return cafeResponses;
+        return unViewedCafes.stream()
+                .map(cafe -> CafeResponse.of(cafe, member.isLike(cafe)))
+                .toList();
     }
 }
