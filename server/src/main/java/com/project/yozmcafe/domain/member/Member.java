@@ -16,6 +16,9 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Member {
 
+    private static final String UN_EXISTED_UNVIEWED_CAFE = "존재하지 않는 내역입니다.";
+    public static final String UN_EXISTED_LIKED_CAFE = "존재하지 않는 좋아요 내역입니다.";
+
     @Id
     private String id;
     @Column(nullable = false)
@@ -26,7 +29,7 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
@@ -49,14 +52,33 @@ public class Member {
         final UnViewedCafe foundUnviewedCafe = unViewedCafes.stream()
                 .filter(unViewedCafe::equals)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 내역입니다."));
-
+                .orElseThrow(() -> new IllegalArgumentException(UN_EXISTED_UNVIEWED_CAFE));
         unViewedCafes.remove(foundUnviewedCafe);
     }
 
     public boolean isEmptyUnViewedCafe() {
         return unViewedCafes.isEmpty();
     }
+
+    public void updateIsLike(final Cafe cafe, final boolean isLiked) {
+        final boolean currentIsLike = isLike(cafe);
+        if (currentIsLike != isLiked && isLiked) {
+            addLikedCafe(cafe);
+        }
+
+        if (currentIsLike != isLiked && !isLiked) {
+            removeLikedCafe(cafe);
+        }
+    }
+
+    private void removeLikedCafe(final Cafe cafe) {
+        final LikedCafe targetLikedCafe = likedCafes.stream()
+                .filter(likedCafe -> likedCafe.isSameCafe(cafe))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(UN_EXISTED_LIKED_CAFE));
+        likedCafes.remove(targetLikedCafe);
+    }
+
 
     public void addLikedCafe(Cafe cafe) {
         likedCafes.add(new LikedCafe(cafe, this));
