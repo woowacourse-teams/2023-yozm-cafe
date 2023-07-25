@@ -6,7 +6,7 @@ import useCafes from '../hooks/useCafes';
 const PREFETCH_OFFSET = 2;
 
 const Home = () => {
-  const { isFetching, cafes, fetchNextPage } = useCafes();
+  const { cafes, fetchNextPage, isFetching, hasNextPage } = useCafes();
   const [activeCafe, setActiveCafe] = useState(cafes[0]);
 
   // https://github.com/woowacourse-teams/2023-yozm-cafe/pull/49#discussion_r1264872201
@@ -25,7 +25,9 @@ const Home = () => {
     });
   }, [cafes]);
 
-  if (!isFetching && cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length) {
+  const shouldFetch =
+    hasNextPage && isFetching && cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length;
+  if (shouldFetch) {
     fetchNextPage();
   }
 
