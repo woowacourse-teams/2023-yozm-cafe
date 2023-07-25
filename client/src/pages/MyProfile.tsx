@@ -1,14 +1,22 @@
+import { Navigate } from 'react-router';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
 import Logo from '../components/Logo';
 import ProfileInfo from '../components/ProfileInfo';
+import useUser from '../hooks/useUser';
 
 const MyProfile = () => {
+  const { data: user } = useUser();
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <Container>
       <Logo fontSize="2xl" />
-      <ProfileInfo userImage="/images/profile-example.png" userName="김고니" />
+      <ProfileInfo userImage={user.imageUrl} userName={user.name} />
       <ButtonContainer>
         <EditButtonContainer>
           <Button fullWidth>프로필 수정하기</Button>

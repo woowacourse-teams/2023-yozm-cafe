@@ -1,16 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
 import { PiHouseLight, PiUserCircleLight } from 'react-icons/pi';
 import { Link, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
-import client from '../client';
+import useUser from '../hooks/useUser';
 
 const Navbar = () => {
   const { pathname } = useLocation();
-
-  const { data: isLoggedIn } = useQuery<boolean>(['isLoggedIn'], {
-    enabled: false,
-    initialData: client.accessToken !== null,
-  });
+  const { data: user } = useUser();
 
   return (
     <Container>
@@ -18,9 +13,9 @@ const Navbar = () => {
         <Icon as={PiHouseLight} />
         <IconName>홈</IconName>
       </IconContainer>
-      {isLoggedIn ? (
+      {user ? (
         <IconContainer to="/my-profile" $isActive={pathname === '/my-profile'}>
-          <ProfileImage src="/images/profile-example.png" alt="Profile" />
+          <ProfileImage src={user.imageUrl} alt="Profile" />
           <IconName>프로필</IconName>
         </IconContainer>
       ) : (
