@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface CafeRepository extends JpaRepository<Cafe, Long> {
     Slice<Cafe> findSliceBy(Pageable pageable);
 
-
     @Query(value = "SELECT c FROM Cafe AS c "
             + "INNER JOIN UnViewedCafe AS u "
             + "ON c.id = u.cafe.id "

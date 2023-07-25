@@ -6,14 +6,13 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 
 public record CafeResponse(Long id, String name, String address, List<String> images, boolean isLiked, int likeCount,
                            DetailResponse detail) {
-
-    public static CafeResponse from(final Cafe cafe) {
+    public static CafeResponse of(final Cafe cafe, final boolean isLiked) {
         return new CafeResponse(
                 cafe.getId(),
                 cafe.getName(),
                 cafe.getAddress(),
                 cafe.getImages().getUrls(),
-                false,
+                isLiked,
                 cafe.getLikeCount(),
                 DetailResponse.from(cafe.getDetail()));
     }

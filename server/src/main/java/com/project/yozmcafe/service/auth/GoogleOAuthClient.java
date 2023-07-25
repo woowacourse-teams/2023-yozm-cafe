@@ -8,14 +8,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class GoogleOAuthClient extends OAuthClient {
 
-    @Value("${spring.auth.google.uri}")
-    private String googleUri;
+    @Value("${spring.auth.google.tokenUri}")
+    private String googleTokenUri;
     @Value("${spring.auth.google.clientId}")
     private String clientId;
     @Value("${spring.auth.google.clientSecret}")
     private String clientSecret;
     @Value("${spring.auth.google.redirectUri}")
     private String redirectUri;
+    @Value("${spring.auth.google.authUri}")
+    private String googleAuthUri;
+    @Value("${spring.auth.google.scope}")
+    private String scope;
 
     @Override
     protected Class<? extends OAuthToken> getType() {
@@ -38,7 +42,17 @@ public class GoogleOAuthClient extends OAuthClient {
     }
 
     @Override
-    protected String requestUri() {
-        return googleUri;
+    protected String tokenUri() {
+        return googleTokenUri;
+    }
+
+    @Override
+    protected String authUri() {
+        return googleAuthUri;
+    }
+
+    @Override
+    protected String scope() {
+        return scope;
     }
 }
