@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import Button from './Button';
 import Logo from './Logo';
 
-const Header = () => {
+const Navbar = () => {
   return (
     <Container>
       <LogoContainer to="/">
@@ -18,9 +18,9 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Navbar;
 
-const Container = styled.header`
+const Container = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
