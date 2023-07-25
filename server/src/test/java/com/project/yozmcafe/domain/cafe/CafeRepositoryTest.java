@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,11 @@ class CafeRepositoryTest {
         cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
         cafe4 = cafeRepository.save(Fixture.getCafe("카페4", "주소4", 6));
         cafe5 = cafeRepository.save(Fixture.getCafe("카페5", "주소5", 7));
+    }
+
+    @AfterEach
+    void after() {
+        cafeRepository.deleteAll();
     }
 
     @Test
