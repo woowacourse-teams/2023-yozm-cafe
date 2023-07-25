@@ -43,8 +43,14 @@ class Client {
     return this.fetch<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
   }
 
-  requestAccessToken(provider: AuthProvider, code: string) {
-    return this.fetch<{ accessToken: string }>(`/auth/${provider}?code=${code}`, { method: 'POST' });
+  /**
+   * 인증 수행 시, OAuth 제공자(provider)와 인증 코드(Authorization Code) 값을
+   * 백엔드에 전송하면 백엔드에서 발급한 accessToken을 응답으로 받을 수 있다.
+   */
+  issueAccessToken(provider: AuthProvider, code: string) {
+    return this.fetch<{ token: string }>(`/auth/${provider}?code=${code}`, { method: 'POST' }).then(
+      (data) => data.token,
+    );
   }
 }
 

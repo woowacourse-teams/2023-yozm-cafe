@@ -1,3 +1,9 @@
+export type Identity = {
+  sub: string;
+  iat: number;
+  exp: number;
+};
+
 type CafeImages = {
   urls: string[];
 };
