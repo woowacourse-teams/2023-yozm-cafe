@@ -1,11 +1,16 @@
 package com.project.yozmcafe.controller.auth;
 
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
+import com.project.yozmcafe.util.AcceptanceContext;
 import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
+import io.restassured.matcher.DetailedCookieMatcher;
+import io.restassured.matcher.RestAssuredMatchers;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +46,12 @@ class AuthControllerTest {
     @MockBean
     JwtTokenProvider jwtTokenProvider;
 
+    private AcceptanceContext request;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        request = new AcceptanceContext();
     }
 
     @Test
@@ -129,5 +137,23 @@ class AuthControllerTest {
 
         //then
         assertThat(response.getHeader("Location")).contains("response_type", "redirect_uri", "client_id", "scope");
+    }
+
+    @Test
+    @DisplayName("로그아웃을 한다")
+    void logout() {
+        //given
+        final Cookie cookie = new Cookie.Builder("refreshToken", "리프레시").build();
+        final DetailedCookieMatcher expectedDetail = RestAssuredMatchers.detailedCookie()
+                .value("")
+                .maxAge(0);
+
+        //when
+        request.invokeHttpDeleteWithCookie("/auth", cookie);
+
+        //then
+        request.response.then()
+                .statusCode(HttpStatus.OK.value())
+                .cookie("refreshToken", expectedDetail);
     }
 }
