@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 import { cafes } from '../data/mockData';
+import { Identity } from '../types';
 
 export const handlers = [
   // 카페 조회
@@ -43,7 +44,16 @@ export const handlers = [
   }),
 
   // 인증 코드를 accessToken으로 교환
-  rest.post('/api/auth/kakao', async (req, res, ctx) => {
+  rest.post('/api/auth/:authProvider', async (req, res, ctx) => {
+    const { authProvider } = req.params;
+    if (!['kakao', 'google'].includes(authProvider as string)) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: 'OAuth 제공자는 kakao 또는 google이어야 합니다.',
+        }),
+      );
+    }
     const code = req.url.searchParams.get('code');
     if ((code?.length ?? 0) <= 0) {
       return res(
@@ -53,13 +63,30 @@ export const handlers = [
         }),
       );
     }
-    // 여기에서 모킹된 액세스 토큰을 생성하고 받은 리프레시 토큰을 사용
-    const accessToken = 'VeryGoodSalmonKingFuckingKoreanILoveCoffee';
+
+    // 여기에서 모킹된 액세스 토큰을 생성
+    const token =
+      btoa(
+        JSON.stringify({
+          typ: 'JWT',
+          alg: 'HS256',
+        }),
+      ) +
+      '.' +
+      btoa(
+        JSON.stringify({
+          sub: '1000',
+          iat: Date.now(),
+          exp: Date.now() + 1 * 60 * 60 * 1000,
+        } satisfies Identity),
+      ) +
+      '.' +
+      'SUPERSECRET';
 
     return res(
       ctx.status(200),
       ctx.json({
-        accessToken,
+        token,
       }),
     );
   }),
