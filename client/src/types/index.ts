@@ -4,6 +4,12 @@ export type Identity = {
   exp: number;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  imageUrl: string;
+};
+
 type CafeImages = {
   urls: string[];
 };
