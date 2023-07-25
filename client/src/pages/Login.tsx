@@ -9,7 +9,7 @@ const Login = () => {
         <Logo fontSize="7xl" />
       </LogoContainer>
       <ButtonContainer>
-        <a href="/api/auth/kakao?code=1234">
+        <a href="/api/auth/kakao">
           <KakaoLoginButton>
             <LoginButton $color="yellow" $border="none">
               <ButtonContent>

@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import { AuthProvider } from './context/AuthContext';
 import router from './router';
 import GlobalStyle from './styles/GlobalStyle';
 import ResetStyle from './styles/ResetStyle';
@@ -20,7 +21,9 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <ResetStyle />
         <GlobalStyle />
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
