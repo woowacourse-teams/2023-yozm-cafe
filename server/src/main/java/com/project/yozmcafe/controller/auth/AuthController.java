@@ -22,6 +22,7 @@ public class AuthController {
 
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final String AUTHORIZATION = "Authorization";
+    private static final String BEARER = "Bearer ";
 
     private final AuthService authService;
 
@@ -50,7 +51,7 @@ public class AuthController {
     public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request,
                                                       final HttpServletResponse response,
                                                       @CookieValue(name = REFRESH_TOKEN) final String refreshToken) {
-        final String accessToken = request.getHeader(AUTHORIZATION);
+        final String accessToken = request.getHeader(AUTHORIZATION).replace(BEARER,"");
         final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, refreshToken);
         setRefreshTokenCookie(response);
         return ResponseEntity.ok(tokenResponse);

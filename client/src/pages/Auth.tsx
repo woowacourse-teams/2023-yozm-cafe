@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate, json, useParams, useSearchParams } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { AuthProvider } from '../types';
@@ -29,7 +30,13 @@ const Auth = () => {
     );
   }
 
-  useAuth({ provider, code });
+  const { identity, issueAccessToken } = useAuth();
+
+  useEffect(() => {
+    issueAccessToken({ provider, code });
+  }, []);
+
+  if (!identity) return <></>;
 
   return <Navigate to="/" />;
 };
