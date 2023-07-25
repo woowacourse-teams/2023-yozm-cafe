@@ -1,12 +1,17 @@
 import CopyPlugin from 'copy-webpack-plugin';
 import DotenvWebpackPlugin from 'dotenv-webpack';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const API_URL = process.env.API_URL ?? 'http://localhost:8080';
 
 /** @type {import('webpack').Configuration} */
 export default {
   mode: 'development',
+  // https://github.com/TypeStrong/fork-ts-checker-webpack-plugin#installation
+  context: dirname(fileURLToPath(import.meta.url)),
   entry: './src/index',
   output: {
     filename: 'bundle.js',
@@ -35,6 +40,7 @@ export default {
     new CopyPlugin({
       patterns: [{ from: 'public', to: '' }],
     }),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   devServer: {
     hot: true,
