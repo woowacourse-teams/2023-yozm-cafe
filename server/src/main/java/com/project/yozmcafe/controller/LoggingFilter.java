@@ -1,5 +1,6 @@
 package com.project.yozmcafe.controller;
 
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,29 +19,37 @@ import java.util.UUID;
 public class LoggingFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
-
-    private static final Logger logger = LoggerFactory.getLogger("API Request");
     private static final String KEY = "user";
     private static final String ANONYMOUS = "anonymous";
+
+    private static final Logger logger = LoggerFactory.getLogger("API Request");
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public LoggingFilter(final JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
-        MDC.put(KEY, getUserFrom(request));
+        MDC.put(KEY, getMemberUUIDFromJWT(request));
         logger.info("Request For '{}'", request.getRequestURI());
         MDC.clear();
 
         filterChain.doFilter(request, response);
     }
 
-    private String getUserFrom(final HttpServletRequest request) {
+    private String getMemberUUIDFromJWT(final HttpServletRequest request) {
         final String authorization = request.getHeader(AUTHORIZATION);
 
         if (Objects.isNull(authorization)) {
             return ANONYMOUS;
         }
 
-        return UUID.nameUUIDFromBytes(authorization.getBytes()).toString();
+        final String token = authorization.replace("Bearer ", "");
+        final String memberId = jwtTokenProvider.getMemberId(token);
+        return UUID.nameUUIDFromBytes(memberId.getBytes()).toString();
     }
 }
