@@ -42,11 +42,11 @@ public class Cafe {
     }
 
     public void addLikeCount() {
-        this.likeCount += 1;
+        likeCount += 1;
     }
 
     public void subtractLikeCount() {
-        this.likeCount -= 1;
+        likeCount -= 1;
     }
 
     public Long getId() {
