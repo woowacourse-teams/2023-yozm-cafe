@@ -2,7 +2,6 @@ import { Navigate } from 'react-router';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
-import Logo from '../components/Logo';
 import ProfileInfo from '../components/ProfileInfo';
 import useUser from '../hooks/useUser';
 
@@ -15,7 +14,6 @@ const MyProfile = () => {
 
   return (
     <Container>
-      <Logo fontSize="2xl" />
       <ProfileInfo userImage={user.imageUrl} userName={user.name} />
       <ButtonContainer>
         <EditButtonContainer>
