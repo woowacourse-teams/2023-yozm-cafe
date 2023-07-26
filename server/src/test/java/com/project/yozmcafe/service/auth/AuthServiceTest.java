@@ -1,19 +1,20 @@
 package com.project.yozmcafe.service.auth;
 
 import com.project.yozmcafe.controller.auth.OAuthProvider;
+import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyString;
@@ -68,13 +69,16 @@ class AuthServiceTest {
         assertThat(memberRepository.findAll()).hasSize(1);
     }
 
-    @ParameterizedTest(name = "{0} 인증 URI 조회")
-    @EnumSource(value = OAuthProvider.class)
-    @DisplayName("Provider 별 인증 Uri를 받는다.")
-    void getAuthorizationUri(OAuthProvider oAuthProvider) {
+    @Test
+    @DisplayName("Provider 인증 Url을 받는다.")
+    void getAuthorizationUri() {
         //when
-        final String authorizationUri = authService.getAuthorizationUri(oAuthProvider);
+        final List<AuthorizationUrlDto> authorizationUrls = authService.getAuthorizationUrls();
+
         //then
-        assertThat(authorizationUri).contains("response_type", "redirect_uri", "client_id", "scope");
+        for (AuthorizationUrlDto provider : authorizationUrls) {
+            assertThat(provider.authorizationUrl())
+                    .contains("response_type", "redirect_uri", "client_id", "scope");
+        }
     }
 }
