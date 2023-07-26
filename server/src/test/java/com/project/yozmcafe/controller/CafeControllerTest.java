@@ -76,7 +76,7 @@ class CafeControllerTest {
     @DisplayName("카페에 좋아요를 추가하고, 해당 카페를 조회하는 경우 isLike가 true로 매핑되어 응답한다.")
     void updateLikesAdd() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
         saveMemberAndUnViewedCafes();
 
         //when
@@ -103,7 +103,7 @@ class CafeControllerTest {
     @DisplayName("카페에 좋아요를 취소하고, 해당 카페를 조회하는 경우 isLike가 false로 매핑되어 응답한다.")
     void updateLikes() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
         saveMemberAndUnViewedCafes();
         addLikedCafes();
 
@@ -167,7 +167,7 @@ class CafeControllerTest {
     void getCafesWithMember() {
         //given
         cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
         saveMemberAndUnViewedCafes();
 
         //when
@@ -191,7 +191,7 @@ class CafeControllerTest {
     @DisplayName("로그인한 사용자가 /cafes?page=?에 GET 요청을 보낼 때, 아직보지 않은 카페가 5개 미만이면 그 수만큼의 서로 다른 카페를 응답한다.")
     void getCafesWithMemberWhenCafeLessThan() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn("memberId");
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
         saveMemberAndUnViewedCafes();
 
         //when
