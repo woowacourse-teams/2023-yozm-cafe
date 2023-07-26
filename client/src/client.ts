@@ -35,20 +35,20 @@ class Client {
     this.accessToken = accessToken;
   }
 
-  getCafes() {
-    return this.fetchJson<Cafe[]>(`/cafes`);
+  getCafes(page = 1) {
+    return this.fetchJson<Cafe[]>(`/cafes?page=${page}`);
   }
 
   getCafesForGuest(page = 1) {
     return this.fetchJson<Cafe[]>(`/cafes/guest?page=${page}`);
   }
 
-  getCafes(page = 1) {
-    return this.fetchJson<Cafe[]>(`/cafes?page=${page}`);
-  }
-
   getUser(userId: string) {
     return this.fetchJson<User>(`/members/${userId}`);
+  }
+
+  async setLikedCafe(cafeId: Cafe['id'], isLiked: Cafe['isLiked']) {
+    await this.fetch(`/cafes/${cafeId}/likes?isLiked=${isLiked}`, { method: 'POST' });
   }
 
   addFavoriteCafe(cafeId: Cafe['id']) {
