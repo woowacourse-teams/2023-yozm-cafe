@@ -1,31 +1,39 @@
 import { rest } from 'msw';
 import { cafes } from '../data/mockData';
-import { Identity } from '../types';
+import { Identity, User } from '../types';
+
+let pageState = 1;
 
 export const handlers = [
   // 카페 조회
   rest.get('/api/cafes', (req, res, ctx) => {
     const PAGINATE_UNIT = 5;
 
+    const page = pageState;
+    pageState += 1;
+
+    const paginatedCafes = cafes.map((cafe, index) => ({
+      ...cafe,
+      name: `${cafe.name} (${page}호점)`,
+      id: PAGINATE_UNIT * (page - 1) + 1 + index,
+      detail: { ...cafe.detail, description: `(로그인 된 사용자)\n\n${cafe.detail.description}` },
+    }));
+
+    return res(ctx.status(200), ctx.json(paginatedCafes));
+  }),
+
+  // 로그인하지 않은 사용자의 카페 조회
+  rest.get('/api/cafes/guest', (req, res, ctx) => {
+    const PAGINATE_UNIT = 5;
+
     const page = Number(req.url.searchParams.get('page') || 1);
-    const isPageExists = !!cafes.at(PAGINATE_UNIT * page - 1);
 
-    if (!isPageExists) {
-      cafes
-        .slice(0, PAGINATE_UNIT)
-        .map((cafe) => structuredClone(cafe))
-        .map((cafe, index) => ({
-          ...cafe,
-          name: `${cafe.name} (${page}호점)`,
-          id: PAGINATE_UNIT * (page - 1) + 1 + index,
-        }))
-        .forEach((cafe) => {
-          cafes.push(cafe);
-        });
-    }
-
-    const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
-    const paginatedCafes = cafes.slice(start, end);
+    const paginatedCafes = cafes.map((cafe, index) => ({
+      ...cafe,
+      name: `${cafe.name} (${page}호점)`,
+      id: PAGINATE_UNIT * (page - 1) + 1 + index,
+      detail: { ...cafe.detail, description: `(게스트 사용자)\n\n${cafe.detail.description}` },
+    }));
 
     return res(ctx.status(200), ctx.json(paginatedCafes));
   }),
@@ -122,6 +130,28 @@ export const handlers = [
       ctx.json({
         token,
       }),
+    );
+  }),
+
+  rest.get('/api/members/:memberId', (req, res, ctx) => {
+    const { memberId } = req.params;
+    const authorization = req.headers.get('Authorization');
+    if (!authorization?.startsWith('Bearer')) {
+      return res(
+        ctx.status(401),
+        ctx.json({
+          message: '로그인이 필요합니다.',
+        }),
+      );
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: String(memberId),
+        imageUrl: 'https://avatars.githubusercontent.com/u/20203944?v=4',
+        name: '솔로스타',
+      } satisfies User),
     );
   }),
 ];

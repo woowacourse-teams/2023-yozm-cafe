@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import client from '../client';
+import useAuth from './useAuth';
 
 /**
  * `/cafes` 엔드포인트에서 받아오는 데이터(상태)를 사용할 수 있는 커스텀 훅입니다.
@@ -19,11 +20,16 @@ import client from '../client';
  * ```
  */
 const useCafes = () => {
+  const { identity } = useAuth();
   const queryResult = useInfiniteQuery({
-    queryKey: [''],
-    queryFn: ({ pageParam = 1 }) => client.getCafes(pageParam).then((cafes) => ({ cafes, page: pageParam })),
+    queryKey: ['cafes', identity],
+    queryFn: ({ pageParam = 1 }) =>
+      identity
+        ? client.getCafes().then((cafes) => ({ cafes, page: pageParam }))
+        : client.getCafesForGuest(pageParam).then((cafes) => ({ cafes, page: pageParam })),
     getNextPageParam: (lastPage) => (lastPage.cafes.length > 0 ? lastPage.page + 1 : undefined),
   });
+
   return {
     ...queryResult,
     data: queryResult.data as NonNullable<typeof queryResult.data>,
