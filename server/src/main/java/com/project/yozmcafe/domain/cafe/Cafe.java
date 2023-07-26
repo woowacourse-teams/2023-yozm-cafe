@@ -41,6 +41,10 @@ public class Cafe {
         this.likeCount = likeCount;
     }
 
+    public Cafe(String name, String address, Images images, Detail detail) {
+        this(null, name, address, images, detail, 0);
+    }
+
     public Long getId() {
         return id;
     }
