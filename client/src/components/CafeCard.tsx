@@ -28,7 +28,7 @@ const CafeCard = (props: CardProps) => {
       <AsidePosition>
         <Aside>
           <CafeInfoModal title={cafe.name} address={cafe.address} content={cafe.detail.description} />
-          <CafeActionBar />
+          <CafeActionBar cafe={cafe} />
         </Aside>
       </AsidePosition>
     </Container>
