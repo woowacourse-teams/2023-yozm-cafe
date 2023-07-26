@@ -1,14 +1,14 @@
 package com.project.yozmcafe.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Cookie;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AcceptanceContext {
@@ -120,6 +120,14 @@ public class AcceptanceContext {
                 .given().log().all()
                 .body(data).contentType(ContentType.JSON)
                 .auth().oauth2(accessToken);
+        response = request.delete(path);
+        response.then().log().all();
+    }
+
+    public void invokeHttpDeleteWithCookie(String path, Cookie cookie) {
+        request = RestAssured
+                .given().log().all()
+                .cookie(cookie);
         response = request.delete(path);
         response.then().log().all();
     }

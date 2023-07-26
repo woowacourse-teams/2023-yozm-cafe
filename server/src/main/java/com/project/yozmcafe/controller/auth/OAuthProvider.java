@@ -1,5 +1,6 @@
 package com.project.yozmcafe.controller.auth;
 
+import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.service.auth.OAuthClient;
@@ -30,7 +31,7 @@ public enum OAuthProvider {
         return oAuthClient.getUserInfo(code);
     }
 
-    public String getAuthorizationUrl(){
+    public String getAuthorizationUrl() {
         return oAuthClient.getAuthorizationUrl();
     }
 

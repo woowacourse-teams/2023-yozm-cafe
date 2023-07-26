@@ -48,12 +48,21 @@ public class AuthController {
         final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, refreshToken);
         setRefreshTokenCookie(response);
         return ResponseEntity.ok(tokenResponse);
-    }   
+    }
 
     @GetMapping("/{providerName}")
     public String redirectAuthorizationUri(@PathVariable("providerName") final OAuthProvider oAuthProvider) {
         final String authUri = authService.getAuthorizationUri(oAuthProvider);
 
         return "redirect:" + authUri;
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> logout(final HttpServletResponse response) {
+        final Cookie cookie = new Cookie(REFRESH_TOKEN, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
     }
 }

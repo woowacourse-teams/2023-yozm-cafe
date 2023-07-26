@@ -1,7 +1,7 @@
 package com.project.yozmcafe.service.auth;
 
-import com.project.yozmcafe.controller.auth.MemberInfo;
 import com.project.yozmcafe.domain.auth.token.OAuthToken;
+import com.project.yozmcafe.domain.member.MemberInfo;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
