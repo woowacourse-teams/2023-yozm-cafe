@@ -26,7 +26,9 @@ const Home = () => {
   }, [cafes]);
 
   const shouldFetch =
-    hasNextPage && isFetching && cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length;
+    hasNextPage &&
+    !isFetching &&
+    cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length;
   if (shouldFetch) {
     fetchNextPage();
   }
