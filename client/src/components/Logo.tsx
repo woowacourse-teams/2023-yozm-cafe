@@ -6,12 +6,13 @@ type LogoProps = {
 };
 
 const Logo = ({ fontSize }: LogoProps) => {
-  return <StyledLogo fontSize={fontSize}>요즘카페</StyledLogo>;
+  return <Container fontSize={fontSize}>요즘카페</Container>;
 };
 
 export default Logo;
 
-const StyledLogo = styled.h1<LogoProps>`
+const Container = styled.h1<LogoProps>`
+  cursor: pointer;
   font-family: 'BMJUA', sans-serif;
   font-size: ${(props) => theme.fontSize[props.fontSize]};
   color: ${({ theme }) => theme.color.primary};

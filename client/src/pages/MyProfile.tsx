@@ -1,16 +1,24 @@
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
 import ProfileInfo from '../components/ProfileInfo';
+import useAuth from '../hooks/useAuth';
 import useUser from '../hooks/useUser';
 
 const MyProfile = () => {
+  const navigate = useNavigate();
   const { data: user } = useUser();
+  const { clearAuthorization } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" />;
   }
+
+  const handleLogout = async () => {
+    await clearAuthorization();
+    navigate('/');
+  };
 
   return (
     <Container>
@@ -20,7 +28,7 @@ const MyProfile = () => {
           <Button fullWidth>프로필 수정하기</Button>
         </EditButtonContainer>
         <LogOutButton>
-          <Button variant="outlined" fullWidth>
+          <Button variant="outlined" fullWidth onClick={handleLogout}>
             로그아웃
           </Button>
         </LogOutButton>
