@@ -1,7 +1,11 @@
 package com.project.yozmcafe.acceptance;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.fixture.Fixture;
+import com.project.yozmcafe.util.AcceptanceContext;
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,16 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.jdbc.Sql;
 
-import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.util.AcceptanceContext;
-
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"classpath:truncate.sql"}, executionPhase = AFTER_TEST_METHOD)
 public class CafeAcceptanceTest {
 
     @LocalServerPort
