@@ -22,6 +22,7 @@ const theme = {
 
     background: {
       primary: '#f8f8f8',
+      secondary: 'rgba(11, 19, 30, 0.67);',
     },
   },
   fontSize: {
