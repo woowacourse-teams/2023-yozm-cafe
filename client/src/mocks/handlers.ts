@@ -66,6 +66,6 @@ export const handlers = [
 
   // refreshToken (httpOnly) 쿠키 삭제
   rest.delete('/api/auth', async (req, res, ctx) => {
-    return res(ctx.status(204));
+    return res(ctx.status(200));
   }),
 ];
