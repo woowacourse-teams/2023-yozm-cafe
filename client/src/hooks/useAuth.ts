@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import client from '../client';
 import AuthContext from '../context/AuthContext';
 import { AuthProvider, Identity } from '../types';
@@ -37,7 +37,6 @@ const useAuth = () => {
   const { identity, setIdentity } = authContext;
 
   const { mutate: issueAccessToken } = useMutation({
-    mutationKey: ['auth'],
     mutationFn: ({ provider, code }: AuthParams) =>
       client.issueAccessToken(provider, code).then((accessToken) => {
         client.setAccessToken(accessToken);
@@ -52,7 +51,17 @@ const useAuth = () => {
     },
   });
 
-  return { identity, issueAccessToken };
+  const { mutate: clearRefreshToken } = useMutation({
+    mutationFn: () => client.clearRefreshToken(),
+  });
+
+  const clearAuthorization = useCallback(() => {
+    setIdentity(null);
+    client.setAccessToken(null);
+    return clearRefreshToken();
+  }, [clearRefreshToken]);
+
+  return { identity, issueAccessToken, clearAuthorization };
 };
 
 export default useAuth;

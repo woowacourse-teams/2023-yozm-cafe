@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import useUser from '../hooks/useUser';
 import Button from './Button';
 import Logo from './Logo';
 import Modal from './Modal';
 
 const Navbar = () => {
+  const { data: user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -21,10 +23,14 @@ const Navbar = () => {
       <LogoContainer to="/">
         <Logo fontSize="4xl" />
       </LogoContainer>
-      <ButtonContainer onClick={openModal}>
-        <Button fullWidth={true} fullHeight={true}>
-          로그인
-        </Button>
+      <ButtonContainer>
+        {user ? (
+          <ProfileImage src={user.imageUrl} alt="Profile" />
+        ) : (
+          <Button fullWidth={true} fullHeight={true} onClick={openModal}>
+            로그인
+          </Button>
+        )}
       </ButtonContainer>
       {isModalOpen && <Modal onClose={closeModal} />}
     </Container>
@@ -49,4 +55,9 @@ const ButtonContainer = styled.div`
 
 const LogoContainer = styled(Link)`
   text-decoration: none;
+`;
+
+const ProfileImage = styled.img`
+  height: 100%;
+  border-radius: 100%;
 `;

@@ -51,6 +51,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-storybook": "^0.6.12",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "html-webpack-plugin": "^5.5.3",
     "msw": "^1.2.2",
     "postcss-styled-syntax": "^0.4.0",
