@@ -16,8 +16,8 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Member {
 
-    private static final String UN_EXISTED_UNVIEWED_CAFE = "존재하지 않는 내역입니다.";
-    public static final String UN_EXISTED_LIKED_CAFE = "존재하지 않는 좋아요 내역입니다.";
+    private static final String NOT_EXISTED_UNVIEWED_CAFE = "존재하지 않는 내역입니다.";
+    public static final String NOT_EXISTED_LIKED_CAFE = "존재하지 않는 좋아요 내역입니다.";
 
     @Id
     private String id;
@@ -52,7 +52,7 @@ public class Member {
         final UnViewedCafe foundUnviewedCafe = unViewedCafes.stream()
                 .filter(unViewedCafe::equals)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(UN_EXISTED_UNVIEWED_CAFE));
+                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_UNVIEWED_CAFE));
         unViewedCafes.remove(foundUnviewedCafe);
     }
 
@@ -77,7 +77,7 @@ public class Member {
         final LikedCafe targetLikedCafe = likedCafes.stream()
                 .filter(likedCafe -> likedCafe.isSameCafe(cafe))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(UN_EXISTED_LIKED_CAFE));
+                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_LIKED_CAFE));
         likedCafes.remove(targetLikedCafe);
     }
 
