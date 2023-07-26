@@ -1,18 +1,25 @@
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import useUser from '../hooks/useUser';
 import Button from './Button';
 import Logo from './Logo';
 
 const Navbar = () => {
+  const { data: user } = useUser();
+
   return (
     <Container>
       <LogoContainer to="/">
         <Logo fontSize="4xl" />
       </LogoContainer>
       <ButtonContainer>
-        <Button fullWidth={true} fullHeight={true}>
-          로그인
-        </Button>
+        {user ? (
+          <ProfileImage src={user.imageUrl} alt="Profile" />
+        ) : (
+          <Button fullWidth={true} fullHeight={true}>
+            로그인
+          </Button>
+        )}
       </ButtonContainer>
     </Container>
   );
@@ -38,4 +45,9 @@ const ButtonContainer = styled.div`
 const LogoContainer = styled(Link)`
   flex: 8;
   text-decoration: none;
+`;
+
+const ProfileImage = styled.img`
+  height: 100%;
+  border-radius: 100%;
 `;
