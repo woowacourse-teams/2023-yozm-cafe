@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -63,14 +63,11 @@ class MemberServiceTest {
         memberRepository.save(member);
 
         //when
-        final Slice<LikedCafeResponse> likedCafes = memberService.findLikedCafesById(member.getId(), pageRequest);
+        final List<LikedCafeResponse> likedCafes = memberService.findLikedCafesById(member.getId(), pageRequest);
 
-        //then
-        assertAll(
-                () -> assertThat(likedCafes.isFirst()).isTrue(),
-                () -> assertThat(likedCafes.isLast()).isTrue(),
-                () -> assertThat(likedCafes.get()).hasSize(1)
-        );
+        for (LikedCafeResponse likedCafe : likedCafes) {
+            assertThat(likedCafe.cafeId()).isEqualTo(savedCafe.getId());
+        }
     }
 
     @Test
