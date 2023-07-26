@@ -124,4 +124,26 @@ export const handlers = [
       }),
     );
   }),
+
+  rest.get('/api/members/:memberId', (req, res, ctx) => {
+    const { memberId } = req.params;
+    const authorization = req.headers.get('Authorization');
+    if (!authorization?.startsWith('Bearer')) {
+      return res(
+        ctx.status(401),
+        ctx.json({
+          message: '로그인이 필요합니다.',
+        }),
+      );
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: String(memberId),
+        imageUrl: 'https://avatars.githubusercontent.com/u/20203944?v=4',
+        name: '솔로스타',
+      } satisfies User),
+    );
+  }),
 ];
