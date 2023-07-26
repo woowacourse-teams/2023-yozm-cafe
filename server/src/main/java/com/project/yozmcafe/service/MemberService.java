@@ -10,6 +10,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 public class MemberService {
@@ -27,13 +29,13 @@ public class MemberService {
         return MemberResponse.from(member);
     }
 
-    public Slice<LikedCafeResponse> findLikedCafesById(final String memberId, Pageable pageable) {
+    public List<LikedCafeResponse> findLikedCafesById(final String memberId, Pageable pageable) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 존재하지 않습니다."));
 
         final Slice<LikedCafe> likedCafes = memberRepository.findLikedCafeByMemberId(member.getId(), pageable);
 
-        return likedCafes.map(LikedCafe::getCafe)
-                .map(cafe -> new LikedCafeResponse(cafe.getId(), cafe.getRepresentativeImage()));
+        return likedCafes.stream().map(LikedCafe::getCafe)
+                .map(cafe -> new LikedCafeResponse(cafe.getId(), cafe.getRepresentativeImage())).toList();
     }
 }
