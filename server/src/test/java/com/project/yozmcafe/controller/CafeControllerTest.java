@@ -22,15 +22,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.LikedCafe;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import com.project.yozmcafe.util.AcceptanceContext;
-import com.project.yozmcafe.util.LikeCafeRepository;
-import com.project.yozmcafe.util.UnViewedCafeRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -49,10 +45,6 @@ class CafeControllerTest {
     private MemberRepository memberRepository;
     @Autowired
     private CafeRepository cafeRepository;
-    @Autowired
-    private UnViewedCafeRepository unViewedCafeRepository;
-    @Autowired
-    private LikeCafeRepository likeCafeRepository;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
     private Cafe cafe1, cafe2, cafe3, cafe4, cafe5;
@@ -77,6 +69,7 @@ class CafeControllerTest {
     void updateLikesAdd() {
         //given
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
+
         saveMemberAndUnViewedCafes();
 
         //when
@@ -104,8 +97,7 @@ class CafeControllerTest {
     void updateLikes() {
         //given
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
-        saveMemberAndUnViewedCafes();
-        addLikedCafes();
+        saveMemberAndUnViewedCafesAndLikedCafes();
 
         //when
         context.invokeHttpPostWithToken("/cafes/" + cafe1.getId() + "/likes?isLiked=false");
@@ -166,9 +158,12 @@ class CafeControllerTest {
     @DisplayName("로그인한 사용자가 /cafes?page=?에 GET 요청을 보내면 아직보지않은 랜덤한,서로 다른 카페정보를 5개씩 응답한다.")
     void getCafesWithMember() {
         //given
-        cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
-        saveMemberAndUnViewedCafes();
+
+        final Member member = saveMemberAndUnViewedCafes();
+        cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
+        member.addUnViewedCafes(List.of(cafe5));
+        memberRepository.save(member);
 
         //when
         context.invokeHttpGetWithToken("/cafes?page=1");
@@ -210,24 +205,19 @@ class CafeControllerTest {
         );
     }
 
-    private void saveMemberAndUnViewedCafes() {
-        Member member = memberRepository.save(new Member(MEMBER_ID, "name1", "image"));
-
-        final List<Cafe> allCafes = cafeRepository.findAll();
-        final List<UnViewedCafe> allUnViewedCafes = allCafes.stream()
-                .map(savedCafe -> new UnViewedCafe(savedCafe, member))
-                .toList();
-        unViewedCafeRepository.saveAll(allUnViewedCafes);
-
-        member.addUnViewedCafes(allCafes);
+    private Member saveMemberAndUnViewedCafes() {
+        final Member member = new Member(MEMBER_ID, "asdf", "img");
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
+        return memberRepository.save(member);
     }
 
-    private void addLikedCafes() {
-        Member member = memberRepository.findById(MEMBER_ID).get();
-        final List<Cafe> allCafes = cafeRepository.findAll();
-        final List<LikedCafe> likedCafes = allCafes.stream()
-                .map(savedCafe -> new LikedCafe(savedCafe, member))
-                .toList();
-        likeCafeRepository.saveAll(likedCafes);
+    private void saveMemberAndUnViewedCafesAndLikedCafes() {
+        final Member member = new Member(MEMBER_ID, "memberName", "memberImg");
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
+        member.addLikedCafe(cafe1);
+        member.addLikedCafe(cafe2);
+        member.addLikedCafe(cafe3);
+        member.addLikedCafe(cafe4);
+        memberRepository.save(member);
     }
 }
