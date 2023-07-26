@@ -21,6 +21,7 @@ public class LoggingFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION = "Authorization";
     private static final String KEY = "user";
     private static final String ANONYMOUS = "anonymous";
+    private static final String BEARER = "Bearer ";
 
     private static final Logger logger = LoggerFactory.getLogger("API Request");
 
@@ -48,7 +49,7 @@ public class LoggingFilter extends OncePerRequestFilter {
             return ANONYMOUS;
         }
 
-        final String token = authorization.replace("Bearer ", "");
+        final String token = authorization.replace(BEARER, "");
         final String memberId = jwtTokenProvider.getMemberId(token);
         return UUID.nameUUIDFromBytes(memberId.getBytes()).toString();
     }
