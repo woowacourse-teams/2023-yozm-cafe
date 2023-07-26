@@ -22,7 +22,7 @@ const useCafes = () => {
   const queryResult = useInfiniteQuery({
     queryKey: [''],
     queryFn: ({ pageParam = 1 }) => client.getCafes(pageParam).then((cafes) => ({ cafes, page: pageParam })),
-    getNextPageParam: (lastPage) => lastPage.page + 1,
+    getNextPageParam: (lastPage) => (lastPage.cafes.length > 0 ? lastPage.page + 1 : undefined),
   });
   return {
     ...queryResult,
