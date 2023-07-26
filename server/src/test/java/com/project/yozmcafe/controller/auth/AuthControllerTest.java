@@ -122,7 +122,7 @@ class AuthControllerTest {
                 .when()
                 .log().all()
                 .redirects().follow(false)
-                .get("/auth/authorizationUrls");
+                .get("/auth/urls");
 
         //then
         assertThat(response.getBody().jsonPath().getString("authorizationUrl"))
