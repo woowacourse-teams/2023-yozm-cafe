@@ -39,6 +39,7 @@ public class CafeService {
                 .toList();
     }
 
+    @Transactional
     public Cafe saveCafe(CafeRequest cafeRequest) {
         return cafeRepository.save(cafeRequest.toCafe());
     }
