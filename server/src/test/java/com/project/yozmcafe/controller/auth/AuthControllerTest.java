@@ -36,7 +36,7 @@ class AuthControllerTest {
     GoogleOAuthClient googleOAuthClient;
     @SpyBean
     KakaoOAuthClient kakaoOAuthClient;
-    @MockBean
+    @SpyBean
     MemberRepository memberRepository;
     @MockBean
     JwtTokenProvider jwtTokenProvider;
