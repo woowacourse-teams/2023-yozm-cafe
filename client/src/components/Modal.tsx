@@ -23,18 +23,14 @@ const Modal = ({ onClose }: ModalProps) => {
         <LoginTitle>간편 로그인</LoginTitle>
         <ButtonContainer>
           <a href="/auth/kakao?code=1234">
-            <KakaoLoginButton>
-              <LoginButton $color="yellow">
-                <img src="/assets/kakao.svg" alt="카카오 로고" />
-              </LoginButton>
-            </KakaoLoginButton>
+            <LoginButton $color="yellow">
+              <img src="/assets/kakao.svg" alt="카카오 로고" />
+            </LoginButton>
           </a>
           <a href="/api/auth/google">
-            <GoogleLoginButton>
-              <LoginButton $color="white">
-                <img src="/assets/google.svg" alt="구글 로고" />
-              </LoginButton>
-            </GoogleLoginButton>
+            <LoginButton $color="white">
+              <img src="/assets/google.svg" alt="구글 로고" />
+            </LoginButton>
           </a>
         </ButtonContainer>
       </ModalContent>
@@ -124,7 +120,3 @@ const ButtonContainer = styled.section`
   justify-content: space-evenly;
   width: 100%;
 `;
-
-const KakaoLoginButton = styled.div``;
-
-const GoogleLoginButton = styled.div``;
