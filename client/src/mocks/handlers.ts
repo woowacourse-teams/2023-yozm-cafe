@@ -38,9 +38,9 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(paginatedCafes));
   }),
 
-  // 좋아요 추가
+  // 좋아요
   rest.post('/api/cafes/:cafeId/likes', (req, res, ctx) => {
-    const { cafeId } = req.params;
+    const cafeId = Number(req.params.cafeId);
     const liked = req.url.searchParams.get('isLiked');
     if (!liked) {
       return res(
@@ -52,7 +52,7 @@ export const handlers = [
     }
     const isLiked = liked === 'true';
 
-    const cafe = cafes.find((cafe) => cafe.id === Number(cafeId));
+    const cafe = cafes.find((cafe) => cafe.id === cafeId);
     if (!cafe) {
       return res(
         ctx.status(404),
