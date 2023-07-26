@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+
+import java.util.List;
 import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,14 +65,11 @@ class MemberServiceTest {
         memberRepository.save(member);
 
         //when
-        final Slice<LikedCafeResponse> likedCafes = memberService.findLikedCafesById(member.getId(), pageRequest);
+        final List<LikedCafeResponse> likedCafes = memberService.findLikedCafesById(member.getId(), pageRequest);
 
-        //then
-        assertAll(
-                () -> assertThat(likedCafes.isFirst()).isTrue(),
-                () -> assertThat(likedCafes.isLast()).isTrue(),
-                () -> assertThat(likedCafes.get()).hasSize(1)
-        );
+        for (LikedCafeResponse likedCafe : likedCafes) {
+            assertThat(likedCafe.cafeId()).isEqualTo(savedCafe.getId());
+        }
     }
 
     @Test

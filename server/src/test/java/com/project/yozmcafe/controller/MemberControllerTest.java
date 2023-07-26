@@ -68,11 +68,11 @@ class MemberControllerTest {
     @DisplayName("멤버의 좋아요 목록을 조회할 수 있다.")
     void getLikedCafes() {
         //given
-        final Cafe save1 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
-        final Cafe save2 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
         final Member member = new Member("1234", "오션", "오션.img");
-        member.addLikedCafe(save1);
-        member.addLikedCafe(save2);
+        member.addLikedCafe(savedCafe1);
+        member.addLikedCafe(savedCafe2);
         memberRepository.save(member);
 
         //when
@@ -83,10 +83,8 @@ class MemberControllerTest {
 
         //then
         assertAll(
-                () -> assertThat(response.jsonPath().getBoolean("first")).isTrue(),
-                () -> assertThat(response.jsonPath().getBoolean("last")).isFalse(),
-                () -> assertThat(response2.jsonPath().getBoolean("first")).isFalse(),
-                () -> assertThat(response2.jsonPath().getBoolean("last")).isTrue()
+                () -> assertThat(response.jsonPath().getLong("[0].cafeId")).isEqualTo(1),
+                () -> assertThat(response2.jsonPath().getLong("[0].cafeId")).isEqualTo(2)
         );
     }
 
