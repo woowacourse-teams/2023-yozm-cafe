@@ -1,4 +1,87 @@
-import { Cafe } from '../types';
+import { Cafe, LikedCafe } from '../types';
+
+export const likedCafes: LikedCafe[] = [
+  {
+    cafeId: 1,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 2,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 3,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 4,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 5,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 6,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 7,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 8,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 9,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 10,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 11,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 12,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 13,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 14,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 15,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 16,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 17,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 18,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 19,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+  {
+    cafeId: 20,
+    imageUrl: '/images/cafe-image-1.png',
+  },
+];
 
 export const cafes: Cafe[] = [
   {
@@ -6,7 +89,13 @@ export const cafes: Cafe[] = [
     name: '성수 카페',
     address: '성수로 1길',
     images: {
-      urls: ['/images/cafe-image-1.png', '/images/cafe-image-1.png'],
+      urls: [
+        '/images/cafe-image-1.png',
+        '/images/cafe-image-2.png',
+        '/images/cafe-image-3.png',
+        '/images/cafe-image-4.png',
+        '/images/cafe-image-5.png',
+      ],
     },
     isLiked: false,
     likeCount: 1,
