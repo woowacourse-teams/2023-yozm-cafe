@@ -9,7 +9,7 @@ import java.util.List;
 @Embeddable
 public class Images {
 
-    private static final Integer REPRESENTATIVE_INDEX = 0;
+    private static final int REPRESENTATIVE_INDEX = 0;
 
     @ElementCollection
     @CollectionTable(name = "image")
