@@ -67,9 +67,8 @@ class MemberServiceTest {
         //when
         final List<LikedCafeResponse> likedCafes = memberService.findLikedCafesById(member.getId(), pageRequest);
 
-        for (LikedCafeResponse likedCafe : likedCafes) {
-            assertThat(likedCafe.cafeId()).isEqualTo(savedCafe.getId());
-        }
+        //then
+        assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
     }
 
     @Test
