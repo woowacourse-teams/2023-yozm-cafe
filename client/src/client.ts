@@ -1,4 +1,4 @@
-import { AuthProvider, Cafe, User } from './types';
+import { AuthProvider, Cafe, LikedCafe, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -43,12 +43,12 @@ class Client {
     return this.fetchJson<Cafe[]>(`/cafes/guest?page=${page}`);
   }
 
-  getCafes(page = 1) {
-    return this.fetchJson<Cafe[]>(`/cafes?page=${page}`);
-  }
-
   getUser(userId: string) {
     return this.fetchJson<User>(`/members/${userId}`);
+  }
+
+  getLikedCafeList(userId: string, page = 1) {
+    return this.fetchJson<LikedCafe[]>(`/members/${userId}/liked-cafes?page=${page}`);
   }
 
   addFavoriteCafe(cafeId: Cafe['id']) {
