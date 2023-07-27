@@ -4,6 +4,7 @@ server/build/
 !server/gradle/wrapper/gradle-wrapper.jar
 !server/src/main/**/build/
 !server/src/test/**/build/
+logs
 
 ### STS ###
 server/.apt_generated

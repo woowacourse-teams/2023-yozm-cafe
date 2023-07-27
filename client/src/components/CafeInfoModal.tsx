@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { SlArrowDown } from 'react-icons/sl';
+import { RiArrowUpDoubleLine } from 'react-icons/ri';
+import { SlLocationPin } from 'react-icons/sl';
 import { styled } from 'styled-components';
 
 type CafeInfoModalProps = {
@@ -13,12 +14,15 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
 
   return (
     <Container>
+      <Title>{title}</Title>
+      <Address>
+        <LocationPinIcon />
+        {address}
+      </Address>
       <Modal className={isOpen ? 'active' : ''} onClick={() => setIsOpen(!isOpen)}>
-        <Title>{title}</Title>
-        <Address>{address}</Address>
         {!isOpen && (
           <ArrowDownContainer>
-            <StyledArrowDown />
+            <ArrowUpIcon />
           </ArrowDownContainer>
         )}
         <Content>{content}</Content>
@@ -30,13 +34,23 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
 export default CafeInfoModal;
 
 const Container = styled.div`
-  height: 120px;
-  max-height: 120px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  height: 80px;
+  max-height: 80px;
+  margin-left: ${({ theme }) => theme.space[4]};
 `;
 
-const StyledArrowDown = styled(SlArrowDown)`
-  font-size: ${({ theme }) => theme.fontSize['2xl']};
-  color: ${({ theme }) => theme.color.line.secondary};
+const ArrowUpIcon = styled(RiArrowUpDoubleLine)`
+  font-size: ${({ theme }) => theme.fontSize['3xl']};
+  color: ${({ theme }) => theme.color.white};
+`;
+
+const LocationPinIcon = styled(SlLocationPin)`
+  margin-right: ${({ theme }) => theme.space[1]};
+  font-size: ${({ theme }) => theme.fontSize.sm};
 `;
 
 const ArrowDownContainer = styled.div`
@@ -45,16 +59,19 @@ const ArrowDownContainer = styled.div`
 `;
 
 const Title = styled.h1`
+  padding-bottom: ${({ theme }) => theme.space['1.5']};
   font-size: ${({ theme }) => theme.fontSize['3xl']};
   font-weight: bolder;
+  color: ${({ theme }) => theme.color.white};
 `;
 
 const Address = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.lg};
+  color: ${({ theme }) => theme.color.white};
 `;
 
 const Content = styled.p`
-  margin-top: 20px;
+  margin-top: ${({ theme }) => theme.space[5]};
   color: ${({ theme }) => theme.color.gray};
 `;
 
@@ -65,23 +82,19 @@ const Modal = styled.main`
   bottom: 0;
 
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 8px;
 
   width: 100%;
-  height: 120px;
-  padding: 16px;
+  height: 90px;
+  padding: ${({ theme }) => theme.space[4]};
 
-  opacity: 0.8;
-  background: ${({ theme }) => theme.color.background.primary};
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-
-  transition: all 0.2s;
+  transition: all 0.3s;
 
   &:not(.active):hover {
     cursor: pointer;
-    transform: scale(1.02) translateY(-4px);
+    height: 100px;
   }
 
   &.active {

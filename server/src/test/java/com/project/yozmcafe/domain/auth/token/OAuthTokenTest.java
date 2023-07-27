@@ -1,6 +1,6 @@
 package com.project.yozmcafe.domain.auth.token;
 
-import com.project.yozmcafe.controller.auth.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

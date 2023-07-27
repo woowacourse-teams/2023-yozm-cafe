@@ -1,8 +1,8 @@
 package com.project.yozmcafe.service.auth;
 
-import com.project.yozmcafe.controller.auth.MemberInfo;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

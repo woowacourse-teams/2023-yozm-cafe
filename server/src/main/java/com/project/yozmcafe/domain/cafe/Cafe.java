@@ -1,8 +1,13 @@
 package com.project.yozmcafe.domain.cafe;
 
-import jakarta.persistence.*;
-
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Cafe {
@@ -26,13 +31,26 @@ public class Cafe {
     protected Cafe() {
     }
 
-    public Cafe(final Long id, final String name, final String address, final Images images, final Detail detail, final int likeCount) {
+    public Cafe(final Long id, final String name, final String address, final Images images, final Detail detail,
+                final int likeCount) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.images = images;
         this.detail = detail;
         this.likeCount = likeCount;
+    }
+
+    public Cafe(String name, String address, Images images, Detail detail) {
+        this(null, name, address, images, detail, 0);
+    }
+
+    public void addLikeCount() {
+        likeCount += 1;
+    }
+
+    public void subtractLikeCount() {
+        likeCount -= 1;
     }
 
     public String getRepresentativeImage() {
