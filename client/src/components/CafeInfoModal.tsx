@@ -16,13 +16,13 @@ const CafeInfoModal = ({ title, address, content }: CafeInfoModalProps) => {
     <Container>
       <Title>{title}</Title>
       <Address>
-        <StyledLocation />
+        <LocationPinIcon />
         {address}
       </Address>
       <Modal className={isOpen ? 'active' : ''} onClick={() => setIsOpen(!isOpen)}>
         {!isOpen && (
           <ArrowDownContainer>
-            <StyledArrowDown />
+            <ArrowUpIcon />
           </ArrowDownContainer>
         )}
         <Content>{content}</Content>
@@ -40,16 +40,15 @@ const Container = styled.div`
 
   height: 80px;
   max-height: 80px;
-  margin-left: 8px;
-  padding: 0 8px;
+  margin-left: ${({ theme }) => theme.space[3]};
 `;
 
-const StyledArrowDown = styled(RiArrowUpDoubleLine)`
+const ArrowUpIcon = styled(RiArrowUpDoubleLine)`
   font-size: ${({ theme }) => theme.fontSize['3xl']};
   color: ${({ theme }) => theme.color.white};
 `;
 
-const StyledLocation = styled(SlLocationPin)`
+const LocationPinIcon = styled(SlLocationPin)`
   margin: 1px;
   font-size: ${({ theme }) => theme.fontSize.sm};
 `;

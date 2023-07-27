@@ -33,7 +33,7 @@ const Container = styled.aside`
   gap: 24px;
   align-self: flex-end;
 
-  padding-right: 8px;
+  padding-right: ${({ theme }) => theme.space[3]};
 `;
 
 const Action = styled.button`

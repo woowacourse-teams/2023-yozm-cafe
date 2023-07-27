@@ -59,5 +59,5 @@ const Aside = styled.div`
   position: relative;
   display: flex;
   flex-direction: column-reverse;
-  gap: 80px;
+  gap: ${({ theme }) => theme.space[20]};
 `;
