@@ -78,10 +78,7 @@ class CafeControllerTest {
 
         context.invokeHttpGetWithToken("/cafes");
         final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
-        final CafeResponse cafeResponse = cafeResponses.stream()
-                .filter(cur -> Objects.equals(cur.id(), cafe1.getId()))
-                .findAny()
-                .get();
+        final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
 
         //then
         assertAll(
@@ -90,6 +87,14 @@ class CafeControllerTest {
                 () -> assertThat(cafeResponse.likeCount()).isEqualTo(2),
                 () -> assertThat(cafeResponse.isLiked()).isTrue()
         );
+    }
+
+    private CafeResponse getCafeResponse(final List<CafeResponse> cafeResponses, long targetCafeId) {
+        final CafeResponse cafeResponse = cafeResponses.stream()
+                .filter(response -> Objects.equals(response.id(), targetCafeId))
+                .findAny()
+                .get();
+        return cafeResponse;
     }
 
     @Test
@@ -105,10 +110,7 @@ class CafeControllerTest {
 
         context.invokeHttpGetWithToken("/cafes");
         final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
-        final CafeResponse cafeResponse = cafeResponses.stream()
-                .filter(cur -> Objects.equals(cur.id(), cafe1.getId()))
-                .findAny()
-                .get();
+        final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
 
         //then
         assertAll(
