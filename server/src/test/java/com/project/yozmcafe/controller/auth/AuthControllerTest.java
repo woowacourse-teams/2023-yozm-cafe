@@ -1,5 +1,6 @@
 package com.project.yozmcafe.controller.auth;
 
+import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
