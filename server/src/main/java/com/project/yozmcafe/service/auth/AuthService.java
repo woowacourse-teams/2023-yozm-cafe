@@ -45,7 +45,7 @@ public class AuthService {
 
     public List<AuthorizationUrlDto> getAuthorizationUrls() {
         return Arrays.stream(OAuthProvider.values())
-                .map(it -> new AuthorizationUrlDto(it.name(), it.getAuthorizationUrl()))
+                .map(provider -> new AuthorizationUrlDto(provider.name(), provider.getAuthorizationUrl()))
                 .collect(Collectors.toList());
     }
 }
