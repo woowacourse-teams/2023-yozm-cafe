@@ -20,7 +20,7 @@ public class Fixture {
                         new AvailableTime(Days.FRIDAY, LocalTime.now(), LocalTime.now(), true),
                         new AvailableTime(Days.SATURDAY, LocalTime.now(), LocalTime.now(), true),
                         new AvailableTime(Days.SUNDAY, LocalTime.now(), LocalTime.now(), true))
-                , "mapUrl", "desc");
+                , "mapUrl", "desc", "010-1234-5678");
     }
 
     public static Images getImages() {
