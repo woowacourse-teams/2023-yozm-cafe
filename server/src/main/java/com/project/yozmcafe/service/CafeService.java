@@ -2,6 +2,7 @@ package com.project.yozmcafe.service;
 
 import java.util.List;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +37,10 @@ public class CafeService {
         return unViewedCafes.stream()
                 .map(cafe -> CafeResponse.of(cafe, member.isLike(cafe)))
                 .toList();
+    }
+
+    @Transactional
+    public Cafe saveCafe(CafeRequest cafeRequest) {
+        return cafeRepository.save(cafeRequest.toCafe());
     }
 }
