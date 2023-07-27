@@ -1,3 +1,8 @@
+export type AuthUrl = {
+  provider: string;
+  authorizationUrl: string;
+};
+
 export type Identity = {
   sub: string;
   iat: number;
