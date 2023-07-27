@@ -54,7 +54,7 @@ public class AuthController {
     }
 
     @GetMapping("/urls")
-    public ResponseEntity<List<AuthorizationUrlDto>> getRedirectAuthorizationUrl() {
+    public ResponseEntity<List<AuthorizationUrlDto>> getRedirectAuthorizationUrls() {
         final List<AuthorizationUrlDto> authorizationUrls = authService.getAuthorizationUrls();
 
         return ResponseEntity.ok(authorizationUrls);
