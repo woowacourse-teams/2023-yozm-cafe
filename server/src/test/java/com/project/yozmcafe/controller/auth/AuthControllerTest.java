@@ -1,13 +1,16 @@
 package com.project.yozmcafe.controller.auth;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
-
-import java.util.Optional;
-
+import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
+import com.project.yozmcafe.util.AcceptanceContext;
+import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
+import io.restassured.matcher.DetailedCookieMatcher;
+import io.restassured.matcher.RestAssuredMatchers;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,19 +20,13 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberInfo;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
-import com.project.yozmcafe.util.AcceptanceContext;
+import java.util.Optional;
 
-import io.restassured.RestAssured;
-import io.restassured.http.Cookie;
-import io.restassured.matcher.DetailedCookieMatcher;
-import io.restassured.matcher.RestAssuredMatchers;
-import io.restassured.response.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthControllerTest {
