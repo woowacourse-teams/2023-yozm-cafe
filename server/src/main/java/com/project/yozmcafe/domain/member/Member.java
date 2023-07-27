@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 public class Member {
 
     private static final String NOT_EXISTED_UNVIEWED_CAFE = "존재하지 않는 내역입니다.";
-    public static final String NOT_EXISTED_LIKED_CAFE = "존재하지 않는 좋아요 내역입니다.";
+    private static final String NOT_EXISTED_LIKED_CAFE = "존재하지 않는 좋아요 내역입니다.";
 
     @Id
     private String id;
@@ -60,17 +60,22 @@ public class Member {
         return unViewedCafes.isEmpty();
     }
 
-    public void updateIsLike(final Cafe cafe, final boolean isLiked) {
-        final boolean currentIsLike = isLike(cafe);
-        if (currentIsLike != isLiked && isLiked) {
-            addLikedCafe(cafe);
-            cafe.addLikeCount();
+    public void updateIsLikedCafesBy(final Cafe cafe, final boolean isLiked) {
+        if (alreadySatisfiedBy(cafe, isLiked)) {
+            return;
         }
 
-        if (currentIsLike != isLiked && !isLiked) {
-            removeLikedCafe(cafe);
-            cafe.subtractLikeCount();
+        if (isLiked) {
+            addLikedCafe(cafe);
         }
+
+        if (!isLiked) {
+            removeLikedCafe(cafe);
+        }
+    }
+
+    private boolean alreadySatisfiedBy(final Cafe cafe, final boolean isLiked) {
+        return isLike(cafe) == isLiked;
     }
 
     private void removeLikedCafe(final Cafe cafe) {
@@ -79,11 +84,13 @@ public class Member {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_LIKED_CAFE));
         likedCafes.remove(targetLikedCafe);
+        cafe.subtractLikeCount();
     }
 
 
     public void addLikedCafe(Cafe cafe) {
         likedCafes.add(new LikedCafe(cafe, this));
+        cafe.addLikeCount();
     }
 
     public boolean isLike(final Cafe cafe) {

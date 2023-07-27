@@ -32,6 +32,6 @@ public class MemberService {
     public void updateLike(final Member member, final long cafeId, final boolean isLiked) {
         final Cafe cafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 카페가 존재하지 않습니다."));
-        member.updateIsLike(cafe, isLiked);
+        member.updateIsLikedCafesBy(cafe, isLiked);
     }
 }
