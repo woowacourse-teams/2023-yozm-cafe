@@ -6,6 +6,7 @@ import Loading from './pages/Loading';
 import MyProfile from './pages/MyProfile';
 import NotFound from './pages/NotFound';
 import Root from './pages/Root';
+import TestAuthorizationCode from './pages/TestAuthorizationCode';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
         <Auth />
       </Suspense>
     ),
+  },
+  {
+    path: '/test',
+    children: [{ path: 'auth/:provider', element: <TestAuthorizationCode /> }],
   },
 ]);
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
@@ -32,7 +32,7 @@ const Navbar = () => {
           </Button>
         )}
       </ButtonContainer>
-      {isModalOpen && <Modal onClose={closeModal} />}
+      <Suspense>{isModalOpen && <Modal onClose={closeModal} />}</Suspense>
     </Container>
   );
 };
@@ -50,7 +50,8 @@ const Container = styled.nav`
 `;
 
 const ButtonContainer = styled.div`
-  width: 25%;
+  flex: 2;
+  height: 55%;
 `;
 
 const LogoContainer = styled(Link)`
