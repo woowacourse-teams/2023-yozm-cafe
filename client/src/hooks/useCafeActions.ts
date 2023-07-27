@@ -1,6 +1,7 @@
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '../client';
 import { Cafe } from '../types';
+import useAuth from './useAuth';
 
 type SetLikedCafeParams = {
   cafeId: Cafe['id'];
@@ -27,14 +28,13 @@ const withIsLiked = (cafes: InfiniteData<{ cafes: Cafe[] }>, cafeId: Cafe['id'],
 
 const useCafeActions = () => {
   const queryClient = useQueryClient();
+  const { identity } = useAuth();
   const { mutate: setLikedCafe } = useMutation({
     mutationFn: ({ cafeId, isLiked }: SetLikedCafeParams) => client.setLikedCafe(cafeId, isLiked),
     onMutate: async ({ cafeId, isLiked }) => {
-      await queryClient.cancelQueries(['cafes', cafeId, 'isLiked']);
+      const cafes: InfiniteData<{ cafes: Cafe[] }> | undefined = queryClient.getQueryData(['cafes', identity]);
 
-      const cafes: InfiniteData<{ cafes: Cafe[] }> | undefined = queryClient.getQueryData(['cafes']);
-
-      queryClient.setQueryData(['cafes'], cafes ? withIsLiked(cafes, cafeId, isLiked) : cafes);
+      queryClient.setQueryData(['cafes', identity], cafes ? withIsLiked(cafes, cafeId, isLiked) : cafes);
       return { previous: cafes };
     },
     onError: (_, __, context) => {

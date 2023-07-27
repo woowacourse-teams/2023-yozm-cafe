@@ -35,8 +35,8 @@ class Client {
     this.accessToken = accessToken;
   }
 
-  getCafes(page = 1) {
-    return this.fetchJson<Cafe[]>(`/cafes?page=${page}`);
+  getCafes() {
+    return this.fetchJson<Cafe[]>(`/cafes`);
   }
 
   getCafesForGuest(page = 1) {
