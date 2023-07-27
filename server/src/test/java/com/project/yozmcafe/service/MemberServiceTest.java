@@ -55,7 +55,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("멤버에 해당하는 좋아요 카페 목록을 조회한다.")
+    @DisplayName("멤버가 좋아요한 카페 목록을 조회한다.")
     void findLikedCafesById() {
         //given
         final Cafe savedCafe = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
