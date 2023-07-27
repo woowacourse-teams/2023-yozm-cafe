@@ -136,8 +136,14 @@ class AuthControllerTest {
                 .get("/auth/urls");
 
         //then
-        assertThat(response.getBody().jsonPath().getString("authorizationUrl"))
-                .contains("response_type", "redirect_uri", "client_id", "scope");
+        for (OAuthProvider provider : OAuthProvider.values()) {
+            String providerPath = "[" + provider.ordinal() + "]" + ".provider";
+            String urlPath = "[" + provider.ordinal() + "]" + ".authorizationUrl";
+
+            assertThat(response.getBody().jsonPath().getString(providerPath)).isEqualTo(provider.name());
+            assertThat(response.getBody().jsonPath().getString(urlPath))
+                    .contains("response_type", "redirect_uri", "client_id", "scope");
+        }
     }
 
     @Test
