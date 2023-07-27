@@ -57,10 +57,7 @@ const AsidePosition = styled.div`
 
 const Aside = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column-reverse;
-  gap: 40px;
-
-  margin: 20px;
+  gap: 80px;
 `;
