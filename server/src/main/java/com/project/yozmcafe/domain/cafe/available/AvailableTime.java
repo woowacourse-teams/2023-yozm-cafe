@@ -1,12 +1,11 @@
 package com.project.yozmcafe.domain.cafe.available;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import java.time.LocalTime;
 
 @Embeddable
 public class AvailableTime {

@@ -1,14 +1,13 @@
 package com.project.yozmcafe.fixture;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.Detail;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.domain.cafe.available.AvailableTime;
 import com.project.yozmcafe.domain.cafe.available.Days;
+
+import java.time.LocalTime;
+import java.util.List;
 
 public class Fixture {
     public static Detail getDetail() {
