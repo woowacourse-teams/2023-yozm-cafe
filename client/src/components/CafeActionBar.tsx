@@ -38,6 +38,6 @@ const Container = styled.aside`
 
 const Action = styled.button`
   color: white;
-  background: transparent;
+  background: none;
   border: none;
 `;
