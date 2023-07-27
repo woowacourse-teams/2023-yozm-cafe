@@ -2,7 +2,6 @@ package com.project.yozmcafe.service.auth;
 
 import com.project.yozmcafe.controller.auth.MemberInfo;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
-import com.project.yozmcafe.controller.dto.TokenResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
@@ -67,7 +65,7 @@ class AuthServiceTest {
     @DisplayName("회원가입된 상태의 유저가 아닐 때 createAccessToken 호출하면 멤버를 새로 저장하고, 모든 카페를 해당 멤버의 unViewedCafe 로 같이 저장한다. ")
     void createAccessToken2() {
         //given
-        String memberId= "1234";
+        String memberId = "1234";
         doReturn(new MemberInfo(memberId, "", ""))
                 .when(googleOAuthClient).getUserInfo(anyString());
         given(jwtTokenProvider.createAccessFrom(anyString())).willReturn("토큰");
@@ -80,11 +78,10 @@ class AuthServiceTest {
         final Member member = memberRepository.findById(memberId).get();
         final List<UnViewedCafe> memberUnViewedCafes = member.getUnViewedCafes();
         final List<Cafe> allCafes = cafeRepository.findAll();
-        assertAll(
-                () -> assertThat(memberUnViewedCafes)
-                        .extracting("id")
-                        .containsExactlyElementsOf(allCafes.stream().map(Cafe::getId).toList())
-        );
+
+        assertThat(memberUnViewedCafes)
+                .extracting("id")
+                .containsExactlyElementsOf(allCafes.stream().map(Cafe::getId).toList());
     }
 
     @ParameterizedTest(name = "{0} 인증 URI 조회")
