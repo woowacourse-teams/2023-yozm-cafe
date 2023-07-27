@@ -35,7 +35,8 @@ public class MemberService {
 
         final Slice<LikedCafe> likedCafes = memberRepository.findLikedCafesByMemberId(member.getId(), pageable);
 
-        return likedCafes.stream().map(LikedCafe::getCafe)
-                .map(cafe -> new LikedCafeResponse(cafe.getId(), cafe.getRepresentativeImage())).toList();
+        return likedCafes.stream()
+                .map(LikedCafeResponse::from)
+                .toList();
     }
 }
