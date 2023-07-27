@@ -3,6 +3,7 @@ package com.project.yozmcafe.controller.auth;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +52,7 @@ public class AuthController {
     public ResponseEntity<TokenResponse> refreshToken(final HttpServletRequest request,
                                                       final HttpServletResponse response,
                                                       @CookieValue(name = REFRESH_TOKEN) final String refreshToken) {
-        final String accessToken = request.getHeader(AUTHORIZATION).replace(BEARER,"");
+        final String accessToken = request.getHeader(AUTHORIZATION).replace(BEARER, "");
         final TokenResponse tokenResponse = authService.refreshAccessToken(accessToken, refreshToken);
         setRefreshTokenCookie(response);
         return ResponseEntity.ok(tokenResponse);
@@ -62,5 +63,14 @@ public class AuthController {
         final String authUri = authService.getAuthorizationUri(oAuthProvider);
 
         return "redirect:" + authUri;
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> logout(final HttpServletResponse response) {
+        final Cookie cookie = new Cookie(REFRESH_TOKEN, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
     }
 }

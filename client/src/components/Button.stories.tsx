@@ -11,5 +11,8 @@ const meta: Meta<typeof Button> = {
 export default meta;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    children: '버튼',
+    fullWidth: true,
+  },
 };

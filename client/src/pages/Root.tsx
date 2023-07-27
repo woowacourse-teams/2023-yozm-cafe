@@ -5,10 +5,10 @@ import Navbar from '../components/Navbar';
 const Root = () => {
   return (
     <>
+      <Navbar />
       <PageContent>
         <Outlet />
       </PageContent>
-      <Navbar />
     </>
   );
 };

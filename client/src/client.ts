@@ -9,7 +9,7 @@ export class ClientNetworkError extends Error {
 class Client {
   accessToken: string | null = null;
 
-  async fetch<TData>(input: RequestInfo | URL, init?: RequestInit): Promise<TData> {
+  async fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     try {
       const response = await fetch(`/api${input}`, {
         ...init,
@@ -21,30 +21,42 @@ class Client {
       if (!response.ok) {
         throw response;
       }
-      return response.json();
+      return response;
     } catch (error) {
       throw new ClientNetworkError();
     }
+  }
+
+  async fetchJson<TData>(input: RequestInfo | URL, init?: RequestInit): Promise<TData> {
+    return this.fetch(input, init).then((response) => response.json());
   }
 
   setAccessToken(accessToken: string | null) {
     this.accessToken = accessToken;
   }
 
+  getCafes() {
+    return this.fetchJson<Cafe[]>(`/cafes`);
+  }
+
+  getCafesForGuest(page = 1) {
+    return this.fetchJson<Cafe[]>(`/cafes/guest?page=${page}`);
+  }
+
   getCafes(page = 1) {
-    return this.fetch<Cafe[]>(`/cafes?page=${page}`);
+    return this.fetchJson<Cafe[]>(`/cafes?page=${page}`);
   }
 
   getUser(userId: string) {
-    return this.fetch<User>(`/members/${userId}`);
+    return this.fetchJson<User>(`/members/${userId}`);
   }
 
   addFavoriteCafe(cafeId: Cafe['id']) {
-    return this.fetch<void>(`/cafes/${cafeId}/likes`, { method: 'POST' });
+    return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'POST' });
   }
 
   removeFavoriteCafe(cafeId: Cafe['id']) {
-    return this.fetch<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
+    return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
   }
 
   /**
@@ -52,9 +64,20 @@ class Client {
    * 백엔드에 전송하면 백엔드에서 발급한 accessToken을 응답으로 받을 수 있다.
    */
   issueAccessToken(provider: AuthProvider, code: string) {
-    return this.fetch<{ token: string }>(`/auth/${provider}?code=${code}`, { method: 'POST' }).then(
+    return this.fetchJson<{ token: string }>(`/auth/${provider}?code=${code}`, { method: 'POST' }).then(
       (data) => data.token,
     );
+  }
+
+  /**
+   * access token을 지워도 refresh token이 남아있으면 계속 access token이 발급되기
+   * 때문에, 완전한 로그아웃을 하려면 refresh token을 삭제해주어야 한다.
+   *
+   * refresh token은 httpOnly 쿠키로 저장되기 때문에 서버에 요청을 하여 쿠키를 삭제
+   * 해주어야 한다.
+   */
+  async clearRefreshToken() {
+    await this.fetch(`/auth`, { method: 'DELETE' });
   }
 }
 
