@@ -128,7 +128,7 @@ class MemberTest {
         assertAll(
                 () -> assertThat(member.getLikedCafes()).hasSize(0),
                 () -> assertThat(member.isLike(cafe)).isFalse(),
-                () -> assertThat(cafe.getLikeCount()).isEqualTo(9));
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(10));
     }
 
     @Test
@@ -164,7 +164,7 @@ class MemberTest {
         assertAll(
                 () -> assertThat(member.getLikedCafes()).hasSize(likedCafeCount),
                 () -> assertThat(member.isLike(cafe)).isEqualTo(isLikeExpected),
-                () -> assertThat(cafe.getLikeCount()).isEqualTo(10)
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(11)
         );
     }
 

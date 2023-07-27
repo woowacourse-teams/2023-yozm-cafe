@@ -53,8 +53,7 @@ public class Member {
                 .filter(unViewedCafe::equals)
                 .findAny()
                 .ifPresentOrElse(
-                        unViewedCafes::remove,
-                        () -> {
+                        unViewedCafes::remove, () -> {
                             throw new IllegalArgumentException(NOT_EXISTED_UNVIEWED_CAFE);
                         }
                 );
@@ -83,11 +82,12 @@ public class Member {
     }
 
     private void removeLikedCafe(final Cafe cafe) {
-        final LikedCafe targetLikedCafe = likedCafes.stream()
+        likedCafes.stream()
                 .filter(likedCafe -> likedCafe.isSameCafe(cafe))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_LIKED_CAFE));
-        likedCafes.remove(targetLikedCafe);
+                .ifPresentOrElse(likedCafes::remove, () -> {
+                    throw new IllegalArgumentException(NOT_EXISTED_LIKED_CAFE);
+                });
         cafe.subtractLikeCount();
     }
 

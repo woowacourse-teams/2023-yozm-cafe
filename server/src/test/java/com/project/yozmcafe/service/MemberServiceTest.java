@@ -85,7 +85,27 @@ class MemberServiceTest {
         assertAll(
                 () -> assertThat(updatedMember.getLikedCafes()).isEmpty(),
                 () -> assertThat(updatedMember.isLike(cafe)).isFalse(),
-                () -> assertThat(cafe.getLikeCount()).isEqualTo(9)
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(10)
+        );
+    }
+
+    @Test
+    @DisplayName("member의 likedCafes에 cafeId에 해당하는 카페가 존재하고, isLiked가 true인 경우 기존의 상태를 유지한다.")
+    void updateLikeAlreadySatisfied() {
+        //given
+        final Member member = memberRepository.save(new Member("memberId", "폴로", "폴로사진"));
+        final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페", "카페주소", 10));
+        member.addLikedCafe(cafe);
+
+        //when
+        memberService.updateLike(member, cafe.getId(), true);
+        final Member updatedMember = memberRepository.findById(member.getId()).get();
+
+        //then
+        assertAll(
+                () -> assertThat(updatedMember.getLikedCafes()).hasSize(1),
+                () -> assertThat(updatedMember.isLike(cafe)).isTrue(),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(11)
         );
     }
 
