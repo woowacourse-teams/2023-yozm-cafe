@@ -43,7 +43,8 @@ public class CafeController {
     }
 
     @PostMapping("/{cafeId}/likes")
-    public ResponseEntity<Void> updateLikes(Member member, @PathVariable("cafeId") final long cafeId,
+    public ResponseEntity<Void> updateLikes(final Member member,
+                                            @PathVariable("cafeId") final long cafeId,
                                             @RequestParam("isLiked") final boolean isLiked) {
         memberService.updateLike(member, cafeId, isLiked);
         return ResponseEntity.ok().build();
