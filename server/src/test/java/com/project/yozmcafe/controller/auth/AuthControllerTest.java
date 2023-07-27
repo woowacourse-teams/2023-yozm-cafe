@@ -121,7 +121,6 @@ class AuthControllerTest {
         final Response response = RestAssured.given().log().all()
                 .when()
                 .log().all()
-                .redirects().follow(false)
                 .get("/auth/urls");
 
         //then
