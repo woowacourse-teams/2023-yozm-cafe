@@ -37,4 +37,9 @@ export type Cafe = {
   detail: CafeDetail;
 };
 
+export type LikedCafe = {
+  cafeId: number;
+  imageUrl: string;
+};
+
 export type AuthProvider = 'kakao' | 'google';
