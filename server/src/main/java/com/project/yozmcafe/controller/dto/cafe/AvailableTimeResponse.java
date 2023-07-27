@@ -1,10 +1,12 @@
 package com.project.yozmcafe.controller.dto.cafe;
 
-import java.time.LocalDateTime;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.yozmcafe.domain.cafe.available.AvailableTime;
 
-public record AvailableTimeResponse(String day, LocalDateTime open, LocalDateTime close, boolean opened) {
+import java.time.LocalTime;
+
+public record AvailableTimeResponse(String day, @JsonFormat(pattern = "HH:mm") LocalTime open,
+                                    @JsonFormat(pattern = "HH:mm") LocalTime close, boolean opened) {
     public static AvailableTimeResponse from(final AvailableTime availableTime) {
         return new AvailableTimeResponse(
                 availableTime.getDay().name(),
