@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { cafes } from '../data/mockData';
+import { cafes, likedCafes } from '../data/mockData';
 import { Identity, User } from '../types';
 
 let pageState = 1;
@@ -68,7 +68,7 @@ export const handlers = [
 
   // 좋아요 한 목록 조회
   rest.get('/api/members/:memberId/liked-cafes', (req, res, ctx) => {
-    const PAGINATE_UNIT = 20;
+    const PAGINATE_UNIT = 15;
 
     const memberId = Number(req.params.memberId);
     const page = Number(req.url.searchParams.get('page') || 1);
@@ -76,12 +76,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json(
-        cafes
-          .filter((cafe) => cafe.isLiked)
-          .slice(start, end)
-          .map((cafe) => ({ cafeId: cafe.id, imageUrl: cafe.images.urls[0] })),
-      ),
+      ctx.json(likedCafes.map((likedCafes) => ({ cafeId: likedCafes.cafeId, imageUrl: likedCafes.imageUrl }))),
     );
   }),
 
