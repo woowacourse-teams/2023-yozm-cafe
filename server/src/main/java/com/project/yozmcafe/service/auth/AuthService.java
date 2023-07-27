@@ -10,6 +10,7 @@ import com.project.yozmcafe.domain.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -39,6 +40,7 @@ public class AuthService {
     private Member saveNewMemberWithAllCafes(final MemberInfo memberInfo) {
         final Member member = memberRepository.save(memberInfo.toMember());
         final List<Cafe> allCafes = cafeRepository.findAll();
+        Collections.shuffle(allCafes);
         member.addUnViewedCafes(allCafes);
         return member;
     }
