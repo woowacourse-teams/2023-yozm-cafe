@@ -1,16 +1,20 @@
 package com.project.yozmcafe.domain.member;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.fixture.Fixture;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemberTest {
 
@@ -106,5 +110,72 @@ class MemberTest {
 
         //then
         assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("멤버의 likedCafes에 존재하고, isLiked가 false인 경우 likedCafes에서 cafe를 삭제한다.")
+    void updateIsLikeRemoveCafe() {
+        //given
+        final Member member = new Member("5", "폴로", "폴로사진");
+        final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
+        member.addLikedCafe(cafe);
+        final boolean isLiked = false;
+
+        //when
+        member.updateLikedCafesBy(cafe, isLiked);
+
+        //then
+        assertAll(
+                () -> assertThat(member.getLikedCafes()).hasSize(0),
+                () -> assertThat(member.isLike(cafe)).isFalse(),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(10));
+    }
+
+    @Test
+    @DisplayName("멤버의 likedCafes에 존재하지 않고, isLiked가 true인 경우 likedCafes에 cafe를 추가한다.")
+    void updateIsLikeAddCafe() {
+        //given
+        final Member member = new Member("5", "폴로", "폴로사진");
+        final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
+        final boolean isLiked = true;
+
+        //when
+        member.updateLikedCafesBy(cafe, isLiked);
+
+        //then
+        assertAll(
+                () -> assertThat(member.getLikedCafes()).hasSize(1),
+                () -> assertThat(member.isLike(cafe)).isTrue(),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(11)
+        );
+    }
+
+    @ParameterizedTest
+    @DisplayName("멤버의 likedCafes에 해당카페가 존재하고, isLiked가 true, 멤버의 likedCafes에 해당 카페가 존재하지 않고, isLiked가 false인 경우 아무런 작업을 하지 않는다.")
+    @MethodSource("provideMemberAndIsLiked")
+    void updateIsLikedDoNothing(Member member, Cafe cafe, boolean isLiked, boolean isLikeExpected) {
+        //given
+        final int likedCafeCount = member.getLikedCafes().size();
+
+        //when
+        member.updateLikedCafesBy(cafe, isLiked);
+
+        //then
+        assertAll(
+                () -> assertThat(member.getLikedCafes()).hasSize(likedCafeCount),
+                () -> assertThat(member.isLike(cafe)).isEqualTo(isLikeExpected),
+                () -> assertThat(cafe.getLikeCount()).isEqualTo(11)
+        );
+    }
+
+    public static Stream<Arguments> provideMemberAndIsLiked() {
+        final Member member1 = new Member("6", "오션", "오션사진");
+        final Member member2 = new Member("7", "연어", "연어사진");
+        final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
+        member1.addLikedCafe(cafe);
+        return Stream.of(
+                Arguments.of(member1, cafe, true, true),
+                Arguments.of(member2, cafe, false, false)
+        );
     }
 }

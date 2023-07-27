@@ -1,17 +1,41 @@
 package com.project.yozmcafe.controller.auth;
 
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
+import com.project.yozmcafe.util.AcceptanceContext;
+import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
+import io.restassured.matcher.DetailedCookieMatcher;
+import io.restassured.matcher.RestAssuredMatchers;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -38,12 +62,15 @@ class AuthControllerTest {
     KakaoOAuthClient kakaoOAuthClient;
     @SpyBean
     MemberRepository memberRepository;
-    @MockBean
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
+
+    private AcceptanceContext request;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        request = new AcceptanceContext();
     }
 
     @Test
@@ -66,6 +93,7 @@ class AuthControllerTest {
         //then
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
@@ -90,6 +118,7 @@ class AuthControllerTest {
         //then
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
@@ -98,36 +127,59 @@ class AuthControllerTest {
     @DisplayName("토큰을 갱신한다.")
     void refreshToken() {
         //given
-        given(jwtTokenProvider.refreshAccessToken(anyString(), anyString()))
-                .willReturn("goodOceanAccessToken");
+        final String accessToken = jwtTokenProvider.createAccessFrom("1L");
+        final String refreshToken = jwtTokenProvider.createRefresh();
 
         //when
         final Response response = RestAssured.given().log().all()
-                .header("Authorization", "goodOceanAccessToken")
-                .cookie("refreshToken", "handSomeOceanRefreshToken")
+                .header("Authorization", accessToken)
+                .cookie("refreshToken", refreshToken)
                 .when()
                 .log().all()
                 .get("/auth");
 
         //then
         assertAll(
-                () -> assertThat(response.jsonPath().getString("token")).isEqualTo("goodOceanAccessToken"),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
 
-    @ParameterizedTest(name = "{0} 인증 주소 Redirect")
-    @EnumSource(value = OAuthProvider.class)
-    @DisplayName("Provider 별 인증 주소로 Redirect 한다.")
-    void redirectAuthorizationUri(OAuthProvider oAuthProvider) {
+    @Test
+    @DisplayName("Provider 인증 주소를 반환한다.")
+    void authorizationUrls() {
         //when
         final Response response = RestAssured.given().log().all()
                 .when()
                 .log().all()
-                .redirects().follow(false)
-                .get("/auth/{Provider}", oAuthProvider);
+                .get("/auth/urls");
 
         //then
-        assertThat(response.getHeader("Location")).contains("response_type", "redirect_uri", "client_id", "scope");
+        for (OAuthProvider provider : OAuthProvider.values()) {
+            String providerPath = "[" + provider.ordinal() + "]" + ".provider";
+            String urlPath = "[" + provider.ordinal() + "]" + ".authorizationUrl";
+
+            assertThat(response.getBody().jsonPath().getString(providerPath)).isEqualTo(provider.name());
+            assertThat(response.getBody().jsonPath().getString(urlPath))
+                    .contains("response_type", "redirect_uri", "client_id", "scope");
+        }
+    }
+
+    @Test
+    @DisplayName("로그아웃을 한다")
+    void logout() {
+        //given
+        final Cookie cookie = new Cookie.Builder("refreshToken", "리프레시").build();
+        final DetailedCookieMatcher expectedDetail = RestAssuredMatchers.detailedCookie()
+                .value("")
+                .maxAge(0);
+
+        //when
+        request.invokeHttpDeleteWithCookie("/auth", cookie);
+
+        //then
+        request.response.then()
+                .statusCode(HttpStatus.OK.value())
+                .cookie("refreshToken", expectedDetail);
     }
 }

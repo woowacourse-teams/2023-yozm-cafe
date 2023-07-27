@@ -1,7 +1,7 @@
 package com.project.yozmcafe.domain.auth.token;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.yozmcafe.controller.auth.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberInfo;
 
 import java.util.Arrays;
 import java.util.Base64;
