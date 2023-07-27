@@ -32,7 +32,7 @@ public class MemberService {
         return MemberResponse.from(member);
     }
 
-    public List<LikedCafeResponse> findLikedCafesById(final String memberId, Pageable pageable) {
+    public List<LikedCafeResponse> findLikedCafesById(final String memberId, final Pageable pageable) {
         final Member member = findMemberByIdOrElseThrow(memberId);
 
         final Slice<LikedCafe> likedCafes = memberRepository.findLikedCafesByMemberId(member.getId(), pageable);
