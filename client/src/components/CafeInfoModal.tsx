@@ -40,7 +40,7 @@ const Container = styled.div`
 
   height: 80px;
   max-height: 80px;
-  margin-left: ${({ theme }) => theme.space[3]};
+  margin-left: ${({ theme }) => theme.space[4]};
 `;
 
 const ArrowUpIcon = styled(RiArrowUpDoubleLine)`
@@ -49,7 +49,7 @@ const ArrowUpIcon = styled(RiArrowUpDoubleLine)`
 `;
 
 const LocationPinIcon = styled(SlLocationPin)`
-  margin: 1px;
+  margin-right: ${({ theme }) => theme.space[1]};
   font-size: ${({ theme }) => theme.fontSize.sm};
 `;
 
@@ -59,7 +59,7 @@ const ArrowDownContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  padding-bottom: 5px;
+  padding-bottom: ${({ theme }) => theme.space['1.5']};
   font-size: ${({ theme }) => theme.fontSize['3xl']};
   font-weight: bolder;
   color: ${({ theme }) => theme.color.white};
@@ -71,7 +71,7 @@ const Address = styled.h2`
 `;
 
 const Content = styled.p`
-  margin-top: 20px;
+  margin-top: ${({ theme }) => theme.space[5]};
   color: ${({ theme }) => theme.color.gray};
 `;
 
@@ -88,7 +88,7 @@ const Modal = styled.main`
 
   width: 100%;
   height: 90px;
-  padding: 16px;
+  padding: ${({ theme }) => theme.space[4]};
 
   transition: all 0.3s;
 

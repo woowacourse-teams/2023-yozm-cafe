@@ -46,7 +46,7 @@ const Container = styled.nav`
 
   width: 100%;
   height: 66px;
-  padding: 0 15px;
+  padding: 0 ${({ theme }) => theme.space[4]};
 `;
 
 const ButtonContainer = styled.div`
