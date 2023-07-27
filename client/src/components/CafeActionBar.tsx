@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
 import ShareButton from './ShareButton';
 
@@ -18,9 +17,7 @@ const CafeActionBar = () => {
       <Action>
         <LikeButton likeCount={likeCount} active={isLiked} onChange={handleLikeCountIncrease} />
       </Action>
-      <Action>
-        <CommentButton />
-      </Action>
+
       <Action>
         <ShareButton />
       </Action>
@@ -35,6 +32,8 @@ const Container = styled.aside`
   flex-direction: column;
   gap: 24px;
   align-self: flex-end;
+
+  padding-right: 8px;
 `;
 
 const Action = styled.button`
