@@ -67,7 +67,7 @@ class MemberRepositoryTest {
         final Member savedMember = memberRepository.save(member);
 
         //when
-        final Slice<LikedCafe> likedCafeByMemberId = memberRepository.findLikedCafeByMemberId(savedMember.getId(), pageRequest);
+        final Slice<LikedCafe> likedCafeByMemberId = memberRepository.findLikedCafesByMemberId(savedMember.getId(), pageRequest);
 
         //then
         assertAll(

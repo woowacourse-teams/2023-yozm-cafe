@@ -33,7 +33,7 @@ public class MemberService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 존재하지 않습니다."));
 
-        final Slice<LikedCafe> likedCafes = memberRepository.findLikedCafeByMemberId(member.getId(), pageable);
+        final Slice<LikedCafe> likedCafes = memberRepository.findLikedCafesByMemberId(member.getId(), pageable);
 
         return likedCafes.stream().map(LikedCafe::getCafe)
                 .map(cafe -> new LikedCafeResponse(cafe.getId(), cafe.getRepresentativeImage())).toList();

@@ -15,5 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findById(String id);
 
     @Query("SELECT likedCafes FROM Member m JOIN m.likedCafes likedCafes WHERE m.id = :memberId")
-    Slice<LikedCafe> findLikedCafeByMemberId(@Param("memberId") final String memberId, final Pageable pageable);
+    Slice<LikedCafe> findLikedCafesByMemberId(@Param("memberId") final String memberId, final Pageable pageable);
 }
