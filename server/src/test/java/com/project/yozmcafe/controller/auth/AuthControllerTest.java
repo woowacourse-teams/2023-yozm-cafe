@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -45,7 +46,7 @@ class AuthControllerTest {
     KakaoOAuthClient kakaoOAuthClient;
     @MockBean
     MemberRepository memberRepository;
-    @SpyBean
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
     private AcceptanceContext request;
@@ -110,20 +111,20 @@ class AuthControllerTest {
     @DisplayName("토큰을 갱신한다.")
     void refreshToken() {
         //given
-        doReturn("goodOceanAccessToken")
-                .when(jwtTokenProvider).refreshAccessToken(anyString(), anyString());
+        final String accessToken = jwtTokenProvider.createAccessFrom("1L");
+        final String refreshToken = jwtTokenProvider.createRefresh();
 
         //when
         final Response response = RestAssured.given().log().all()
-                .header("Authorization", "goodOceanAccessToken")
-                .cookie("refreshToken", "handSomeOceanRefreshToken")
+                .header("Authorization", accessToken)
+                .cookie("refreshToken", refreshToken)
                 .when()
                 .log().all()
                 .get("/auth");
 
         //then
         assertAll(
-                () -> assertThat(response.jsonPath().getString("token")).isEqualTo("goodOceanAccessToken"),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
                 () -> assertThat(response.cookie("refreshToken")).isNotNull()
         );
     }
