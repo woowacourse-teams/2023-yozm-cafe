@@ -122,7 +122,7 @@ class MemberTest {
         final boolean isLiked = false;
 
         //when
-        member.updateIsLikedCafesBy(cafe, isLiked);
+        member.updateLikedCafesBy(cafe, isLiked);
 
         //then
         assertAll(
@@ -140,7 +140,7 @@ class MemberTest {
         final boolean isLiked = true;
 
         //when
-        member.updateIsLikedCafesBy(cafe, isLiked);
+        member.updateLikedCafesBy(cafe, isLiked);
 
         //then
         assertAll(
@@ -158,7 +158,7 @@ class MemberTest {
         final int likedCafeCount = member.getLikedCafes().size();
 
         //when
-        member.updateIsLikedCafesBy(cafe, isLiked);
+        member.updateLikedCafesBy(cafe, isLiked);
 
         //then
         assertAll(

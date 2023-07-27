@@ -63,7 +63,7 @@ public class Member {
         return unViewedCafes.isEmpty();
     }
 
-    public void updateIsLikedCafesBy(final Cafe cafe, final boolean isLiked) {
+    public void updateLikedCafesBy(final Cafe cafe, final boolean isLiked) {
         if (alreadySatisfiedBy(cafe, isLiked)) {
             return;
         }
