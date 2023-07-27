@@ -1,10 +1,14 @@
 package com.project.yozmcafe.service.auth;
 
 import com.project.yozmcafe.controller.auth.OAuthProvider;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,8 @@ class AuthServiceTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
+    private CafeRepository cafeRepository;
+    @Autowired
     private AuthService authService;
 
     @Test
@@ -55,18 +61,26 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입된 상태의 유저가 아닐 때 createAccessToken 호출하면 멤버를 새로 저장한다")
+    @DisplayName("회원가입된 상태의 유저가 아닐 때 createAccessToken 호출하면 멤버를 새로 저장하고, 모든 카페를 해당 멤버의 unViewedCafe 로 같이 저장한다. ")
     void createAccessToken2() {
         //given
-        doReturn(new MemberInfo("1234", "", ""))
+        String memberId = "1234";
+        doReturn(new MemberInfo(memberId, "", ""))
                 .when(googleOAuthClient).getUserInfo(anyString());
         given(jwtTokenProvider.createAccessFrom(anyString())).willReturn("토큰");
+        saveCafes();
 
         //when
         authService.createAccessToken("135", OAuthProvider.GOOGLE);
 
         //then
-        assertThat(memberRepository.findAll()).hasSize(1);
+        final Member member = memberRepository.findById(memberId).get();
+        final List<UnViewedCafe> memberUnViewedCafes = member.getUnViewedCafes();
+        final List<Cafe> allCafes = cafeRepository.findAll();
+
+        assertThat(memberUnViewedCafes)
+                .extracting("id")
+                .containsExactlyElementsOf(allCafes.stream().map(Cafe::getId).toList());
     }
 
     @Test
@@ -80,5 +94,10 @@ class AuthServiceTest {
             assertThat(provider.authorizationUrl())
                     .contains("response_type", "redirect_uri", "client_id", "scope");
         }
+    }
+
+    private void saveCafes() {
+        cafeRepository.save(Fixture.getCafe("name1", "address1", 1));
+        cafeRepository.save(Fixture.getCafe("name2", "address2", 2));
     }
 }
