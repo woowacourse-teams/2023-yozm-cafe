@@ -24,7 +24,6 @@ const MyProfile = () => {
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     if (isFetchingNextPage) {
-      console.log('하하하');
       return;
     }
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
