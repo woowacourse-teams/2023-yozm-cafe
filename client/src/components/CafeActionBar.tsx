@@ -30,7 +30,7 @@ export default CafeActionBar;
 const Container = styled.aside`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: ${({ theme }) => theme.space[6]};
   align-self: flex-end;
 
   padding-right: ${({ theme }) => theme.space[3]};
