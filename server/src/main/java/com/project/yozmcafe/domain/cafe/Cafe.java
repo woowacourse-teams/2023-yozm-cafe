@@ -45,6 +45,14 @@ public class Cafe {
         this(null, name, address, images, detail, 0);
     }
 
+    public void addLikeCount() {
+        likeCount += 1;
+    }
+
+    public void subtractLikeCount() {
+        likeCount -= 1;
+    }
+
     public Long getId() {
         return id;
     }
