@@ -38,7 +38,7 @@ class AuthControllerTest {
     KakaoOAuthClient kakaoOAuthClient;
     @MockBean
     MemberRepository memberRepository;
-    @MockBean
+    @SpyBean
     JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
@@ -98,8 +98,8 @@ class AuthControllerTest {
     @DisplayName("토큰을 갱신한다.")
     void refreshToken() {
         //given
-        given(jwtTokenProvider.refreshAccessToken(anyString(), anyString()))
-                .willReturn("goodOceanAccessToken");
+        doReturn("goodOceanAccessToken")
+                .when(jwtTokenProvider).refreshAccessToken(anyString(), anyString());
 
         //when
         final Response response = RestAssured.given().log().all()
