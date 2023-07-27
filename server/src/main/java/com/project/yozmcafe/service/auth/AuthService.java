@@ -31,12 +31,12 @@ public class AuthService {
         final MemberInfo memberInfo = provider.getUserInfo(code);
 
         final Member member = memberRepository.findById(memberInfo.openId())
-                .orElse(saveNewMember(memberInfo));
+                .orElse(saveNewMemberWithAllCafes(memberInfo));
 
         return new TokenResponse(jwtTokenProvider.createAccessFrom(member.getId()));
     }
 
-    private Member saveNewMember(final MemberInfo memberInfo) {
+    private Member saveNewMemberWithAllCafes(final MemberInfo memberInfo) {
         final Member member = memberRepository.save(memberInfo.toMember());
         final List<Cafe> allCafes = cafeRepository.findAll();
         member.addUnViewedCafes(allCafes);
