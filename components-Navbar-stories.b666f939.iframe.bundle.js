@@ -5,7 +5,7 @@
 
   width: 100%;
   height: 66px;
-  padding: 0 15px;
+  padding: 0 ${({theme})=>theme.space[4]};
 `,ButtonContainer=styled_components_browser_esm.zo.div`
   width: 25%;
 `,LogoContainer=(0,styled_components_browser_esm.zo)(dist.rU)`
@@ -128,4 +128,4 @@
   justify-content: space-evenly;
   width: 100%;
 `;try{Modal.displayName="Modal",Modal.__docgenInfo={description:"",displayName:"Modal",props:{onClose:{defaultValue:null,description:"",name:"onClose",required:!0,type:{name:"() => void"}}}},"undefined"!=typeof STORYBOOK_REACT_CLASSES&&(STORYBOOK_REACT_CLASSES["src/components/Modal.tsx#Modal"]={docgenInfo:Modal.__docgenInfo,name:"Modal",path:"src/components/Modal.tsx#Modal"})}catch(__react_docgen_typescript_loader_error){}}}]);
-//# sourceMappingURL=components-Navbar-stories.2ed08eaf.iframe.bundle.js.map
+//# sourceMappingURL=components-Navbar-stories.b666f939.iframe.bundle.js.map
