@@ -49,11 +49,15 @@ public class Member {
     }
 
     public void removeUnViewedCafe(final UnViewedCafe unViewedCafe) {
-        final UnViewedCafe foundUnviewedCafe = unViewedCafes.stream()
+        unViewedCafes.stream()
                 .filter(unViewedCafe::equals)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_UNVIEWED_CAFE));
-        unViewedCafes.remove(foundUnviewedCafe);
+                .ifPresentOrElse(
+                        unViewedCafes::remove,
+                        () -> {
+                            throw new IllegalArgumentException(NOT_EXISTED_UNVIEWED_CAFE);
+                        }
+                );
     }
 
     public boolean isEmptyUnViewedCafe() {
