@@ -22,21 +22,24 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public MemberResponse findById(final String id) {
-        final Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 존재하지 않습니다."));
+    public MemberResponse findById(final String memberId) {
+        final Member member = findMemberByIdOrElseThrow(memberId);
 
         return MemberResponse.from(member);
     }
 
     public List<LikedCafeResponse> findLikedCafesById(final String memberId, Pageable pageable) {
-        final Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 존재하지 않습니다."));
+        final Member member = findMemberByIdOrElseThrow(memberId);
 
         final Slice<LikedCafe> likedCafes = memberRepository.findLikedCafesByMemberId(member.getId(), pageable);
 
         return likedCafes.stream()
                 .map(LikedCafeResponse::from)
                 .toList();
+    }
+
+    private Member findMemberByIdOrElseThrow(final String memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 존재하지 않습니다."));
     }
 }
