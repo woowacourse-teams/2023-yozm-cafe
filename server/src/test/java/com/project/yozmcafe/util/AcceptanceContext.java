@@ -123,8 +123,4 @@ public class AcceptanceContext {
         response = request.delete(path);
         response.then().log().all();
     }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 }
