@@ -80,7 +80,7 @@ export const handlers = [
         cafes
           .filter((cafe) => cafe.isLiked)
           .slice(start, end)
-          .map((cafe) => ({ cafeId: cafe.id, imageUrl: cafe.images.urls[0] })),
+          .map((cafe) => ({ cafeId: cafe.id, imageUrl: cafe.images[0] })),
       ),
     );
   }),

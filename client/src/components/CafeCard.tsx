@@ -24,7 +24,7 @@ const CafeCard = (props: CardProps) => {
 
   return (
     <Container>
-      <Image ref={ref} src={cafe.images.urls[0]} />
+      <Image ref={ref} src={cafe.images[0]} />
       <AsidePosition>
         <Aside>
           <CafeInfoModal title={cafe.name} address={cafe.address} content={cafe.detail.description} />
@@ -57,10 +57,7 @@ const AsidePosition = styled.div`
 
 const Aside = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column-reverse;
-  gap: 40px;
-
-  margin: 20px;
+  gap: ${({ theme }) => theme.space[20]};
 `;

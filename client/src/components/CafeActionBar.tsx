@@ -25,9 +25,7 @@ const CafeActionBar = (props: CafeActionBarProps) => {
       <Action>
         <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
       </Action>
-      <Action>
-        <CommentButton />
-      </Action>
+
       <Action>
         <ShareButton />
       </Action>
@@ -40,12 +38,14 @@ export default CafeActionBar;
 const Container = styled.aside`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: ${({ theme }) => theme.space[6]};
   align-self: flex-end;
+
+  padding-right: ${({ theme }) => theme.space[3]};
 `;
 
 const Action = styled.button`
   color: white;
-  background: transparent;
+  background: none;
   border: none;
 `;

@@ -16,6 +16,9 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Member {
 
+    private static final String NOT_EXISTED_UNVIEWED_CAFE = "존재하지 않는 내역입니다.";
+    private static final String NOT_EXISTED_LIKED_CAFE = "존재하지 않는 좋아요 내역입니다.";
+
     @Id
     private String id;
     @Column(nullable = false)
@@ -26,7 +29,7 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
@@ -46,20 +49,52 @@ public class Member {
     }
 
     public void removeUnViewedCafe(final UnViewedCafe unViewedCafe) {
-        final UnViewedCafe foundUnviewedCafe = unViewedCafes.stream()
+        unViewedCafes.stream()
                 .filter(unViewedCafe::equals)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 내역입니다."));
-
-        unViewedCafes.remove(foundUnviewedCafe);
+                .ifPresentOrElse(
+                        unViewedCafes::remove, () -> {
+                            throw new IllegalArgumentException(NOT_EXISTED_UNVIEWED_CAFE);
+                        }
+                );
     }
 
     public boolean isEmptyUnViewedCafe() {
         return unViewedCafes.isEmpty();
     }
 
+    public void updateLikedCafesBy(final Cafe cafe, final boolean isLiked) {
+        if (alreadySatisfiedBy(cafe, isLiked)) {
+            return;
+        }
+
+        if (isLiked) {
+            addLikedCafe(cafe);
+        }
+
+        if (!isLiked) {
+            removeLikedCafe(cafe);
+        }
+    }
+
+    private boolean alreadySatisfiedBy(final Cafe cafe, final boolean isLiked) {
+        return isLike(cafe) == isLiked;
+    }
+
+    private void removeLikedCafe(final Cafe cafe) {
+        likedCafes.stream()
+                .filter(likedCafe -> likedCafe.isSameCafe(cafe))
+                .findAny()
+                .ifPresentOrElse(likedCafes::remove, () -> {
+                    throw new IllegalArgumentException(NOT_EXISTED_LIKED_CAFE);
+                });
+        cafe.subtractLikeCount();
+    }
+
+
     public void addLikedCafe(Cafe cafe) {
         likedCafes.add(new LikedCafe(cafe, this));
+        cafe.addLikeCount();
     }
 
     public boolean isLike(final Cafe cafe) {

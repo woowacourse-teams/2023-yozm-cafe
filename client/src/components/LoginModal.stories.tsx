@@ -1,12 +1,12 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import Modal from './Modal';
+import LoginModal from './LoginModal';
 
-type Story = StoryObj<typeof Modal>;
+type Story = StoryObj<typeof LoginModal>;
 
-const meta: Meta<typeof Modal> = {
-  title: 'Modal',
-  component: Modal,
+const meta: Meta<typeof LoginModal> = {
+  title: 'LoginModal',
+  component: LoginModal,
 };
 
 export default meta;
