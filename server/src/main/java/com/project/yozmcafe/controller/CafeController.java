@@ -2,6 +2,7 @@ package com.project.yozmcafe.controller;
 
 import java.util.List;
 
+import com.project.yozmcafe.service.CafeHistoryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -24,23 +25,27 @@ import com.project.yozmcafe.service.MemberService;
 @RequestMapping("/cafes")
 public class CafeController {
 
+    private static final int PAGE_SIZE = 5;
+
     private final CafeService cafeService;
+    private final CafeHistoryService cafeHistoryService;
     private final MemberService memberService;
 
-    public CafeController(final CafeService cafeService, final MemberService memberService) {
+    public CafeController(final CafeService cafeService, final CafeHistoryService cafeHistoryService, final MemberService memberService) {
         this.cafeService = cafeService;
+        this.cafeHistoryService = cafeHistoryService;
         this.memberService = memberService;
     }
 
     @GetMapping
     public ResponseEntity<List<CafeResponse>> getCafesWithMember(final Member member,
-                                                                 @PageableDefault(size = 5) final Pageable pageable) {
+                                                                 @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(pageable, member);
         return ResponseEntity.ok(cafeResponses);
     }
 
     @GetMapping("/guest")
-    public ResponseEntity<List<CafeResponse>> getCafes(@PageableDefault(size = 5) final Pageable pageable) {
+    public ResponseEntity<List<CafeResponse>> getCafes(@PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);
     }
@@ -57,5 +62,12 @@ public class CafeController {
     public ResponseEntity<Void> saveCafe(@RequestBody CafeRequest cafeRequest) {
         cafeService.saveCafe(cafeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/{cafeId}/history")
+    public ResponseEntity<Void> updateMemberUnViewedCafeHistory(final Member member,
+                                                                @PathVariable("cafeId") final long cafeId) {
+        cafeHistoryService.removeUnViewedCafe(member, cafeId);
+        return ResponseEntity.ok().build();
     }
 }
