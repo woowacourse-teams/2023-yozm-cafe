@@ -10,10 +10,6 @@ export type User = {
   imageUrl: string;
 };
 
-type CafeImages = {
-  urls: string[];
-};
-
 type OpeningHours = {
   day: string;
   open: string;
@@ -31,7 +27,7 @@ export type Cafe = {
   id: number;
   name: string;
   address: string;
-  images: CafeImages;
+  images: string[];
   isLiked: boolean;
   likeCount: number;
   detail: CafeDetail;
