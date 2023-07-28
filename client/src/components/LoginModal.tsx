@@ -7,7 +7,7 @@ type ModalProps = {
   onClose: () => void;
 };
 
-const Modal = ({ onClose }: ModalProps) => {
+const LoginModal = ({ onClose }: ModalProps) => {
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 클릭 이벤트가 ModalContainer까지 전파되지 않도록 막습니다.
     e.stopPropagation();
@@ -38,7 +38,7 @@ const Modal = ({ onClose }: ModalProps) => {
   );
 };
 
-export default Modal;
+export default LoginModal;
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -66,6 +66,7 @@ const ModalContent = styled.div`
   align-items: center;
   justify-content: center;
 
+  width: 350px;
   padding: ${({ theme }) => theme.space['5']};
 
   background-color: white;
