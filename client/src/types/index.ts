@@ -1,3 +1,8 @@
+export type AuthUrl = {
+  provider: string;
+  authorizationUrl: string;
+};
+
 export type Identity = {
   sub: string;
   iat: number;
@@ -31,6 +36,11 @@ export type Cafe = {
   isLiked: boolean;
   likeCount: number;
   detail: CafeDetail;
+};
+
+export type LikedCafe = {
+  cafeId: number;
+  imageUrl: string;
 };
 
 export type AuthProvider = 'kakao' | 'google';

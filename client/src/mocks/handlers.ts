@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { cafes } from '../data/mockData';
+import { cafes, likedCafes } from '../data/mockData';
 import { Identity, User } from '../types';
 
 let pageState = 1;
@@ -38,9 +38,9 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(paginatedCafes));
   }),
 
-  // 좋아요 추가
+  // 좋아요
   rest.post('/api/cafes/:cafeId/likes', (req, res, ctx) => {
-    const { cafeId } = req.params;
+    const cafeId = Number(req.params.cafeId);
     const liked = req.url.searchParams.get('isLiked');
     if (!liked) {
       return res(
@@ -52,7 +52,7 @@ export const handlers = [
     }
     const isLiked = liked === 'true';
 
-    const cafe = cafes.find((cafe) => cafe.id === Number(cafeId));
+    const cafe = cafes.find((cafe) => cafe.id === cafeId);
     if (!cafe) {
       return res(
         ctx.status(404),
@@ -68,7 +68,7 @@ export const handlers = [
 
   // 좋아요 한 목록 조회
   rest.get('/api/members/:memberId/liked-cafes', (req, res, ctx) => {
-    const PAGINATE_UNIT = 20;
+    const PAGINATE_UNIT = 15;
 
     const memberId = Number(req.params.memberId);
     const page = Number(req.url.searchParams.get('page') || 1);
@@ -82,6 +82,16 @@ export const handlers = [
           .slice(start, end)
           .map((cafe) => ({ cafeId: cafe.id, imageUrl: cafe.images[0] })),
       ),
+    );
+  }),
+
+  rest.get('/api/auth/urls', async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        { provider: 'google', authorizationUrl: '/test/auth/google' },
+        { provider: 'kakao', authorizationUrl: '/test/auth/kakao' },
+      ]),
     );
   }),
 

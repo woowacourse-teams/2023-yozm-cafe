@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
@@ -39,7 +39,7 @@ const Navbar = () => {
           </Button>
         )}
       </ButtonContainer>
-      {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}
+      <Suspense>{isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}</Suspense>
     </Container>
   );
 };
