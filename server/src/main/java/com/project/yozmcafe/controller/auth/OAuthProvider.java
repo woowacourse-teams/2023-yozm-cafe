@@ -1,13 +1,15 @@
 package com.project.yozmcafe.controller.auth;
 
+import java.util.Objects;
+
+import org.springframework.context.annotation.Configuration;
+
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.service.auth.OAuthClient;
-import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Configuration;
 
-import java.util.Objects;
+import jakarta.annotation.PostConstruct;
 
 public enum OAuthProvider {
     GOOGLE,
@@ -33,6 +35,10 @@ public enum OAuthProvider {
 
     public String getAuthorizationUrl() {
         return oAuthClient.getAuthorizationUrl();
+    }
+
+    public String getProviderName() {
+        return name().toLowerCase();
     }
 
     @Configuration
