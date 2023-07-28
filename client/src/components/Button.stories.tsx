@@ -13,6 +13,6 @@ export default meta;
 export const Default: Story = {
   args: {
     children: '버튼',
-    fullWidth: true,
+    $fullWidth: true,
   },
 };
