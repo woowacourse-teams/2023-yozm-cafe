@@ -25,7 +25,7 @@ const CafeCard = (props: CardProps) => {
   }, [intersection?.isIntersecting, onIntersect]);
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? cafe.images.urls.length - 1 : prevIndex - 1));
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + cafe.images.urls.length) % cafe.images.urls.length);
   };
 
   const handleNextImage = () => {
