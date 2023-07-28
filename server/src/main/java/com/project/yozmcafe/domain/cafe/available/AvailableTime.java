@@ -14,16 +14,16 @@ public class AvailableTime {
     private Days day;
     private LocalTime open;
     private LocalTime close;
-    private boolean isOpened;
+    private boolean opened;
 
     protected AvailableTime() {
     }
 
-    public AvailableTime(final Days day, final LocalTime open, final LocalTime close, final boolean isOpened) {
+    public AvailableTime(final Days day, final LocalTime open, final LocalTime close, final boolean opened) {
         this.day = day;
         this.open = open;
         this.close = close;
-        this.isOpened = isOpened;
+        this.opened = opened;
     }
 
     public Days getDay() {
@@ -38,7 +38,7 @@ public class AvailableTime {
         return close;
     }
 
-    public boolean isOpened() {
-        return isOpened;
+    public boolean getOpened() {
+        return opened;
     }
 }
