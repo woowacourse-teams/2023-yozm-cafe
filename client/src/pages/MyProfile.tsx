@@ -28,7 +28,7 @@ const MyProfile = () => {
           <Button $fullWidth>프로필 수정하기</Button>
         </EditButtonContainer>
         <LogOutButton>
-          <Button variant="outlined" $fullWidth onClick={handleLogout}>
+          <Button variant="disabled" $fullWidth onClick={handleLogout}>
             로그아웃
           </Button>
         </LogOutButton>
