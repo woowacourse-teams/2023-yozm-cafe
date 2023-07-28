@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
 import Button from './Button';
+import LoginModal from './LoginModal';
 import Logo from './Logo';
-import Modal from './Modal';
 
 const Navbar = () => {
   const { data: user } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
   };
 
   return (
@@ -27,12 +27,12 @@ const Navbar = () => {
         {user ? (
           <ProfileImage src={user.imageUrl} alt="Profile" />
         ) : (
-          <Button fullWidth={true} fullHeight={true} onClick={openModal}>
+          <Button fullWidth={true} fullHeight={true} onClick={openLoginModal}>
             로그인
           </Button>
         )}
       </ButtonContainer>
-      {isModalOpen && <Modal onClose={closeModal} />}
+      {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}
     </Container>
   );
 };

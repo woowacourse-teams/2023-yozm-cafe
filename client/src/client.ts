@@ -43,10 +43,6 @@ class Client {
     return this.fetchJson<Cafe[]>(`/cafes/guest?page=${page}`);
   }
 
-  getCafes(page = 1) {
-    return this.fetchJson<Cafe[]>(`/cafes?page=${page}`);
-  }
-
   getUser(userId: string) {
     return this.fetchJson<User>(`/members/${userId}`);
   }
