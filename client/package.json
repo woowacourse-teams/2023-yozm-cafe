@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "start": "webpack serve",
-    "build": "webpack",
+    "build": "webpack --config webpack.prod.js",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build"
   },
