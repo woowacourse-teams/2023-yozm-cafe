@@ -14,6 +14,8 @@ public class AvailableTime {
     private Days day;
     private LocalTime open;
     private LocalTime close;
+
+    @Column(name = "is_opened")
     private boolean opened;
 
     protected AvailableTime() {
