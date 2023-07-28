@@ -5,7 +5,13 @@ export const cafes: Cafe[] = [
     id: 1,
     name: '성수 카페',
     address: '성수로 1길',
-    images: ['/images/cafe-image-1.png', '/images/cafe-image-1.png'],
+    images: [
+        '/images/cafe-image-1.png',
+        '/images/cafe-image-2.png',
+        '/images/cafe-image-3.png',
+        '/images/cafe-image-4.png',
+        '/images/cafe-image-5.png',
+      ],
     isLiked: false,
     likeCount: 1,
     detail: {
