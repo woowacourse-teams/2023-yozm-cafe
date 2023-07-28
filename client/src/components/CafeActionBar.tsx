@@ -1,26 +1,31 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
+import useCafeActions from '../hooks/useCafeActions';
+import { Cafe } from '../types';
 import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
 import ShareButton from './ShareButton';
 
-const CafeActionBar = () => {
-  const [likeCount, setLikeCount] = useState(1);
-  const [isLiked, setIsLiked] = useState(false);
+type CafeActionBarProps = {
+  cafe: Cafe;
+};
+
+const CafeActionBar = (props: CafeActionBarProps) => {
+  const { cafe } = props;
+  const { setLikedCafe } = useCafeActions();
 
   const handleLikeCountIncrease = () => {
-    setIsLiked(!isLiked);
-    setLikeCount(likeCount + (isLiked ? -1 : +1));
+    setLikedCafe({
+      cafeId: cafe.id,
+      isLiked: !cafe.isLiked,
+    });
   };
 
   return (
     <Container>
       <Action>
-        <LikeButton likeCount={likeCount} active={isLiked} onChange={handleLikeCountIncrease} />
+        <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
       </Action>
-      <Action>
-        <CommentButton />
-      </Action>
+
       <Action>
         <ShareButton />
       </Action>
@@ -33,12 +38,14 @@ export default CafeActionBar;
 const Container = styled.aside`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: ${({ theme }) => theme.space[6]};
   align-self: flex-end;
+
+  padding-right: ${({ theme }) => theme.space[3]};
 `;
 
 const Action = styled.button`
   color: white;
-  background: transparent;
+  background: none;
   border: none;
 `;
