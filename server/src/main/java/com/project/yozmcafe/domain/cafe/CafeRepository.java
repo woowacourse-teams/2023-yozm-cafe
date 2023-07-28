@@ -18,6 +18,9 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             + "WHERE u.member.id = :memberId")
     Page<Cafe> findUnViewedCafesByMember(final Pageable pageable, @Param("memberId") final String memberId);
 
+    @Query("SELECT COUNT(u) FROM UnViewedCafe u WHERE u.member.id = :memberId")
+    Long countUnViewedCafesByMemberId(@Param("memberId") String memberId);
+
     @Query(value = "SELECT u FROM UnViewedCafe AS u "
             + "WHERE u.member.id = :memberId AND u.cafe.id = :cafeId")
     Optional<UnViewedCafe> findUnViewedCafeByMemberAndCafe(@Param("memberId") final String memberId, @Param("cafeId") final Long cafeId);

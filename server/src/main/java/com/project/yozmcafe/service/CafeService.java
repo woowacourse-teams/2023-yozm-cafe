@@ -17,7 +17,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CafeService {
 
-    public static final boolean UN_LOGIN_USER_IS_LIKED = false;
+    private static final boolean UN_LOGIN_USER_IS_LIKED = false;
+    private static final int PAGE_SIZE = 5;
 
     private final CafeRepository cafeRepository;
 
@@ -34,10 +35,10 @@ public class CafeService {
     }
 
     public List<CafeResponse> getCafesForLoginMember(final Pageable pageable, final Member member) {
-        Page<Cafe> cafePage = cafeRepository.findUnViewedCafesByMember(pageable, member.getId());
+        Long unViewedCafeCount = cafeRepository.countUnViewedCafesByMemberId(member.getId());
 
-        int pageIdx = (int) (Math.random() * cafePage.getTotalPages());
-        PageRequest randomPageRequest = PageRequest.of(pageIdx, 5);
+        int pageIdx = (int) (Math.random() * Math.ceil(unViewedCafeCount / pageable.getPageSize()));
+        PageRequest randomPageRequest = PageRequest.of(pageIdx, PAGE_SIZE);
         Page<Cafe> randomPage = cafeRepository.findUnViewedCafesByMember(randomPageRequest, member.getId());
 
         return randomPage.getContent().stream()
