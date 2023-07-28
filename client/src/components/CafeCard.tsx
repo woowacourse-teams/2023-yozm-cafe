@@ -25,18 +25,18 @@ const CafeCard = (props: CardProps) => {
   }, [intersection?.isIntersecting, onIntersect]);
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + cafe.images.urls.length) % cafe.images.urls.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + cafe.images.length) % cafe.images.length);
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1 + cafe.images.urls.length) % cafe.images.urls.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1 + cafe.images.length) % cafe.images.length);
   };
 
   return (
     <Container>
       <CarouselImage ref={ref} src={cafe.images[currentImageIndex]} />
       <DotsContainer>
-        {cafe.images.urls.map((_, index) => (
+        {cafe.images.map((_, index) => (
           <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
         ))}
       </DotsContainer>
