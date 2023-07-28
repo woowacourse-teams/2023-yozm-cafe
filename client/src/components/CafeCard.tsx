@@ -29,7 +29,7 @@ const CafeCard = (props: CardProps) => {
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex === cafe.images.urls.length - 1 ? 0 : prevIndex + 1));
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1 + cafe.images.urls.length) % cafe.images.urls.length);
   };
 
   return (
