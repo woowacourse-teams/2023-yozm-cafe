@@ -1,13 +1,22 @@
 import { CgClose } from 'react-icons/cg';
 import { styled } from 'styled-components';
+import useAuthUrls from '../hooks/useAuthUrls';
+import { Theme } from '../styles/theme';
 import LoginButton from './LoginButton';
 import Logo from './Logo';
+
+const brandColors: Record<string, keyof Theme['color']> = {
+  kakao: 'yellow',
+  google: 'white',
+};
 
 type ModalProps = {
   onClose: () => void;
 };
 
-const Modal = ({ onClose }: ModalProps) => {
+const LoginModal = ({ onClose }: ModalProps) => {
+  const { data: urls } = useAuthUrls();
+
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 클릭 이벤트가 ModalContainer까지 전파되지 않도록 막습니다.
     e.stopPropagation();
@@ -22,23 +31,20 @@ const Modal = ({ onClose }: ModalProps) => {
         <Logo fontSize="5xl" />
         <LoginTitle>간편 로그인</LoginTitle>
         <ButtonContainer>
-          <a href="/auth/kakao?code=1234">
-            <LoginButton $color="yellow">
-              <img src="/assets/kakao.svg" alt="카카오 로고" />
-            </LoginButton>
-          </a>
-          <a href="/api/auth/google">
-            <LoginButton $color="white">
-              <img src="/assets/google.svg" alt="구글 로고" />
-            </LoginButton>
-          </a>
+          {urls.map(({ provider, authorizationUrl }) => (
+            <a href={authorizationUrl}>
+              <LoginButton $color={brandColors[provider] ?? 'white'}>
+                <img src={`/assets/${provider}.svg`} alt={`${provider} 로고`} />
+              </LoginButton>
+            </a>
+          ))}
         </ButtonContainer>
       </ModalContent>
     </ModalContainer>
   );
 };
 
-export default Modal;
+export default LoginModal;
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -66,6 +72,7 @@ const ModalContent = styled.div`
   align-items: center;
   justify-content: center;
 
+  width: 350px;
   padding: ${({ theme }) => theme.space['5']};
 
   background-color: white;

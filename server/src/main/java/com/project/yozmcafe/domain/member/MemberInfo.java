@@ -1,6 +1,4 @@
-package com.project.yozmcafe.controller.auth;
-
-import com.project.yozmcafe.domain.member.Member;
+package com.project.yozmcafe.domain.member;
 
 public record MemberInfo(String openId, String name, String image) {
 

@@ -41,6 +41,22 @@ public class Cafe {
         this.likeCount = likeCount;
     }
 
+    public Cafe(String name, String address, Images images, Detail detail) {
+        this(null, name, address, images, detail, 0);
+    }
+
+    public void addLikeCount() {
+        likeCount += 1;
+    }
+
+    public void subtractLikeCount() {
+        likeCount -= 1;
+    }
+
+    public String getRepresentativeImage() {
+        return images.getRepresentativeImage();
+    }
+
     public Long getId() {
         return id;
     }

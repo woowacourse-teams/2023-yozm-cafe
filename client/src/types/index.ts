@@ -1,3 +1,8 @@
+export type AuthUrl = {
+  provider: string;
+  authorizationUrl: string;
+};
+
 export type Identity = {
   sub: string;
   iat: number;
@@ -8,10 +13,6 @@ export type User = {
   id: string;
   name: string;
   imageUrl: string;
-};
-
-type CafeImages = {
-  urls: string[];
 };
 
 type OpeningHours = {
@@ -31,7 +32,7 @@ export type Cafe = {
   id: number;
   name: string;
   address: string;
-  images: CafeImages;
+  images: string[];
   isLiked: boolean;
   likeCount: number;
   detail: CafeDetail;
