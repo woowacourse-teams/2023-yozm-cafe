@@ -1,4 +1,4 @@
-import { AuthProvider, AuthUrl, Cafe, User } from './types';
+import { AuthProvider, AuthUrl, Cafe, LikedCafe, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -49,6 +49,10 @@ class Client {
 
   getUser(userId: string) {
     return this.fetchJson<User>(`/members/${userId}`);
+  }
+
+  getLikedCafeList(userId: string, page = 1) {
+    return this.fetchJson<LikedCafe[]>(`/members/${userId}/liked-cafes?page=${page}`);
   }
 
   async setLikedCafe(cafeId: Cafe['id'], isLiked: Cafe['isLiked']) {
