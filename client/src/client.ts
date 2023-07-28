@@ -47,6 +47,10 @@ class Client {
     return this.fetchJson<User>(`/members/${userId}`);
   }
 
+  async setLikedCafe(cafeId: Cafe['id'], isLiked: Cafe['isLiked']) {
+    await this.fetch(`/cafes/${cafeId}/likes?isLiked=${isLiked}`, { method: 'POST' });
+  }
+
   addFavoriteCafe(cafeId: Cafe['id']) {
     return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'POST' });
   }
