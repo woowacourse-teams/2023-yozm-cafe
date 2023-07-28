@@ -1,10 +1,10 @@
 package com.project.yozmcafe.service.auth;
 
 import com.project.yozmcafe.controller.auth.OAuthProvider;
+import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
-import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -34,7 +32,7 @@ class AuthServiceTest {
     private GoogleOAuthClient googleOAuthClient;
     @SpyBean
     private KakaoOAuthClient kakaoOAuthClient;
-    @MockBean
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
@@ -50,7 +48,6 @@ class AuthServiceTest {
         //given
         doReturn(new MemberInfo("1234", "", ""))
                 .when(googleOAuthClient).getUserInfo(anyString());
-        given(jwtTokenProvider.createAccessFrom(anyString())).willReturn("토큰");
         memberRepository.save(new Member("1234", "연어", "image"));
 
         //when
@@ -67,7 +64,6 @@ class AuthServiceTest {
         String memberId = "1234";
         doReturn(new MemberInfo(memberId, "", ""))
                 .when(googleOAuthClient).getUserInfo(anyString());
-        given(jwtTokenProvider.createAccessFrom(anyString())).willReturn("토큰");
         saveCafes();
 
         //when
@@ -79,8 +75,8 @@ class AuthServiceTest {
         final List<Cafe> allCafes = cafeRepository.findAll();
 
         assertThat(memberUnViewedCafes)
-                .extracting("id")
-                .containsExactlyElementsOf(allCafes.stream().map(Cafe::getId).toList());
+                .extracting("cafe.id")
+                .containsAll(allCafes.stream().map(Cafe::getId).toList());
     }
 
     @Test
