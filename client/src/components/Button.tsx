@@ -3,13 +3,13 @@ import styled, { css } from 'styled-components';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'default' | 'outlined' | 'disabled';
-  fullWidth?: boolean;
-  fullHeight?: boolean;
+  $fullWidth?: boolean;
+  $fullHeight?: boolean;
 };
 
-const Button = ({ children, variant = 'default', fullWidth = false, fullHeight = false, ...rest }: ButtonProps) => {
+const Button = ({ children, variant = 'default', $fullWidth = false, $fullHeight = false, ...rest }: ButtonProps) => {
   return (
-    <Container variant={variant} fullWidth={fullWidth} fullHeight={fullHeight} {...rest}>
+    <Container variant={variant} $fullWidth={$fullWidth} $fullHeight={$fullHeight} {...rest}>
       {children}
     </Container>
   );
@@ -45,6 +45,6 @@ const Container = styled.button<ButtonProps>`
 
   border-radius: 40px;
   ${(props) => ButtonVariants[props.variant || 'default']}
-  ${(props) => props.fullWidth && 'width: 100%;'}
-  ${(props) => props.fullHeight && 'height: 100%;'}
+  ${(props) => props.$fullWidth && 'width: 100%;'}
+  ${(props) => props.$fullHeight && 'height: 100%;'}
 `;
