@@ -4,7 +4,6 @@ import com.project.yozmcafe.domain.cafe.available.AvailableTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Lob;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ public class Detail {
     private List<AvailableTime> availableTimes;
     @Column(nullable = false)
     private String mapUrl;
-    @Lob
     @Column(columnDefinition = "text")
     private String description;
     private String phone;
