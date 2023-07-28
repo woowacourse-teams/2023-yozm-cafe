@@ -85,6 +85,16 @@ export const handlers = [
     );
   }),
 
+  rest.get('/api/auth/urls', async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        { provider: 'google', authorizationUrl: '/test/auth/google' },
+        { provider: 'kakao', authorizationUrl: '/test/auth/kakao' },
+      ]),
+    );
+  }),
+
   // 인증 코드를 accessToken으로 교환
   rest.post('/api/auth/:authProvider', async (req, res, ctx) => {
     const { authProvider } = req.params;
