@@ -41,8 +41,12 @@ const CafeCard = (props: CardProps) => {
         ))}
       </DotsContainer>
       <CarouselNavigation>
-        <BsChevronCompactLeft onClick={handlePrevImage} />
-        <BsChevronCompactRight onClick={handleNextImage} />
+        <ButtonLeft>
+          <BsChevronCompactLeft onClick={handlePrevImage} />
+        </ButtonLeft>
+        <ButtonRight>
+          <BsChevronCompactRight onClick={handleNextImage} />
+        </ButtonRight>
       </CarouselNavigation>
       <AsidePosition>
         <Aside>
@@ -80,8 +84,12 @@ const CarouselNavigation = styled.div`
   width: 100%;
   & > * {
     cursor: pointer;
+
     font-size: ${({ theme }) => theme.fontSize['3xl']};
     color: ${({ theme }) => theme.color.white};
+
+    background: none;
+    border: none;
   }
 `;
 
@@ -121,3 +129,7 @@ const Aside = styled.div`
 
   margin: ${({ theme }) => theme.space[5]};
 `;
+
+const ButtonLeft = styled.button``;
+
+const ButtonRight = styled.button``;
