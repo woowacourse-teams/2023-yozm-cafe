@@ -32,16 +32,14 @@ const CafeCard = (props: CardProps) => {
     setCurrentImageIndex((prevIndex) => (prevIndex === cafe.images.urls.length - 1 ? 0 : prevIndex + 1));
   };
 
-  const renderDots = () => {
-    return cafe.images.urls.map((_, index) => (
-      <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
-    ));
-  };
-
   return (
     <Container>
       <CarouselImage ref={ref} src={cafe.images.urls[currentImageIndex]} />
-      <DotsContainer>{renderDots()}</DotsContainer>
+      <DotsContainer>
+        {cafe.images.urls.map((_, index) => (
+          <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
+        ))}
+      </DotsContainer>
       <CarouselNavigation>
         <BsChevronCompactLeft onClick={handlePrevImage} />
         <BsChevronCompactRight onClick={handleNextImage} />
