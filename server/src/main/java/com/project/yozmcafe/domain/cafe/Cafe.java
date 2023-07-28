@@ -53,6 +53,10 @@ public class Cafe {
         likeCount -= 1;
     }
 
+    public String getRepresentativeImage() {
+        return images.getRepresentativeImage();
+    }
+
     public Long getId() {
         return id;
     }

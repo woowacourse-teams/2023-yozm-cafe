@@ -34,7 +34,7 @@ const CafeCard = (props: CardProps) => {
 
   return (
     <Container>
-      <CarouselImage ref={ref} src={cafe.images.urls[currentImageIndex]} />
+      <CarouselImage ref={ref} src={cafe.images[currentImageIndex]} />
       <DotsContainer>
         {cafe.images.urls.map((_, index) => (
           <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
@@ -51,7 +51,7 @@ const CafeCard = (props: CardProps) => {
       <AsidePosition>
         <Aside>
           <CafeInfoModal title={cafe.name} address={cafe.address} content={cafe.detail.description} />
-          <CafeActionBar />
+          <CafeActionBar cafe={cafe} />
         </Aside>
       </AsidePosition>
     </Container>

@@ -5,15 +5,13 @@ export const cafes: Cafe[] = [
     id: 1,
     name: '성수 카페',
     address: '성수로 1길',
-    images: {
-      urls: [
+    images: [
         '/images/cafe-image-1.png',
         '/images/cafe-image-2.png',
         '/images/cafe-image-3.png',
         '/images/cafe-image-4.png',
         '/images/cafe-image-5.png',
       ],
-    },
     isLiked: false,
     likeCount: 1,
     detail: {
@@ -69,9 +67,7 @@ export const cafes: Cafe[] = [
     id: 2,
     name: '성수 카페2',
     address: '성수로 2길',
-    images: {
-      urls: ['/images/cafe-image-2.png', '/images/cafe-image-2.png'],
-    },
+    images: ['/images/cafe-image-2.png', '/images/cafe-image-2.png'],
     isLiked: true,
     likeCount: 0,
     detail: {
@@ -127,9 +123,7 @@ export const cafes: Cafe[] = [
     id: 3,
     name: '성수 카페3',
     address: '성수로 3길',
-    images: {
-      urls: ['/images/cafe-image-3.png', '/images/cafe-image-3.png'],
-    },
+    images: ['/images/cafe-image-3.png', '/images/cafe-image-3.png'],
     isLiked: true,
     likeCount: 0,
     detail: {
@@ -185,9 +179,7 @@ export const cafes: Cafe[] = [
     id: 4,
     name: '성수 카페4',
     address: '성수로 4길',
-    images: {
-      urls: ['/images/cafe-image-4.png', '/images/cafe-image-4.png'],
-    },
+    images: ['/images/cafe-image-4.png', '/images/cafe-image-4.png'],
     isLiked: false,
     likeCount: 0,
     detail: {
@@ -243,9 +235,7 @@ export const cafes: Cafe[] = [
     id: 5,
     name: '성수 카페5',
     address: '성수로 5길',
-    images: {
-      urls: ['/images/cafe-image-5.png', '/images/cafe-image-5.png'],
-    },
+    images: ['/images/cafe-image-5.png', '/images/cafe-image-5.png'],
     isLiked: false,
     likeCount: 0,
     detail: {
