@@ -3,7 +3,6 @@ package com.project.yozmcafe.domain.cafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.util.UnViewedCafeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -78,7 +77,7 @@ class CafeRepositoryTest {
         unViewedCafeRepository.save(new UnViewedCafe(cafe5, member));
 
         //when
-        final List<Cafe> result = cafeRepository.findUnViewedCafesByMember(pageRequest, member.getId()).getContent();
+        final List<Cafe> result = unViewedCafeRepository.findUnViewedCafesByMember(member.getId(), pageRequest).getContent();
 
         //then
         assertThat(result).hasSize(5);

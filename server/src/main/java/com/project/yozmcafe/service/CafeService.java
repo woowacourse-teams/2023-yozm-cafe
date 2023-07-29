@@ -4,6 +4,7 @@ import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +20,11 @@ import java.util.List;
 public class CafeService {
 
     private final CafeRepository cafeRepository;
+    private final UnViewedCafeRepository unViewedCafeRepository;
 
-    public CafeService(final CafeRepository cafeRepository) {
+    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViewedCafeRepository) {
         this.cafeRepository = cafeRepository;
+        this.unViewedCafeRepository = unViewedCafeRepository;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
@@ -33,11 +36,11 @@ public class CafeService {
     }
 
     public List<CafeResponse> getCafesForLoginMember(final Pageable pageable, final Member member) {
-        Long unViewedCafeCount = cafeRepository.countUnViewedCafesByMemberId(member.getId());
+        Long unViewedCafeCount = unViewedCafeRepository.countByMemberId(member.getId());
         final int pageSize = pageable.getPageSize();
 
         final PageRequest randomPageRequest = getRandomPageRequest(unViewedCafeCount, pageSize);
-        Page<Cafe> randomPage = cafeRepository.findUnViewedCafesByMember(randomPageRequest, member.getId());
+        final Page<Cafe> randomPage = unViewedCafeRepository.findUnViewedCafesByMember(member.getId(), randomPageRequest);
 
         return randomPage.getContent().stream()
                 .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))

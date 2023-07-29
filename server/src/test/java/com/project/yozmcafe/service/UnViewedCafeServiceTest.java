@@ -2,10 +2,10 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.util.UnViewedCafeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class UnViewedCafeServiceTest {
 
     @BeforeEach
     void setUp() {
-        unViewedCafeService = new UnViewedCafeService(cafeRepository);
+        unViewedCafeService = new UnViewedCafeService(unViewedCafeRepository, cafeRepository);
     }
 
     @Test
