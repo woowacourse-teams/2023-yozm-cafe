@@ -22,7 +22,7 @@ const CafeCard = (props: CardProps) => {
     if (intersection) {
       onIntersect?.(intersection);
     }
-  }, [intersection?.isIntersecting, onIntersect]);
+  }, [intersection?.isIntersecting]);
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + cafe.images.length) % cafe.images.length);
@@ -122,7 +122,6 @@ const AsidePosition = styled.div`
 
 const Aside = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column-reverse;
   gap: ${({ theme }) => theme.space[5]};

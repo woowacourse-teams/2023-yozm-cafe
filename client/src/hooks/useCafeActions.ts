@@ -8,6 +8,10 @@ type SetLikedCafeParams = {
   isLiked: boolean;
 };
 
+type MarkedAsCafeParams = {
+  cafeId: Cafe['id'];
+};
+
 const withIsLiked = (cafes: InfiniteData<{ cafes: Cafe[] }>, cafeId: Cafe['id'], isLiked: Cafe['isLiked']) => {
   return {
     ...cafes,
@@ -42,7 +46,11 @@ const useCafeActions = () => {
     },
   });
 
-  return { setLikedCafe };
+  const { mutate: markedAsViewedCafe } = useMutation({
+    mutationFn: ({ cafeId }: MarkedAsCafeParams) => client.markedAsViewedCafe(cafeId),
+  });
+
+  return { setLikedCafe, markedAsViewedCafe };
 };
 
 export default useCafeActions;
