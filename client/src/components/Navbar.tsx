@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Suspense, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
 import Button from './Button';
@@ -8,6 +8,7 @@ import Logo from './Logo';
 
 const Navbar = () => {
   const { data: user } = useUser();
+  const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const openLoginModal = () => {
@@ -18,6 +19,10 @@ const Navbar = () => {
     setIsLoginModalOpen(false);
   };
 
+  const handleProfileClick = () => {
+    navigate('/my-profile');
+  };
+
   return (
     <Container>
       <LogoContainer to="/">
@@ -25,14 +30,16 @@ const Navbar = () => {
       </LogoContainer>
       <ButtonContainer>
         {user ? (
-          <ProfileImage src={user.imageUrl} alt="Profile" />
+          <Button variant="outlined" $fullWidth={true} $fullHeight={true} onClick={handleProfileClick}>
+            프로필
+          </Button>
         ) : (
-          <Button fullWidth={true} fullHeight={true} onClick={openLoginModal}>
+          <Button $fullWidth={true} $fullHeight={true} onClick={openLoginModal}>
             로그인
           </Button>
         )}
       </ButtonContainer>
-      {isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}
+      <Suspense>{isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}</Suspense>
     </Container>
   );
 };
@@ -50,14 +57,10 @@ const Container = styled.nav`
 `;
 
 const ButtonContainer = styled.div`
-  width: 25%;
+  flex: 3;
 `;
 
 const LogoContainer = styled(Link)`
+  flex: 7;
   text-decoration: none;
-`;
-
-const ProfileImage = styled.img`
-  height: 100%;
-  border-radius: 100%;
 `;

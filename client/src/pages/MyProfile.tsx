@@ -4,15 +4,17 @@ import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
 import ProfileInfo from '../components/ProfileInfo';
 import useAuth from '../hooks/useAuth';
+import useLikedCafes from '../hooks/useLikedCafes';
 import useUser from '../hooks/useUser';
 
 const MyProfile = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
   const { clearAuthorization } = useAuth();
+  const { likedCafes, fetchNextPage, isFetchingNextPage } = useLikedCafes();
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   const handleLogout = async () => {
@@ -20,21 +22,32 @@ const MyProfile = () => {
     navigate('/');
   };
 
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    if (isFetchingNextPage) {
+      return;
+    }
+    const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
+    if (scrollHeight - scrollTop === clientHeight) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <Container>
       <ProfileInfo userImage={user.imageUrl} userName={user.name} />
       <ButtonContainer>
         <EditButtonContainer>
-          <Button fullWidth>프로필 수정하기</Button>
+          <Button $fullWidth>프로필 수정하기</Button>
         </EditButtonContainer>
         <LogOutButton>
-          <Button variant="outlined" fullWidth onClick={handleLogout}>
+          <Button variant="disabled" $fullWidth onClick={handleLogout}>
             로그아웃
           </Button>
         </LogOutButton>
       </ButtonContainer>
-      <LikedCafeListContainer>
-        <LikedCafeList />
+      <LikedCafeListContainer onScroll={handleScroll}>
+        {/* LikedCafeList 컴포넌트에 likedCafes 데이터 전달 */}
+        <LikedCafeList likedCafes={likedCafes} />
       </LikedCafeListContainer>
     </Container>
   );

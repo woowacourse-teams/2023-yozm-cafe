@@ -1,14 +1,15 @@
 package com.project.yozmcafe.controller.auth;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 @Transactional
@@ -25,5 +26,19 @@ class OAuthProviderTest {
     @DisplayName("인증 Uri 를 받아올 수 있다.")
     void getAuthorizationUrl(OAuthProvider oAuthProvider) {
         assertThat(oAuthProvider.getAuthorizationUrl()).contains("response_type", "redirect_uri", "client_id", "scope");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = OAuthProvider.class)
+    @DisplayName("providerName을 소문자로 반환한다.")
+    void getProviderName(final OAuthProvider oAuthProvider) {
+        //when
+        final String providerName = oAuthProvider.getProviderName();
+
+        //then
+        assertSoftly(softAssertions -> {
+            assertThat(providerName).isLowerCase();
+            assertThat(providerName).isEqualToIgnoringCase(oAuthProvider.name());
+        });
     }
 }
