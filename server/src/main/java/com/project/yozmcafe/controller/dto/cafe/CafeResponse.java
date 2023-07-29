@@ -1,11 +1,14 @@
 package com.project.yozmcafe.controller.dto.cafe;
 
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
+
+import java.util.List;
 
 public record CafeResponse(Long id, String name, String address, List<String> images, boolean isLiked, int likeCount,
                            DetailResponse detail) {
+
+    private static final boolean UN_LOGGED_IN_USER_IS_LIKE = false;
+
     public static CafeResponse fromLoggedInUser(final Cafe cafe, final boolean isLiked) {
         return new CafeResponse(
                 cafe.getId(),
@@ -23,7 +26,7 @@ public record CafeResponse(Long id, String name, String address, List<String> im
                 cafe.getName(),
                 cafe.getAddress(),
                 cafe.getImages().getUrls(),
-                false,
+                UN_LOGGED_IN_USER_IS_LIKE,
                 cafe.getLikeCount(),
                 DetailResponse.from(cafe.getDetail()));
     }
