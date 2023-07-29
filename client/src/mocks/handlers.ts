@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { cafes, likedCafes } from '../data/mockData';
+import { cafes } from '../data/mockData';
 import { Identity, User } from '../types';
 
 let pageState = 1;
@@ -66,6 +66,10 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({}));
   }),
 
+  rest.post('/api/cafes/:cafeId/history', (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
   // 좋아요 한 목록 조회
   rest.get('/api/members/:memberId/liked-cafes', (req, res, ctx) => {
     const PAGINATE_UNIT = 15;
@@ -106,6 +110,7 @@ export const handlers = [
         }),
       );
     }
+
     const code = req.url.searchParams.get('code');
     if ((code?.length ?? 0) <= 0) {
       return res(
