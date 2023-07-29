@@ -3,7 +3,6 @@ package com.project.yozmcafe.controller;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.service.CafeHistoryService;
 import com.project.yozmcafe.service.CafeService;
 import com.project.yozmcafe.service.MemberService;
 import org.springframework.data.domain.PageRequest;
@@ -23,12 +22,10 @@ public class CafeController {
     private static final int IGNORED_PAGE = 0;
 
     private final CafeService cafeService;
-    private final CafeHistoryService cafeHistoryService;
     private final MemberService memberService;
 
-    public CafeController(final CafeService cafeService, final CafeHistoryService cafeHistoryService, final MemberService memberService) {
+    public CafeController(final CafeService cafeService, final MemberService memberService) {
         this.cafeService = cafeService;
-        this.cafeHistoryService = cafeHistoryService;
         this.memberService = memberService;
     }
 
@@ -58,12 +55,5 @@ public class CafeController {
     public ResponseEntity<Void> saveCafe(@RequestBody CafeRequest cafeRequest) {
         cafeService.saveCafe(cafeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping("/{cafeId}/history")
-    public ResponseEntity<Void> updateMemberUnViewedCafeHistory(final Member member,
-                                                                @PathVariable("cafeId") final long cafeId) {
-        cafeHistoryService.removeUnViewedCafe(member, cafeId);
-        return ResponseEntity.ok().build();
     }
 }

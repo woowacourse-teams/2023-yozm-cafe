@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class CafeHistoryServiceTest {
+class UnViewedCafeServiceTest {
 
-    private CafeHistoryService cafeHistoryService;
+    private UnViewedCafeService unViewedCafeService;
 
     @Autowired
     private CafeRepository cafeRepository;
@@ -35,7 +35,7 @@ class CafeHistoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        cafeHistoryService = new CafeHistoryService(cafeRepository);
+        unViewedCafeService = new UnViewedCafeService(cafeRepository);
     }
 
     @Test
@@ -48,7 +48,7 @@ class CafeHistoryServiceTest {
         member.addUnViewedCafes(List.of(cafe1, cafe2));
 
         //when
-        cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(1);
@@ -65,7 +65,7 @@ class CafeHistoryServiceTest {
         member.addUnViewedCafes(List.of(cafe1));
 
         //when
-        cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);

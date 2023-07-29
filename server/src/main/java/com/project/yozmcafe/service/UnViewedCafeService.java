@@ -1,23 +1,22 @@
 package com.project.yozmcafe.service;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class CafeHistoryService {
+public class UnViewedCafeService {
 
     private final CafeRepository cafeRepository;
 
-    public CafeHistoryService(final CafeRepository cafeRepository) {
+    public UnViewedCafeService(final CafeRepository cafeRepository) {
         this.cafeRepository = cafeRepository;
     }
 
