@@ -77,7 +77,7 @@ class CafeRepositoryTest {
         unViewedCafeRepository.save(new UnViewedCafe(cafe5, member));
 
         //when
-        final List<Cafe> result = unViewedCafeRepository.findUnViewedCafesByMember(member.getId(), pageRequest).getContent();
+        final List<Cafe> result = unViewedCafeRepository.findUnViewedCafesByMember(member.getId(), pageRequest);
 
         //then
         assertThat(result).hasSize(5);
