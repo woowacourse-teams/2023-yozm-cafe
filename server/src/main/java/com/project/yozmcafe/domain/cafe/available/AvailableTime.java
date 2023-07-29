@@ -14,18 +14,16 @@ public class AvailableTime {
     private Days day;
     private LocalTime open;
     private LocalTime close;
-
-    @Column(name = "is_opened")
-    private boolean opened;
+    private boolean isOpened;
 
     protected AvailableTime() {
     }
 
-    public AvailableTime(final Days day, final LocalTime open, final LocalTime close, final boolean opened) {
+    public AvailableTime(final Days day, final LocalTime open, final LocalTime close, final boolean isOpened) {
         this.day = day;
         this.open = open;
         this.close = close;
-        this.opened = opened;
+        this.isOpened = isOpened;
     }
 
     public Days getDay() {
@@ -40,7 +38,7 @@ public class AvailableTime {
         return close;
     }
 
-    public boolean getOpened() {
-        return opened;
+    public boolean isOpened() {
+        return isOpened;
     }
 }

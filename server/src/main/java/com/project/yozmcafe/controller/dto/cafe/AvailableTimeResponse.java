@@ -12,7 +12,7 @@ public record AvailableTimeResponse(String day, @JsonFormat(pattern = "HH:mm") L
                 availableTime.getDay().name(),
                 availableTime.getOpen(),
                 availableTime.getClose(),
-                availableTime.getOpened()
+                availableTime.isOpened()
         );
     }
 }
