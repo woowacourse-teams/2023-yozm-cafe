@@ -38,7 +38,7 @@ const useCafeActions = () => {
       return { previous: cafes };
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData(['cafes'], context?.previous);
+      queryClient.setQueryData(['cafes', identity], context?.previous);
     },
   });
 

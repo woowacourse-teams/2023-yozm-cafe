@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import useCafeActions from '../hooks/useCafeActions';
+import useUser from '../hooks/useUser';
 import { Cafe } from '../types';
-import CommentButton from './CommentButton';
 import LikeButton from './LikeButton';
 import ShareButton from './ShareButton';
 
@@ -12,8 +12,14 @@ type CafeActionBarProps = {
 const CafeActionBar = (props: CafeActionBarProps) => {
   const { cafe } = props;
   const { setLikedCafe } = useCafeActions();
+  const { data: user } = useUser();
 
   const handleLikeCountIncrease = () => {
+    if (!user) {
+      alert('로그인이 필요합니다!');
+      return;
+    }
+
     setLikedCafe({
       cafeId: cafe.id,
       isLiked: !cafe.isLiked,
