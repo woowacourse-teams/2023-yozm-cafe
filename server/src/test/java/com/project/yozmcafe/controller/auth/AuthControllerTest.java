@@ -1,17 +1,13 @@
 package com.project.yozmcafe.controller.auth;
 
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberInfo;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
-import com.project.yozmcafe.util.AcceptanceContext;
-import io.restassured.RestAssured;
-import io.restassured.http.Cookie;
-import io.restassured.matcher.DetailedCookieMatcher;
-import io.restassured.matcher.RestAssuredMatchers;
-import io.restassured.response.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,13 +18,19 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
+import com.project.yozmcafe.util.AcceptanceContext;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
+import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
+import io.restassured.matcher.DetailedCookieMatcher;
+import io.restassured.matcher.RestAssuredMatchers;
+import io.restassured.response.Response;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "classpath:truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -140,7 +142,7 @@ class AuthControllerTest {
             String providerPath = "[" + provider.ordinal() + "]" + ".provider";
             String urlPath = "[" + provider.ordinal() + "]" + ".authorizationUrl";
 
-            assertThat(response.getBody().jsonPath().getString(providerPath)).isEqualTo(provider.name());
+            assertThat(response.getBody().jsonPath().getString(providerPath)).isEqualTo(provider.getProviderName());
             assertThat(response.getBody().jsonPath().getString(urlPath))
                     .contains("response_type", "redirect_uri", "client_id", "scope");
         }
