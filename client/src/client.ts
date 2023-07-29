@@ -63,6 +63,10 @@ class Client {
     return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'POST' });
   }
 
+  async markedAsViewedCafe(cafeId: Cafe['id']) {
+    await this.fetch(`/cafes/${cafeId}/history`, { method: 'POST' });
+  }
+
   removeFavoriteCafe(cafeId: Cafe['id']) {
     return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
   }
