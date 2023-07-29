@@ -125,9 +125,7 @@ const Aside = styled.div`
 
   display: flex;
   flex-direction: column-reverse;
-  gap: ${({ theme }) => theme.space[10]};
-
-  margin: ${({ theme }) => theme.space[5]};
+  gap: ${({ theme }) => theme.space[5]};
 `;
 
 const ButtonLeft = styled.button``;

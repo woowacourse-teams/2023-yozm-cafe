@@ -22,7 +22,7 @@ export default LikeButton;
 
 const HeartIcon = styled(PiHeartFill)<{ $active: boolean }>`
   cursor: pointer;
-  font-size: ${({ theme }) => theme.fontSize['5xl']};
+  font-size: ${({ theme }) => theme.fontSize['4xl']};
   color: ${({ theme, $active }) => ($active ? theme.color.primary : theme.color.white)};
 `;
 
