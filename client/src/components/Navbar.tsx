@@ -30,7 +30,7 @@ const Navbar = () => {
       </LogoContainer>
       <ButtonContainer>
         {user ? (
-          <Button variant="outlined" $fullWidth={true} $fullHeight={true} onClick={handleProfileClick}>
+          <Button $variant="outlined" $fullWidth={true} $fullHeight={true} onClick={handleProfileClick}>
             프로필
           </Button>
         ) : (
