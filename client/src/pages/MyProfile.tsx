@@ -36,14 +36,9 @@ const MyProfile = () => {
     <Container>
       <ProfileInfo userImage={user.imageUrl} userName={user.name} />
       <ButtonContainer>
-        <EditButtonContainer>
-          <Button $fullWidth>프로필 수정하기</Button>
-        </EditButtonContainer>
-        <LogOutButton>
-          <Button $variant="disabled" $fullWidth onClick={handleLogout}>
-            로그아웃
-          </Button>
-        </LogOutButton>
+        <Button $variant="default" $fullWidth onClick={handleLogout}>
+          로그아웃
+        </Button>
       </ButtonContainer>
       <LikedCafeListContainer onScroll={handleScroll}>
         {/* LikedCafeList 컴포넌트에 likedCafes 데이터 전달 */}
@@ -62,16 +57,12 @@ const Container = styled.section`
 
 const ButtonContainer = styled.article`
   display: flex;
+  justify-content: center;
   margin: ${({ theme }) => theme.space['3']} 0;
-`;
 
-const EditButtonContainer = styled.div`
-  flex: 6;
-  margin-right: ${({ theme }) => theme.space['2.5']};
-`;
-
-const LogOutButton = styled.div`
-  flex: 4;
+  & > * {
+    width: 120px;
+  }
 `;
 
 const LikedCafeListContainer = styled.div`
