@@ -46,6 +46,7 @@ const CafeCard = (props: CardProps) => {
       <CarouselImageList ref={ref}>
         <CarouselImage src={getImageByOffset(0)} $show={true} />
         {/* 이미지를 미리 불러오기 위한 장치 */}
+        <CarouselImage src={getImageByOffset(-1)} $show={false} />
         <CarouselImage src={getImageByOffset(1)} $show={false} />
       </CarouselImageList>
       <DotsContainer>
