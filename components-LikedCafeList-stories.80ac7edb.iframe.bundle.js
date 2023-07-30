@@ -20,11 +20,9 @@
 `,GridContainer=styled_components_browser_esm.zo.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 열 */
-  gap: ${({theme})=>theme.space[3]};
+  gap: ${({theme})=>theme.space[.5]};
   margin-bottom: ${({theme})=>theme.space[10]};
 `,CafeImage=styled_components_browser_esm.zo.img`
-  width: 145px;
-  height: 200px;
-  border-radius: 20px;
+  aspect-ratio: 1 / 1;
 `;try{LikedCafeList.displayName="LikedCafeList",LikedCafeList.__docgenInfo={description:"",displayName:"LikedCafeList",props:{likedCafes:{defaultValue:null,description:"",name:"likedCafes",required:!0,type:{name:"LikedCafe[]"}}}},"undefined"!=typeof STORYBOOK_REACT_CLASSES&&(STORYBOOK_REACT_CLASSES["src/components/LikedCafeList.tsx#LikedCafeList"]={docgenInfo:LikedCafeList.__docgenInfo,name:"LikedCafeList",path:"src/components/LikedCafeList.tsx#LikedCafeList"})}catch(__react_docgen_typescript_loader_error){}const LikedCafeList_stories={title:"LikedCafeList",component:components_LikedCafeList},Default={args:{}};Default.parameters={...Default.parameters,docs:{...Default.parameters?.docs,source:{originalSource:"{\n  args: {}\n}",...Default.parameters?.docs?.source}}};const __namedExportsOrder=["Default"]}}]);
-//# sourceMappingURL=components-LikedCafeList-stories.d6bfc4d6.iframe.bundle.js.map
+//# sourceMappingURL=components-LikedCafeList-stories.80ac7edb.iframe.bundle.js.map
