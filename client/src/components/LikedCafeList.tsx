@@ -55,11 +55,10 @@ const ScrollContainer = styled.div`
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 열 */
-  gap: ${({ theme }) => theme.space['3']};
+  gap: ${({ theme }) => theme.space['0.5']};
   margin-bottom: ${({ theme }) => theme.space['10']};
 `;
 
 const CafeImage = styled.img`
-  width: 145px;
-  height: 145px;
+  aspect-ratio: 1 / 1;
 `;
