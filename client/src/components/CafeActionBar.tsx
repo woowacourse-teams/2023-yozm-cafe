@@ -3,7 +3,6 @@ import useCafeActions from '../hooks/useCafeActions';
 import useUser from '../hooks/useUser';
 import { Cafe } from '../types';
 import LikeButton from './LikeButton';
-import ShareButton from './ShareButton';
 
 type CafeActionBarProps = {
   cafe: Cafe;
@@ -31,9 +30,6 @@ const CafeActionBar = (props: CafeActionBarProps) => {
       <Action>
         <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
       </Action>
-      <Action>
-        <ShareButton />
-      </Action>
     </Container>
   );
 };
@@ -43,10 +39,8 @@ export default CafeActionBar;
 const Container = styled.aside`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space[3]};
   align-self: flex-end;
-
-  padding-right: ${({ theme }) => theme.space[5]};
+  padding-right: ${({ theme }) => theme.space[4]};
 `;
 
 const Action = styled.button`

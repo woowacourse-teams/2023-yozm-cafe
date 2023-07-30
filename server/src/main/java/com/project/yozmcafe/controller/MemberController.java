@@ -29,7 +29,7 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
-    @GetMapping("/{memberId}/likedCafes")
+    @GetMapping("/{memberId}/liked-cafes")
     public ResponseEntity<List<LikedCafeResponse>> getLikedCafes(@PathVariable("memberId") final String memberId,
                                                                  @PageableDefault(size = 15) final Pageable pageable) {
         final List<LikedCafeResponse> likedCafes = memberService.findLikedCafesById(memberId, pageable);

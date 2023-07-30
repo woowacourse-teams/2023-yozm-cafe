@@ -93,9 +93,9 @@ class MemberControllerTest {
         memberRepository.save(member);
 
         //when
-        context.invokeHttpGet("/members/{memberId}/likedCafes?size=1&page=1", member.getId());
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
         Response response = context.response;
-        context.invokeHttpGet("/members/{memberId}/likedCafes?size=1&page=2", member.getId());
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=2", member.getId());
         Response response2 = context.response;
 
         //then
@@ -113,7 +113,7 @@ class MemberControllerTest {
         memberRepository.save(member);
 
         //when
-        context.invokeHttpGet("/members/{memberId}/likedCafes?size=1&page=1", member.getId());
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
         Response response = context.response;
 
         //then
@@ -136,7 +136,7 @@ class MemberControllerTest {
         context.accessToken = "accessToken";
         context.invokeHttpPostWithToken("/cafes/" + cafe.getId() + "/likes?isLiked=true");
         relogin();
-        context.invokeHttpGet("/members/{memberId}/likedCafes?size=1&page=1", member.getId());
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
 
         final List<LikedCafeResponse> result = context.response.jsonPath().getList("");
 
