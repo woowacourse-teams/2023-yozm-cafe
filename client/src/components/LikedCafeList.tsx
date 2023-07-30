@@ -61,6 +61,5 @@ const GridContainer = styled.div`
 
 const CafeImage = styled.img`
   width: 145px;
-  height: 200px;
-  border-radius: 20px;
+  height: 145px;
 `;
