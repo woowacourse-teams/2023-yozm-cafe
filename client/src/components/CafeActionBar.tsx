@@ -46,7 +46,7 @@ const Container = styled.aside`
   gap: ${({ theme }) => theme.space[3]};
   align-self: flex-end;
 
-  padding-right: ${({ theme }) => theme.space[5]};
+  padding-right: ${({ theme }) => theme.space[4]};
 `;
 
 const Action = styled.button`
