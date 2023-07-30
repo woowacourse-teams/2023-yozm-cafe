@@ -138,8 +138,7 @@ class MemberControllerTest {
         relogin();
         context.invokeHttpGet("/members/{memberId}/likedCafes?size=1&page=1", member.getId());
 
-        final List<LikedCafeResponse> result = context.response.jsonPath()
-                .getList("$", LikedCafeResponse.class);
+        final List<LikedCafeResponse> result = context.response.jsonPath().getList("");
 
         //then
         assertThat(result).hasSize(1);
