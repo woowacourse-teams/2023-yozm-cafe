@@ -40,21 +40,19 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
   return (
     <Container>
       <h3>{isOpenedToday() ? '영업중' : '영업 종료'}</h3>
-      <OpeningHourList>
-        <OpeningHourListSummary>
-          {todayOpeningHour
-            ? `${DAY_MAPPER[todayOpeningHour.day]} ${todayOpeningHour.open} - ${todayOpeningHour.close}`
-            : '휴무'}
-        </OpeningHourListSummary>
+      <Summary>
+        {todayOpeningHour?.opened
+          ? `${DAY_MAPPER[todayOpeningHour.day]} ${todayOpeningHour.open} - ${todayOpeningHour.close}`
+          : '휴무'}
+      </Summary>
 
-        <ul>
-          {openingHours.map((openingHour) => (
-            <li key={openingHour.day}>
-              {DAY_MAPPER[openingHour.day]} {openingHour.open} - {openingHour.close}
-            </li>
-          ))}
-        </ul>
-      </OpeningHourList>
+      <Details>
+        {openingHours.map((openingHour) => (
+          <li key={openingHour.day}>
+            {DAY_MAPPER[openingHour.day]} {openingHour.opened ? `${openingHour.open} - ${openingHour.close}` : '휴무'}
+          </li>
+        ))}
+      </Details>
     </Container>
   );
 };
@@ -62,34 +60,18 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
 export default OpeningHoursDetail;
 
 const Container = styled.div`
-  display: flex;
+  display: grid;
   gap: ${({ theme }) => theme.space[2]};
+  align-items: center;
 `;
 
-const OpeningHourListSummary = styled.summary``;
+const Summary = styled.h3``;
 
-const OpeningHourList = styled.details`
-  & ul {
-    display: flex;
-    flex-direction: column;
-    gap: ${({ theme }) => theme.space[1]};
-  }
+const Details = styled.ul`
+  display: flex;
+  grid-column: 2;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space[1]};
 
-  &[open] summary {
-    margin-bottom: ${({ theme }) => theme.space[3]};
-  }
-
-  & summary::marker {
-    content: '';
-  }
-
-  & summary::after {
-    content: '▼';
-    margin-left: ${({ theme }) => theme.space[1]};
-    font-size: ${({ theme }) => theme.fontSize.sm};
-  }
-
-  &[open] summary::after {
-    content: '▲';
-  }
+  color: ${({ theme }) => theme.color.gray};
 `;
