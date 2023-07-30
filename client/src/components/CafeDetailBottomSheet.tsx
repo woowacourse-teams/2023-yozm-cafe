@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BsClock, BsGeoAlt } from 'react-icons/bs';
+import { BsBoxArrowUpRight, BsClock, BsGeoAlt } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import { Cafe } from '../types';
 import OpeningHoursDetail from './OpeningHoursDetail';
@@ -27,7 +27,11 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
       <InfoContainer>
         <Info>
           <BsGeoAlt />
-          <h3>{cafe.address}</h3>
+          <a href={cafe.detail.mapUrl} target="_blank">
+            <h3>
+              {cafe.address} <BsBoxArrowUpRight />
+            </h3>
+          </a>
         </Info>
         <Info>
           <BsClock />
