@@ -49,6 +49,13 @@ const ResetStyle = createGlobalStyle`
     margin: 0;
   }
 
+  button {
+    color: inherit;
+    text-shadow: inherit;
+    background: unset;
+    border: unset;
+  }
+
   html {
     box-sizing: border-box;
   }
