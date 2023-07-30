@@ -94,7 +94,6 @@ const CarouselImage = styled.img`
 
 const CarouselNavigation = styled.div`
   position: absolute;
-  z-index: 2;
   top: 50%;
 
   display: flex;
