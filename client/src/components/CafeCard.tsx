@@ -139,11 +139,8 @@ const AsidePosition = styled.div`
 
 const Aside = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column-reverse;
-  gap: ${({ theme }) => theme.space[5]};
-
   padding-bottom: ${({ theme }) => theme.space[10]};
 `;
 
