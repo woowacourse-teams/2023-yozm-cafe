@@ -1,8 +1,9 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-
 import { ThemeProvider } from 'styled-components';
+import GlobalStyle from '../src/styles/GlobalStyle';
+import ResetStyle from '../src/styles/ResetStyle';
 import theme from '../src/styles/theme';
 
 const customViewports = {
@@ -34,6 +35,8 @@ const preview: Preview = {
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
         <ThemeProvider theme={theme}>
+          <ResetStyle />
+          <GlobalStyle />
           <Story />
         </ThemeProvider>
       </MemoryRouter>
