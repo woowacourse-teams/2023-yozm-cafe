@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { BsClock, BsGeoAlt, BsTelephone } from 'react-icons/bs';
+import { BsClock, BsGeoAlt } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import { Cafe } from '../types';
+import OpeningHoursDetail from './OpeningHoursDetail';
 
 type CafeDetailBottomSheetProps = {
   show?: boolean;
@@ -26,18 +27,22 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
       <InfoContainer>
         <Info>
           <BsGeoAlt />
-          {cafe.address}
+          <h3>{cafe.address}</h3>
         </Info>
         <Info>
           <BsClock />
-          <span>영업중</span>
+          <OpeningHoursDetail openingHours={cafe.detail.openingHours} />
         </Info>
-        <Info>
+        {/* <Info>
           <BsTelephone />
-          <span>000-000-000</span>
-        </Info>
+          <h3>000-000-000</h3>
+        </Info> */}
       </InfoContainer>
-      <Content>{cafe.detail.description}</Content>
+      <Content>
+        {cafe.detail.description.split('\n').map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </Content>
     </Container>
   );
 };
@@ -52,7 +57,6 @@ const Container = styled.div<{ $show: boolean }>`
   flex-direction: column;
 
   width: 100%;
-  min-height: 100%;
   padding: ${({ theme }) => theme.space[4]};
   padding-bottom: ${({ theme }) => theme.space[10]};
 
@@ -80,9 +84,12 @@ const InfoContainer = styled.div`
 const Info = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
-  align-items: center;
+  align-items: flex-start;
 `;
 
-const Content = styled.p`
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space[2]};
   margin-top: ${({ theme }) => theme.space[5]};
 `;

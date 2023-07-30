@@ -15,15 +15,24 @@ export type User = {
   imageUrl: string;
 };
 
-type OpeningHours = {
-  day: string;
-  open: string;
-  close: string;
-  opened: boolean;
-};
+export type OpeningHourDay = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
+
+export type OpeningHour =
+  | {
+      day: OpeningHourDay;
+      open: string;
+      close: string;
+      opened: true;
+    }
+  | {
+      day: OpeningHourDay;
+      open: null;
+      close: null;
+      opened: false;
+    };
 
 type CafeDetail = {
-  openingHours: OpeningHours[];
+  openingHours: OpeningHour[];
   mapUrl: string;
   description: string;
 };
