@@ -30,12 +30,13 @@ class CafeServiceTest {
     private CafeRepository cafeRepository;
     @Autowired
     private UnViewedCafeRepository unViewedCafeRepository;
+    private final RandomPageRequestGenerator pageRequestGenerator = new RandomPageRequestGenerator();
     @Autowired
     private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
-        cafeService = new CafeService(cafeRepository, unViewedCafeRepository);
+        cafeService = new CafeService(cafeRepository, unViewedCafeRepository, pageRequestGenerator);
     }
 
     @Test

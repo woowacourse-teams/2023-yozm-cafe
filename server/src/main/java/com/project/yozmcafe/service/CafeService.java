@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
 import java.util.List;
 
 @Service
@@ -20,10 +19,12 @@ public class CafeService {
 
     private final CafeRepository cafeRepository;
     private final UnViewedCafeRepository unViewedCafeRepository;
+    private final RandomPageRequestGenerator pageRequestGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViewedCafeRepository) {
+    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViewedCafeRepository, final RandomPageRequestGenerator pageRequestGenerator) {
         this.cafeRepository = cafeRepository;
         this.unViewedCafeRepository = unViewedCafeRepository;
+        this.pageRequestGenerator = pageRequestGenerator;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
@@ -44,10 +45,8 @@ public class CafeService {
     }
 
     private PageRequest getRandomPageRequestByMember(final Member member, final int pageSize) {
-        Long unViewedCafeCount = unViewedCafeRepository.countByMemberId(member.getId());
-
-        final int pageIdx = new SecureRandom().nextInt((int) Math.ceil((double) unViewedCafeCount / pageSize));
-        return PageRequest.of(pageIdx, pageSize);
+        final Long unViewedCafeCount = unViewedCafeRepository.countByMemberId(member.getId());
+        return pageRequestGenerator.getPageRequestWithCafeCount(unViewedCafeCount, pageSize);
     }
 
     @Transactional
