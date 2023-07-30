@@ -47,6 +47,8 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
           <p>{paragraph}</p>
         ))}
       </Content>
+
+      <MoreContentHintGradient />
     </Container>
   );
 };
@@ -57,17 +59,23 @@ const Container = styled.div<{ $show: boolean }>`
   position: absolute;
   bottom: 0;
 
+  overflow-y: auto;
   display: ${(props) => (props.$show ? 'flex' : 'none')};
   flex-direction: column;
 
   width: 100%;
+  height: 450px;
   padding: ${({ theme }) => theme.space[4]};
-  padding-bottom: ${({ theme }) => theme.space[10]};
+  padding-bottom: ${({ theme }) => theme.space[16]};
 
   color: ${({ theme }) => theme.color.text.primary};
   text-shadow: none;
 
   background: ${({ theme }) => theme.color.white};
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   & svg {
     filter: none !important;
   }
@@ -96,4 +104,14 @@ const Content = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.space[2]};
   margin-top: ${({ theme }) => theme.space[5]};
+`;
+
+const MoreContentHintGradient = styled.div`
+  position: fixed;
+  bottom: 0;
+
+  width: 475px; /* FIXME: 하드코딩 대신 부모 크기 기반으로 설정하도록 변경하기 */
+  height: ${({ theme }) => theme.space[16]};
+
+  background: linear-gradient(transparent, white);
 `;
