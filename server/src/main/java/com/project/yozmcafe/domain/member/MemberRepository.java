@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findById(String id);
 
-    @Query("SELECT likedCafes FROM Member m JOIN m.likedCafes likedCafes WHERE m.id = :memberId")
+    @Query("SELECT likedCafes FROM Member m JOIN m.likedCafes likedCafes WHERE m.id = :memberId ORDER BY likedCafes.id DESC")
     Slice<LikedCafe> findLikedCafesByMemberId(@Param("memberId") final String memberId, final Pageable pageable);
 }

@@ -100,8 +100,8 @@ class MemberControllerTest {
 
         //then
         assertAll(
-                () -> assertThat(response.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe1.getId()),
-                () -> assertThat(response2.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe2.getId())
+                () -> assertThat(response.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe2.getId()),
+                () -> assertThat(response2.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe1.getId())
         );
     }
 
