@@ -19,6 +19,7 @@ import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
 import com.project.yozmcafe.fixture.Fixture;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;

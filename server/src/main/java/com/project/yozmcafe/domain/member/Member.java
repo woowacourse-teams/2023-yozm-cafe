@@ -13,7 +13,6 @@ import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -41,9 +40,7 @@ public class Member {
         this.image = image;
     }
 
-    public void addUnViewedCafesWithShuffle(final List<Cafe> cafes) {
-        Collections.shuffle(cafes);
-
+    public void addUnViewedCafes(final List<Cafe> cafes) {
         final List<UnViewedCafe> allUnViewedCafes = cafes.stream()
                 .map(savedCafe -> new UnViewedCafe(savedCafe, this))
                 .toList();
