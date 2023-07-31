@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BsBoxArrowUpRight, BsClock, BsGeoAlt } from 'react-icons/bs';
+import { BsBoxArrowUpRight, BsClock, BsGeoAlt, BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import { Cafe } from '../types';
 import OpeningHoursDetail from './OpeningHoursDetail';
@@ -23,6 +23,9 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
 
   return (
     <Container $show={show ?? false} onClick={handlePreventClickPropagation}>
+      <CloseButton>
+        <CloseIcon onClick={onClose} />
+      </CloseButton>
       <Title>{cafe.name}</Title>
       <InfoContainer>
         <Info>
@@ -114,4 +117,15 @@ const MoreContentHintGradient = styled.div`
   height: ${({ theme }) => theme.space[16]};
 
   background: linear-gradient(transparent, white);
+`;
+
+const CloseButton = styled.button`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+const CloseIcon = styled(BsX)`
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.fontSize['2xl']};
 `;
