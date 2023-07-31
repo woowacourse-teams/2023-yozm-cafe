@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -163,7 +164,7 @@ class CafeControllerTest {
 
         final Member member = saveMemberAndUnViewedCafes();
         cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
-        member.addUnViewedCafes(List.of(cafe5));
+        member.addUnViewedCafesWithShuffle(List.of(cafe5));
         memberRepository.save(member);
 
         //when
@@ -208,13 +209,13 @@ class CafeControllerTest {
 
     private Member saveMemberAndUnViewedCafes() {
         final Member member = new Member(MEMBER_ID, "asdf", "img");
-        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
+        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2, cafe3, cafe4));
         return memberRepository.save(member);
     }
 
     private void saveMemberAndUnViewedCafesAndLikedCafes() {
         final Member member = new Member(MEMBER_ID, "memberName", "memberImg");
-        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
+        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2, cafe3, cafe4));
         member.addLikedCafe(cafe1);
         member.addLikedCafe(cafe2);
         member.addLikedCafe(cafe3);
