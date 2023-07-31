@@ -1,13 +1,5 @@
 package com.project.yozmcafe.service.auth;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.controller.dto.TokenResponse;
@@ -16,6 +8,13 @@ import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,7 +45,7 @@ public class AuthService {
         final Member member = memberRepository.save(memberInfo.toMember());
         final List<Cafe> allCafes = cafeRepository.findAll();
         Collections.shuffle(allCafes);
-        member.addUnViewedCafes(allCafes);
+        member.addUnViewedCafesWithShuffle(allCafes);
         return member;
     }
 

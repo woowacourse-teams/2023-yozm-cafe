@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +46,7 @@ class UnViewedCafeServiceTest {
         final Member member = memberRepository.save(new Member("1", "폴로", "폴로사진"));
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
-        member.addUnViewedCafes(List.of(cafe1, cafe2));
+        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2));
 
         //when
         unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
@@ -62,7 +63,7 @@ class UnViewedCafeServiceTest {
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
         final Cafe cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
-        member.addUnViewedCafes(List.of(cafe1));
+        member.addUnViewedCafesWithShuffle(List.of(cafe1));
 
         //when
         unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
