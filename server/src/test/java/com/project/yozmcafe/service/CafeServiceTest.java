@@ -47,7 +47,7 @@ class CafeServiceTest {
         final Member member = memberRepository.save(new Member("1", "폴로", "img"));
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
-        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2));
+        member.addUnViewedCafes(Arrays.asList(cafe1, cafe2));
         member.addLikedCafe(cafe1);
 
         //when

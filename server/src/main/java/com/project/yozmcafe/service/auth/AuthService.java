@@ -3,6 +3,7 @@ package com.project.yozmcafe.service.auth;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.controller.dto.TokenResponse;
+import com.project.yozmcafe.domain.CafeShuffleStrategy;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +23,14 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
+    private final CafeShuffleStrategy cafeShuffleStrategy;
 
     public AuthService(final JwtTokenProvider jwtTokenProvider, final MemberRepository memberRepository,
-                       final CafeRepository cafeRepository) {
+                       final CafeRepository cafeRepository, final CafeShuffleStrategy cafeShuffleStrategy) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.memberRepository = memberRepository;
         this.cafeRepository = cafeRepository;
+        this.cafeShuffleStrategy = cafeShuffleStrategy;
     }
 
     @Transactional
@@ -43,9 +45,9 @@ public class AuthService {
 
     private Member saveNewMemberWithAllCafes(final MemberInfo memberInfo) {
         final Member member = memberRepository.save(memberInfo.toMember());
-        final List<Cafe> allCafes = cafeRepository.findAll();
-        Collections.shuffle(allCafes);
-        member.addUnViewedCafesWithShuffle(allCafes);
+        final List<Cafe> allCafes = cafeShuffleStrategy.shuffle(cafeRepository.findAll());
+        member.addUnViewedCafes(allCafes);
+
         return member;
     }
 
