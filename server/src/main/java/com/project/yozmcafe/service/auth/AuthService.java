@@ -37,7 +37,7 @@ public class AuthService {
         final MemberInfo memberInfo = provider.getUserInfo(code);
 
         final Member member = memberRepository.findById(memberInfo.openId())
-                .orElse(saveNewMemberWithAllCafes(memberInfo));
+                .orElseGet(() -> saveNewMemberWithAllCafes(memberInfo));
 
         return new TokenResponse(jwtTokenProvider.createAccessFrom(member.getId()));
     }

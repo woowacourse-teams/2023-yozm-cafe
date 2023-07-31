@@ -1,26 +1,39 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.MemberResponse;
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.util.AcceptanceContext;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import com.project.yozmcafe.controller.dto.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.MemberResponse;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.fixture.Fixture;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
+import com.project.yozmcafe.util.AcceptanceContext;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"classpath:truncate.sql"}, executionPhase = AFTER_TEST_METHOD)
@@ -35,6 +48,10 @@ class MemberControllerTest {
     private CafeRepository cafeRepository;
     @Autowired
     private AcceptanceContext context;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+    @SpyBean
+    private KakaoOAuthClient kakaoOAuthClient;
 
     @BeforeEach
     void setUp() {
@@ -101,5 +118,37 @@ class MemberControllerTest {
 
         //then
         assertThat(response.jsonPath().getList("")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("재로그인 시 좋아요 목록이 남아있는다.")
+    void reLoginLikedListTest() {
+        //given
+        final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Member member = memberRepository.save(
+                new Member("memberId", "폴로", "폴로사진"));
+
+        given(jwtTokenProvider.getMemberId(anyString())).willReturn(member.getId());
+        doReturn(new MemberInfo(member.getId(), member.getName(), member.getImage())).when(kakaoOAuthClient)
+                .getUserInfo(anyString());
+
+        //when
+        context.accessToken = "accessToken";
+        context.invokeHttpPostWithToken("/cafes/" + cafe.getId() + "/likes?isLiked=true");
+        relogin();
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
+
+        final List<LikedCafeResponse> result = context.response.jsonPath().getList("");
+
+        //then
+        assertThat(result).hasSize(1);
+    }
+
+    private Response relogin() {
+        return RestAssured.given()
+                .log().all()
+                .queryParam("code", "googleCode")
+                .when()
+                .post("/auth/{providerName}", "kakao");
     }
 }
