@@ -91,7 +91,6 @@ public class Member {
         cafe.subtractLikeCount();
     }
 
-
     public void addLikedCafe(Cafe cafe) {
         likedCafes.add(new LikedCafe(cafe, this));
         cafe.addLikeCount();
