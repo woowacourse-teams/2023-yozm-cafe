@@ -22,6 +22,8 @@ import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
 
 import java.util.List;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,8 +80,8 @@ class MemberTest {
 
         //when & then
         assertThatThrownBy(() -> member.removeUnViewedCafe(inValidUnViewedCafe))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE.getMessage());
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 내역입니다.");
     }
 
     @Test
