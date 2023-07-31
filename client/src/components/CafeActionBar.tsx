@@ -40,7 +40,7 @@ const Container = styled.aside`
   display: flex;
   flex-direction: column;
   align-self: flex-end;
-  padding-right: ${({ theme }) => theme.space[4]};
+  padding-right: ${({ theme }) => theme.space[3]};
 `;
 
 const Action = styled.button`
