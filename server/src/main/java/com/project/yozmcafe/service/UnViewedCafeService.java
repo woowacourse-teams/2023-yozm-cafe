@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,10 +26,12 @@ public class UnViewedCafeService {
 
     @Transactional
     public void removeUnViewedCafe(final Member member, final long cafeId) {
-        final UnViewedCafe unViewedCafe = unViewedCafeRepository.findByMemberIdAndCafeId(member.getId(), cafeId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 UnViewedCafe가 없습니다."));
-        member.removeUnViewedCafe(unViewedCafe);
+        final Optional<UnViewedCafe> unViewedCafe = unViewedCafeRepository.findByMemberIdAndCafeId(member.getId(), cafeId);
+        if (!unViewedCafe.isPresent()) {
+            return;
+        }
 
+        member.removeUnViewedCafe(unViewedCafe.get());
         if (member.isEmptyUnViewedCafe()) {
             updateUnViewedCafes(member);
         }
