@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ class MemberTest {
         final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
 
         //when
-        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2, cafe3));
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
@@ -42,7 +42,7 @@ class MemberTest {
         final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
         final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 4);
         final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
-        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2, cafe3));
         final UnViewedCafe unViewedCafe = member.getUnViewedCafes().get(0);
 
         //when

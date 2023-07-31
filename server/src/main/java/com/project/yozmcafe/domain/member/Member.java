@@ -1,17 +1,13 @@
 package com.project.yozmcafe.domain.member;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import jakarta.persistence.*;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -41,7 +37,9 @@ public class Member {
         this.image = image;
     }
 
-    public void addUnViewedCafes(final List<Cafe> cafes) {
+    public void addUnViewedCafesWithShuffle(final List<Cafe> cafes) {
+        Collections.shuffle(cafes);
+
         final List<UnViewedCafe> allUnViewedCafes = cafes.stream()
                 .map(savedCafe -> new UnViewedCafe(savedCafe, this))
                 .toList();

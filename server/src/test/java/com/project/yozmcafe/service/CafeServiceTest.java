@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +47,7 @@ class CafeServiceTest {
         final Member member = memberRepository.save(new Member("1", "폴로", "img"));
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
-        member.addUnViewedCafes(List.of(cafe1, cafe2));
+        member.addUnViewedCafesWithShuffle(Arrays.asList(cafe1, cafe2));
         member.addLikedCafe(cafe1);
 
         //when
@@ -55,8 +56,8 @@ class CafeServiceTest {
         //then
         assertAll(
                 () -> assertThat(result).hasSize(2),
-                () -> assertThat(result.get(0).isLiked()).isTrue(),
-                () -> assertThat(result.get(1).isLiked()).isFalse()
+                () -> assertThat(result).map(CafeResponse::isLiked)
+                        .containsAll(List.of(true, false))
         );
     }
 
