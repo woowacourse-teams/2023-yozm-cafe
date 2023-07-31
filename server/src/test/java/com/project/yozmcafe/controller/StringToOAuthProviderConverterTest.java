@@ -1,11 +1,14 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.auth.OAuthProvider;
-import org.assertj.core.api.Assertions;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_OAUTH_PROVIDER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.project.yozmcafe.controller.auth.OAuthProvider;
+import com.project.yozmcafe.exception.BadRequestException;
 
 class StringToOAuthProviderConverterTest {
 
@@ -31,8 +34,8 @@ class StringToOAuthProviderConverterTest {
         final String nothing = "nothing";
 
         //when, then
-        Assertions.assertThatThrownBy(() -> converter.convert(nothing))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("잘못된 OAuth 로그인입니다.");
+        assertThatThrownBy(() -> converter.convert(nothing))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_OAUTH_PROVIDER.getMessage());
     }
 }

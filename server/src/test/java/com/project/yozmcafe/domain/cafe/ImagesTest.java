@@ -1,13 +1,16 @@
 package com.project.yozmcafe.domain.cafe;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_IMAGE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import com.project.yozmcafe.exception.BadRequestException;
 
 class ImagesTest {
 
@@ -33,6 +36,8 @@ class ImagesTest {
 
         //when
         //then
-        assertThatThrownBy(images::getRepresentativeImage).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(images::getRepresentativeImage)
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_CAFE_IMAGE.getMessage());
     }
 }

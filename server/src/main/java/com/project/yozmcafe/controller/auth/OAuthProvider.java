@@ -1,10 +1,15 @@
 package com.project.yozmcafe.controller.auth;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_OAUTH_CLIENT;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_OAUTH_PROVIDER;
+
 import java.util.Objects;
 
 import org.springframework.context.annotation.Configuration;
 
 import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.InternalServerException;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.service.auth.OAuthClient;
@@ -21,7 +26,7 @@ public enum OAuthProvider {
         try {
             return OAuthProvider.valueOf(providerName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("잘못된 OAuth 로그인입니다.");
+            throw new BadRequestException(NOT_EXISTED_OAUTH_PROVIDER);
         }
     }
 
@@ -61,7 +66,7 @@ public enum OAuthProvider {
                     oAuthProvider.setOAuthClient(kakaoOAuthClient);
                 }
                 if (Objects.isNull(oAuthProvider.oAuthClient)) {
-                    throw new IllegalStateException("OAuthProvider에게 맞는 OAuthClient가 존재하지 않습니다.");
+                    throw new InternalServerException(NOT_EXISTED_OAUTH_CLIENT);
                 }
             }
         }
