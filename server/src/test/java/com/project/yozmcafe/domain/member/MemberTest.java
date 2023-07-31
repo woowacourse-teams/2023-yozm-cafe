@@ -1,8 +1,12 @@
 package com.project.yozmcafe.domain.member;
 
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
-import com.project.yozmcafe.fixture.Fixture;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +20,11 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
+import com.project.yozmcafe.fixture.Fixture;
 
 class MemberTest {
 
@@ -43,7 +52,7 @@ class MemberTest {
         final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
         final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 4);
         final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
-        member.addUnViewedCafes(Arrays.asList(cafe1, cafe2, cafe3));
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
         final UnViewedCafe unViewedCafe = member.getUnViewedCafes().get(0);
 
         //when
@@ -67,8 +76,8 @@ class MemberTest {
 
         //when & then
         assertThatThrownBy(() -> member.removeUnViewedCafe(inValidUnViewedCafe))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 내역입니다.");
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE.getMessage());
     }
 
     @Test

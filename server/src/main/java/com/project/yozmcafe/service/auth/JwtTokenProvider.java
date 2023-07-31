@@ -1,5 +1,8 @@
 package com.project.yozmcafe.service.auth;
 
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_TOKEN;
+import static com.project.yozmcafe.exception.ErrorCode.TOKEN_IS_EXPIRED;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -8,12 +11,17 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.*;
+import com.project.yozmcafe.exception.TokenException;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenProvider {
-    private static final String INVALID_TOKEN = "유효하지 않은 인증 정보입니다.";
 
     private final SecretKey key;
     private final long accessTokenExpired;
@@ -60,7 +68,7 @@ public class JwtTokenProvider {
         } catch (final ExpiredJwtException expired) {
             return expired.getClaims();
         } catch (final Exception e) {
-            throw new IllegalArgumentException(INVALID_TOKEN);
+            throw new TokenException(INVALID_TOKEN);
         }
     }
 
@@ -73,7 +81,7 @@ public class JwtTokenProvider {
         final Claims claims = toClaims(token);
 
         if (claims.getExpiration().before(new Date())) {
-            throw new IllegalArgumentException(INVALID_TOKEN);
+            throw new TokenException(TOKEN_IS_EXPIRED);
         }
     }
 }
