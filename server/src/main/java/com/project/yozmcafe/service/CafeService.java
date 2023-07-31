@@ -1,42 +1,52 @@
 package com.project.yozmcafe.service;
 
-import java.util.List;
-
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
+import com.project.yozmcafe.domain.member.Member;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.member.Member;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class CafeService {
 
-    public static final boolean UN_LOGIN_USER_IS_LIKED = false;
-
     private final CafeRepository cafeRepository;
+    private final UnViewedCafeRepository unViewedCafeRepository;
+    private final RandomPageRequestGenerator pageRequestGenerator;
 
-    public CafeService(final CafeRepository cafeRepository) {
+    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeRepository unViewedCafeRepository, final RandomPageRequestGenerator pageRequestGenerator) {
         this.cafeRepository = cafeRepository;
+        this.unViewedCafeRepository = unViewedCafeRepository;
+        this.pageRequestGenerator = pageRequestGenerator;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
         final List<Cafe> foundCafes = cafeRepository.findSliceBy(pageable).getContent();
+
         return foundCafes.stream()
-                .map(cafe -> CafeResponse.of(cafe, UN_LOGIN_USER_IS_LIKED))
+                .map(CafeResponse::fromUnLoggedInUser)
                 .toList();
     }
 
     public List<CafeResponse> getCafesForLoginMember(final Pageable pageable, final Member member) {
-        final List<Cafe> unViewedCafes = cafeRepository.findUnViewedCafesByMember(pageable, member.getId())
-                .getContent();
-        return unViewedCafes.stream()
-                .map(cafe -> CafeResponse.of(cafe, member.isLike(cafe)))
+        final PageRequest randomPageRequest = getRandomPageRequestByMember(member, pageable.getPageSize());
+        final List<Cafe> randomCafes = unViewedCafeRepository.findUnViewedCafesByMember(member.getId(), randomPageRequest);
+
+        return randomCafes.stream()
+                .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))
                 .toList();
+    }
+
+    private PageRequest getRandomPageRequestByMember(final Member member, final int pageSize) {
+        final Long unViewedCafeCount = unViewedCafeRepository.countByMemberId(member.getId());
+        return pageRequestGenerator.getPageRequestWithCafeCount(unViewedCafeCount, pageSize);
     }
 
     @Transactional

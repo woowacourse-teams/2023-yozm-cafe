@@ -3,6 +3,7 @@ package com.project.yozmcafe.service;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
@@ -28,11 +29,13 @@ class CafeServiceTest {
     @Autowired
     private CafeRepository cafeRepository;
     @Autowired
+    private UnViewedCafeRepository unViewedCafeRepository;
+    @Autowired
     private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
-        cafeService = new CafeService(cafeRepository);
+        cafeService = new CafeService(cafeRepository, unViewedCafeRepository, new RandomPageRequestGenerator());
     }
 
     @Test

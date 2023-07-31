@@ -2,10 +2,10 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.util.UnViewedCafeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class CafeHistoryServiceTest {
+class UnViewedCafeServiceTest {
 
-    private CafeHistoryService cafeHistoryService;
+    private UnViewedCafeService unViewedCafeService;
 
     @Autowired
     private CafeRepository cafeRepository;
@@ -35,7 +35,7 @@ class CafeHistoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        cafeHistoryService = new CafeHistoryService(cafeRepository);
+        unViewedCafeService = new UnViewedCafeService(unViewedCafeRepository, cafeRepository);
     }
 
     @Test
@@ -48,7 +48,7 @@ class CafeHistoryServiceTest {
         member.addUnViewedCafes(List.of(cafe1, cafe2));
 
         //when
-        cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(1);
@@ -65,7 +65,7 @@ class CafeHistoryServiceTest {
         member.addUnViewedCafes(List.of(cafe1));
 
         //when
-        cafeHistoryService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);

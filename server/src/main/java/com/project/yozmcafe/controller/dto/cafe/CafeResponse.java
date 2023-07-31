@@ -1,18 +1,32 @@
 package com.project.yozmcafe.controller.dto.cafe;
 
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
+
+import java.util.List;
 
 public record CafeResponse(Long id, String name, String address, List<String> images, boolean isLiked, int likeCount,
                            DetailResponse detail) {
-    public static CafeResponse of(final Cafe cafe, final boolean isLiked) {
+
+    private static final boolean UN_LOGGED_IN_USER_IS_LIKE = false;
+
+    public static CafeResponse fromLoggedInUser(final Cafe cafe, final boolean isLiked) {
         return new CafeResponse(
                 cafe.getId(),
                 cafe.getName(),
                 cafe.getAddress(),
                 cafe.getImages().getUrls(),
                 isLiked,
+                cafe.getLikeCount(),
+                DetailResponse.from(cafe.getDetail()));
+    }
+
+    public static CafeResponse fromUnLoggedInUser(final Cafe cafe) {
+        return new CafeResponse(
+                cafe.getId(),
+                cafe.getName(),
+                cafe.getAddress(),
+                cafe.getImages().getUrls(),
+                UN_LOGGED_IN_USER_IS_LIKE,
                 cafe.getLikeCount(),
                 DetailResponse.from(cafe.getDetail()));
     }
