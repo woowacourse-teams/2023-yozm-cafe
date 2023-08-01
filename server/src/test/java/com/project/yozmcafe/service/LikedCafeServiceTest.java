@@ -37,7 +37,7 @@ class LikedCafeServiceTest {
         //given
         final Cafe savedCafe = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
         final Member member = new Member("1234", "오션", "오션.img");
-        member.addLikedCafe(savedCafe);
+        member.updateLikedCafesBy(savedCafe, true);
         memberRepository.save(member);
 
         //when
@@ -83,7 +83,7 @@ class LikedCafeServiceTest {
         //given
         final Member member = memberRepository.save(new Member("memberId", "폴로", "폴로사진"));
         final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페", "카페주소", 10));
-        member.addLikedCafe(cafe);
+        member.updateLikedCafesBy(cafe, true);
 
         //when
         likedCafeService.updateLike(member, cafe.getId(), false);
@@ -103,7 +103,7 @@ class LikedCafeServiceTest {
         //given
         final Member member = memberRepository.save(new Member("memberId", "폴로", "폴로사진"));
         final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페", "카페주소", 10));
-        member.addLikedCafe(cafe);
+        member.updateLikedCafesBy(cafe, true);
 
         //when
         likedCafeService.updateLike(member, cafe.getId(), true);

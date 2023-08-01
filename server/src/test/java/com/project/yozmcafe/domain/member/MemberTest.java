@@ -1,6 +1,7 @@
 package com.project.yozmcafe.domain.member;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
@@ -10,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import com.project.yozmcafe.domain.cafe.LikedCafe;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -226,10 +225,10 @@ class MemberTest {
         final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
         final Cafe cafe3 = Fixture.getCafe(3L, "카페3", "주소2", 3);
         final Cafe cafe4 = Fixture.getCafe(4L, "카페4", "주소2", 3);
-        member.addLikedCafe(cafe1);
-        member.addLikedCafe(cafe2);
-        member.addLikedCafe(cafe3);
-        member.addLikedCafe(cafe4);
+        member.updateLikedCafesBy(cafe1, true);
+        member.updateLikedCafesBy(cafe2, true);
+        member.updateLikedCafesBy(cafe3, true);
+        member.updateLikedCafesBy(cafe4, true);
 
         //when
         final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
