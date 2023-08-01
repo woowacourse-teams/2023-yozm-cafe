@@ -21,7 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -209,13 +208,13 @@ class CafeControllerTest {
 
     private Member saveMemberAndUnViewedCafes() {
         final Member member = new Member(MEMBER_ID, "asdf", "img");
-        member.addUnViewedCafes(Arrays.asList(cafe1, cafe2, cafe3, cafe4));
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
         return memberRepository.save(member);
     }
 
     private void saveMemberAndUnViewedCafesAndLikedCafes() {
         final Member member = new Member(MEMBER_ID, "memberName", "memberImg");
-        member.addUnViewedCafes(Arrays.asList(cafe1, cafe2, cafe3, cafe4));
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
         member.addLikedCafe(cafe1);
         member.addLikedCafe(cafe2);
         member.addLikedCafe(cafe3);
