@@ -7,7 +7,6 @@ import useAuth from './useAuth';
  * react-query의 `useInfiniteQuery` 를 사용하여 구현되었습니다.
  *
  * @example
- * ```
  * const Example = () => {
  *   const { cafes, fetchNextPage } = useCafes();
  *
@@ -17,7 +16,6 @@ import useAuth from './useAuth';
  *
  *   return <>{cafes.map((cafe) => <CafeExample key={cafe.id} cafe={cafe} />)}</>
  * }
- * ```
  */
 const useCafes = () => {
   const { identity } = useAuth();
@@ -28,6 +26,8 @@ const useCafes = () => {
         ? client.getCafes().then((cafes) => ({ cafes, page: pageParam }))
         : client.getCafesForGuest(pageParam).then((cafes) => ({ cafes, page: pageParam })),
     getNextPageParam: (lastPage) => (lastPage.cafes.length > 0 ? lastPage.page + 1 : undefined),
+    cacheTime: Infinity,
+    staleTime: Infinity,
   });
 
   return {
