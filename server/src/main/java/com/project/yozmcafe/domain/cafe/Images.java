@@ -1,10 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_IMAGE;
-
 import java.util.List;
-
-import com.project.yozmcafe.exception.BadRequestException;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
@@ -31,9 +27,6 @@ public class Images {
     }
 
     public String getRepresentativeImage() {
-        if (urls.isEmpty()) {
-            throw new BadRequestException(NOT_EXISTED_CAFE_IMAGE);
-        }
         return urls.get(REPRESENTATIVE_INDEX);
     }
 }
