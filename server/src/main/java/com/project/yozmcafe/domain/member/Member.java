@@ -7,6 +7,7 @@ import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
@@ -115,5 +116,15 @@ public class Member {
 
     public List<LikedCafe> getLikedCafes() {
         return likedCafes;
+    }
+
+    public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
+        int startIndex = (pageNum-1)*pageSize;
+        int endIndex = Math.min(startIndex+pageSize, likedCafes.size());
+
+        final List<LikedCafe> pagedLikedCafes = likedCafes.subList(startIndex, endIndex);
+        Collections.reverse(pagedLikedCafes);
+
+        return pagedLikedCafes;
     }
 }
