@@ -6,11 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UnViewedCafeRepository extends JpaRepository<UnViewedCafe, Long> {
-
-    Long countByMemberId(String memberId);
 
     @Query(value = "SELECT c FROM Cafe AS c "
             + "INNER JOIN UnViewedCafe AS u "
@@ -18,5 +15,5 @@ public interface UnViewedCafeRepository extends JpaRepository<UnViewedCafe, Long
             + "WHERE u.member.id = :memberId")
     List<Cafe> findUnViewedCafesByMember(@Param("memberId") final String memberId, final Pageable pageable);
 
-    Optional<UnViewedCafe> findByMemberIdAndCafeId(final String memberId, final Long cafeId);
+    List<UnViewedCafe> findByMemberIdAndCafeId(final String memberId, final Long cafeId);
 }
