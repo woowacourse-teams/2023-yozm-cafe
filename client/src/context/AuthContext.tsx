@@ -19,6 +19,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
   const identity = useMemo(() => {
     client.setAccessToken(accessToken);
+    client.onAccessTokenRefresh(setAccessToken);
 
     if (!accessToken) return null;
 
