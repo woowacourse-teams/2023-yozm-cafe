@@ -4,7 +4,11 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +65,7 @@ public class Member {
     }
 
     public void updateLikedCafesBy(final Cafe cafe, final boolean isLiked) {
-        if (alreadySatisfiedBy(cafe, isLiked)) {
+        if (isLike(cafe) == isLiked) {
             return;
         }
 
@@ -74,8 +78,14 @@ public class Member {
         }
     }
 
-    private boolean alreadySatisfiedBy(final Cafe cafe, final boolean isLiked) {
-        return isLike(cafe) == isLiked;
+    public boolean isLike(final Cafe cafe) {
+        return likedCafes.stream()
+                .anyMatch(likedCafe -> likedCafe.isSameCafe(cafe));
+    }
+
+    public void addLikedCafe(final Cafe cafe) {
+        likedCafes.add(new LikedCafe(cafe, this));
+        cafe.addLikeCount();
     }
 
     private void removeLikedCafe(final Cafe cafe) {
@@ -88,14 +98,14 @@ public class Member {
         cafe.subtractLikeCount();
     }
 
-    public void addLikedCafe(Cafe cafe) {
-        likedCafes.add(new LikedCafe(cafe, this));
-        cafe.addLikeCount();
-    }
+    public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
+        List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
+        Collections.reverse(reverseLikedCafes);
 
-    public boolean isLike(final Cafe cafe) {
-        return likedCafes.stream()
-                .anyMatch(likedCafe -> likedCafe.isSameCafe(cafe));
+        int startIndex = (pageNum - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, reverseLikedCafes.size());
+
+        return reverseLikedCafes.subList(startIndex, endIndex);
     }
 
     public String getId() {
@@ -116,15 +126,5 @@ public class Member {
 
     public List<LikedCafe> getLikedCafes() {
         return likedCafes;
-    }
-
-    public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
-        List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-        Collections.reverse(reverseLikedCafes);
-
-        int startIndex = (pageNum - 1) * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, reverseLikedCafes.size());
-
-        return reverseLikedCafes.subList(startIndex, endIndex);
     }
 }
