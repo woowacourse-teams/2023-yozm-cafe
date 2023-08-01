@@ -41,7 +41,7 @@ class CafeServiceTest {
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
         member.addUnViewedCafes(Arrays.asList(cafe1, cafe2));
-        member.addLikedCafe(cafe1);
+        member.updateLikedCafesBy(cafe1, true);
 
         //when
         final List<CafeResponse> result = cafeService.getCafesForLoginMember(member, 5);

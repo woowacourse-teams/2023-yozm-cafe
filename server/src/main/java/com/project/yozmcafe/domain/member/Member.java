@@ -84,7 +84,7 @@ public class Member {
                 .anyMatch(likedCafe -> likedCafe.isSameCafe(cafe));
     }
 
-    public void addLikedCafe(final Cafe cafe) {
+    private void addLikedCafe(final Cafe cafe) {
         likedCafes.add(new LikedCafe(cafe, this));
         cafe.addLikeCount();
     }

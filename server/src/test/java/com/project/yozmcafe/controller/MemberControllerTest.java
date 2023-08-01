@@ -86,8 +86,8 @@ class MemberControllerTest {
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
         final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
         final Member member = new Member("1234", "오션", "오션.img");
-        member.addLikedCafe(savedCafe1);
-        member.addLikedCafe(savedCafe2);
+        member.updateLikedCafesBy(savedCafe1, true);
+        member.updateLikedCafesBy(savedCafe2, true);
         memberRepository.save(member);
 
         //when

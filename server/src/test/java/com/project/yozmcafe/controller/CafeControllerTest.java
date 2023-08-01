@@ -215,10 +215,10 @@ class CafeControllerTest {
     private void saveMemberAndUnViewedCafesAndLikedCafes() {
         final Member member = new Member(MEMBER_ID, "memberName", "memberImg");
         member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3, cafe4));
-        member.addLikedCafe(cafe1);
-        member.addLikedCafe(cafe2);
-        member.addLikedCafe(cafe3);
-        member.addLikedCafe(cafe4);
+        member.updateLikedCafesBy(cafe1, true);
+        member.updateLikedCafesBy(cafe2, true);
+        member.updateLikedCafesBy(cafe3, true);
+        member.updateLikedCafesBy(cafe4, true);
         memberRepository.save(member);
     }
 }

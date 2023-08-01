@@ -93,7 +93,7 @@ class MemberTest {
         //given
         final Member member = new Member("4", "폴로", "폴로사진");
         final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 10);
-        member.addLikedCafe(cafe1);
+        member.updateLikedCafesBy(cafe1, true);
 
         //when
         final boolean result1 = member.isLike(cafe1);
@@ -118,11 +118,11 @@ class MemberTest {
 
     @Test
     @DisplayName("멤버의 likedCafes에 존재하고, isLiked가 false인 경우 likedCafes에서 cafe를 삭제한다.")
-    void updateIsLikeRemoveCafe() {
+    void updateLikedCafesBy() {
         //given
         final Member member = new Member("5", "폴로", "폴로사진");
         final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
-        member.addLikedCafe(cafe);
+        member.updateLikedCafesBy(cafe, true);
         final boolean isLiked = false;
 
         //when
@@ -172,11 +172,45 @@ class MemberTest {
         );
     }
 
+    @Test
+    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 10개 미만이면 True")
+    void isUnViewedCafesSizeUnderTen_true() {
+        //given
+        final Member member = new Member("1", "연어", "image");
+        final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페", "카페주소", 10);
+        final Cafe cafe3 = Fixture.getCafe(3L, "카페", "카페주소", 10);
+        final Cafe cafe4 = Fixture.getCafe(4L, "카페", "카페주소", 10);
+
+        member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
+
+        //when, then
+        assertThat(member.isUnViewedCafesSizeUnderTen()).isTrue();
+    }
+
+    @Test
+    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 10개 이상이면 False")
+    void isUnViewedCafesSizeUnderTen_false() {
+        //given
+        final Member member = new Member("1", "연어", "image");
+        final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페", "카페주소", 10);
+        final Cafe cafe3 = Fixture.getCafe(3L, "카페", "카페주소", 10);
+        final Cafe cafe4 = Fixture.getCafe(4L, "카페", "카페주소", 10);
+
+        member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
+        member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
+        member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
+
+        //when, then
+        assertThat(member.isUnViewedCafesSizeUnderTen()).isFalse();
+    }
+
     public static Stream<Arguments> provideMemberAndIsLiked() {
         final Member member1 = new Member("6", "오션", "오션사진");
         final Member member2 = new Member("7", "연어", "연어사진");
         final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
-        member1.addLikedCafe(cafe);
+        member1.updateLikedCafesBy(cafe, true);
         return Stream.of(
                 Arguments.of(member1, cafe, true, true),
                 Arguments.of(member2, cafe, false, false)
