@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BsBoxArrowUpRight, BsClock, BsGeoAlt, BsX } from 'react-icons/bs';
+import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import { Cafe } from '../types';
 import OpeningHoursDetail from './OpeningHoursDetail';
@@ -28,18 +28,17 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
       </CloseButton>
       <Title>{cafe.name}</Title>
       <InfoContainer>
-        <Info>
+        <LocationDetail>
           <BsGeoAlt />
           <a href={cafe.detail.mapUrl} target="_blank">
-            <h3>
+            <LocationName>
               {cafe.address} <BsBoxArrowUpRight />
-            </h3>
+            </LocationName>
           </a>
-        </Info>
-        <Info>
-          <BsClock />
+        </LocationDetail>
+        <OpeningHoursDetails>
           <OpeningHoursDetail openingHours={cafe.detail.openingHours} />
-        </Info>
+        </OpeningHoursDetails>
         {/* <Info>
           <BsTelephone />
           <h3>000-000-000</h3>
@@ -96,10 +95,22 @@ const InfoContainer = styled.div`
   gap: ${({ theme }) => theme.space[2]};
 `;
 
-const Info = styled.div`
+const OpeningHoursDetails = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: flex-start;
+`;
+
+const LocationDetail = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.space[2]};
+  align-items: center;
+`;
+
+const LocationName = styled.h3`
+  display: flex;
+  gap: ${({ theme }) => theme.space[1]};
+  align-items: center;
 `;
 
 const Content = styled.div`
