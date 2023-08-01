@@ -13,6 +13,8 @@ import java.util.List;
 @RestController
 public class LikedCafeController {
 
+    private static final int PAGE_SIZE = 15;
+
     private final LikedCafeService likedCafeService;
 
     public LikedCafeController(final LikedCafeService likedCafeService) {
@@ -21,7 +23,7 @@ public class LikedCafeController {
 
     @GetMapping("/members/{memberId}/liked-cafes")
     public ResponseEntity<List<LikedCafeResponse>> getLikedCafes(@PathVariable("memberId") final String memberId,
-                                                                 @PageableDefault(size = 15) final Pageable pageable) {
+                                                                 @PageableDefault(PAGE_SIZE) final Pageable pageable) {
         final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(memberId, pageable);
         return ResponseEntity.ok(likedCafes);
     }
