@@ -17,7 +17,7 @@ const CafeCard = (props: CardProps) => {
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const ref = useRef<HTMLImageElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(ref, { threshold: 0.7 });
 
   useEffect(() => {
@@ -26,17 +26,29 @@ const CafeCard = (props: CardProps) => {
     }
   }, [intersection?.isIntersecting]);
 
+  const getImageIndexByOffset = (offset: number) => {
+    const length = cafe.images.length;
+    return (currentImageIndex + length + offset) % length;
+  };
+
+  const getImageByOffset = (offset: number) => cafe.images[getImageIndexByOffset(offset)];
+
   const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + cafe.images.length) % cafe.images.length);
+    setCurrentImageIndex(getImageIndexByOffset(-1));
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1 + cafe.images.length) % cafe.images.length);
+    setCurrentImageIndex(getImageIndexByOffset(1));
   };
 
   return (
     <Container>
-      <CarouselImage ref={ref} src={cafe.images[currentImageIndex]} />
+      <CarouselImageList ref={ref}>
+        <CarouselImage src={getImageByOffset(0)} $show={true} />
+        {/* 이미지를 미리 불러오기 위한 장치 */}
+        <CarouselImage src={getImageByOffset(-1)} $show={false} />
+        <CarouselImage src={getImageByOffset(1)} $show={false} />
+      </CarouselImageList>
       <DotsContainer>
         {cafe.images.map((_, index) => (
           <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
@@ -85,10 +97,19 @@ const Container = styled.div`
   }
 `;
 
-const CarouselImage = styled.img`
-  overflow: hidden;
+const CarouselImageList = styled.div`
+  display: grid;
   width: 100%;
   height: 100%;
+`;
+
+const CarouselImage = styled.img<{ $show: boolean }>`
+  display: ${(props) => (props.$show ? 'initial' : 'none')};
+  grid-area: 1 / 1 / 1 / 1;
+
+  width: 100%;
+  height: 100%;
+
   object-fit: cover;
 `;
 
