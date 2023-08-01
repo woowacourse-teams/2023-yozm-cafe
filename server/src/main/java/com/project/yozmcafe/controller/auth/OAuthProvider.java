@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.exception.BadRequestException;
-import com.project.yozmcafe.exception.InternalServerException;
+import com.project.yozmcafe.exception.OAuthException;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.service.auth.OAuthClient;
@@ -66,7 +66,7 @@ public enum OAuthProvider {
                     oAuthProvider.setOAuthClient(kakaoOAuthClient);
                 }
                 if (Objects.isNull(oAuthProvider.oAuthClient)) {
-                    throw new InternalServerException(NOT_EXISTED_OAUTH_CLIENT);
+                    throw new OAuthException(NOT_EXISTED_OAUTH_CLIENT);
                 }
             }
         }

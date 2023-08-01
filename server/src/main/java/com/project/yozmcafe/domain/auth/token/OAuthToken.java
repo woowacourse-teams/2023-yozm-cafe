@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.yozmcafe.domain.member.MemberInfo;
-import com.project.yozmcafe.exception.InternalServerException;
+import com.project.yozmcafe.exception.OAuthException;
 
 public abstract class OAuthToken {
 
@@ -53,7 +53,7 @@ public abstract class OAuthToken {
         final String entry = payLoads.stream()
                 .filter(payload -> payload.contains(key))
                 .findAny()
-                .orElseThrow((() -> new InternalServerException(INVALID_OAUTH_USER_INFO)));
+                .orElseThrow((() -> new OAuthException(INVALID_OAUTH_USER_INFO)));
 
         return entry.split(ENTRY_DELIMITER)[VALUE_INDEX];
     }
