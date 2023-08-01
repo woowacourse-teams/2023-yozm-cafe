@@ -1,11 +1,5 @@
 package com.project.yozmcafe.domain.member;
 
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
@@ -16,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
 
 @Entity
 public class Member {
