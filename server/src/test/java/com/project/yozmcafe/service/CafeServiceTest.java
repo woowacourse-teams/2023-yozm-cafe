@@ -56,8 +56,8 @@ class CafeServiceTest {
         //then
         assertAll(
                 () -> assertThat(result).hasSize(2),
-                () -> assertThat(result).map(CafeResponse::isLiked)
-                        .containsAll(List.of(true, false))
+                () -> assertThat(result.get(0).isLiked()).isTrue(),
+                () -> assertThat(result.get(1).isLiked()).isFalse()
         );
     }
 
