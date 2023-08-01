@@ -5,6 +5,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -56,7 +58,8 @@ class LikedCafeServiceTest {
         //when
         //then
         assertThatThrownBy(() -> likedCafeService.findLikedCafesById("findLikedCafesById_fail", pageRequest))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_MEMBER.getMessage());
     }
 
     @Test

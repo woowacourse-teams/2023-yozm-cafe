@@ -2,6 +2,8 @@ package com.project.yozmcafe.domain.member;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,8 +68,8 @@ class MemberTest {
 
         //when & then
         assertThatThrownBy(() -> member.removeUnViewedCafe(inValidUnViewedCafe))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 내역입니다.");
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE.getMessage());
     }
 
     @Test
@@ -77,7 +79,7 @@ class MemberTest {
         final Member member = new Member("4", "폴로", "폴로사진");
 
         //when
-        final boolean result = member.isEmptyUnViewedCafe();
+        final boolean result = member.isEmptyUnViewedCafes();
 
         //then
         assertThat(result).isTrue();

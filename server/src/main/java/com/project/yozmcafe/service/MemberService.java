@@ -3,8 +3,11 @@ package com.project.yozmcafe.service;
 import com.project.yozmcafe.controller.dto.MemberResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
 
 @Transactional(readOnly = true)
 @Service
@@ -22,8 +25,8 @@ public class MemberService {
         return MemberResponse.from(member);
     }
 
-    private Member findMemberByIdOrElseThrow(final String memberId) {
+    public Member findMemberByIdOrElseThrow(final String memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_MEMBER));
     }
 }

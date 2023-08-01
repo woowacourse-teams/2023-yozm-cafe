@@ -17,8 +17,8 @@ public class UnViewedCafeController {
     }
 
     @PostMapping("cafes/{cafeId}/history")
-    public ResponseEntity<Void> updateMemberUnViewedCafeHistory(final Member member,
-                                                                @PathVariable("cafeId") final long cafeId) {
+    public ResponseEntity<Void> removeUnViewedCafe(final Member member,
+                                                   @PathVariable("cafeId") final long cafeId) {
         unViewedCafeService.removeUnViewedCafe(member, cafeId);
         return ResponseEntity.ok().build();
     }

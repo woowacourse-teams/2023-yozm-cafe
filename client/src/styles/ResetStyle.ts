@@ -47,6 +47,7 @@ const ResetStyle = createGlobalStyle`
   input,
   select {
     margin: 0;
+    padding: 0;
   }
 
   button {
