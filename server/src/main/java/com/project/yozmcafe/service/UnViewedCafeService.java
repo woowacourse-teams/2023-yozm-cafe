@@ -31,10 +31,14 @@ public class UnViewedCafeService {
         unViewedCafeRepository.findByMemberIdAndCafeId(member.getId(), cafeId)
                 .ifPresent(member::removeUnViewedCafe);
 
-        if (member.isEmptyUnViewedCafes()) {
+        refillWhenUnViewedCafesSizeUnderTen(member);
+    }
+
+    @Transactional
+    public void refillWhenUnViewedCafesSizeUnderTen(final Member member) {
+        if (member.isUnViewedCafesSizeUnderTen()) {
             final List<Cafe> shuffledCafes = shuffleStrategy.shuffle(cafeRepository.findAll());
             member.addUnViewedCafes(shuffledCafes);
         }
     }
-
 }

@@ -40,7 +40,7 @@ class UnViewedCafeServiceTest {
     }
 
     @Test
-    @DisplayName("사용자의 unViewedCafe를 삭제한다.")
+    @DisplayName("사용자의 unViewedCafe를 삭제할 때 남은 갯수가 10개 이하이면 새로 넣는다")
     void removeUnViewedCafe() {
         //given
         final Member member = memberRepository.save(new Member("1", "폴로", "폴로사진"));
@@ -52,8 +52,8 @@ class UnViewedCafeServiceTest {
         unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
 
         //then
-        assertThat(member.getUnViewedCafes()).hasSize(1);
-        assertThat(unViewedCafeRepository.findAll()).hasSize(1);
+        assertThat(member.getUnViewedCafes()).hasSize(3);
+        assertThat(unViewedCafeRepository.findAll()).hasSize(3);
     }
 
     @Test

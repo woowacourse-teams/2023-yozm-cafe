@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
+import static java.lang.Math.min;
 
 @Entity
 public class Member {
@@ -60,8 +61,8 @@ public class Member {
                 );
     }
 
-    public boolean isEmptyUnViewedCafes() {
-        return unViewedCafes.isEmpty();
+    public boolean isUnViewedCafesSizeUnderTen() {
+        return unViewedCafes.size() < 10;
     }
 
     public void updateLikedCafesBy(final Cafe cafe, final boolean isLiked) {
@@ -96,6 +97,14 @@ public class Member {
                     throw new BadRequestException(NOT_EXISTED_LIKED_CAFE);
                 });
         cafe.subtractLikeCount();
+    }
+
+    public List<UnViewedCafe> getNextUnViewedCafes(final int size) {
+        final int availableSize = min(unViewedCafes.size(), size);
+        final List<UnViewedCafe> result = new ArrayList<>(unViewedCafes.subList(0, availableSize));
+        unViewedCafes.removeAll(result);
+
+        return result;
     }
 
     public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {

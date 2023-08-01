@@ -1,17 +1,17 @@
 package com.project.yozmcafe.domain.member;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
 import com.project.yozmcafe.fixture.Fixture;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import com.project.yozmcafe.domain.cafe.LikedCafe;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -81,7 +81,7 @@ class MemberTest {
         final Member member = new Member("4", "폴로", "폴로사진");
 
         //when
-        final boolean result = member.isEmptyUnViewedCafes();
+        final boolean result = member.isUnViewedCafesSizeUnderTen();
 
         //then
         assertThat(result).isTrue();
