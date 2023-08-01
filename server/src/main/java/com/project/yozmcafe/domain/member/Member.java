@@ -1,11 +1,5 @@
 package com.project.yozmcafe.domain.member;
 
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
@@ -13,7 +7,11 @@ import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
 
 @Entity
 public class Member {
@@ -90,7 +88,6 @@ public class Member {
         cafe.subtractLikeCount();
     }
 
-
     public void addLikedCafe(Cafe cafe) {
         likedCafes.add(new LikedCafe(cafe, this));
         cafe.addLikeCount();
@@ -119,5 +116,15 @@ public class Member {
 
     public List<LikedCafe> getLikedCafes() {
         return likedCafes;
+    }
+
+    public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
+        List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
+        Collections.reverse(reverseLikedCafes);
+
+        int startIndex = (pageNum - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, reverseLikedCafes.size());
+
+        return reverseLikedCafes.subList(startIndex, endIndex);
     }
 }

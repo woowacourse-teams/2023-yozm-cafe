@@ -1,25 +1,5 @@
 package com.project.yozmcafe.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-
-import java.util.List;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.jdbc.Sql;
-
 import com.project.yozmcafe.controller.dto.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.MemberResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -31,9 +11,27 @@ import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.util.AcceptanceContext;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"classpath:truncate.sql"}, executionPhase = AFTER_TEST_METHOD)
@@ -93,15 +91,14 @@ class MemberControllerTest {
         memberRepository.save(member);
 
         //when
-        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?page=1", member.getId());
         Response response = context.response;
-        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=2", member.getId());
-        Response response2 = context.response;
+
 
         //then
         assertAll(
-                () -> assertThat(response.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe1.getId()),
-                () -> assertThat(response2.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe2.getId())
+                () -> assertThat(response.jsonPath().getLong("[0].cafeId")).isEqualTo(savedCafe2.getId()),
+                () -> assertThat(response.jsonPath().getLong("[1].cafeId")).isEqualTo(savedCafe1.getId())
         );
     }
 
@@ -113,7 +110,7 @@ class MemberControllerTest {
         memberRepository.save(member);
 
         //when
-        context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
+        context.invokeHttpGet("/members/{memberId}/liked-cafes?page=1", member.getId());
         Response response = context.response;
 
         //then
@@ -135,7 +132,7 @@ class MemberControllerTest {
         //when
         context.accessToken = "accessToken";
         context.invokeHttpPostWithToken("/cafes/" + cafe.getId() + "/likes?isLiked=true");
-        relogin();
+        reLogin();
         context.invokeHttpGet("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
 
         final List<LikedCafeResponse> result = context.response.jsonPath().getList("");
@@ -144,8 +141,8 @@ class MemberControllerTest {
         assertThat(result).hasSize(1);
     }
 
-    private Response relogin() {
-        return RestAssured.given()
+    private void reLogin() {
+        RestAssured.given()
                 .log().all()
                 .queryParam("code", "googleCode")
                 .when()

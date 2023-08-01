@@ -1,24 +1,18 @@
 package com.project.yozmcafe.domain.member;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-import java.util.List;
-import java.util.stream.Stream;
-
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.LikedCafe;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
+import com.project.yozmcafe.fixture.Fixture;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
-import com.project.yozmcafe.exception.BadRequestException;
-import com.project.yozmcafe.exception.ErrorCode;
-import com.project.yozmcafe.fixture.Fixture;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -187,5 +181,26 @@ class MemberTest {
                 Arguments.of(member1, cafe, true, true),
                 Arguments.of(member2, cafe, false, false)
         );
+    }
+
+    @Test
+    @DisplayName("좋아요한 카페 목록을 페이지 처리한다")
+    void getLikedCafesByPaging() {
+        //given
+        final Member member = new Member("1234", "오션", "오션사진");
+        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
+        final Cafe cafe3 = Fixture.getCafe(3L, "카페3", "주소2", 3);
+        final Cafe cafe4 = Fixture.getCafe(4L, "카페4", "주소2", 3);
+        member.addLikedCafe(cafe1);
+        member.addLikedCafe(cafe2);
+        member.addLikedCafe(cafe3);
+        member.addLikedCafe(cafe4);
+
+        //when
+        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
+
+        //then
+        assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe4, cafe3);
     }
 }

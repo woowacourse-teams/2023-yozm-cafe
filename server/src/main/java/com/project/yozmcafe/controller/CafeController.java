@@ -4,7 +4,6 @@ import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.CafeService;
-import com.project.yozmcafe.service.MemberService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,11 +21,9 @@ public class CafeController {
     private static final int IGNORED_PAGE = 0;
 
     private final CafeService cafeService;
-    private final MemberService memberService;
 
-    public CafeController(final CafeService cafeService, final MemberService memberService) {
+    public CafeController(final CafeService cafeService) {
         this.cafeService = cafeService;
-        this.memberService = memberService;
     }
 
     @GetMapping
@@ -41,14 +38,6 @@ public class CafeController {
     public ResponseEntity<List<CafeResponse>> getCafes(@PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);
-    }
-
-    @PostMapping("/{cafeId}/likes")
-    public ResponseEntity<Void> updateLikes(final Member member,
-                                            @PathVariable("cafeId") final long cafeId,
-                                            @RequestParam("isLiked") final boolean isLiked) {
-        memberService.updateLike(member, cafeId, isLiked);
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping
