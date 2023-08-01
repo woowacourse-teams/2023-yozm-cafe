@@ -119,12 +119,12 @@ public class Member {
     }
 
     public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
-        int startIndex = (pageNum-1)*pageSize;
-        int endIndex = Math.min(startIndex+pageSize, likedCafes.size());
+        List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
+        Collections.reverse(reverseLikedCafes);
 
-        final List<LikedCafe> pagedLikedCafes = likedCafes.subList(startIndex, endIndex);
-        Collections.reverse(pagedLikedCafes);
+        int startIndex = (pageNum - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, reverseLikedCafes.size());
 
-        return pagedLikedCafes;
+        return reverseLikedCafes.subList(startIndex, endIndex);
     }
 }
