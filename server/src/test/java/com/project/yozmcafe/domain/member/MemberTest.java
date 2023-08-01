@@ -188,17 +188,19 @@ class MemberTest {
     void getLikedCafesByPaging() {
         //given
         final Member member = new Member("1234", "오션", "오션사진");
-        final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
-        final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 3);
-        final Cafe cafe3 = Fixture.getCafe("카페3", "주소2", 3);
-        final Cafe cafe4 = Fixture.getCafe("카페4", "주소2", 3);
+        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
+        final Cafe cafe3 = Fixture.getCafe(3L, "카페3", "주소2", 3);
+        final Cafe cafe4 = Fixture.getCafe(4L, "카페4", "주소2", 3);
         member.addLikedCafe(cafe1);
         member.addLikedCafe(cafe2);
+        member.addLikedCafe(cafe3);
+        member.addLikedCafe(cafe4);
 
         //when
         final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
 
         //then
-        Assertions.assertThat(likedCafes).map(LikedCafe::getCafe).containsAll(List.of(cafe3, cafe4));
+        assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe4, cafe3);
     }
 }
