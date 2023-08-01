@@ -7,19 +7,44 @@ export class ClientNetworkError extends Error {
 }
 
 class Client {
+  isAccessTokenRefreshing = false;
+
   accessToken: string | null = null;
+
+  accessTokenRefreshListener: ((accessToken: string) => void) | null = null;
+
+  // FIXME: react <-> 외부 시스템(Client)와 상태 연동을 위해 양방향 바인딩을 걸었습니다.
+  // 향후 단방향으로 수정해야 합니다.
+  onAccessTokenRefresh(listener: (accessToken: string) => void) {
+    this.accessTokenRefreshListener = listener;
+  }
 
   async fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     try {
-      const response = await fetch(`/api${input}`, {
-        ...init,
-        headers: {
-          ...init?.headers,
-          ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
-        },
-      });
+      const fetchFn = () =>
+        fetch(`/api${input}`, {
+          ...init,
+          headers: {
+            ...init?.headers,
+            ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
+          },
+        });
+
+      let response = await fetchFn();
       if (!response.ok) {
-        throw response;
+        if (response.status === 401 && !this.isAccessTokenRefreshing) {
+          // this.refreshAccessToken() 을 호출하기 전,
+          // this.isAccessTokenRefreshing을 true로 설정해줘야 잠재적인 recursion loop를 방지할 수 있습니다.
+          this.isAccessTokenRefreshing = true;
+          const accessToken = await this.refreshAccessToken();
+          this.accessToken = accessToken;
+          this.accessTokenRefreshListener?.(accessToken);
+          this.isAccessTokenRefreshing = false;
+
+          response = await fetchFn();
+        }
+
+        if (!response.ok) throw response;
       }
       return response;
     } catch (error) {
@@ -79,6 +104,13 @@ class Client {
     return this.fetchJson<{ token: string }>(`/auth/${provider}?code=${code}`, { method: 'POST' }).then(
       (data) => data.token,
     );
+  }
+
+  /**
+   * accessToken이 만료되었을 때, 서버에서 accessToken을 다시 발급받는다.
+   */
+  refreshAccessToken() {
+    return this.fetchJson<{ token: string }>(`/auth`).then((data) => data.token);
   }
 
   /**
