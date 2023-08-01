@@ -40,7 +40,7 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
 
   return (
     <Container>
-      <SummaryDetailsContainer>
+      <SummaryDetails>
         <BsClock />
         <h3>{isOpenedToday() ? '영업중' : '영업 종료'}</h3>
         <Summary>
@@ -48,7 +48,7 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
             ? `${DAY_MAPPER[todayOpeningHour.day]} ${todayOpeningHour.open} - ${todayOpeningHour.close}`
             : '휴무'}
         </Summary>
-      </SummaryDetailsContainer>
+      </SummaryDetails>
       <Details>
         {openingHours.map((openingHour) => (
           <li key={openingHour.day}>
@@ -75,7 +75,7 @@ const Details = styled.ul`
   color: ${({ theme }) => theme.color.gray};
 `;
 
-const SummaryDetailsContainer = styled.div`
+const SummaryDetails = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: center;

@@ -28,17 +28,17 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
       </CloseButton>
       <Title>{cafe.name}</Title>
       <InfoContainer>
-        <LocationDetailContainer>
+        <LocationDetail>
           <BsGeoAlt />
           <a href={cafe.detail.mapUrl} target="_blank">
             <LocationName>
               {cafe.address} <BsBoxArrowUpRight />
             </LocationName>
           </a>
-        </LocationDetailContainer>
-        <OpeningHoursDetailContainer>
+        </LocationDetail>
+        <OpeningHoursDetails>
           <OpeningHoursDetail openingHours={cafe.detail.openingHours} />
-        </OpeningHoursDetailContainer>
+        </OpeningHoursDetails>
         {/* <Info>
           <BsTelephone />
           <h3>000-000-000</h3>
@@ -95,13 +95,13 @@ const InfoContainer = styled.div`
   gap: ${({ theme }) => theme.space[2]};
 `;
 
-const OpeningHoursDetailContainer = styled.div`
+const OpeningHoursDetails = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: flex-start;
 `;
 
-const LocationDetailContainer = styled.div`
+const LocationDetail = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: center;
