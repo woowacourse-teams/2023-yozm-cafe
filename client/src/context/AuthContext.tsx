@@ -23,8 +23,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     if (!accessToken) return null;
 
     const [header, payload, verifySignature] = accessToken.split('.');
-    const identity = JSON.parse(window.atob(payload)) as Identity;
-    return identity;
+    return JSON.parse(window.atob(payload)) as Identity;
   }, [accessToken]);
 
   const contextValue = useMemo(
