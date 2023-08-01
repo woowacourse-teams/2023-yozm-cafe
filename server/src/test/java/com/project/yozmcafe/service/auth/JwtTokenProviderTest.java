@@ -1,12 +1,15 @@
 package com.project.yozmcafe.service.auth;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
+import static com.project.yozmcafe.exception.ErrorCode.TOKEN_IS_EXPIRED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import com.project.yozmcafe.exception.TokenException;
 
 class JwtTokenProviderTest {
 
@@ -63,8 +66,8 @@ class JwtTokenProviderTest {
         assertSoftly(softAssertions -> {
             assertThat(payload).isEqualTo("연어");
             assertThatThrownBy(() -> provider.validate(token))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("유효하지 않은 인증 정보입니다.");
+                    .isInstanceOf(TokenException.class)
+                    .hasMessage(TOKEN_IS_EXPIRED.getMessage());
         });
     }
 
@@ -82,8 +85,8 @@ class JwtTokenProviderTest {
         //then
         assertSoftly(softAssertions -> {
             assertThatThrownBy(() -> provider.validate(access))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("유효하지 않은 인증 정보입니다.");
+                    .isInstanceOf(TokenException.class)
+                    .hasMessage(TOKEN_IS_EXPIRED.getMessage());
             assertThat(provider.getMemberId(access))
                     .isEqualTo(provider.getMemberId(refreshedAccessToken));
         });

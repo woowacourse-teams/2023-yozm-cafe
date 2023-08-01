@@ -1,12 +1,13 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.LikedCafeResponse;
-import com.project.yozmcafe.controller.dto.MemberResponse;
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.fixture.Fixture;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import com.project.yozmcafe.controller.dto.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.MemberResponse;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.fixture.Fixture;
 
 @SpringBootTest
 @Transactional
@@ -49,8 +53,8 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 아이디로 회원을 조회하면 예외가 발생한다")
     void findById_fail() {
         assertThatThrownBy(() -> memberService.findById("nothing"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당하는 회원이 존재하지 않습니다.");
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_MEMBER.getMessage());
     }
 
     @Test
@@ -76,10 +80,10 @@ class MemberServiceTest {
         //given
         final PageRequest pageRequest = PageRequest.of(0, 1);
 
-        //when
-        //then
+        //when & then
         assertThatThrownBy(() -> memberService.findLikedCafesById("findLikedCafesById_fail", pageRequest))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_MEMBER.getMessage());
     }
 
     @Test
@@ -150,7 +154,7 @@ class MemberServiceTest {
 
         //when & then
         assertThatThrownBy(() -> memberService.updateLike(member, cafe.getId(), true))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당하는 카페가 존재하지 않습니다.");
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_CAFE.getMessage());
     }
 }
