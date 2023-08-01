@@ -54,7 +54,7 @@ public class Member {
                 );
     }
 
-    public boolean isEmptyUnViewedCafe() {
+    public boolean isEmptyUnViewedCafes() {
         return unViewedCafes.isEmpty();
     }
 

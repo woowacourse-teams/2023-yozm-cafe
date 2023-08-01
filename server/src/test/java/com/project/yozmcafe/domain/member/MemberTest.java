@@ -78,7 +78,7 @@ class MemberTest {
         final Member member = new Member("4", "폴로", "폴로사진");
 
         //when
-        final boolean result = member.isEmptyUnViewedCafe();
+        final boolean result = member.isEmptyUnViewedCafes();
 
         //then
         assertThat(result).isTrue();
