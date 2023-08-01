@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.domain.RandomCafeShuffleStrategy;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
@@ -35,7 +36,7 @@ class UnViewedCafeServiceTest {
 
     @BeforeEach
     void setUp() {
-        unViewedCafeService = new UnViewedCafeService(unViewedCafeRepository, cafeRepository);
+        unViewedCafeService = new UnViewedCafeService(unViewedCafeRepository, cafeRepository, new RandomCafeShuffleStrategy());
     }
 
     @Test

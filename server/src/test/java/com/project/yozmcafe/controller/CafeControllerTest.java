@@ -90,11 +90,10 @@ class CafeControllerTest {
     }
 
     private CafeResponse getCafeResponse(final List<CafeResponse> cafeResponses, long targetCafeId) {
-        final CafeResponse cafeResponse = cafeResponses.stream()
+        return cafeResponses.stream()
                 .filter(response -> Objects.equals(response.id(), targetCafeId))
                 .findAny()
                 .get();
-        return cafeResponse;
     }
 
     @Test

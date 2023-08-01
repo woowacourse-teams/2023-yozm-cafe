@@ -10,12 +10,10 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
+import jakarta.persistence.*;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -60,7 +58,7 @@ public class Member {
                 );
     }
 
-    public boolean isEmptyUnViewedCafe() {
+    public boolean isEmptyUnViewedCafes() {
         return unViewedCafes.isEmpty();
     }
 

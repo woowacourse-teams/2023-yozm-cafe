@@ -18,6 +18,13 @@ import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
 import com.project.yozmcafe.fixture.Fixture;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemberTest {
 
@@ -80,7 +87,7 @@ class MemberTest {
         final Member member = new Member("4", "폴로", "폴로사진");
 
         //when
-        final boolean result = member.isEmptyUnViewedCafe();
+        final boolean result = member.isEmptyUnViewedCafes();
 
         //then
         assertThat(result).isTrue();
