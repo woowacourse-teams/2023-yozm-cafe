@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback, useContext } from 'react';
 import client from '../client';
 import AuthContext from '../context/AuthContext';
-import { AuthProvider, Identity } from '../types';
+import { AuthProvider } from '../types';
 
 type AuthParams = {
   provider: AuthProvider;
@@ -34,20 +34,12 @@ const useAuth = () => {
   if (!authContext) {
     throw new Error('AuthProvider를 사용해주셔야 합니다.');
   }
-  const { identity, setIdentity } = authContext;
+  const { accessToken, setAccessToken, identity } = authContext;
 
   const { mutate: issueAccessToken } = useMutation({
-    mutationFn: ({ provider, code }: AuthParams) =>
-      client.issueAccessToken(provider, code).then((accessToken) => {
-        client.setAccessToken(accessToken);
-        return accessToken;
-      }),
+    mutationFn: ({ provider, code }: AuthParams) => client.issueAccessToken(provider, code),
     onSettled: (accessToken) => {
-      if (!accessToken) return null;
-
-      const [header, payload, verifySignature] = accessToken.split('.');
-      const identity = JSON.parse(window.atob(payload)) as Identity;
-      setIdentity(identity);
+      setAccessToken(accessToken ?? null);
     },
   });
 
@@ -56,12 +48,16 @@ const useAuth = () => {
   });
 
   const clearAuthorization = useCallback(() => {
-    setIdentity(null);
-    client.setAccessToken(null);
+    setAccessToken(null);
     return clearRefreshToken();
   }, [clearRefreshToken]);
 
-  return { identity, issueAccessToken, clearAuthorization };
+  return {
+    accessToken,
+    issueAccessToken,
+    clearAuthorization,
+    identity,
+  };
 };
 
 export default useAuth;

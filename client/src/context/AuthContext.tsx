@@ -1,9 +1,12 @@
-import { Dispatch, PropsWithChildren, createContext, useMemo, useState } from 'react';
+import { Dispatch, PropsWithChildren, createContext, useMemo } from 'react';
+import client from '../client';
+import usePersistedState from '../hooks/usePersistedState';
 import { Identity } from '../types';
 
 type AuthContextValue = {
+  accessToken: string | null;
+  setAccessToken: Dispatch<string | null>;
   identity: Identity | null;
-  setIdentity: Dispatch<Identity | null>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -12,14 +15,24 @@ type AuthProviderProps = PropsWithChildren;
 
 export const AuthProvider = (props: AuthProviderProps) => {
   const { children } = props;
-  const [identity, setIdentity] = useState<Identity | null>(null);
+  const [accessToken, setAccessToken] = usePersistedState<string | null>('accessToken', null);
+
+  const identity = useMemo(() => {
+    client.setAccessToken(accessToken);
+
+    if (!accessToken) return null;
+
+    const [header, payload, verifySignature] = accessToken.split('.');
+    return JSON.parse(window.atob(payload)) as Identity;
+  }, [accessToken]);
 
   const contextValue = useMemo(
     () => ({
+      accessToken,
+      setAccessToken,
       identity,
-      setIdentity,
     }),
-    [identity],
+    [accessToken, setAccessToken, identity],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
