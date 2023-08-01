@@ -1,10 +1,12 @@
 package com.project.yozmcafe.domain.member;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
 import com.project.yozmcafe.fixture.Fixture;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -179,5 +181,22 @@ class MemberTest {
                 Arguments.of(member1, cafe, true, true),
                 Arguments.of(member2, cafe, false, false)
         );
+    }
+
+    @Test
+    @DisplayName("좋아요한 카페 목록을 페이지 처리한다")
+    void getLikedCafesByPaging() {
+        //given
+        final Member member = new Member("1234", "오션", "오션사진");
+        final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 3);
+        member.addLikedCafe(cafe1);
+        member.addLikedCafe(cafe2);
+
+        //when
+        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
+
+        //then
+        Assertions.assertThat(likedCafes).map(LikedCafe::getCafe).containsAll(List.of(cafe2, cafe1));
     }
 }

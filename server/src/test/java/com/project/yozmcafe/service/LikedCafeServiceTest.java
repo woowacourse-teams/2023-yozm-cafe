@@ -11,7 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,12 +37,11 @@ class LikedCafeServiceTest {
         //given
         final Cafe savedCafe = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
         final Member member = new Member("1234", "오션", "오션.img");
-        final PageRequest pageRequest = PageRequest.of(0, 1);
         member.addLikedCafe(savedCafe);
         memberRepository.save(member);
 
         //when
-        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(member.getId(), pageRequest);
+        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(member.getId(), 1, 15);
 
         //then
         assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
@@ -53,11 +51,9 @@ class LikedCafeServiceTest {
     @DisplayName("좋아요 카페 목록을 조회할 멤버가 없을 경우 예외가 발생한다.")
     void findLikedCafesById_fail() {
         //given
-        final PageRequest pageRequest = PageRequest.of(0, 1);
-
         //when
         //then
-        assertThatThrownBy(() -> likedCafeService.findLikedCafesById("findLikedCafesById_fail", pageRequest))
+        assertThatThrownBy(() -> likedCafeService.findLikedCafesById("findLikedCafesById_fail", 1, 15))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_MEMBER.getMessage());
     }
