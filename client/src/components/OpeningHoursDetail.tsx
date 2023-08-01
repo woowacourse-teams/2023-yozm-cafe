@@ -1,3 +1,4 @@
+import { BsClock } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import { OpeningHour, OpeningHourDay } from '../types';
 
@@ -39,13 +40,15 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
 
   return (
     <Container>
-      <h3>{isOpenedToday() ? '영업중' : '영업 종료'}</h3>
-      <Summary>
-        {todayOpeningHour?.opened
-          ? `${DAY_MAPPER[todayOpeningHour.day]} ${todayOpeningHour.open} - ${todayOpeningHour.close}`
-          : '휴무'}
-      </Summary>
-
+      <SummaryDetailsContainer>
+        <BsClock />
+        <h3>{isOpenedToday() ? '영업중' : '영업 종료'}</h3>
+        <Summary>
+          {todayOpeningHour?.opened
+            ? `${DAY_MAPPER[todayOpeningHour.day]} ${todayOpeningHour.open} - ${todayOpeningHour.close}`
+            : '휴무'}
+        </Summary>
+      </SummaryDetailsContainer>
       <Details>
         {openingHours.map((openingHour) => (
           <li key={openingHour.day}>
@@ -59,19 +62,22 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
 
 export default OpeningHoursDetail;
 
-const Container = styled.div`
-  display: grid;
-  gap: ${({ theme }) => theme.space[2]};
-  align-items: center;
-`;
+const Container = styled.div``;
 
 const Summary = styled.h3``;
 
 const Details = styled.ul`
   display: flex;
-  grid-column: 2;
   flex-direction: column;
   gap: ${({ theme }) => theme.space[1]};
+  align-items: flex-end;
 
   color: ${({ theme }) => theme.color.gray};
+`;
+
+const SummaryDetailsContainer = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.space[2]};
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.space[1]};
 `;
