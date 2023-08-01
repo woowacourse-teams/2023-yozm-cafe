@@ -13,7 +13,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.UUID;
 
 @Component
 public class LoggingFilter extends OncePerRequestFilter {
@@ -35,14 +34,14 @@ public class LoggingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
-        MDC.put(KEY, getMemberUUIDFromJWT(request));
+        MDC.put(KEY, getMemberIdFromJwt(request));
         logger.info("Request For '{}'", request.getRequestURI());
         MDC.clear();
 
         filterChain.doFilter(request, response);
     }
 
-    private String getMemberUUIDFromJWT(final HttpServletRequest request) {
+    private String getMemberIdFromJwt(final HttpServletRequest request) {
         final String authorization = request.getHeader(AUTHORIZATION);
 
         if (Objects.isNull(authorization)) {
@@ -50,7 +49,6 @@ public class LoggingFilter extends OncePerRequestFilter {
         }
 
         final String token = authorization.replace(BEARER, "");
-        final String memberId = jwtTokenProvider.getMemberId(token);
-        return UUID.nameUUIDFromBytes(memberId.getBytes()).toString();
+        return jwtTokenProvider.getMemberId(token);
     }
 }
