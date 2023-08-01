@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorResponse;
-import com.project.yozmcafe.exception.InternalServerException;
+import com.project.yozmcafe.exception.OAuthException;
 import com.project.yozmcafe.exception.TokenException;
 
 @ControllerAdvice
@@ -30,8 +30,8 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handle(final InternalServerException e) {
-        logger.error("Internal Server Error: {}", e.getErrorResponse());
+    public ResponseEntity<ErrorResponse> handle(final OAuthException e) {
+        logger.error("OAuth exception: {}", e.getErrorResponse());
         return ResponseEntity.internalServerError().body(e.getErrorResponse());
     }
 

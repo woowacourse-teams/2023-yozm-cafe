@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.project.yozmcafe.domain.member.MemberInfo;
-import com.project.yozmcafe.exception.InternalServerException;
+import com.project.yozmcafe.exception.OAuthException;
 
 class OAuthTokenTest {
 
@@ -40,7 +40,7 @@ class OAuthTokenTest {
 
         //when & then
         assertThatThrownBy(googleToken::toUserInfo)
-                .isInstanceOf(InternalServerException.class)
+                .isInstanceOf(OAuthException.class)
                 .hasMessage(INVALID_OAUTH_USER_INFO.getMessage());
 
 
