@@ -89,6 +89,28 @@ export const handlers = [
     );
   }),
 
+  rest.get('/api/auth', async (req, res, ctx) => {
+    const token =
+      btoa(
+        JSON.stringify({
+          typ: 'JWT',
+          alg: 'HS256',
+        }),
+      ) +
+      '.' +
+      btoa(
+        JSON.stringify({
+          sub: '1000',
+          iat: Date.now(),
+          exp: Date.now() + 1 * 60 * 60 * 1000,
+        } satisfies Identity),
+      ) +
+      '.' +
+      'SUPERSECRET';
+
+    return res(ctx.status(200), ctx.json({ token }));
+  }),
+
   rest.get('/api/auth/urls', async (req, res, ctx) => {
     return res(
       ctx.status(200),
