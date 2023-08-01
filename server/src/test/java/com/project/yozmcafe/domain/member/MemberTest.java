@@ -190,6 +190,8 @@ class MemberTest {
         final Member member = new Member("1234", "오션", "오션사진");
         final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
         final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 3);
+        final Cafe cafe3 = Fixture.getCafe("카페3", "주소2", 3);
+        final Cafe cafe4 = Fixture.getCafe("카페4", "주소2", 3);
         member.addLikedCafe(cafe1);
         member.addLikedCafe(cafe2);
 
@@ -197,6 +199,6 @@ class MemberTest {
         final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
 
         //then
-        Assertions.assertThat(likedCafes).map(LikedCafe::getCafe).containsAll(List.of(cafe2, cafe1));
+        Assertions.assertThat(likedCafes).map(LikedCafe::getCafe).containsAll(List.of(cafe3, cafe4));
     }
 }
