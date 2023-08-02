@@ -25,4 +25,20 @@ class RandomPageRequestGeneratorTest {
                 () -> assertThat(pageNumber).isLessThanOrEqualTo(12 / 5)
         );
     }
+
+    @DisplayName("생성된 pageRequest 의 페이지 범위가 카페 개수에 따라 가능한 범위 이내 이어야 한다.-전체 페이지가 1개인 경우")
+    @RepeatedTest(10)
+    void getPageRequest2() {
+        //given
+        //when
+        PageRequest result = pageRequestGenerator.getPageRequestWithCafeCount(3L, 5);
+
+        //then
+        int pageNumber = result.getPageNumber();
+
+        assertAll(
+                () -> assertThat(pageNumber).isGreaterThanOrEqualTo(0),
+                () -> assertThat(pageNumber).isLessThanOrEqualTo(3 / 5)
+        );
+    }
 }
