@@ -7,7 +7,6 @@ import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class UnViewedCafeService {
         refillWhenUnViewedCafesSizeUnderTen(member);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void refillWhenUnViewedCafesSizeUnderTen(final Member member) {
         if (member.isUnViewedCafesSizeUnderTen()) {
             final List<Cafe> shuffledCafes = shuffleStrategy.shuffle(cafeRepository.findAll());
