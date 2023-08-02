@@ -68,7 +68,7 @@ const Container = styled.div<{ $show: boolean }>`
   width: 100%;
   height: 450px;
   padding: ${({ theme }) => theme.space[4]};
-  padding-bottom: ${({ theme }) => theme.space[16]};
+  padding-bottom: 0;
 
   color: ${({ theme }) => theme.color.text.primary};
   text-shadow: none;
@@ -121,11 +121,11 @@ const Content = styled.div`
 `;
 
 const MoreContentHintGradient = styled.div`
-  position: fixed;
+  position: sticky;
   bottom: 0;
 
-  width: 475px; /* FIXME: 하드코딩 대신 부모 크기 기반으로 설정하도록 변경하기 */
-  height: ${({ theme }) => theme.space[16]};
+  width: 100%;
+  min-height: ${({ theme }) => theme.space[16]};
 
   background: linear-gradient(transparent, white);
 `;
