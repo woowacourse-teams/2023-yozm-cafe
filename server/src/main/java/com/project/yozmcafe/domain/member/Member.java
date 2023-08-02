@@ -11,12 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
 import static java.lang.Math.min;
+import static java.util.Collections.reverse;
 
 @Entity
 public class Member {
@@ -110,10 +110,10 @@ public class Member {
 
     public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
         List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-        Collections.reverse(reverseLikedCafes);
+        reverse(reverseLikedCafes);
 
         int startIndex = (pageNum - 1) * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, reverseLikedCafes.size());
+        int endIndex = min(startIndex + pageSize, reverseLikedCafes.size());
 
         return reverseLikedCafes.subList(startIndex, endIndex);
     }
