@@ -19,6 +19,7 @@ public class AuthController {
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer ";
+    private static final int COOKIE_MAX_AGE = 60 * 60 * 24 * 14;
 
     private final AuthService authService;
 
@@ -39,6 +40,7 @@ public class AuthController {
         final TokenResponse refreshTokenResponse = authService.createRefreshToken();
 
         final Cookie cookie = new Cookie(REFRESH_TOKEN, refreshTokenResponse.token());
+        cookie.setMaxAge(COOKIE_MAX_AGE);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
     }
