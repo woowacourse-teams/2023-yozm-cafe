@@ -143,19 +143,6 @@ class CafeControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 되지 않은 사용자가 /cafes/guest?page=? 에 GET요청을 보낸 경우 page가 최대 page를 초과하는 경우 빈배열을 반환한다.")
-    void getCafesEmptyByUnLoginUser() {
-        //when
-        context.invokeHttpGet("/cafes/guest?page=2000");
-
-        //then
-        assertAll(
-                () -> assertThat(context.response.statusCode()).isEqualTo(200),
-                () -> assertThat(context.response.jsonPath().getList("$")).isEmpty()
-        );
-    }
-
-    @Test
     @DisplayName("로그인한 사용자가 /cafes?page=?에 GET 요청을 보내면 아직보지않은 랜덤한,서로 다른 카페정보를 5개씩 응답한다.")
     void getCafesWithMember() {
         //given

@@ -62,8 +62,8 @@ class CafeServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 되지 않은 사용자의 안본 카페 목록을 조회한다.")
-    void getCafesForUnLoginMember() {
+    @DisplayName("로그인 되지 않은 사용자의 랜덤한 카페 목록을 조회한다. - 카페 정보가 5개 이하인 경우")
+    void getCafesForUnLoginMember1() {
         //given
         final PageRequest pageRequest = PageRequest.of(0, 5);
         cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
@@ -78,5 +78,24 @@ class CafeServiceTest {
                 () -> assertThat(result.get(0).isLiked()).isFalse(),
                 () -> assertThat(result.get(1).isLiked()).isFalse()
         );
+    }
+
+    @Test
+    @DisplayName("로그인 되지 않은 사용자의 랜덤한 카페 목록을 조회한다. - 카페 정보가 5개 이상인 경우")
+    void getCafesForUnLoginMember2() {
+        //given
+        final PageRequest pageRequest = PageRequest.of(0, 5);
+        cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        cafeRepository.save(Fixture.getCafe("카페3", "주소3", 10));
+        cafeRepository.save(Fixture.getCafe("카페4", "주소4", 11));
+        cafeRepository.save(Fixture.getCafe("카페5", "주소5", 10));
+        cafeRepository.save(Fixture.getCafe("카페6", "주소6", 11));
+
+        //when
+        final List<CafeResponse> result = cafeService.getCafesForUnLoginMember(pageRequest);
+
+        //then
+        assertThat(result).hasSize(5);
     }
 }
