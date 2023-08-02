@@ -11,11 +11,11 @@ class Client {
 
   accessToken: string | null = null;
 
-  accessTokenRefreshListener: ((accessToken: string) => void) | null = null;
+  accessTokenRefreshListener: ((accessToken: string | null) => void) | null = null;
 
   // FIXME: react <-> 외부 시스템(Client)와 상태 연동을 위해 양방향 바인딩을 걸었습니다.
   // 향후 단방향으로 수정해야 합니다.
-  onAccessTokenRefresh(listener: (accessToken: string) => void) {
+  onAccessTokenRefresh(listener: (accessToken: string | null) => void) {
     this.accessTokenRefreshListener = listener;
   }
 
@@ -44,7 +44,11 @@ class Client {
           response = await fetchFn();
         }
 
-        if (!response.ok) throw response;
+        if (!response.ok) {
+          // access token 재발급이 불가하기 때문에 access token을 삭제한다.
+          this.accessTokenRefreshListener?.(null);
+          throw response;
+        }
       }
       return response;
     } catch (error) {
