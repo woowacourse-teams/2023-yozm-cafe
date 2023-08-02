@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_UN_VIEWED_CAFE;
 import static java.lang.Math.min;
 import static java.util.Collections.reverse;
 
@@ -51,15 +50,11 @@ public class Member {
         unViewedCafes.addAll(allUnViewedCafes);
     }
 
-    public void removeUnViewedCafe(final UnViewedCafe unViewedCafe) {
+    public void removeUnViewedCafe(final long cafeId) {
         unViewedCafes.stream()
-                .filter(unViewedCafe::equals)
-                .findAny()
-                .ifPresentOrElse(
-                        unViewedCafes::remove, () -> {
-                            throw new BadRequestException(NOT_EXISTED_UN_VIEWED_CAFE);
-                        }
-                );
+                .filter(unViewedCafe -> unViewedCafe.equalsCafeId(cafeId))
+                .findFirst()
+                .ifPresent(unViewedCafes::remove);
     }
 
     public boolean isUnViewedCafesSizeUnder(final int sizeExclusive) {

@@ -38,6 +38,10 @@ public class UnViewedCafe {
         this.member = member;
     }
 
+    public boolean equalsCafeId(final long cafeId) {
+        return Objects.equals(cafeId, cafe.getId());
+    }
+
     public Long getId() {
         return id;
     }

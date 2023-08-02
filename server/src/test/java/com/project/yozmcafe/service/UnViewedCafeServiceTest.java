@@ -3,7 +3,6 @@ package com.project.yozmcafe.service;
 import com.project.yozmcafe.domain.RandomCafeShuffleStrategy;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
@@ -29,14 +28,11 @@ class UnViewedCafeServiceTest {
     private CafeRepository cafeRepository;
 
     @Autowired
-    private UnViewedCafeRepository unViewedCafeRepository;
-
-    @Autowired
     private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
-        unViewedCafeService = new UnViewedCafeService(unViewedCafeRepository, cafeRepository, new RandomCafeShuffleStrategy());
+        unViewedCafeService = new UnViewedCafeService(cafeRepository, new RandomCafeShuffleStrategy());
     }
 
     @Test
@@ -53,7 +49,6 @@ class UnViewedCafeServiceTest {
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
-        assertThat(unViewedCafeRepository.findAll()).hasSize(3);
     }
 
     @Test
@@ -70,7 +65,6 @@ class UnViewedCafeServiceTest {
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
-        assertThat(unViewedCafeRepository.findAll()).hasSize(3);
     }
 
     @Test

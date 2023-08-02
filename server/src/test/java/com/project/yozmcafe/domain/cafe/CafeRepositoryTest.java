@@ -26,9 +26,6 @@ class CafeRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private UnViewedCafeRepository unViewedCafeRepository;
-
     private Cafe cafe1;
     private Cafe cafe2;
     private Cafe cafe3;
