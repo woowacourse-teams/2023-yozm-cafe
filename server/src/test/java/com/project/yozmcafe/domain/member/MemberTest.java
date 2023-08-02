@@ -80,7 +80,7 @@ class MemberTest {
         final Member member = new Member("4", "폴로", "폴로사진");
 
         //when
-        final boolean result = member.isUnViewedCafesSizeUnderTen();
+        final boolean result = member.isUnViewedCafesSizeUnder(1);
 
         //then
         assertThat(result).isTrue();
@@ -172,7 +172,7 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 10개 미만이면 True")
+    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 4개 미만이면 True")
     void isUnViewedCafesSizeUnderTen_true() {
         //given
         final Member member = new Member("1", "연어", "image");
@@ -184,11 +184,11 @@ class MemberTest {
         member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
 
         //when, then
-        assertThat(member.isUnViewedCafesSizeUnderTen()).isTrue();
+        assertThat(member.isUnViewedCafesSizeUnder(5)).isTrue();
     }
 
     @Test
-    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 10개 이상이면 False")
+    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 12개 이상이면 False")
     void isUnViewedCafesSizeUnderTen_false() {
         //given
         final Member member = new Member("1", "연어", "image");
@@ -202,7 +202,7 @@ class MemberTest {
         member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
 
         //when, then
-        assertThat(member.isUnViewedCafesSizeUnderTen()).isFalse();
+        assertThat(member.isUnViewedCafesSizeUnder(12)).isFalse();
     }
 
     public static Stream<Arguments> provideMemberAndIsLiked() {

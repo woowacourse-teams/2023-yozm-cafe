@@ -16,6 +16,7 @@ import java.util.List;
 public class UnViewedCafeService {
 
     private static final int FIRST_CAFE = 0;
+    private static final int DEFAULT_SIZE_CONDITION = 20;
 
     private final UnViewedCafeRepository unViewedCafeRepository;
     private final CafeRepository cafeRepository;
@@ -37,12 +38,12 @@ public class UnViewedCafeService {
             member.removeUnViewedCafe(unViewedCafes.get(FIRST_CAFE));
         }
 
-        refillWhenUnViewedCafesSizeUnderTen(member);
+        refillWhenUnViewedCafesSizeUnderTwenty(member);
     }
 
     @Transactional
-    public void refillWhenUnViewedCafesSizeUnderTen(final Member member) {
-        if (member.isUnViewedCafesSizeUnderTen()) {
+    public void refillWhenUnViewedCafesSizeUnderTwenty(final Member member) {
+        if (member.isUnViewedCafesSizeUnder(DEFAULT_SIZE_CONDITION)) {
             final List<Cafe> shuffledCafes = shuffleStrategy.shuffle(cafeRepository.findAll());
             member.addUnViewedCafes(shuffledCafes);
         }

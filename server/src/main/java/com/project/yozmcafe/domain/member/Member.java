@@ -62,8 +62,8 @@ public class Member {
                 );
     }
 
-    public boolean isUnViewedCafesSizeUnderTen() {
-        return unViewedCafes.size() < 10;
+    public boolean isUnViewedCafesSizeUnder(final int sizeExclusive) {
+        return unViewedCafes.size() < sizeExclusive;
     }
 
     public void updateLikedCafesBy(final Cafe cafe, final boolean isLiked) {

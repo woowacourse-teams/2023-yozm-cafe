@@ -35,7 +35,7 @@ public class CafeService {
     @Transactional
     public List<CafeResponse> getCafesForLoginMember(final Member member, final int size) {
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
-        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTen(member);
+        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
         return cafes.stream()
                 .map(UnViewedCafe::getCafe)
