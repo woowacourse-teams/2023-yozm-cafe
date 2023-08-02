@@ -45,7 +45,7 @@ class UnViewedCafeServiceTest {
         member.addUnViewedCafes(List.of(cafe1, cafe2));
 
         //when
-        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafeByCafeId(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
@@ -61,7 +61,7 @@ class UnViewedCafeServiceTest {
         member.addUnViewedCafes(List.of(cafe1));
 
         //when
-        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafeByCafeId(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
@@ -79,7 +79,7 @@ class UnViewedCafeServiceTest {
         }
 
         //when
-        unViewedCafeService.removeUnViewedCafe(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafeByCafeId(member, cafe1.getId());
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(20);

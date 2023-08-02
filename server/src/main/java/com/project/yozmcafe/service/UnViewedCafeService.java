@@ -25,7 +25,7 @@ public class UnViewedCafeService {
     }
 
     @Transactional
-    public void removeUnViewedCafe(final Member member, final long cafeId) {
+    public void removeUnViewedCafeByCafeId(final Member member, final long cafeId) {
         member.removeUnViewedCafe(cafeId);
         refillWhenUnViewedCafesSizeUnderTwenty(member);
     }

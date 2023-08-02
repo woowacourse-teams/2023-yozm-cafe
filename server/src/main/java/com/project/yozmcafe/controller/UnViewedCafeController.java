@@ -19,7 +19,7 @@ public class UnViewedCafeController {
     @PostMapping("cafes/{cafeId}/history")
     public ResponseEntity<Void> removeUnViewedCafe(final Member member,
                                                    @PathVariable("cafeId") final long cafeId) {
-        unViewedCafeService.removeUnViewedCafe(member, cafeId);
+        unViewedCafeService.removeUnViewedCafeByCafeId(member, cafeId);
         return ResponseEntity.ok().build();
     }
 }
