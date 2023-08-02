@@ -47,6 +47,7 @@ public class Member {
         final List<UnViewedCafe> allUnViewedCafes = cafes.stream()
                 .map(savedCafe -> new UnViewedCafe(savedCafe, this))
                 .toList();
+
         unViewedCafes.addAll(allUnViewedCafes);
     }
 
