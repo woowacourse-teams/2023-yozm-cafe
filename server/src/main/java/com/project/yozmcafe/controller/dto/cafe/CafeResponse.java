@@ -1,7 +1,6 @@
 package com.project.yozmcafe.controller.dto.cafe;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 
 import java.util.List;
 
@@ -19,10 +18,6 @@ public record CafeResponse(Long id, String name, String address, List<String> im
                 isLiked,
                 cafe.getLikeCount(),
                 DetailResponse.from(cafe.getDetail()));
-    }
-
-    public static CafeResponse fromLoggedInUser(final UnViewedCafe unViewedCafe, final boolean isLiked) {
-        return fromLoggedInUser(unViewedCafe.getCafe(), isLiked);
     }
 
     public static CafeResponse fromUnLoggedInUser(final Cafe cafe) {
