@@ -47,7 +47,13 @@ const useCafeActions = () => {
   });
 
   const { mutate: markedAsViewedCafe } = useMutation({
-    mutationFn: ({ cafeId }: MarkedAsCafeParams) => client.markedAsViewedCafe(cafeId),
+    mutationFn: async ({ cafeId }: MarkedAsCafeParams) => {
+      if (queryClient.getQueryData(['markedAsViewedCafe', cafeId, identity])) {
+        return;
+      }
+      queryClient.setQueryData(['markedAsViewedCafe', cafeId, identity], true);
+      return client.markedAsViewedCafe(cafeId);
+    },
   });
 
   return { setLikedCafe, markedAsViewedCafe };
