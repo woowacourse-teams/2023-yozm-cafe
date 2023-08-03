@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PiHeartFill } from 'react-icons/pi';
 import { styled } from 'styled-components';
 
@@ -8,12 +9,23 @@ type LikeButtonProps = {
 };
 
 const LikeButton = ({ likeCount, active, onChange }: LikeButtonProps) => {
-  const handleLikeClick = () => onChange?.();
+  const [isLiked, setIsLiked] = useState(active);
+  const [announce, setAnnounce] = useState('');
+
+  const handleLikeClick = () => {
+    setIsLiked((prevIsLiked) => !prevIsLiked);
+    setAnnounce(isLiked ? '좋아요 취소되었습니다.' : '좋아요가 추가되었습니다.');
+    setTimeout(() => setAnnounce(''), 1000);
+    onChange?.();
+  };
 
   return (
-    <Container>
-      <HeartIcon $active={active} onClick={handleLikeClick} />
+    <Container aria-label="좋아요 버튼" tabIndex={0} role="button">
+      <HeartIcon $active={isLiked} onClick={handleLikeClick} />
       <LikeCount>{likeCount}</LikeCount>
+      <Announcement aria-live="assertive" aria-atomic="true" aria-relevant="text">
+        {`${likeCount} ${announce}`}
+      </Announcement>
     </Container>
   );
 };
@@ -36,4 +48,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+const Announcement = styled.div`
+  position: absolute;
+  left: -9999px;
 `;
