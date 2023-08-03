@@ -44,7 +44,8 @@ public class Member {
 
     public void addUnViewedCafes(final List<Cafe> cafes) {
         final List<UnViewedCafe> allUnViewedCafes = cafes.stream()
-                .map(savedCafe -> new UnViewedCafe(savedCafe, this))
+                .map(cafe -> new UnViewedCafe(cafe, this))
+                .filter(unViewedCafe -> !unViewedCafes.contains(unViewedCafe))
                 .toList();
 
         unViewedCafes.addAll(allUnViewedCafes);
