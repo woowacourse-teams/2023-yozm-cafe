@@ -35,10 +35,33 @@ const CafeCard = (props: CardProps) => {
 
   const handlePrevImage = () => {
     setCurrentImageIndex(getImageIndexByOffset(-1));
+    announceImageChange('이전 이미지', currentImageIndex - 1);
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex(getImageIndexByOffset(1));
+    announceImageChange('다음 이미지', currentImageIndex + 1);
+  };
+
+  const announceImageChange = (action: string, imageIndex: number) => {
+    const message = `${cafe.name} 카페, ${imageIndex + 1}번째 사진입니다. ${action} 버튼을 클릭하셨습니다.`;
+
+    // 숨겨진 메시지를 화면에 추가하여 스크린 리더가 읽을 수 있게 함
+    // 하드 코딩이라 개선 필요
+
+    const announcementDiv = document.createElement('div');
+    announcementDiv.setAttribute('aria-live', 'polite');
+    announcementDiv.style.position = 'absolute';
+    announcementDiv.style.width = '1px';
+    announcementDiv.style.height = '1px';
+    announcementDiv.style.overflow = 'hidden';
+    document.body.appendChild(announcementDiv);
+
+    announcementDiv.textContent = message;
+
+    setTimeout(() => {
+      announcementDiv.remove();
+    }, 1000);
   };
 
   return (
@@ -51,14 +74,7 @@ const CafeCard = (props: CardProps) => {
       </CarouselImageList>
       <DotsContainer>
         {cafe.images.map((_, index) => (
-          <Dot
-            key={index}
-            active={index === currentImageIndex}
-            onClick={() => setCurrentImageIndex(index)}
-            role="button"
-            tabIndex={0}
-            aria-label={`Cafe Image ${index + 1}`}
-          />
+          <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
         ))}
       </DotsContainer>
       <CarouselNavigation>
