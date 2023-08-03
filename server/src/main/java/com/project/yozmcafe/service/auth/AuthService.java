@@ -3,12 +3,10 @@ package com.project.yozmcafe.service.auth;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.controller.dto.TokenResponse;
-import com.project.yozmcafe.domain.CafeShuffleStrategy;
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.UnViewedCafeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,17 +18,15 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AuthService {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UnViewedCafeService unViewedCafeService;
     private final MemberRepository memberRepository;
-    private final CafeRepository cafeRepository;
-    private final CafeShuffleStrategy cafeShuffleStrategy;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public AuthService(final JwtTokenProvider jwtTokenProvider, final MemberRepository memberRepository,
-                       final CafeRepository cafeRepository, final CafeShuffleStrategy cafeShuffleStrategy) {
+                       final UnViewedCafeService unViewedCafeService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.memberRepository = memberRepository;
-        this.cafeRepository = cafeRepository;
-        this.cafeShuffleStrategy = cafeShuffleStrategy;
+        this.unViewedCafeService = unViewedCafeService;
     }
 
     @Transactional
@@ -38,17 +34,10 @@ public class AuthService {
         final MemberInfo memberInfo = provider.getUserInfo(code);
 
         final Member member = memberRepository.findById(memberInfo.openId())
-                .orElseGet(() -> saveNewMemberWithAllCafes(memberInfo));
+                .orElseGet(() -> memberRepository.save(memberInfo.toMember()));
+        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
         return new TokenResponse(jwtTokenProvider.createAccessFrom(member.getId()));
-    }
-
-    private Member saveNewMemberWithAllCafes(final MemberInfo memberInfo) {
-        final Member member = memberRepository.save(memberInfo.toMember());
-        final List<Cafe> allCafes = cafeShuffleStrategy.shuffle(cafeRepository.findAll());
-        member.addUnViewedCafes(allCafes);
-
-        return member;
     }
 
     public TokenResponse createRefreshToken() {
