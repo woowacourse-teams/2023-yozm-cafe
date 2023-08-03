@@ -28,7 +28,12 @@ const CafeActionBar = (props: CafeActionBarProps) => {
   return (
     <Container>
       <Action>
-        <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
+        <LikeButton
+          likeCount={cafe.likeCount}
+          active={cafe.isLiked}
+          onChange={handleLikeCountIncrease}
+          aria-label="좋아요 버튼"
+        />
       </Action>
     </Container>
   );

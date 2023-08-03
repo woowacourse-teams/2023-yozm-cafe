@@ -44,22 +44,29 @@ const CafeCard = (props: CardProps) => {
   return (
     <Container>
       <CarouselImageList ref={ref}>
-        <CarouselImage src={getImageByOffset(0)} $show={true} />
+        <CarouselImage src={getImageByOffset(0)} alt={`Cafe Image ${currentImageIndex + 1}`} $show={true} />
         {/* 이미지를 미리 불러오기 위한 장치 */}
-        <CarouselImage src={getImageByOffset(-1)} $show={false} />
-        <CarouselImage src={getImageByOffset(1)} $show={false} />
+        <CarouselImage src={getImageByOffset(-1)} $show={false} aria-hidden="true" />
+        <CarouselImage src={getImageByOffset(1)} $show={false} aria-hidden="true" />
       </CarouselImageList>
       <DotsContainer>
         {cafe.images.map((_, index) => (
-          <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
+          <Dot
+            key={index}
+            active={index === currentImageIndex}
+            onClick={() => setCurrentImageIndex(index)}
+            role="button"
+            tabIndex={0}
+            aria-label={`Cafe Image ${index + 1}`}
+          />
         ))}
       </DotsContainer>
       <CarouselNavigation>
-        <ButtonLeft>
-          <BsChevronCompactLeft onClick={handlePrevImage} />
+        <ButtonLeft onClick={handlePrevImage} aria-label="이전 이미지">
+          <BsChevronCompactLeft />
         </ButtonLeft>
-        <ButtonRight>
-          <BsChevronCompactRight onClick={handleNextImage} />
+        <ButtonRight onClick={handleNextImage} aria-label="다음 이미지">
+          <BsChevronCompactRight />
         </ButtonRight>
       </CarouselNavigation>
       <AsidePosition>

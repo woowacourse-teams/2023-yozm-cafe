@@ -10,7 +10,7 @@ type CafeSummaryProps = {
 
 const CafeSummary = ({ title, address, onClick }: CafeSummaryProps) => {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} role="button" tabIndex={0}>
       <Summary>
         <Title>{title}</Title>
         <Address>

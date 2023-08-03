@@ -25,15 +25,15 @@ const LoginModal = ({ onClose }: ModalProps) => {
   return (
     <ModalContainer onClick={onClose}>
       <ModalContent onClick={handleContentClick}>
-        <CloseButtonContainer>
+        <CloseButtonContainer aria-label="닫기 버튼" role="dialog" aria-modal="true" aria-hidden="true">
           <CloseIcon onClick={onClose} />
         </CloseButtonContainer>
         <Logo fontSize="5xl" />
         <LoginTitle>간편 로그인</LoginTitle>
         <ButtonContainer>
           {urls.map(({ provider, authorizationUrl }) => (
-            <a href={authorizationUrl}>
-              <LoginButton $color={brandColors[provider] ?? 'white'}>
+            <a href={authorizationUrl} key={provider}>
+              <LoginButton $color={brandColors[provider] ?? 'white'} aria-label={`${provider} 로그인`}>
                 <img src={`/assets/${provider}.svg`} alt={`${provider} 로고`} />
               </LoginButton>
             </a>
@@ -79,7 +79,7 @@ const ModalContent = styled.div`
   border-radius: 8px;
 `;
 
-const CloseButtonContainer = styled.div`
+const CloseButtonContainer = styled.button`
   display: flex;
   justify-content: flex-end;
 

@@ -22,7 +22,7 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
   };
 
   return (
-    <Container $show={show ?? false} onClick={handlePreventClickPropagation}>
+    <Container $show={show ?? false} onClick={handlePreventClickPropagation} role="dialog" aria-modal="true">
       <CloseButton>
         <CloseIcon onClick={onClose} />
       </CloseButton>
@@ -30,7 +30,7 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
       <InfoContainer>
         <LocationDetail>
           <BsGeoAlt />
-          <a href={cafe.detail.mapUrl} target="_blank">
+          <a href={cafe.detail.mapUrl} target="_blank" rel="noopener noreferrer">
             <LocationName>
               {cafe.address} <BsBoxArrowUpRight />
             </LocationName>
@@ -45,8 +45,8 @@ const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetPro
         </Info> */}
       </InfoContainer>
       <Content>
-        {cafe.detail.description.split('\n').map((paragraph) => (
-          <p>{paragraph}</p>
+        {cafe.detail.description.split('\n').map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
         ))}
       </Content>
 
