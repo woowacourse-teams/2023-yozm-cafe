@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class MemberTest {
 
@@ -27,6 +28,25 @@ class MemberTest {
         final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
 
         //when
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+
+        //then
+        assertThat(member.getUnViewedCafes()).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("회원의 unViewedCafe를 추가할 때 기존과 중복되면 추가되지 않는다.")
+    void addUnViewedCafes2() {
+        //given
+        Member member = new Member("id", "연어", "image");
+        final Cafe cafe1 = Fixture.getCafe("카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe("카페2", "주소2", 4);
+        final Cafe cafe3 = Fixture.getCafe("카페3", "주소3", 5);
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+
+        //when
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
         member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
 
         //then
@@ -48,6 +68,16 @@ class MemberTest {
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("회원의 unViewedCafe 기록 삭제 - 삭제할 카페가 UnViewedCafe에 존재하지 않아도 예외가 발생하지 않는다")
+    void removeUnViewedCafe2() {
+        //given
+        Member member = new Member("id", "연어", "image");
+
+        //when, then
+        assertDoesNotThrow(() -> member.removeUnViewedCafe(1L));
     }
 
     @Test
@@ -150,7 +180,7 @@ class MemberTest {
 
     @Test
     @DisplayName("멤버의 남은 UnViewedCafe 갯수가 4개 미만이면 True")
-    void isUnViewedCafesSizeUnderTen_true() {
+    void isUnViewedCafesSizeUnder_true() {
         //given
         final Member member = new Member("1", "연어", "image");
         final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
@@ -165,8 +195,8 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 12개 이상이면 False")
-    void isUnViewedCafesSizeUnderTen_false() {
+    @DisplayName("멤버의 남은 UnViewedCafe 갯수가 4개 이상이면 False")
+    void isUnViewedCafesSizeUnder_false() {
         //given
         final Member member = new Member("1", "연어", "image");
         final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
@@ -175,11 +205,9 @@ class MemberTest {
         final Cafe cafe4 = Fixture.getCafe(4L, "카페", "카페주소", 10);
 
         member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
-        member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
-        member.addUnViewedCafes(List.of(cafe, cafe2, cafe3, cafe4));
 
         //when, then
-        assertThat(member.isUnViewedCafesSizeUnder(12)).isFalse();
+        assertThat(member.isUnViewedCafesSizeUnder(4)).isFalse();
     }
 
     public static Stream<Arguments> provideMemberAndIsLiked() {

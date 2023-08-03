@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,17 +72,53 @@ class UnViewedCafeServiceTest {
     @DisplayName("사용자의 unViewedCafe를 삭제하고 남은 unViewedCafe가 20개 이상이라면 삭제만 한다")
     void removeUnViewedCafe_over20() {
         final Member member = memberRepository.save(new Member("2", "도치", "도치사진"));
-        final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 3));
-        final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 4));
-        final Cafe cafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 5));
-        for (int i = 0; i < 7; i++) {
-            member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
+
+        final List<Cafe> allCafes = new ArrayList<>();
+        for (int i = 0; i < 21; i++) {
+            allCafes.add(Fixture.getCafe((long) i, "카페", "주소", 3));
         }
+        member.addUnViewedCafes(allCafes);
 
         //when
-        unViewedCafeService.removeUnViewedCafeByCafeId(member, cafe1.getId());
+        unViewedCafeService.removeUnViewedCafeByCafeId(member, 1L);
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(20);
+    }
+
+    @Test
+    @DisplayName("사용자의 UnViewedCafe가 20개 미만일 때 모든 카페를 다시 채운다")
+    void refillWhenUnViewedCafesSizeUnderTwenty() {
+        //given
+        final Member member = memberRepository.save(new Member("id", "연어", "image"));
+        cafeRepository.save(Fixture.getCafe("cafe1", "address", 5));
+        cafeRepository.save(Fixture.getCafe("cafe2", "address", 5));
+        cafeRepository.save(Fixture.getCafe("cafe3", "address", 5));
+
+        //when
+        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
+
+        //then
+        assertThat(member.getUnViewedCafes()).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("사용자의 UnViewedCafe가 20개 이상이면 다시 채우지 않는다")
+    void refillWhenUnViewedCafesSizeUnderTwenty2() {
+        //given
+        final Member member = memberRepository.save(new Member("id", "연어", "image"));
+
+        final int initialUnViewedCafesSize = 20;
+        final List<Cafe> allCafes = new ArrayList<>();
+        for (int i = 0; i < initialUnViewedCafesSize; i++) {
+            allCafes.add(Fixture.getCafe((long) i, "카페", "주소", 3));
+        }
+        member.addUnViewedCafes(allCafes);
+
+        //when
+        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
+
+        //then
+        assertThat(member.getUnViewedCafes()).hasSize(initialUnViewedCafesSize);
     }
 }
