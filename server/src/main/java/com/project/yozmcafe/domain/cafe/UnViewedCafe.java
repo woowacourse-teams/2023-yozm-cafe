@@ -1,15 +1,14 @@
 package com.project.yozmcafe.domain.cafe;
 
-import java.util.Objects;
-
 import com.project.yozmcafe.domain.member.Member;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import java.util.Objects;
 
 @Entity
 public class UnViewedCafe {
@@ -37,6 +36,10 @@ public class UnViewedCafe {
         this.id = id;
         this.cafe = cafe;
         this.member = member;
+    }
+
+    public boolean equalsCafeId(final long cafeId) {
+        return Objects.equals(cafeId, cafe.getId());
     }
 
     public Long getId() {
