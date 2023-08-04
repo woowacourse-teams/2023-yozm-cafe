@@ -148,12 +148,3 @@ public class Cafe {
         return hash(id);
     }
 }
-
-/**
- * create table if not exists `yozm-cafe`.cafe
- * (
- * like_count  int default 0 not null,
- * id          bigint auto_increment primary key,
- * address     varchar(50)   not null,
- * name        varchar(20)   not null,
- */
