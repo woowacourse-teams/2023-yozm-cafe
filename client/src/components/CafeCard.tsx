@@ -35,19 +35,42 @@ const CafeCard = (props: CardProps) => {
 
   const handlePrevImage = () => {
     setCurrentImageIndex(getImageIndexByOffset(-1));
+    announceImageChange('이전 이미지', currentImageIndex - 1);
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex(getImageIndexByOffset(1));
+    announceImageChange('다음 이미지', currentImageIndex + 1);
+  };
+
+  const announceImageChange = (action: string, imageIndex: number) => {
+    const message = `${cafe.name} 카페, ${imageIndex + 1}번째 사진입니다. ${action} 버튼을 클릭하셨습니다.`;
+
+    // 숨겨진 메시지를 화면에 추가하여 스크린 리더가 읽을 수 있게 함
+    // 하드 코딩이라 개선 필요
+
+    const announcementDiv = document.createElement('div');
+    announcementDiv.setAttribute('aria-live', 'polite');
+    announcementDiv.style.position = 'absolute';
+    announcementDiv.style.width = '1px';
+    announcementDiv.style.height = '1px';
+    announcementDiv.style.overflow = 'hidden';
+    document.body.appendChild(announcementDiv);
+
+    announcementDiv.textContent = message;
+
+    setTimeout(() => {
+      announcementDiv.remove();
+    }, 1000);
   };
 
   return (
     <Container>
       <CarouselImageList ref={ref}>
-        <CarouselImage src={getImageByOffset(0)} $show={true} />
+        <CarouselImage src={getImageByOffset(0)} alt={`Cafe Image ${currentImageIndex + 1}`} $show={true} />
         {/* 이미지를 미리 불러오기 위한 장치 */}
-        <CarouselImage src={getImageByOffset(-1)} $show={false} />
-        <CarouselImage src={getImageByOffset(1)} $show={false} />
+        <CarouselImage src={getImageByOffset(-1)} $show={false} aria-hidden="true" />
+        <CarouselImage src={getImageByOffset(1)} $show={false} aria-hidden="true" />
       </CarouselImageList>
       <DotsContainer>
         {cafe.images.map((_, index) => (
@@ -55,11 +78,11 @@ const CafeCard = (props: CardProps) => {
         ))}
       </DotsContainer>
       <CarouselNavigation>
-        <ButtonLeft>
-          <BsChevronCompactLeft onClick={handlePrevImage} />
+        <ButtonLeft onClick={handlePrevImage} aria-label="이전 이미지">
+          <BsChevronCompactLeft />
         </ButtonLeft>
-        <ButtonRight>
-          <BsChevronCompactRight onClick={handleNextImage} />
+        <ButtonRight onClick={handleNextImage} aria-label="다음 이미지">
+          <BsChevronCompactRight />
         </ButtonRight>
       </CarouselNavigation>
       <AsidePosition>

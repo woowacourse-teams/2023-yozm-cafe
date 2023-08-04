@@ -6,7 +6,11 @@ type LogoProps = {
 };
 
 const Logo = ({ fontSize }: LogoProps) => {
-  return <Container fontSize={fontSize}>요즘카페</Container>;
+  return (
+    <Container fontSize={fontSize} aria-label="요즘카페 로고">
+      요즘카페
+    </Container>
+  );
 };
 
 export default Logo;

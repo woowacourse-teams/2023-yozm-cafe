@@ -39,7 +39,7 @@ const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
   };
 
   return (
-    <Container>
+    <Container aria-live="polite">
       <SummaryDetails>
         <BsClock />
         <h3>{isOpenedToday() ? '영업중' : '영업 종료'}</h3>

@@ -34,7 +34,7 @@ const Navbar = () => {
             프로필
           </Button>
         ) : (
-          <Button $fullWidth={true} $fullHeight={true} onClick={openLoginModal}>
+          <Button $fullWidth={true} $fullHeight={true} onClick={openLoginModal} aria-haspopup="dialog">
             로그인
           </Button>
         )}
