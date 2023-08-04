@@ -27,10 +27,10 @@ public class Member {
     @Column(nullable = false)
     private String image;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {CascadeType.PERSIST})
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {CascadeType.PERSIST})
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
@@ -104,14 +104,14 @@ public class Member {
         return result;
     }
 
-    public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
-        List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-        reverse(reverseLikedCafes);
+    public List<LikedCafe> getLikedCafesByPaging(int pageNumber, int pageSize) {
+        List<LikedCafe> likedCafes = new ArrayList<>(this.likedCafes);
+        reverse(likedCafes);
 
-        int startIndex = (pageNum - 1) * pageSize;
-        int endIndex = min(startIndex + pageSize, reverseLikedCafes.size());
+        int startIndex = (pageNumber - 1) * pageSize;
+        int endIndex = min(startIndex + pageSize, likedCafes.size());
 
-        return reverseLikedCafes.subList(startIndex, endIndex);
+        return likedCafes.subList(startIndex, endIndex);
     }
 
     public String getId() {
