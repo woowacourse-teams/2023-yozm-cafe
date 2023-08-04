@@ -5,6 +5,7 @@ import com.project.yozmcafe.domain.cafe.available.Days;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -20,6 +21,7 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_DETAIL;
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_IMAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 class CafeTest {
 
@@ -116,6 +118,44 @@ class CafeTest {
 
         //then
         assertThat(cafe.getLikeCount()).isEqualTo(0);
+    }
+
+    @Nested
+    @DisplayName("카페 업데이트 테스트")
+    class UpdateTest {
+        @Test
+        @DisplayName("ID값이 같지 않으면 업데이트되지 않는다.")
+        void update() {
+            //given
+            final Cafe cafe = new Cafe(1L, "연어카페", "광안리", images(), detail(), 10);
+
+            //when
+            cafe.update(Fixture.getCafe("새 카페", "새 주소", 100));
+
+            //then
+            assertSoftly(softAssertions -> {
+                assertThat(cafe.getName()).isEqualTo("연어카페");
+                assertThat(cafe.getAddress()).isEqualTo("광안리");
+                assertThat(cafe.getLikeCount()).isEqualTo(10);
+            });
+        }
+
+        @Test
+        @DisplayName("ID값이 같으면 전체가 업데이트 된다.")
+        void update_name() {
+            //given
+            final Cafe cafe = new Cafe(1L, "연어카페", "광안리", images(), detail(), 10);
+
+            //when
+            cafe.update(Fixture.getCafe(1L, "새 카페", "새 주소", 100));
+
+            //then
+            assertSoftly(softAssertions -> {
+                assertThat(cafe.getName()).isEqualTo("새 카페");
+                assertThat(cafe.getAddress()).isEqualTo("새 주소");
+                assertThat(cafe.getLikeCount()).isEqualTo(100);
+            });
+        }
     }
 
     private Images images() {

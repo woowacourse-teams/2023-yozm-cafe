@@ -79,6 +79,18 @@ public class Cafe {
         this(null, name, address, images, detail, 0);
     }
 
+    public void update(final Cafe forUpdate) {
+        if (!forUpdate.equals(this)) {
+            return;
+        }
+
+        this.address = forUpdate.address;
+        this.detail = forUpdate.detail;
+        this.images = forUpdate.images;
+        this.name = forUpdate.name;
+        this.likeCount = forUpdate.likeCount;
+    }
+
     public void addLikeCount() {
         likeCount += 1;
     }
