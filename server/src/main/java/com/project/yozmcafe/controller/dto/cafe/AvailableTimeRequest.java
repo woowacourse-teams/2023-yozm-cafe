@@ -6,7 +6,8 @@ import com.project.yozmcafe.domain.cafe.available.Days;
 
 import java.time.LocalTime;
 
-public record AvailableTimeRequest(Days day, @JsonProperty("open") LocalTime open, @JsonProperty("close") LocalTime close,
+public record AvailableTimeRequest(Days day, @JsonProperty("open") LocalTime open,
+                                   @JsonProperty("close") LocalTime close,
                                    @JsonProperty("opened") boolean opened) {
 
     public AvailableTime toAvailableTime() {
