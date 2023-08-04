@@ -7,6 +7,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 public class CafeAdminService {
 
     private final CafeRepository cafeRepository;
+    @PersistenceContext
     private final EntityManager entityManager;
 
     public CafeAdminService(final CafeRepository cafeRepository, final EntityManager entityManager) {
