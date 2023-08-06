@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -59,13 +60,12 @@ public class CafeAdminService {
         return CafeResponse.fromUnLoggedInUser(cafe);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void delete(final long cafeId) {
         Stream.of(
-                        "DELETE FROM UnViewedCafe u WHERE u.cafe.id = :cafeId",
-                        "DELETE FROM LikedCafe l WHERE l.cafe.id = :cafeId",
-                        "DELETE FROM Cafe c WHERE c.id = :cafeId")
-                .map(entityManager::createQuery)
+                        entityManager.createQuery("DELETE FROM UnViewedCafe u WHERE u.cafe.id = :cafeId"),
+                        entityManager.createQuery("DELETE FROM LikedCafe l WHERE l.cafe.id = :cafeId"),
+                        entityManager.createQuery("DELETE FROM Cafe c WHERE c.id = :cafeId"))
                 .map(query -> query.setParameter("cafeId", cafeId))
                 .forEach(Query::executeUpdate);
     }
