@@ -46,10 +46,6 @@ const TitleContainer = styled.article`
 const ScrollContainer = styled.div`
   overflow-y: scroll;
   flex: 1;
-
-  &::-webkit-scrollbar {
-    width: 0; /* 스크롤 바 너비 설정 */
-  }
 `;
 
 const GridContainer = styled.div`

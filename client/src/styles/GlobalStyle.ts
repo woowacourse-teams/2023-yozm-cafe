@@ -17,6 +17,10 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     font-family: 'Pretendard', sans-serif;
+
+    &::-webkit-scrollbar {
+    display: none;
+  }
   }
 
   body {

@@ -75,9 +75,6 @@ const Container = styled.div<{ $show: boolean }>`
 
   background: ${({ theme }) => theme.color.white};
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
   & svg {
     filter: none !important;
   }
