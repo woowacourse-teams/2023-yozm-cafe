@@ -15,6 +15,7 @@ import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.RollbackException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -197,7 +198,8 @@ class CafeAdminServiceTest {
             cafeAdminService.delete(cafe.getId());
 
             //then
-            assertThatThrownBy(() -> em.getTransaction().commit());
+            assertThatThrownBy(() -> em.getTransaction().commit())
+                    .isInstanceOf(RollbackException.class);
         }
     }
 
