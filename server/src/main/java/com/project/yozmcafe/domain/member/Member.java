@@ -4,7 +4,6 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
 import static java.lang.Math.min;
 import static java.util.Collections.reverse;
 
@@ -27,10 +28,10 @@ public class Member {
     @Column(nullable = false)
     private String image;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
