@@ -1,4 +1,5 @@
-import { useQuery, type QueryKey, type UseQueryOptions, type UseQueryResult } from '@tanstack/react-query';
+import type { QueryKey, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 type BaseUseSuspenseQueryResult<TData> = Omit<
   UseQueryResult<TData, never>,
