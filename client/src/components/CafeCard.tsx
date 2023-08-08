@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useIntersection from '../hooks/useIntersection';
 import type { Cafe } from '../types';
@@ -27,65 +26,38 @@ const CafeCard = (props: CardProps) => {
     }
   }, [intersection?.isIntersecting]);
 
-  const getImageIndexByOffset = (offset: number) => {
-    const length = cafe.images.length;
-    return (currentImageIndex + length + offset) % length;
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        const { scrollLeft, clientWidth } = ref.current;
+        const index = Math.round(scrollLeft / clientWidth);
+        setCurrentImageIndex(index);
+      }
+    };
 
-  const getImageByOffset = (offset: number) => cafe.images[getImageIndexByOffset(offset)];
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex(getImageIndexByOffset(-1));
-    announceImageChange('이전 이미지', currentImageIndex - 1);
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex(getImageIndexByOffset(1));
-    announceImageChange('다음 이미지', currentImageIndex + 1);
-  };
-
-  const announceImageChange = (action: string, imageIndex: number) => {
-    const message = `${cafe.name} 카페, ${imageIndex + 1}번째 사진입니다. ${action} 버튼을 클릭하셨습니다.`;
-
-    // 숨겨진 메시지를 화면에 추가하여 스크린 리더가 읽을 수 있게 함
-    // 하드 코딩이라 개선 필요
-
-    const announcementDiv = document.createElement('div');
-    announcementDiv.setAttribute('aria-live', 'polite');
-    announcementDiv.style.position = 'absolute';
-    announcementDiv.style.width = '1px';
-    announcementDiv.style.height = '1px';
-    announcementDiv.style.overflow = 'hidden';
-    document.body.appendChild(announcementDiv);
-
-    announcementDiv.textContent = message;
-
-    setTimeout(() => {
-      announcementDiv.remove();
-    }, 1000);
-  };
+    ref.current?.addEventListener('scroll', handleScroll);
+    return () => {
+      ref.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <Container>
+      <CardQuantityContainer>
+        <CardQuantityContents>
+          {`${currentImageIndex + 1}`}/{cafe.images.length}
+        </CardQuantityContents>
+      </CardQuantityContainer>
       <CarouselImageList ref={ref}>
-        <CarouselImage src={getImageByOffset(0)} alt={`Cafe Image ${currentImageIndex + 1}`} $show={true} />
-        {/* 이미지를 미리 불러오기 위한 장치 */}
-        <CarouselImage src={getImageByOffset(-1)} $show={false} aria-hidden="true" />
-        <CarouselImage src={getImageByOffset(1)} $show={false} aria-hidden="true" />
+        {cafe.images.map((image, index) => (
+          <CarouselImage key={index} src={image} alt={`${cafe}의 이미지`} />
+        ))}
       </CarouselImageList>
       <DotsContainer>
         {cafe.images.map((_, index) => (
-          <Dot key={index} active={index === currentImageIndex} onClick={() => setCurrentImageIndex(index)} />
+          <Dot key={index} active={index === currentImageIndex} />
         ))}
       </DotsContainer>
-      <CarouselNavigation>
-        <ButtonLeft onClick={handlePrevImage} aria-label="이전 이미지">
-          <BsChevronCompactLeft />
-        </ButtonLeft>
-        <ButtonRight onClick={handleNextImage} aria-label="다음 이미지">
-          <BsChevronCompactRight />
-        </ButtonRight>
-      </CarouselNavigation>
       <AsidePosition>
         <Aside>
           <CafeSummary
@@ -122,38 +94,25 @@ const Container = styled.div`
 `;
 
 const CarouselImageList = styled.div`
-  display: grid;
+  scroll-snap-type: x mandatory;
+
+  overflow-x: auto;
+  display: flex;
+
   width: 100%;
   height: 100%;
 `;
 
-const CarouselImage = styled.img<{ $show: boolean }>`
-  display: ${(props) => (props.$show ? 'initial' : 'none')};
-  grid-area: 1 / 1 / 1 / 1;
+const CarouselImage = styled.img`
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 
-  width: 100%;
+  flex: 0 0 100%;
+
+  min-width: 100%;
   height: 100%;
 
   object-fit: cover;
-`;
-
-const CarouselNavigation = styled.div`
-  position: absolute;
-  top: 50%;
-
-  display: flex;
-  justify-content: space-between;
-
-  width: 100%;
-  & > * {
-    cursor: pointer;
-
-    font-size: ${({ theme }) => theme.fontSize['3xl']};
-    color: ${({ theme }) => theme.color.white};
-
-    background: none;
-    border: none;
-  }
 `;
 
 const DotsContainer = styled.div`
@@ -176,6 +135,25 @@ const Dot = styled.div<{ active: boolean }>`
   border-radius: 50%;
 `;
 
+const CardQuantityContainer = styled.div`
+  position: absolute;
+
+  display: flex;
+  justify-content: flex-end;
+
+  width: 100%;
+  padding: ${({ theme }) => theme.space['2.5']} ${({ theme }) => theme.space['2.5']} 0 0;
+
+  text-shadow: none;
+`;
+
+const CardQuantityContents = styled.div`
+  padding: ${({ theme }) => theme.space[1]} ${({ theme }) => theme.space[2]};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  background-color: ${({ theme }) => theme.color.background.secondary};
+  border-radius: 10px;
+`;
+
 const AsidePosition = styled.div`
   position: absolute;
   bottom: 0;
@@ -188,7 +166,3 @@ const Aside = styled.div`
   flex-direction: column-reverse;
   padding-bottom: ${({ theme }) => theme.space[10]};
 `;
-
-const ButtonLeft = styled.button``;
-
-const ButtonRight = styled.button``;

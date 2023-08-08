@@ -48,10 +48,6 @@ const CardList = styled.ul`
   overflow-y: scroll;
   height: 100%;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
   & > * {
     scroll-snap-align: start;
     scroll-snap-stop: always;
