@@ -1,5 +1,7 @@
 package com.project.yozmcafe.domain.cafe.available;
 
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -20,10 +22,17 @@ public class AvailableTime {
     }
 
     public AvailableTime(final Days day, final LocalTime open, final LocalTime close, final boolean isOpened) {
+        validate(open, close);
         this.day = day;
         this.open = open;
         this.close = close;
         this.isOpened = isOpened;
+    }
+
+    private void validate(final LocalTime open, final LocalTime close) {
+        if (close.isBefore(open)) {
+            throw new BadRequestException(ErrorCode.INVALID_CAFE_AVAILABLE_TIME);
+        }
     }
 
     public Days getDay() {

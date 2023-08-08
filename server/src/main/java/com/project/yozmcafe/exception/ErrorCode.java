@@ -21,6 +21,7 @@ public enum ErrorCode {
     NOT_EXISTED_CAFE_IMAGE("C9", "카페의 이미지 정보가 최소 1개 이상 필요합니다."),
     NOT_EXISTED_CAFE_DETAIL("C10", "카페의 상세 정보가 필요합니다."),
     INVALID_CAFE_LIKE_COUNT("C11", "카페의 좋아요 수는 음수가 될 수 없습니다."),
+    INVALID_CAFE_AVAILABLE_TIME("C12", "영업 시작 시각이 영업 종료 시각보다 이후일 수 없습니다."),
 
     NOT_EXISTED_MEMBER("M1", "회원이 존재하지 않습니다."),
 
