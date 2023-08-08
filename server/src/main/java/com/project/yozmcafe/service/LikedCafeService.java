@@ -8,6 +8,7 @@ import com.project.yozmcafe.domain.member.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,11 +27,18 @@ public class LikedCafeService {
     public List<LikedCafeResponse> findLikedCafesById(final String memberId, final int pageNumber, final int pageSize) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
-        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(pageNumber, pageSize);
+        List<LikedCafe> likedCafes = getLikedCafes(pageNumber, pageSize, member);
 
         return likedCafes.stream()
                 .map(LikedCafeResponse::from)
                 .toList();
+    }
+
+    private List<LikedCafe> getLikedCafes(final int pageNumber, final int pageSize, final Member member) {
+        if (pageNumber > member.getLikedCafes().size() / pageSize) {
+            return Collections.emptyList();
+        }
+        return member.getLikedCafesSection(pageNumber, pageSize);
     }
 
     @Transactional
