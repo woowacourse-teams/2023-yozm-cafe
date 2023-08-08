@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import useCafeActions from '../hooks/useCafeActions';
 import useUser from '../hooks/useUser';
-import { Cafe } from '../types';
+import type { Cafe } from '../types';
 import LikeButton from './LikeButton';
 
 type CafeActionBarProps = {

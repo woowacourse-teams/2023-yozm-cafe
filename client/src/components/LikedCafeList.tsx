@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { LikedCafe } from '../types';
+import type { LikedCafe } from '../types';
 
 type LikedCafeListProps = {
   likedCafes: LikedCafe[];

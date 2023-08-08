@@ -1,4 +1,4 @@
-import { Cafe, LikedCafe } from '../types';
+import type { Cafe, LikedCafe } from '../types';
 
 export const likedCafes: LikedCafe[] = [
   {

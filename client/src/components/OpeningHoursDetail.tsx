@@ -1,6 +1,6 @@
 import { BsClock } from 'react-icons/bs';
 import { styled } from 'styled-components';
-import { OpeningHour, OpeningHourDay } from '../types';
+import type { OpeningHour, OpeningHourDay } from '../types';
 
 const DAY_MAPPER: Record<OpeningHourDay, string> = {
   MONDAY: '월',

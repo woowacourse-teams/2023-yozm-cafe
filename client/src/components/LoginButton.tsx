@@ -1,6 +1,7 @@
-import { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import { styled } from 'styled-components';
-import theme, { Theme } from '../styles/theme';
+import type { Theme } from '../styles/theme';
+import theme from '../styles/theme';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   $color: keyof Theme['color'];

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useIntersection from '../hooks/useIntersection';
-import { Cafe } from '../types';
+import type { Cafe } from '../types';
 import CafeActionBar from './CafeActionBar';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
 import CafeSummary from './CafeSummary';

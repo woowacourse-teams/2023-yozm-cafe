@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * 주어진 ref의 HTMLElement가 화면 상에

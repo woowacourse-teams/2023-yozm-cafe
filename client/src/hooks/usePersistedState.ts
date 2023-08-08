@@ -1,4 +1,5 @@
-import { Dispatch, useEffect, useState } from 'react';
+import type { Dispatch } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * useState와 localStorage가 결합된 훅입니다. 영구 저장되는 상태를 이용할 수 있습니다.

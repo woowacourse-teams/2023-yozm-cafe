@@ -1,8 +1,8 @@
-import React from 'react';
+import type React from 'react';
 import { CgClose } from 'react-icons/cg';
 import { styled } from 'styled-components';
 import useAuthUrls from '../hooks/useAuthUrls';
-import { Theme } from '../styles/theme';
+import type { Theme } from '../styles/theme';
 import LoginButton from './LoginButton';
 import Logo from './Logo';
 

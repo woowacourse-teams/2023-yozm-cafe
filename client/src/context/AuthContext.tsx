@@ -1,7 +1,8 @@
-import { Dispatch, PropsWithChildren, createContext, useMemo } from 'react';
+import type { Dispatch, PropsWithChildren } from 'react';
+import { createContext, useMemo } from 'react';
 import client from '../client';
 import usePersistedState from '../hooks/usePersistedState';
-import { Identity } from '../types';
+import type { Identity } from '../types';
 
 type AuthContextValue = {
   accessToken: string | null;
