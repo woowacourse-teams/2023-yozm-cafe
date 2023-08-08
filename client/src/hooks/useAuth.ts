@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback, useContext } from 'react';
 import client from '../client';
 import AuthContext from '../context/AuthContext';
-import { AuthProvider } from '../types';
+import type { AuthProvider } from '../types';
 
 type AuthParams = {
   provider: AuthProvider;

@@ -5,7 +5,9 @@ type LogoProps = {
   fontSize: keyof typeof theme.fontSize;
 };
 
-const Logo = ({ fontSize }: LogoProps) => {
+const Logo = (props: LogoProps) => {
+  const { fontSize } = props;
+
   return (
     <Container fontSize={fontSize} aria-label="요즘카페 로고">
       요즘카페

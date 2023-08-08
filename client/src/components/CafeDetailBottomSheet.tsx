@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
-import { Cafe } from '../types';
+import type { Cafe } from '../types';
 import OpeningHoursDetail from './OpeningHoursDetail';
 
 type CafeDetailBottomSheetProps = {
@@ -10,7 +10,9 @@ type CafeDetailBottomSheetProps = {
   onClose: () => void;
 };
 
-const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetProps) => {
+const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
+  const { show, cafe, onClose } = props;
+
   useEffect(() => {
     document.addEventListener('click', onClose);
 

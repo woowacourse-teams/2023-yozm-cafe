@@ -22,7 +22,7 @@ const MyProfile = () => {
     navigate('/');
   };
 
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll: React.UIEventHandler = (event) => {
     if (isFetchingNextPage) {
       return;
     }

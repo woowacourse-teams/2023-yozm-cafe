@@ -1,4 +1,4 @@
-import { AuthProvider, AuthUrl, Cafe, LikedCafe, User } from './types';
+import type { AuthProvider, AuthUrl, Cafe, LikedCafe, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {

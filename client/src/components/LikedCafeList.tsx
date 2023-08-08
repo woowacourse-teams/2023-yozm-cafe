@@ -1,11 +1,13 @@
 import { styled } from 'styled-components';
-import { LikedCafe } from '../types';
+import type { LikedCafe } from '../types';
 
 type LikedCafeListProps = {
   likedCafes: LikedCafe[];
 };
 
-const LikedCafeList = ({ likedCafes }: LikedCafeListProps) => {
+const LikedCafeList = (props: LikedCafeListProps) => {
+  const { likedCafes } = props;
+
   return (
     <Container>
       <TitleContainer>

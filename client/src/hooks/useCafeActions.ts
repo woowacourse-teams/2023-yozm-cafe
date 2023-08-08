@@ -1,6 +1,7 @@
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { InfiniteData } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '../client';
-import { Cafe } from '../types';
+import type { Cafe } from '../types';
 import useAuth from './useAuth';
 
 type SetLikedCafeParams = {

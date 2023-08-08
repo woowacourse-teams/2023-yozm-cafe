@@ -1,7 +1,8 @@
+import type React from 'react';
 import { CgClose } from 'react-icons/cg';
 import { styled } from 'styled-components';
 import useAuthUrls from '../hooks/useAuthUrls';
-import { Theme } from '../styles/theme';
+import type { Theme } from '../styles/theme';
 import LoginButton from './LoginButton';
 import Logo from './Logo';
 
@@ -14,12 +15,13 @@ type ModalProps = {
   onClose: () => void;
 };
 
-const LoginModal = ({ onClose }: ModalProps) => {
+const LoginModal = (props: ModalProps) => {
+  const { onClose } = props;
   const { data: urls } = useAuthUrls();
 
-  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleContentClick: React.MouseEventHandler = (event) => {
     // 클릭 이벤트가 ModalContainer까지 전파되지 않도록 막습니다.
-    e.stopPropagation();
+    event.stopPropagation();
   };
 
   return (

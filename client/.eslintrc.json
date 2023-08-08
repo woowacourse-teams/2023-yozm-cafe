@@ -3,6 +3,9 @@
   "extends": [
     "eslint:recommended",
     "standard",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
     "plugin:storybook/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
@@ -13,6 +16,12 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        "fixStyle": "separate-type-imports"
+      }
+    ]
   }
 }

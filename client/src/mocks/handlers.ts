@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { cafes } from '../data/mockData';
-import { Identity, User } from '../types';
+import type { Identity, User } from '../types';
 
 let pageState = 1;
 

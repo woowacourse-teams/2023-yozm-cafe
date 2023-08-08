@@ -1,6 +1,6 @@
 import { BsClock } from 'react-icons/bs';
 import { styled } from 'styled-components';
-import { OpeningHour, OpeningHourDay } from '../types';
+import type { OpeningHour, OpeningHourDay } from '../types';
 
 const DAY_MAPPER: Record<OpeningHourDay, string> = {
   MONDAY: '월',
@@ -16,7 +16,9 @@ type OpeningHoursDetailProps = {
   openingHours: OpeningHour[];
 };
 
-const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
+const OpeningHoursDetail = (props: OpeningHoursDetailProps) => {
+  const { openingHours } = props;
+
   const getCurrentTime = (): string => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
