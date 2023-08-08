@@ -34,13 +34,9 @@ const CafeCard = (props: CardProps) => {
   }, [intersection?.isIntersecting]);
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.addEventListener('scroll', handleScroll);
-    }
+    ref.current?.addEventListener('scroll', handleScroll);
     return () => {
-      if (ref.current) {
-        ref.current.removeEventListener('scroll', handleScroll);
-      }
+      ref.current?.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
