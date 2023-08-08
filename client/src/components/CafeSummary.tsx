@@ -8,7 +8,9 @@ type CafeSummaryProps = {
   onClick: React.MouseEventHandler<HTMLDivElement>;
 };
 
-const CafeSummary = ({ title, address, onClick }: CafeSummaryProps) => {
+const CafeSummary = (props: CafeSummaryProps) => {
+  const { title, address, onClick } = props;
+
   return (
     <Container onClick={onClick} role="button" tabIndex={0}>
       <Summary>

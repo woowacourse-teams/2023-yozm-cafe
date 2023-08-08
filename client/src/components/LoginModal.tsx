@@ -14,7 +14,8 @@ type ModalProps = {
   onClose: () => void;
 };
 
-const LoginModal = ({ onClose }: ModalProps) => {
+const LoginModal = (props: ModalProps) => {
+  const { onClose } = props;
   const { data: urls } = useAuthUrls();
 
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {

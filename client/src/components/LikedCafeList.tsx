@@ -5,7 +5,9 @@ type LikedCafeListProps = {
   likedCafes: LikedCafe[];
 };
 
-const LikedCafeList = ({ likedCafes }: LikedCafeListProps) => {
+const LikedCafeList = (props: LikedCafeListProps) => {
+  const { likedCafes } = props;
+
   return (
     <Container>
       <TitleContainer>

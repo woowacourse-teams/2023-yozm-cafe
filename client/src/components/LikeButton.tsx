@@ -8,7 +8,9 @@ type LikeButtonProps = {
   onChange: () => void;
 };
 
-const LikeButton = ({ likeCount, active, onChange }: LikeButtonProps) => {
+const LikeButton = (props: LikeButtonProps) => {
+  const { likeCount, active, onChange } = props;
+
   const [announce, setAnnounce] = useState('');
 
   useEffect(() => {

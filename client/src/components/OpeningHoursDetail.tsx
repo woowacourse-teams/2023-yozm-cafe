@@ -16,7 +16,9 @@ type OpeningHoursDetailProps = {
   openingHours: OpeningHour[];
 };
 
-const OpeningHoursDetail = ({ openingHours }: OpeningHoursDetailProps) => {
+const OpeningHoursDetail = (props: OpeningHoursDetailProps) => {
+  const { openingHours } = props;
+
   const getCurrentTime = (): string => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');

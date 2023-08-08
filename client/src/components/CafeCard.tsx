@@ -14,6 +14,7 @@ type CardProps = {
 
 const CafeCard = (props: CardProps) => {
   const { cafe, onIntersect } = props;
+
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

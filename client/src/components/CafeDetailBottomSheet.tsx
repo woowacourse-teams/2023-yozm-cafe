@@ -10,7 +10,9 @@ type CafeDetailBottomSheetProps = {
   onClose: () => void;
 };
 
-const CafeDetailBottomSheet = ({ show, cafe, onClose }: CafeDetailBottomSheetProps) => {
+const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
+  const { show, cafe, onClose } = props;
+
   useEffect(() => {
     document.addEventListener('click', onClose);
 

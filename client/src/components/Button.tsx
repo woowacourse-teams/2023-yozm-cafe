@@ -7,7 +7,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   $fullHeight?: boolean;
 };
 
-const Button = ({ children, $variant = 'default', $fullWidth = false, $fullHeight = false, ...rest }: ButtonProps) => {
+const Button = (props: ButtonProps) => {
+  const { children, $variant = 'default', $fullWidth = false, $fullHeight = false, ...rest } = props;
+
   return (
     <Container $variant={$variant} $fullWidth={$fullWidth} $fullHeight={$fullHeight} {...rest}>
       {children}

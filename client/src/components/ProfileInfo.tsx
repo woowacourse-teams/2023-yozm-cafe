@@ -5,7 +5,9 @@ type ProfileInfoProps = {
   userName: string;
 };
 
-const ProfileInfo = ({ userImage, userName }: ProfileInfoProps) => {
+const ProfileInfo = (props: ProfileInfoProps) => {
+  const { userImage, userName } = props;
+
   return (
     <Container>
       <Image src={userImage} alt="프로필 이미지" />

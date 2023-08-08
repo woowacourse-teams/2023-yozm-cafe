@@ -6,7 +6,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   $color: keyof Theme['color'];
 };
 
-const LoginButton = ({ children, ...rest }: ButtonProps) => {
+const LoginButton = (props: ButtonProps) => {
+  const { children, ...rest } = props;
+
   return (
     <Container {...rest}>
       <ButtonContent>{children}</ButtonContent>
