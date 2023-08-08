@@ -32,15 +32,31 @@ services:
     restart: unless-stopped
     ports:
       - 20000:3306
+    volumes:
+      - ./scripts/mysql.sh:/post-install-entrypoint.sh:ro
+      - db-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: yozm-cafe
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       TZ: Asia/Seoul
-    command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_general_ci"]
+    entrypoint: /post-install-entrypoint.sh
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+
+  remote-mysql:
+    image: solo5star/ssh-tunnel
+    restart: unless-stopped
     volumes:
-      - db-data:/var/lib/mysql
+      - ~/.ssh:/ssh
+    environment:
+      TUNNEL_HOST: ${REMOTE_DB_HOST}
+      LOCAL_PORT: 3306
+      REMOTE_HOST: localhost
+      REMOTE_PORT: 20000
 
 volumes:
   db-data:
