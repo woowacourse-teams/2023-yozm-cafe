@@ -1,3 +1,4 @@
+import React from 'react';
 import { CgClose } from 'react-icons/cg';
 import { styled } from 'styled-components';
 import useAuthUrls from '../hooks/useAuthUrls';
@@ -18,9 +19,9 @@ const LoginModal = (props: ModalProps) => {
   const { onClose } = props;
   const { data: urls } = useAuthUrls();
 
-  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleContentClick: React.MouseEventHandler = (event) => {
     // 클릭 이벤트가 ModalContainer까지 전파되지 않도록 막습니다.
-    e.stopPropagation();
+    event.stopPropagation();
   };
 
   return (
