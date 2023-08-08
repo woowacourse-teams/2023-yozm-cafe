@@ -1,5 +1,28 @@
 package com.project.yozmcafe.controller;
 
+import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+
+import java.util.List;
+import java.util.Objects;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.QueryParametersSnippet;
+
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -7,40 +30,14 @@ import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.util.AcceptanceContext;
-import io.restassured.RestAssured;
+
 import io.restassured.response.Response;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-import java.util.Objects;
+class CafeControllerTest extends BaseControllerTest {
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
+    private static final String MEMBER_ID = "memberId";
+    private static final String CAFE_API = "cafeApi/";
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(scripts = "classpath:truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CafeControllerTest {
-
-    public static final String MEMBER_ID = "memberId";
-
-    @LocalServerPort
-    private int port;
-    @Autowired
-    private AcceptanceContext context;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -55,13 +52,6 @@ class CafeControllerTest {
         cafe2 = cafeRepository.save(Fixture.getCafe("n2", "address2", 1));
         cafe3 = cafeRepository.save(Fixture.getCafe("n3", "address3", 1));
         cafe4 = cafeRepository.save(Fixture.getCafe("n4", "address4", 1));
-        RestAssured.port = port;
-    }
-
-    @AfterEach
-    public void afterEach() {
-        memberRepository.deleteAll();
-        cafeRepository.deleteAll();
     }
 
     @Test
@@ -69,15 +59,15 @@ class CafeControllerTest {
     void updateLikesAdd() {
         //given
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
-
         saveMemberAndUnViewedCafes();
 
         //when
-        context.invokeHttpPostWithToken("/cafes/" + cafe1.getId() + "/likes?isLiked=true");
-        final Response likeResponse = context.response;
+        final Response likeResponse = given().auth().oauth2("tmpToken")
+                .when().post("/cafes/{cafeId}/likes?isLiked=true", cafe1.getId());
 
-        context.invokeHttpGetWithToken("/cafes");
-        final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
+        final List<CafeResponse> cafeResponses = getCafeResponses(given().auth().oauth2("tmpToken")
+                .when().get("/cafes"));
+
         final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
 
         //then
@@ -104,11 +94,15 @@ class CafeControllerTest {
         saveMemberAndUnViewedCafesAndLikedCafes();
 
         //when
-        context.invokeHttpPostWithToken("/cafes/" + cafe1.getId() + "/likes?isLiked=false");
-        final Response likeResponse = context.response;
+        final Response likeResponse = given().auth().oauth2("tmpToken")
+                .when().post("/cafes/{cafeId}/likes?isLiked=false", cafe1.getId());
 
-        context.invokeHttpGetWithToken("/cafes");
-        final List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
+        final Response response = given()
+                .auth().oauth2("tmpToken")
+                .when().get("/cafes");
+
+        final List<CafeResponse> cafeResponses = getCafeResponses(response);
+
         final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
 
         //then
@@ -127,12 +121,15 @@ class CafeControllerTest {
         cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
 
         //when
-        context.invokeHttpGet("/cafes/guest?page=1");
+        final Response response = given(spec).log().all()
+                .filter(document(CAFE_API + "비회원 사용자 카페 조회", getPageRequestParam(), getCafeResponseFields()))
+                .when().get("/cafes/guest?page=1");
+
+        final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
         //then
-        List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
         assertAll(
-                () -> assertThat(context.response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).extracting("id", "name")
                         .contains(tuple(cafe1.getId(), "n1"),
                                 tuple(cafe2.getId(), "n2"),
@@ -146,17 +143,22 @@ class CafeControllerTest {
     @DisplayName("로그인 되지 않은 사용자가 /cafes/guest?page=? 에 GET요청을 보낸 경우 page가 최대 page를 초과하는 경우 빈배열을 반환한다.")
     void getCafesEmptyByUnLoginUser() {
         //when
-        context.invokeHttpGet("/cafes/guest?page=2000");
+        final Response response = given(spec).log().all()
+                .filter(document(CAFE_API + "비회원 사용자 카페 조회 page가 최대 page를 초과하면 빈 배열 반환", getPageRequestParam(),
+                        responseFields(fieldWithPath("[]").description("page가 초과하여 빈배열 반환"))))
+                .when().get("/cafes/guest?page=2000");
+
+        final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
         //then
         assertAll(
-                () -> assertThat(context.response.statusCode()).isEqualTo(200),
-                () -> assertThat(context.response.jsonPath().getList("$")).isEmpty()
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(cafeResponses).isEmpty()
         );
     }
 
     @Test
-    @DisplayName("로그인한 사용자가 /cafes?page=?에 GET 요청을 보내면 아직보지않은 랜덤한,서로 다른 카페정보를 5개씩 응답한다.")
+    @DisplayName("로그인한 사용자가 /cafes 에 GET 요청을 보내면 아직 보지 않은 랜덤한, 서로 다른 카페정보를 5개씩 응답한다.")
     void getCafesWithMember() {
         //given
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
@@ -167,13 +169,15 @@ class CafeControllerTest {
         memberRepository.save(member);
 
         //when
-        context.invokeHttpGetWithToken("/cafes?page=1");
+        final Response response = given(spec).log().all()
+                .auth().oauth2("tmpToken")
+                .filter(document(CAFE_API + "로그인 한 사용자 카페 조회", getCafeResponseFields()))
+                .when().get("/cafes");
 
-        //then
-        List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
+        final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
         assertAll(
-                () -> assertThat(context.response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).extracting("id", "name")
                         .contains(tuple(cafe1.getId(), "n1"),
                                 tuple(cafe2.getId(), "n2"),
@@ -184,20 +188,23 @@ class CafeControllerTest {
     }
 
     @Test
-    @DisplayName("로그인한 사용자가 /cafes?page=?에 GET 요청을 보낼 때, 아직보지 않은 카페가 5개 미만이면 그 수만큼의 서로 다른 카페를 응답한다.")
+    @DisplayName("로그인한 사용자가 /cafes 에 GET 요청을 보낼 때, 아직보지 않은 카페가 5개 미만이면 남은 수만큼의 서로 다른 카페를 응답한다.")
     void getCafesWithMemberWhenCafeLessThan() {
         //given
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
         saveMemberAndUnViewedCafes();
 
         //when
-        context.invokeHttpGetWithToken("/cafes?page=1");
+        final Response response = given(spec).log().all()
+                .auth().oauth2("tmpToken")
+                .filter(document(CAFE_API + "로그인 한 사용자 카페 조회 시 남은 카페가 5개 미만인 경우", getCafeResponseFields()))
+                .when().get("/cafes");
+
+        final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
         //then
-        List<CafeResponse> cafeResponses = context.response.jsonPath().getList(".", CafeResponse.class);
-
         assertAll(
-                () -> assertThat(context.response.statusCode()).isEqualTo(200),
+                () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).extracting("id", "name")
                         .contains(tuple(cafe1.getId(), "n1"),
                                 tuple(cafe2.getId(), "n2"),
@@ -220,5 +227,32 @@ class CafeControllerTest {
         member.updateLikedCafesBy(cafe3, true);
         member.updateLikedCafesBy(cafe4, true);
         memberRepository.save(member);
+    }
+
+    private ResponseFieldsSnippet getCafeResponseFields() {
+        return responseFields(
+                fieldWithPath("[].id").description("카페 아이디"),
+                fieldWithPath("[].name").description("카페 이름"),
+                fieldWithPath("[].address").description("카페 주소"),
+                fieldWithPath("[].images[]").description("카페 이미지 url"),
+                fieldWithPath("[].isLiked").description("해당 카페의 좋아요 여부(비회원은 default = false)"),
+                fieldWithPath("[].likeCount").description("카페의 좋아요 갯수"),
+                fieldWithPath("[].detail.phone").description("카페의 전화번호"),
+                fieldWithPath("[].detail.mapUrl").description("카페의 네이버 지도 url"),
+                fieldWithPath("[].detail.description").description("카페의 상세정보"),
+                fieldWithPath("[].detail.openingHours[].day").description("요일"),
+                fieldWithPath("[].detail.openingHours[].open").description("카페 오픈시간"),
+                fieldWithPath("[].detail.openingHours[].close").description("카페 종료시간"),
+                fieldWithPath("[].detail.openingHours[].opened").description("카페 해당요일 영업여부")
+        );
+    }
+
+    private List<CafeResponse> getCafeResponses(final Response response) {
+        return response.then().log().all()
+                .extract().jsonPath().getList(".", CafeResponse.class);
+    }
+
+    private QueryParametersSnippet getPageRequestParam() {
+        return queryParameters(parameterWithName("page").description("페이지 번호"));
     }
 }
