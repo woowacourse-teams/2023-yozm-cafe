@@ -5,36 +5,26 @@ import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
 import com.project.yozmcafe.domain.cafe.available.Days;
-import com.project.yozmcafe.util.AcceptanceContext;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalTime;
 import java.util.List;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(scripts = "classpath:truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class CafeAdminControllerTest {
+import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private AcceptanceContext context;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
+class CafeAdminControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("카페 저장하기")
@@ -42,68 +32,154 @@ class CafeAdminControllerTest {
         //given
         final CafeRequest request = makeCafeRequest();
 
-        //when
-        context.invokeHttpPost("/admin/cafes", request);
-
-        //then
-        context.response.then()
-                .statusCode(HttpStatus.CREATED.value());
+        //when, then
+        given(spec).log().all()
+                .contentType(JSON)
+                .filter(document("어드민 API/카페 저장하기",
+                        requestFields(
+                                fieldWithPath("name").description("카페 이름"),
+                                fieldWithPath("address").description("카페 도로명 주소"),
+                                fieldWithPath("images.[]").description("이미지 URL 배열"),
+                                fieldWithPath("detail.mapUrl").description("네이버 지도 URL"),
+                                fieldWithPath("detail.description").description("상세 설명"),
+                                fieldWithPath("detail.phone").description("전화번호"),
+                                fieldWithPath("detail.openingHours.[].day").description("요일"),
+                                fieldWithPath("detail.openingHours.[].open").description("영업 시작 시각"),
+                                fieldWithPath("detail.openingHours.[].close").description("영업 종료 시각"),
+                                fieldWithPath("detail.openingHours.[].opened").description("해당 요일 영업 여부")),
+                        responseHeaders(headerWithName("Location").description("카페 저장 위치"))))
+                .body(request)
+                .when()
+                .post("/admin/cafes")
+                .then()
+                .statusCode(is(HttpStatus.CREATED.value()))
+                .header("Location", notNullValue());
     }
 
     @Test
     @DisplayName("카페 업데이트")
     void update() {
         //given
-        context.invokeHttpPost("/admin/cafes", makeCafeRequest());
-        final String location = context.response.header("Location");
+        String location = saveCafe();
+        CafeUpdateRequest updateRequest = makeCafeUpdateRequest();
 
-        //when
-        context.invokeHttpPut(location, makeCafeUpdateRequest());
-
-        //then
-        context.response.then()
-                .statusCode(HttpStatus.NO_CONTENT.value());
+        //when, then
+        given(spec).log().all()
+                .contentType(JSON)
+                .filter(document("어드민 API/카페 업데이트하기",
+                        requestFields(
+                                fieldWithPath("name").description("카페 이름"),
+                                fieldWithPath("address").description("카페 도로명 주소"),
+                                fieldWithPath("images.[]").description("이미지 URL 배열"),
+                                fieldWithPath("likeCount").description("좋아요 숫자"),
+                                fieldWithPath("detail.mapUrl").description("네이버 지도 URL"),
+                                fieldWithPath("detail.description").description("상세 설명"),
+                                fieldWithPath("detail.phone").description("전화번호"),
+                                fieldWithPath("detail.openingHours.[].day").description("요일"),
+                                fieldWithPath("detail.openingHours.[].open").description("영업 시작 시각"),
+                                fieldWithPath("detail.openingHours.[].close").description("영업 종료 시각"),
+                                fieldWithPath("detail.openingHours.[].opened").description("해당 요일 영업 여부")),
+                        pathParameters(parameterWithName("cafeId").description("업데이트할 카페 ID"))))
+                .body(updateRequest)
+                .when()
+                .put("/admin/cafes/{cafeId}", location)
+                .then()
+                .statusCode(is(HttpStatus.NO_CONTENT.value()));
     }
 
     @Test
     @DisplayName("카페 삭제")
     void delete() {
         //given
-        context.invokeHttpPost("/admin/cafes", makeCafeRequest());
-        final String location = context.response.header("Location");
+        String location = saveCafe();
 
-        //when
-        context.invokeHttpDelete(location);
-
-        //then
-        context.response.then()
-                .statusCode(HttpStatus.NO_CONTENT.value());
+        //when, then
+        given(spec).log().all()
+                .contentType(JSON)
+                .filter(document("어드민 API/카페 삭제하기",
+                        pathParameters(parameterWithName("cafeId").description("삭제할 카페 ID"))))
+                .when()
+                .delete("/admin/cafes/{cafeId}", location)
+                .then()
+                .statusCode(is(HttpStatus.NO_CONTENT.value()));
     }
 
     @Test
     @DisplayName("카페 전체 조회")
     void findAll() {
-        //when
-        context.invokeHttpGet("/admin/cafes");
+        //given
+        saveCafe();
+        saveCafe();
 
-        //then
-        context.response.then()
-                .statusCode(HttpStatus.OK.value());
+        //when, then
+        given(spec).log().all()
+                .contentType(JSON)
+                .filter(document("어드민 API/카페 전체 조회하기",
+                        responseFields(
+                                fieldWithPath("[].id").description("카페 ID"),
+                                fieldWithPath("[].name").description("카페 이름"),
+                                fieldWithPath("[].address").description("카페 도로명 주소"),
+                                fieldWithPath("[].isLiked").description("좋아요 누른 여부"),
+                                fieldWithPath("[].likeCount").description("좋아요 숫자"),
+                                fieldWithPath("[].images.[]").description("이미지 URL 배열"),
+                                fieldWithPath("[].detail.mapUrl").description("네이버 지도 URL"),
+                                fieldWithPath("[].detail.description").description("상세 설명"),
+                                fieldWithPath("[].detail.phone").description("전화번호"),
+                                fieldWithPath("[].detail.openingHours.[].day").description("요일"),
+                                fieldWithPath("[].detail.openingHours.[].open").description("영업 시작 시각"),
+                                fieldWithPath("[].detail.openingHours.[].close").description("영업 종료 시각"),
+                                fieldWithPath("[].detail.openingHours.[].opened").description("해당 요일 영업 여부"))
+                ))
+                .when()
+                .get("/admin/cafes")
+                .then()
+                .statusCode(is(HttpStatus.OK.value()));
     }
 
     @Test
     @DisplayName("카페 단건 조회")
     void findById() {
         //given
-        context.invokeHttpPost("/admin/cafes", makeCafeRequest());
-        final String location = context.response.header("Location");
+        String location = saveCafe();
 
-        //when
-        context.invokeHttpGet(location);
+        //when, then
+        given(spec).log().all()
+                .contentType(JSON)
+                .filter(document("어드민 API/카페 단건 조회하기",
+                        pathParameters(parameterWithName("cafeId").description("조회할 카페 ID")),
+                        responseFields(
+                                fieldWithPath("id").description("카페 ID"),
+                                fieldWithPath("name").description("카페 이름"),
+                                fieldWithPath("address").description("카페 도로명 주소"),
+                                fieldWithPath("isLiked").description("좋아요 누른 여부"),
+                                fieldWithPath("likeCount").description("좋아요 숫자"),
+                                fieldWithPath("images.[]").description("이미지 URL 배열"),
+                                fieldWithPath("detail.mapUrl").description("네이버 지도 URL"),
+                                fieldWithPath("detail.description").description("상세 설명"),
+                                fieldWithPath("detail.phone").description("전화번호"),
+                                fieldWithPath("detail.openingHours.[].day").description("요일"),
+                                fieldWithPath("detail.openingHours.[].open").description("영업 시작 시각"),
+                                fieldWithPath("detail.openingHours.[].close").description("영업 종료 시각"),
+                                fieldWithPath("detail.openingHours.[].opened").description("해당 요일 영업 여부"))
+                ))
+                .when()
+                .get("/admin/cafes/{cafeId}", location)
+                .then()
+                .statusCode(is(HttpStatus.OK.value()));
+    }
 
-        //then
-        context.response.then()
-                .statusCode(HttpStatus.OK.value());
+    private String saveCafe() {
+        CafeRequest request = makeCafeRequest();
+        String location = given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/admin/cafes")
+                .then()
+                .extract().header("Location");
+        String[] split = location.split("/");
+
+        return split[split.length - 1];
     }
 
     private CafeRequest makeCafeRequest() {
