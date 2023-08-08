@@ -28,9 +28,6 @@
 
   background: ${({theme})=>theme.color.white};
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
   & svg {
     filter: none !important;
   }
@@ -75,4 +72,4 @@
   cursor: pointer;
   font-size: ${({theme})=>theme.fontSize["2xl"]};
 `;try{CafeDetailBottomSheet.displayName="CafeDetailBottomSheet",CafeDetailBottomSheet.__docgenInfo={description:"",displayName:"CafeDetailBottomSheet",props:{show:{defaultValue:null,description:"",name:"show",required:!1,type:{name:"boolean"}},cafe:{defaultValue:null,description:"",name:"cafe",required:!0,type:{name:"Cafe"}},onClose:{defaultValue:null,description:"",name:"onClose",required:!0,type:{name:"() => void"}}}},"undefined"!=typeof STORYBOOK_REACT_CLASSES&&(STORYBOOK_REACT_CLASSES["src/components/CafeDetailBottomSheet.tsx#CafeDetailBottomSheet"]={docgenInfo:CafeDetailBottomSheet.__docgenInfo,name:"CafeDetailBottomSheet",path:"src/components/CafeDetailBottomSheet.tsx#CafeDetailBottomSheet"})}catch(__react_docgen_typescript_loader_error){}const CafeDetailBottomSheet_stories={title:"CafeDetailBottomSheet",component:components_CafeDetailBottomSheet},Default={args:{cafe:{id:1,name:"성수 카페",address:"성수로 1길",images:["/images/cafe-image-1.png","/images/cafe-image-2.png","/images/cafe-image-3.png","/images/cafe-image-4.png","/images/cafe-image-5.png"],isLiked:!1,likeCount:1,detail:{mapUrl:"https://map.kakao/~~",description:"우리 카페는 이뻐용",openingHours:[{day:"MONDAY",open:"2023-07-14T15:27:48.222433",close:"2023-07-14T15:27:48.222448",opened:!0},{day:"TUESDAY",open:"2023-07-14T15:27:48.222455",close:"2023-07-14T15:27:48.222457",opened:!0},{day:"WEDNESDAY",open:"2023-07-14T15:27:48.222459",close:"2023-07-14T15:27:48.222461",opened:!0},{day:"THURSDAY",open:"2023-07-14T15:27:48.222463",close:"2023-07-14T15:27:48.222465",opened:!0},{day:"FRIDAY",open:"2023-07-14T15:27:48.222468",close:"2023-07-14T15:27:48.22247",opened:!0},{day:"SATURDAY",open:"2023-07-14T15:27:48.222472",close:"2023-07-14T15:27:48.222475",opened:!0},{day:"SUNDAY",open:"2023-07-14T15:27:48.222477",close:"2023-07-14T15:27:48.222479",opened:!0}]}}}};Default.parameters={...Default.parameters,docs:{...Default.parameters?.docs,source:{originalSource:"{\n  args: {\n    cafe: cafes[0]\n  }\n}",...Default.parameters?.docs?.source}}};const __namedExportsOrder=["Default"]}}]);
-//# sourceMappingURL=components-CafeDetailBottomSheet-stories.e6f6018f.iframe.bundle.js.map
+//# sourceMappingURL=components-CafeDetailBottomSheet-stories.6fda16e1.iframe.bundle.js.map
