@@ -4,13 +4,10 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
@@ -105,6 +102,10 @@ public class Member {
     }
 
     public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
+        if (pageNum - 1 > likedCafes.size() / pageSize) {
+            return Collections.emptyList();
+        }
+
         List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
         reverse(reverseLikedCafes);
 
