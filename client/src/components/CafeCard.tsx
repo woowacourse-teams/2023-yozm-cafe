@@ -19,14 +19,6 @@ const CafeCard = (props: CardProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(ref, { threshold: 0.7 });
 
-  const handleScroll = () => {
-    if (ref.current) {
-      const { scrollLeft, clientWidth } = ref.current;
-      const index = Math.round(scrollLeft / clientWidth);
-      setCurrentImageIndex(index);
-    }
-  };
-
   useEffect(() => {
     if (intersection) {
       onIntersect?.(intersection);
@@ -34,6 +26,14 @@ const CafeCard = (props: CardProps) => {
   }, [intersection?.isIntersecting]);
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        const { scrollLeft, clientWidth } = ref.current;
+        const index = Math.round(scrollLeft / clientWidth);
+        setCurrentImageIndex(index);
+      }
+    };
+
     ref.current?.addEventListener('scroll', handleScroll);
     return () => {
       ref.current?.removeEventListener('scroll', handleScroll);
