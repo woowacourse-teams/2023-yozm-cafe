@@ -1,5 +1,24 @@
 package com.project.yozmcafe.controller;
 
+import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+
 import com.project.yozmcafe.controller.dto.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.MemberResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -11,34 +30,11 @@ import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import com.project.yozmcafe.util.AcceptanceContext;
+
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"classpath:truncate.sql"}, executionPhase = AFTER_TEST_METHOD)
-class MemberControllerTest {
-
-    @LocalServerPort
-    private int port;
+class MemberControllerTest extends BaseControllerTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -51,16 +47,6 @@ class MemberControllerTest {
     @SpyBean
     private KakaoOAuthClient kakaoOAuthClient;
 
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
-
-    @AfterEach
-    void after() {
-        memberRepository.deleteAll();
-    }
-
     @Test
     @DisplayName("id로 멤버 조회")
     void findById() {
@@ -69,9 +55,18 @@ class MemberControllerTest {
         final MemberResponse expected = MemberResponse.from(member);
 
         //when
-        final MemberResponse response = RestAssured.given().log().all()
+        final MemberResponse response = RestAssured.given(spec).log().all()
+                .filter(document("멤버 조회",
+                        pathParameters(
+                                parameterWithName("memberId").description("멤버 ID")
+                        ), responseFields(
+                                fieldWithPath("id").description("멤버 아이디"),
+                                fieldWithPath("name").description("멤버 이름"),
+                                fieldWithPath("imageUrl").description("멤버 사진")
+                        )
+                ))
                 .when()
-                .get("/members/" + member.getId())
+                .get("/members/{memberId}", member.getId())
                 .then()
                 .extract().response().as(MemberResponse.class);
 
@@ -93,7 +88,6 @@ class MemberControllerTest {
         //when
         context.invokeHttpGet("/members/{memberId}/liked-cafes?page=1", member.getId());
         Response response = context.response;
-
 
         //then
         assertAll(
