@@ -236,26 +236,9 @@ class MemberTest {
         member.updateLikedCafesBy(cafe4, true);
 
         //when
-        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
+        final List<LikedCafe> likedCafes = member.getLikedCafesSection(0, 2);
 
         //then
         assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe4, cafe3);
-    }
-
-    @Test
-    @DisplayName("좋아요 목록 수를 초과한 page 요청 시 빈 list를 반환한다.")
-    void getLikedCafesByPaging_empty() {
-        //given
-        final Member member = new Member("1234", "오션", "오션사진");
-        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
-        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
-        member.updateLikedCafesBy(cafe1, true);
-        member.updateLikedCafesBy(cafe2, true);
-
-        //when
-        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(2, 2);
-
-        //then
-        assertThat(likedCafes).isEmpty();
     }
 }

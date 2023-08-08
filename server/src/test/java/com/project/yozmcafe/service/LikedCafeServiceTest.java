@@ -41,7 +41,7 @@ class LikedCafeServiceTest {
         memberRepository.save(member);
 
         //when
-        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(member.getId(), 1, 15);
+        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(member.getId(), 0, 15);
 
         //then
         assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
@@ -53,9 +53,26 @@ class LikedCafeServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> likedCafeService.findLikedCafesById("findLikedCafesById_fail", 1, 15))
+        assertThatThrownBy(() -> likedCafeService.findLikedCafesById("findLikedCafesById_fail", 0, 15))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_MEMBER.getMessage());
+    }
+
+    @Test
+    @DisplayName("좋아요 목록 수를 초과한 page 요청 시 빈 list를 반환한다.")
+    void findLikedCafesById_empty() {
+        //given
+        final Member member = memberRepository.save(new Member("1234", "오션", "오션사진"));
+        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
+        member.updateLikedCafesBy(cafe1, true);
+        member.updateLikedCafesBy(cafe2, true);
+
+        //when
+        final List<LikedCafeResponse> likedCafesById = likedCafeService.findLikedCafesById(member.getId(), 1, 2);
+
+        //then
+        assertThat(likedCafesById).isEmpty();
     }
 
     @Test
