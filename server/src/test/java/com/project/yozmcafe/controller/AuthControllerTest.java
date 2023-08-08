@@ -1,43 +1,39 @@
-package com.project.yozmcafe.controller.auth;
+package com.project.yozmcafe.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.jdbc.Sql;
-
+import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import com.project.yozmcafe.service.auth.KakaoOAuthClient;
-import com.project.yozmcafe.util.AcceptanceContext;
-
-import io.restassured.RestAssured;
 import io.restassured.http.Cookie;
 import io.restassured.matcher.DetailedCookieMatcher;
 import io.restassured.matcher.RestAssuredMatchers;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "classpath:truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class AuthControllerTest {
+import java.util.Optional;
 
-    @LocalServerPort
-    int port;
+import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.springframework.restdocs.cookies.CookieDocumentation.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+
+class AuthControllerTest extends BaseControllerTest {
 
     @SpyBean
     GoogleOAuthClient googleOAuthClient;
@@ -47,14 +43,6 @@ class AuthControllerTest {
     MemberRepository memberRepository;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-
-    private AcceptanceContext request;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-        request = new AcceptanceContext();
-    }
 
     @Test
     @DisplayName("Provider Google OAuth login을 한다.")
@@ -67,11 +55,15 @@ class AuthControllerTest {
                 .willReturn(Optional.of(new Member("openId", "오션", "바다.img")));
 
         //when
-        final Response response = RestAssured.given()
+        final Response response = given(spec)
                 .log().all()
-                .queryParam("code", "googleCode")
+                .filter(document("OAuth 로그인",
+                        queryParameters(parameterWithName("code").description("Authorization Code")),
+                        pathParameters(parameterWithName("providerName").description("OAuth Provider")),
+                        responseFields(fieldWithPath("token").description("Access Token")),
+                        responseCookies(cookieWithName("refreshToken").description("Refresh Token"))))
                 .when()
-                .post("/auth/{providerName}", "google");
+                .post("/auth/{providerName}?code=googleCode", "google");
 
         //then
         assertAll(
@@ -92,7 +84,7 @@ class AuthControllerTest {
                 .willReturn(Optional.of(new Member("openId", "오션", "바다.img")));
 
         //when
-        final Response response = RestAssured.given()
+        final Response response = given()
                 .log().all()
                 .queryParam("code", "googleCode")
                 .when()
@@ -114,7 +106,12 @@ class AuthControllerTest {
         final String refreshToken = jwtTokenProvider.createRefresh();
 
         //when
-        final Response response = RestAssured.given().log().all()
+        final Response response = given(spec).log().all()
+                .filter(document("토큰 갱신",
+                        requestHeaders(headerWithName("Authorization").description("Access Token")),
+                        requestCookies(cookieWithName("refreshToken").description("Refresh Token")),
+                        responseFields(fieldWithPath("token").description("Access Token")),
+                        responseCookies(cookieWithName("refreshToken").description("Refresh Token"))))
                 .header("Authorization", accessToken)
                 .cookie("refreshToken", refreshToken)
                 .when()
@@ -132,7 +129,10 @@ class AuthControllerTest {
     @DisplayName("Provider 인증 주소를 반환한다.")
     void authorizationUrls() {
         //when
-        final Response response = RestAssured.given().log().all()
+        final Response response = given(spec).log().all()
+                .filter(document("OAuth Provider Url",
+                        responseFields(fieldWithPath("[].provider").description("OAuth Provider 이름"),
+                                fieldWithPath("[].authorizationUrl").description("Provider 인증 Url"))))
                 .when()
                 .log().all()
                 .get("/auth/urls");
@@ -158,10 +158,15 @@ class AuthControllerTest {
                 .maxAge(0);
 
         //when
-        request.invokeHttpDeleteWithCookie("/auth", cookie);
+        final Response response = given(spec).log().all()
+                .filter(document("OAuth 로그아웃",
+                        requestCookies(cookieWithName("refreshToken").description("Refresh Token"))
+                ))
+                .cookie(cookie)
+                .delete("/auth");
 
         //then
-        request.response.then()
+        response.then()
                 .statusCode(HttpStatus.OK.value())
                 .cookie("refreshToken", expectedDetail);
     }
