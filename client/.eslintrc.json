@@ -15,6 +15,12 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        "fixStyle": "separate-type-imports"
+      }
+    ]
   }
 }
