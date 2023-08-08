@@ -1,10 +1,6 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
-import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
-import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
-import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
-import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
+import com.project.yozmcafe.controller.dto.cafe.*;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Detail;
@@ -126,7 +122,7 @@ class CafeAdminServiceTest {
 
         @Test
         @DisplayName("좋아요 수 수정")
-        void update5() {
+        void update4() {
             //given
             final Cafe cafe = saveCafe();
             final int likeCountForUpdate = 10000;
