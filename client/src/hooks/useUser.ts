@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
 import client from '../client';
 import useAuth from './useAuth';
+import useSuspenseQuery from './useSuspenseQuery';
 
 /**
  * identity로 사용자 정보를 조회하고 응답받은 값을 반환합니다.
@@ -17,7 +17,7 @@ import useAuth from './useAuth';
 const useUser = () => {
   const { identity } = useAuth();
 
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['user', identity],
     queryFn: () => client.getUser(identity?.sub as string),
     enabled: !!identity,
