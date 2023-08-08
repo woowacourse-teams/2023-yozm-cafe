@@ -5,7 +5,8 @@ import com.project.yozmcafe.domain.cafe.available.AvailableTime;
 
 import java.util.List;
 
-public record DetailRequest(List<AvailableTimeRequest> openingHours, String mapUrl, String description, String phone) {
+public record DetailRequest(List<AvailableTimeRequest> openingHours, String mapUrl, String description,
+                            String phone) {
     public Detail toDetail() {
         List<AvailableTime> availableTimes = openingHours.stream()
                 .map(AvailableTimeRequest::toAvailableTime)

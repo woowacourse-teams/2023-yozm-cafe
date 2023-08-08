@@ -1,6 +1,5 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -41,10 +40,5 @@ public class CafeService {
                 .map(UnViewedCafe::getCafe)
                 .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))
                 .toList();
-    }
-
-    @Transactional
-    public Cafe saveCafe(CafeRequest cafeRequest) {
-        return cafeRepository.save(cafeRequest.toCafe());
     }
 }

@@ -5,6 +5,8 @@ server/build/
 !server/src/main/**/build/
 !server/src/test/**/build/
 logs
+.logs
+server/.logs
 
 ### STS ###
 server/.apt_generated

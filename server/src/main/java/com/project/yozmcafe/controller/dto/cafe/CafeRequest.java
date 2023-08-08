@@ -5,10 +5,9 @@ import com.project.yozmcafe.domain.cafe.Images;
 
 import java.util.List;
 
-public record CafeRequest(String name, String address, List<String> images, DetailRequest detailRequest) {
+public record CafeRequest(String name, String address, List<String> images, DetailRequest detail) {
 
     public Cafe toCafe() {
-
-        return new Cafe(name, address, new Images(images), detailRequest.toDetail());
+        return new Cafe(name, address, new Images(images), detail.toDetail());
     }
 }

@@ -1,7 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
-import java.util.Objects;
-
+import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -9,8 +8,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Objects;
+
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_CAFE_ADDRESS;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_CAFE_LIKE_COUNT;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_CAFE_NAME;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_DETAIL;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_IMAGE;
+import static io.micrometer.common.util.StringUtils.isBlank;
+import static java.util.Objects.hash;
+import static java.util.Objects.isNull;
+
 @Entity
 public class Cafe {
+
+    public static final int NAME_MAX_LENGTH = 20;
+    public static final int ADDRESS_MAX_LENGTH = 50;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +47,7 @@ public class Cafe {
 
     public Cafe(final Long id, final String name, final String address, final Images images, final Detail detail,
                 final int likeCount) {
+        validate(name, address, images, detail, likeCount);
         this.id = id;
         this.name = name;
         this.address = address;
@@ -41,8 +56,39 @@ public class Cafe {
         this.likeCount = likeCount;
     }
 
+    private void validate(final String name, final String address, final Images images, final Detail detail,
+                          final int likeCount) {
+        if (isBlank(name) || name.length() > NAME_MAX_LENGTH) {
+            throw new BadRequestException(INVALID_CAFE_NAME);
+        }
+        if (isBlank(address) || address.length() > ADDRESS_MAX_LENGTH) {
+            throw new BadRequestException(INVALID_CAFE_ADDRESS);
+        }
+        if (isNull(images)) {
+            throw new BadRequestException(NOT_EXISTED_CAFE_IMAGE);
+        }
+        if (isNull(detail)) {
+            throw new BadRequestException(NOT_EXISTED_CAFE_DETAIL);
+        }
+        if (likeCount < 0) {
+            throw new BadRequestException(INVALID_CAFE_LIKE_COUNT);
+        }
+    }
+
     public Cafe(String name, String address, Images images, Detail detail) {
         this(null, name, address, images, detail, 0);
+    }
+
+    public void update(final Cafe forUpdate) {
+        if (!forUpdate.equals(this)) {
+            return;
+        }
+
+        this.address = forUpdate.address;
+        this.detail = forUpdate.detail;
+        this.images = forUpdate.images;
+        this.name = forUpdate.name;
+        this.likeCount = forUpdate.likeCount;
     }
 
     public void addLikeCount() {
@@ -50,6 +96,10 @@ public class Cafe {
     }
 
     public void subtractLikeCount() {
+        if (likeCount == 0) {
+            return;
+        }
+
         likeCount -= 1;
     }
 
@@ -95,6 +145,6 @@ public class Cafe {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return hash(id);
     }
 }

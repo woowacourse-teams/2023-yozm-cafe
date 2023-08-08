@@ -4,7 +4,6 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
 import static java.lang.Math.min;
 import static java.util.Collections.reverse;
 
@@ -27,10 +28,10 @@ public class Member {
     @Column(nullable = false)
     private String image;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
@@ -104,14 +105,14 @@ public class Member {
         return result;
     }
 
-    public List<LikedCafe> getLikedCafesByPaging(int pageNum, int pageSize) {
-        List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-        reverse(reverseLikedCafes);
+    public List<LikedCafe> getLikedCafesByPaging(int pageNumber, int pageSize) {
+        List<LikedCafe> likedCafes = new ArrayList<>(this.likedCafes);
+        reverse(likedCafes);
 
-        int startIndex = (pageNum - 1) * pageSize;
-        int endIndex = min(startIndex + pageSize, reverseLikedCafes.size());
+        int startIndex = (pageNumber - 1) * pageSize;
+        int endIndex = min(startIndex + pageSize, likedCafes.size());
 
-        return reverseLikedCafes.subList(startIndex, endIndex);
+        return likedCafes.subList(startIndex, endIndex);
     }
 
     public String getId() {

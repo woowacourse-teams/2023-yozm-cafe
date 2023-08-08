@@ -23,10 +23,10 @@ public class LikedCafeService {
         this.memberService = memberService;
     }
 
-    public List<LikedCafeResponse> findLikedCafesById(final String memberId, final int pageNum, final int pageSize) {
+    public List<LikedCafeResponse> findLikedCafesById(final String memberId, final int pageNumber, final int pageSize) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
-        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(pageNum, pageSize);
+        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(pageNumber, pageSize);
 
         return likedCafes.stream()
                 .map(LikedCafeResponse::from)
