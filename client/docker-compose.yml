@@ -41,6 +41,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       TZ: Asia/Seoul
+      SOURCE_REMOTE_DB_HOST: remote-mysql
+      SOURCE_REMOTE_DB_PORT: 3306
     entrypoint: /post-install-entrypoint.sh
     command:
       - mysqld
