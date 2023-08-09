@@ -5,12 +5,14 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,10 +35,10 @@ public class CafeService {
     }
 
     public CafeResponse getCafeById(long cafeId) {
-        Optional<Cafe> foundCafe = cafeRepository.findById(cafeId);
+        Cafe foundCafe = cafeRepository.findById(cafeId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
-        return foundCafe.map(CafeResponse::fromUnLoggedInUser)
-                .orElse(null);
+        return CafeResponse.fromUnLoggedInUser(foundCafe);
     }
 
     @Transactional

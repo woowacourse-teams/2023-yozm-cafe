@@ -182,7 +182,7 @@ class CafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("카페 id로 해당하는 카페를 조회할 때, 존재하지 않는 카페이면 null을 반환한다")
+    @DisplayName("카페 id로 해당하는 카페를 조회할 때, 존재하지 않는 카페이면 statusCode 400을 응답한다")
     void findByIdWhenNotExist() {
         //when
         final Response response = given().log().all()
@@ -190,10 +190,7 @@ class CafeControllerTest extends BaseControllerTest {
                 .get("/cafes/{cafeId}", 9999999L);
 
         //then
-        assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(200),
-                () -> assertThat(response.getBody().asString()).isEmpty()
-        );
+        assertThat(response.statusCode()).isEqualTo(400);
     }
 
     @Test
