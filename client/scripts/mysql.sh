@@ -2,9 +2,15 @@
 
 echo Starting MySQL
 
-if [ "`mysql -u'$MYSQL_USER' -p'$MYSQL_PASSWORD' -se'USE $MYSQL_DATABASE;' 2>&1`" != "" ]; then
-  echo database not exists, clone from remote ...
-  mysqldump -P 3306 -h remote-mysql -u root --password="$MYSQL_ROOT_PASSWORD" $MYSQL_DATABASE 1> /docker-entrypoint-initdb.d/init.sql
+if [ ! -f "/docker-entrypoint-initdb.d/data.sql" ]; then
+  echo Initial data.sql is not exists, clone from remote ...
+  mysqldump -P $SOURCE_REMOTE_DB_PORT -h $SOURCE_REMOTE_DB_HOST -u root --password="$MYSQL_ROOT_PASSWORD" $MYSQL_DATABASE 1> /docker-entrypoint-initdb.d/data.sql
+
+  if [[ $? != 0 ]]; then
+    rm /docker-entrypoint-initdb.d/data.sql
+    echo Clone failed, terminate process
+    exit $?
+  fi
 fi
 
 exec /entrypoint.sh "$@"
