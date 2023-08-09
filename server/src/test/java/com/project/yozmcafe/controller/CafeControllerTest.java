@@ -61,16 +61,20 @@ class CafeControllerTest extends BaseControllerTest {
         given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
         saveMemberAndUnViewedCafes();
 
+        final Response likeResponse = given()
+                .auth().oauth2("tmpToken")
+                .when()
+                .post("/cafes/{cafeId}/likes?isLiked=true", cafe1.getId());
+
         //when
-        final Response likeResponse = given().auth().oauth2("tmpToken")
-                .when().post("/cafes/{cafeId}/likes?isLiked=true", cafe1.getId());
-
-        final List<CafeResponse> cafeResponses = getCafeResponses(given().auth().oauth2("tmpToken")
-                .when().get("/cafes"));
-
-        final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
+        final Response response = given()
+                .auth().oauth2("tmpToken")
+                .when()
+                .get("/cafes");
+        final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
         //then
+        final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
         assertAll(
                 () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).hasSize(4),
@@ -95,17 +99,18 @@ class CafeControllerTest extends BaseControllerTest {
 
         //when
         final Response likeResponse = given().auth().oauth2("tmpToken")
-                .when().post("/cafes/{cafeId}/likes?isLiked=false", cafe1.getId());
+                .when()
+                .post("/cafes/{cafeId}/likes?isLiked=false", cafe1.getId());
 
         final Response response = given()
                 .auth().oauth2("tmpToken")
-                .when().get("/cafes");
+                .when()
+                .get("/cafes");
 
         final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
-        final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
-
         //then
+        final CafeResponse cafeResponse = getCafeResponse(cafeResponses, cafe1.getId());
         assertAll(
                 () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).hasSize(4),
@@ -123,8 +128,8 @@ class CafeControllerTest extends BaseControllerTest {
         //when
         final Response response = given(spec).log().all()
                 .filter(document(CAFE_API + "비회원 사용자 카페 조회", getPageRequestParam(), getCafeResponseFields()))
-                .when().get("/cafes/guest?page=1");
-
+                .when()
+                .get("/cafes/guest?page=1");
         final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
         //then
@@ -144,9 +149,11 @@ class CafeControllerTest extends BaseControllerTest {
     void getCafesEmptyByUnLoginUser() {
         //when
         final Response response = given(spec).log().all()
-                .filter(document(CAFE_API + "비회원 사용자 카페 조회 page가 최대 page를 초과하면 빈 배열 반환", getPageRequestParam(),
+                .filter(document(CAFE_API + "비회원 사용자 카페 조회 page가 최대 page를 초과하면 빈 배열 반환",
+                        getPageRequestParam(),
                         responseFields(fieldWithPath("[]").description("page가 초과하여 빈배열 반환"))))
-                .when().get("/cafes/guest?page=2000");
+                .when()
+                .get("/cafes/guest?page=2000");
 
         final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
@@ -172,10 +179,11 @@ class CafeControllerTest extends BaseControllerTest {
         final Response response = given(spec).log().all()
                 .auth().oauth2("tmpToken")
                 .filter(document(CAFE_API + "로그인 한 사용자 카페 조회", getCafeResponseFields()))
-                .when().get("/cafes");
+                .when()
+                .get("/cafes");
 
+        //then
         final List<CafeResponse> cafeResponses = getCafeResponses(response);
-
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).extracting("id", "name")
@@ -198,7 +206,8 @@ class CafeControllerTest extends BaseControllerTest {
         final Response response = given(spec).log().all()
                 .auth().oauth2("tmpToken")
                 .filter(document(CAFE_API + "로그인 한 사용자 카페 조회 시 남은 카페가 5개 미만인 경우", getCafeResponseFields()))
-                .when().get("/cafes");
+                .when()
+                .get("/cafes");
 
         final List<CafeResponse> cafeResponses = getCafeResponses(response);
 
