@@ -1,5 +1,6 @@
 package com.project.yozmcafe.exception;
 
+import com.project.yozmcafe.domain.ImageResizer;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.Detail;
 
@@ -29,7 +30,10 @@ public enum ErrorCode {
 
     INVALID_OAUTH_USER_INFO("O1", "Provider로 부터 받은 사용자 정보의 확인이 필요합니다."),
     NOT_EXISTED_OAUTH_PROVIDER("O2", "잘못된 Provider Name 입니다."),
-    NOT_EXISTED_OAUTH_CLIENT("O3", "일치하는 OAuthClient가 존재하지 않습니다.");
+    NOT_EXISTED_OAUTH_CLIENT("O3", "일치하는 OAuthClient가 존재하지 않습니다."),
+
+    NOT_IMAGE("I1", "이미지 형식만 받을 수 있습니다."),
+    INVALID_IMAGE_SIZE("I2", format("이미지는 최대 %d Byte까지만 가능합니다.", ImageResizer.MAX_IMAGE_SIZE));
 
     private final String code;
     private final String message;
