@@ -55,7 +55,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("좋아요 카페 목록 조회",
+                .filter(document("likedCafe/좋아요 카페 목록 조회",
                         queryParameters(parameterWithName("page").description("좋아요 목록 페이지 번호")),
                         pathParameters(parameterWithName("memberId").description("멤버 ID")),
                         responseFields(fieldWithPath("[].cafeId").description("카페 ID"),
@@ -131,8 +131,8 @@ class LikedCafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("좋아요",
-                        queryParameters(parameterWithName("isLiked").description("좋아요 여부 확인")),
+                .filter(document("likedCafe/좋아요",
+                        queryParameters(parameterWithName("isLiked").description("true 일 경우 좋아요 추가, false 일 경우 좋아요 취소")),
                         pathParameters(parameterWithName("cafeId").description("카페 ID"))))
                 .auth().oauth2("accessToken")
                 .post("/cafes/{cafeId}/likes?isLiked=true", cafe.getId());

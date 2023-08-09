@@ -57,7 +57,7 @@ class AuthControllerTest extends BaseControllerTest {
         //when
         final Response response = given(spec)
                 .log().all()
-                .filter(document("OAuth 로그인",
+                .filter(document("OAuth/OAuth 로그인",
                         queryParameters(parameterWithName("code").description("Authorization Code")),
                         pathParameters(parameterWithName("providerName").description("OAuth Provider")),
                         responseFields(fieldWithPath("token").description("Access Token")),
@@ -107,7 +107,7 @@ class AuthControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("토큰 갱신",
+                .filter(document("OAuth/토큰 갱신",
                         requestHeaders(headerWithName("Authorization").description("Access Token")),
                         requestCookies(cookieWithName("refreshToken").description("Refresh Token")),
                         responseFields(fieldWithPath("token").description("Access Token")),
@@ -130,7 +130,7 @@ class AuthControllerTest extends BaseControllerTest {
     void authorizationUrls() {
         //when
         final Response response = given(spec).log().all()
-                .filter(document("OAuth Provider Url",
+                .filter(document("OAuth/OAuth Provider Url",
                         responseFields(fieldWithPath("[].provider").description("OAuth Provider 이름"),
                                 fieldWithPath("[].authorizationUrl").description("Provider 인증 Url"))))
                 .when()
@@ -159,7 +159,7 @@ class AuthControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("OAuth 로그아웃",
+                .filter(document("OAuth/OAuth 로그아웃",
                         requestCookies(cookieWithName("refreshToken").description("Refresh Token"))
                 ))
                 .cookie(cookie)
