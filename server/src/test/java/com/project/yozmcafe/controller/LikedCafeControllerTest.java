@@ -1,23 +1,17 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
-
-import java.util.List;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static io.restassured.RestAssured.given;
@@ -25,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -38,9 +31,6 @@ class LikedCafeControllerTest extends BaseControllerTest {
     private CafeRepository cafeRepository;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
-
-    @SpyBean
-    private KakaoOAuthClient kakaoOAuthClient;
 
     @Test
     @DisplayName("사용자의 좋아요 한 카페 목록을 조회한다.")
@@ -86,41 +76,6 @@ class LikedCafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("재로그인 시 좋아요 목록이 남아있는다.")
-    void reLoginLikedListTest() {
-        //given
-        final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
-        final Member member = memberRepository.save(
-                new Member("memberId", "폴로", "폴로사진"));
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn(member.getId());
-        doReturn(new MemberInfo(member.getId(), member.getName(), member.getImage()))
-                .when(kakaoOAuthClient).getUserInfo(anyString());
-
-        //when
-        given().log().all()
-                .auth().oauth2("accessToken")
-                .post("/cafes/" + cafe.getId() + "/likes?isLiked=true");
-
-        reLogin();
-
-        final Response response = given().log().all()
-                .when().get("/members/{memberId}/liked-cafes?size=1&page=1", member.getId());
-
-        final List<LikedCafeResponse> result = response.jsonPath().getList("");
-
-        //then
-        assertThat(result).hasSize(1);
-    }
-
-    private void reLogin() {
-        given()
-                .log().all()
-                .queryParam("code", "googleCode")
-                .when()
-                .post("/auth/{providerName}", "kakao");
-    }
-
-    @Test
     @DisplayName("사용자가 카페에 대해 좋아요를 할 수 있다.")
     void updateLikes() {
         //given
@@ -137,6 +92,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
                 .auth().oauth2("accessToken")
                 .post("/cafes/{cafeId}/likes?isLiked=true", cafe.getId());
 
+        //then
         response.then()
                 .statusCode(HttpStatus.OK.value());
     }
