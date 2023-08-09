@@ -223,7 +223,7 @@ class MemberTest {
 
     @Test
     @DisplayName("좋아요한 카페 목록을 페이지 처리한다")
-    void getLikedCafesByPaging() {
+    void getLikedCafesSection() {
         //given
         final Member member = new Member("1234", "오션", "오션사진");
         final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
