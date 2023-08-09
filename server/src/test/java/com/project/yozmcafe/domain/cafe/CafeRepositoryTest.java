@@ -59,4 +59,15 @@ class CafeRepositoryTest {
         assertThat(cafes).hasSize(5);
         assertThat(cafes).containsExactlyInAnyOrder(cafe1, cafe2, cafe3, cafe4, cafe5);
     }
+
+    @Test
+    @DisplayName("id를 통해 카페를 조회한다.")
+    void findById() {
+        //when
+        final Cafe cafe = cafeRepository.findById(cafe1.getId()).get();
+
+        //then
+        assertThat(cafe).usingRecursiveComparison().isEqualTo(cafe1);
+    }
 }
+
