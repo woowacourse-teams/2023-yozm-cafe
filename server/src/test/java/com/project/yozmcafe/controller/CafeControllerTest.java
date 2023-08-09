@@ -169,7 +169,8 @@ class CafeControllerTest extends BaseControllerTest {
                 .filter(document(CAFE_API + "카페 id로 단 건 조회",
                         pathParameters(parameterWithName("cafeId").description("카페 Id")),
                         getOneCafeResponseFields()))
-                .when().get("/cafes/{cafeId}", cafe3.getId());
+                .when()
+                .get("/cafes/{cafeId}", cafe3.getId());
 
         //then
         Long resultId = response.then().log().all().extract().jsonPath().getLong("id");
@@ -184,8 +185,9 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("카페 id로 해당하는 카페를 조회할 때, 존재하지 않는 카페이면 null을 반환한다")
     void findByIdWhenNotExist() {
         //when
-        final Response response = given(spec).log().all()
-                .when().get("/cafes/{cafeId}", 9999999L);
+        final Response response = given().log().all()
+                .when()
+                .get("/cafes/{cafeId}", 9999999L);
 
         //then
         assertAll(
