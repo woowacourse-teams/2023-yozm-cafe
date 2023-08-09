@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
@@ -105,14 +106,15 @@ public class Member {
         return result;
     }
 
-    public List<LikedCafe> getLikedCafesSection(final int pageNumber, final int pageSize) {
+    public List<LikedCafe> getLikedCafesSection(final int startIndex, final int endIndex) {
+        if (startIndex >= likedCafes.size()){
+            return Collections.emptyList();
+        }
+
         List<LikedCafe> reverseLikedCafes = new ArrayList<>(this.likedCafes);
         reverse(reverseLikedCafes);
 
-        int startIndex = pageNumber * pageSize;
-        int endIndex = min(startIndex + pageSize, likedCafes.size());
-
-        return reverseLikedCafes.subList(startIndex, endIndex);
+        return reverseLikedCafes.subList(startIndex, min(endIndex, likedCafes.size()));
     }
 
     public String getId() {

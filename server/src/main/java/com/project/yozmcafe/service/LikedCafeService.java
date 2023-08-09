@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -36,13 +35,10 @@ public class LikedCafeService {
     }
 
     private List<LikedCafe> getLikedCafes(final Pageable pageable, final Member member) {
-        int pageNumber = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
+        int startIndex = pageable.getPageNumber() * pageable.getPageSize();
+        int endIndex = startIndex + pageable.getPageSize();
 
-        if (pageNumber > member.getLikedCafes().size() / pageSize) {
-            return Collections.emptyList();
-        }
-        return member.getLikedCafesSection(pageNumber, pageSize);
+        return member.getLikedCafesSection(startIndex, endIndex);
     }
 
     @Transactional
