@@ -1,13 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
 import client from '../client';
+import useSuspenseQuery from './useSuspenseQuery';
 
 const useAuthUrls = () => {
-  const queryResult = useQuery({
+  return useSuspenseQuery({
     queryKey: ['auth', 'urls'],
     queryFn: () => client.getAuthUrls(),
   });
-
-  return { ...queryResult, data: queryResult.data as NonNullable<typeof queryResult.data> };
 };
 
 export default useAuthUrls;
