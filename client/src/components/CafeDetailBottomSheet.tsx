@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
+import useCafeMenus from '../hooks/useCafeMenus';
+import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
+import CafeMenuMiniList from './CafeMenuMiniList';
 import OpeningHoursDetail from './OpeningHoursDetail';
 
 type CafeDetailBottomSheetProps = {
-  show?: boolean;
   cafe: Cafe;
   onClose: () => void;
 };
 
 const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
-  const { show, cafe, onClose } = props;
+  const { cafe, onClose } = props;
 
   useEffect(() => {
     document.addEventListener('click', onClose);
@@ -24,11 +26,16 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
   };
 
   return (
-    <Container $show={show ?? false} onClick={handlePreventClickPropagation} role="dialog" aria-modal="true">
+    <Container onClick={handlePreventClickPropagation} role="dialog" aria-modal="true">
       <CloseButton>
         <CloseIcon onClick={onClose} />
       </CloseButton>
       <Title>{cafe.name}</Title>
+      <Spacer $size={'4'} />
+      <Suspense>
+        <CafeMenu cafeId={cafe.id} />
+      </Suspense>
+      <Spacer $size={'4'} />
       <InfoContainer>
         <LocationDetail>
           <BsGeoAlt />
@@ -46,6 +53,7 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
           <h3>000-000-000</h3>
         </Info> */}
       </InfoContainer>
+      <Spacer $size={'6'} />
       <Content>
         {cafe.detail.description.split('\n').map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
@@ -59,12 +67,12 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
 
 export default CafeDetailBottomSheet;
 
-const Container = styled.div<{ $show: boolean }>`
+const Container = styled.div`
   position: absolute;
   bottom: 0;
 
   overflow-y: auto;
-  display: ${(props) => (props.$show ? 'flex' : 'none')};
+  display: flex;
   flex-direction: column;
 
   width: 100%;
@@ -82,8 +90,11 @@ const Container = styled.div<{ $show: boolean }>`
   }
 `;
 
+const Spacer = styled.div<{ $size: keyof Theme['space'] }>`
+  min-height: ${({ theme, $size }) => theme.space[$size]};
+`;
+
 const Title = styled.h1`
-  margin-bottom: ${({ theme }) => theme.space[4]};
   font-size: ${({ theme }) => theme.fontSize['3xl']};
   font-weight: bolder;
 `;
@@ -116,7 +127,6 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space[2]};
-  margin-top: ${({ theme }) => theme.space[5]};
 `;
 
 const MoreContentHintGradient = styled.div`
@@ -139,3 +149,16 @@ const CloseIcon = styled(BsX)`
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['2xl']};
 `;
+
+type CafeMenuProps = {
+  cafeId: Cafe['id'];
+};
+
+const CafeMenu = (props: CafeMenuProps) => {
+  const { cafeId } = props;
+  const {
+    data: { menus },
+  } = useCafeMenus(cafeId);
+
+  return <CafeMenuMiniList menus={menus} />;
+};
