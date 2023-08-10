@@ -70,7 +70,7 @@ const CafeCard = (props: CardProps) => {
           />
           <CafeActionBar cafe={cafe} />
         </Aside>
-        <CafeDetailBottomSheet show={isShowDetail} cafe={cafe} onClose={() => setIsShowDetail(false)} />
+        {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
       </AsidePosition>
     </Container>
   );
