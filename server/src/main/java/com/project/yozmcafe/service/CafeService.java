@@ -34,13 +34,6 @@ public class CafeService {
                 .toList();
     }
 
-    public CafeResponse getCafeById(long cafeId) {
-        Cafe foundCafe = cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
-
-        return CafeResponse.fromUnLoggedInUser(foundCafe);
-    }
-
     @Transactional
     public List<CafeResponse> getCafesForLoginMember(final Member member, final int size) {
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
@@ -50,5 +43,12 @@ public class CafeService {
                 .map(UnViewedCafe::getCafe)
                 .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))
                 .toList();
+    }
+
+    public CafeResponse getCafeById(final long cafeId) {
+        Cafe foundCafe = cafeRepository.findById(cafeId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
+
+        return CafeResponse.fromUnLoggedInUser(foundCafe);
     }
 }
