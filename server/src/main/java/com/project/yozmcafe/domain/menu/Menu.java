@@ -9,6 +9,18 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MENU_PRICE;
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Entity
+@Table(
+    name = "Menu",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UK_cafe_priority",
+            columnNames = {
+                "cafe_id",
+                "priority"
+            }
+        )
+    }
+)
 public class Menu {
 
     public static final int MAX_NAME_LENGTH = 20;

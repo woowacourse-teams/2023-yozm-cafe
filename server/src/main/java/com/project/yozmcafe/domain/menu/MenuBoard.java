@@ -8,6 +8,18 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MENU_BOARD_IM
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Entity
+@Table(
+        name = "MenuBoard",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UK_cafe_priority",
+                        columnNames = {
+                                "cafe_id",
+                                "priority"
+                        }
+                )
+        }
+)
 public class MenuBoard {
 
     @Id
