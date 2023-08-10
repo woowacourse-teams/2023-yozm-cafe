@@ -89,6 +89,11 @@ export const handlers = [
     );
   }),
 
+  // 좋아요 한 카페 목록 상세 조회
+  rest.get('/api/members/:memberId/liked-cafes/details', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(cafes.filter((cafe) => cafe.isLiked)));
+  }),
+
   rest.get('/api/auth', async (req, res, ctx) => {
     const token =
       btoa(
