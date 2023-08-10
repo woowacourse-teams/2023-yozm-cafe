@@ -1,4 +1,4 @@
-name: Deploy
+name: Client Deploy Storybook
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build storybook
-        run: yarn run build:storybook
+        run: yarn build:storybook
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
