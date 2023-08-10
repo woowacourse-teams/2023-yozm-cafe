@@ -9,10 +9,6 @@ type SetLikedCafeParams = {
   isLiked: boolean;
 };
 
-type MarkedAsCafeParams = {
-  cafeId: Cafe['id'];
-};
-
 const withIsLiked = (cafes: InfiniteData<{ cafes: Cafe[] }>, cafeId: Cafe['id'], isLiked: Cafe['isLiked']) => {
   return {
     ...cafes,
@@ -47,17 +43,7 @@ const useCafeActions = () => {
     },
   });
 
-  const { mutate: markedAsViewedCafe } = useMutation({
-    mutationFn: async ({ cafeId }: MarkedAsCafeParams) => {
-      if (queryClient.getQueryData(['markedAsViewedCafe', cafeId, identity])) {
-        return;
-      }
-      queryClient.setQueryData(['markedAsViewedCafe', cafeId, identity], true);
-      return client.markedAsViewedCafe(cafeId);
-    },
-  });
-
-  return { setLikedCafe, markedAsViewedCafe };
+  return { setLikedCafe };
 };
 
 export default useCafeActions;
