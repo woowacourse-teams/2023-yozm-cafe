@@ -1,8 +1,8 @@
 package com.project.yozmcafe.domain;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class ImagesResizer {
 
@@ -14,7 +14,7 @@ public class ImagesResizer {
                 .toList();
     }
 
-    public List<byte[]> resize(final int width) {
+    public List<MultipartFile> resize(final int width) {
         return images.stream()
                 .map(imageResizer -> imageResizer.resize(width))
                 .toList();

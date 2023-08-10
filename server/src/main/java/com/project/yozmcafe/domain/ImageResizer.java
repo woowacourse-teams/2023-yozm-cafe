@@ -1,18 +1,21 @@
 package com.project.yozmcafe.domain;
 
-import com.project.yozmcafe.exception.BadRequestException;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
 import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.project.yozmcafe.exception.BadRequestException;
 
 public class ImageResizer {
 
@@ -43,12 +46,13 @@ public class ImageResizer {
         return !requireNonNull(contentType).startsWith(IMAGE_FORMAT_PREFIX);
     }
 
-    public byte[] resize(final int width) {
+    public MultipartFile resize(final int width) {
         try {
             final BufferedImage source = ImageIO.read(image.getInputStream());
             final BufferedImage result = getScaledImage(width, source);
+            final byte[] bytes = toByteArray(result);
 
-            return toByteArray(result);
+            return ResizedImageFile.from(bytes, image);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
