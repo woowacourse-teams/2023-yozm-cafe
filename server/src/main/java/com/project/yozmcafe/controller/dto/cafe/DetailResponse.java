@@ -1,8 +1,8 @@
 package com.project.yozmcafe.controller.dto.cafe;
 
-import java.util.List;
-
 import com.project.yozmcafe.domain.cafe.Detail;
+
+import java.util.List;
 
 public record DetailResponse(List<AvailableTimeResponse> openingHours, String mapUrl, String description,
                              String phone) {
