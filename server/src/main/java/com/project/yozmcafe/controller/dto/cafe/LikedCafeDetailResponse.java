@@ -1,6 +1,5 @@
-package com.project.yozmcafe.controller.dto;
+package com.project.yozmcafe.controller.dto.cafe;
 
-import com.project.yozmcafe.controller.dto.cafe.DetailResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 

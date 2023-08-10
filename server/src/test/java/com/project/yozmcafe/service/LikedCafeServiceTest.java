@@ -1,7 +1,7 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.LikedCafeDetailResponse;
-import com.project.yozmcafe.controller.dto.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeDetailResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;

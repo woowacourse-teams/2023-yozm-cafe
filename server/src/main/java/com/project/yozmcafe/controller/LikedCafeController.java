@@ -1,7 +1,7 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.LikedCafeDetailResponse;
-import com.project.yozmcafe.controller.dto.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeDetailResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.LikedCafeService;
 import jakarta.websocket.server.PathParam;
