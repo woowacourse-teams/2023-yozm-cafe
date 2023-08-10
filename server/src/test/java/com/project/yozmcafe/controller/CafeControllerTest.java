@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -173,8 +174,7 @@ class CafeControllerTest extends BaseControllerTest {
                 .get("/cafes/{cafeId}", cafe3.getId());
 
         //then
-        Long resultId = response.then().log().all().extract().jsonPath().getLong("id");
-
+        final Long resultId = response.then().log().all().extract().jsonPath().getLong("id");
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(resultId).isEqualTo(cafe3.getId())
@@ -185,12 +185,19 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("카페 id로 해당하는 카페를 조회할 때, 존재하지 않는 카페이면 statusCode 400을 응답한다")
     void findByIdWhenNotExist() {
         //when
-        final Response response = given().log().all()
+        final Response response = given(spec).log().all()
+                .filter(document(CAFE_API + "카페 id로 단 건 조회 예외",
+                        pathParameters(parameterWithName("cafeId").description("카페 Id"))
+                ))
                 .when()
                 .get("/cafes/{cafeId}", 9999999L);
 
         //then
-        assertThat(response.statusCode()).isEqualTo(400);
+        final String errorResponseMessage = response.getBody().jsonPath().getString("message");
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(400),
+                () -> assertThat(errorResponseMessage).isEqualTo(NOT_EXISTED_CAFE.getMessage())
+        );
     }
 
     @Test

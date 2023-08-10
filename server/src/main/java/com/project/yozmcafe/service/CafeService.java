@@ -46,7 +46,7 @@ public class CafeService {
     }
 
     public CafeResponse getCafeById(final long cafeId) {
-        Cafe foundCafe = cafeRepository.findById(cafeId)
+        final Cafe foundCafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
         return CafeResponse.fromUnLoggedInUser(foundCafe);
