@@ -1,4 +1,4 @@
-import type { AuthProvider, AuthUrl, Cafe, LikedCafe, User } from './types';
+import type { AuthProvider, AuthUrl, Cafe, CafeMenu, LikedCafe, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -98,6 +98,10 @@ class Client {
 
   removeFavoriteCafe(cafeId: Cafe['id']) {
     return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
+  }
+
+  getCafeMenu(cafeId: Cafe['id']) {
+    return this.fetchJson<CafeMenu>(`/cafes/${cafeId}/menus`);
   }
 
   /**
