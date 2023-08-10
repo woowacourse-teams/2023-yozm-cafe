@@ -4,14 +4,12 @@ import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
 import ProfileInfo from '../components/ProfileInfo';
 import useAuth from '../hooks/useAuth';
-import useLikedCafes from '../hooks/useLikedCafes';
 import useUser from '../hooks/useUser';
 
 const MyProfile = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
   const { clearAuthorization } = useAuth();
-  const { likedCafes, fetchNextPage, isFetchingNextPage } = useLikedCafes();
 
   if (!user) {
     return <Navigate to="/" />;
@@ -22,16 +20,6 @@ const MyProfile = () => {
     navigate('/');
   };
 
-  const handleScroll: React.UIEventHandler = (event) => {
-    if (isFetchingNextPage) {
-      return;
-    }
-    const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
-    if (scrollHeight - scrollTop === clientHeight) {
-      fetchNextPage();
-    }
-  };
-
   return (
     <Container>
       <ProfileInfo userImage={user.imageUrl} userName={user.name} />
@@ -40,9 +28,8 @@ const MyProfile = () => {
           로그아웃
         </Button>
       </ButtonContainer>
-      <LikedCafeListContainer onScroll={handleScroll}>
-        {/* LikedCafeList 컴포넌트에 likedCafes 데이터 전달 */}
-        <LikedCafeList likedCafes={likedCafes} />
+      <LikedCafeListContainer>
+        <LikedCafeList />
       </LikedCafeListContainer>
     </Container>
   );
