@@ -29,7 +29,11 @@ public enum ErrorCode {
 
     INVALID_OAUTH_USER_INFO("O1", "Provider로 부터 받은 사용자 정보의 확인이 필요합니다."),
     NOT_EXISTED_OAUTH_PROVIDER("O2", "잘못된 Provider Name 입니다."),
-    NOT_EXISTED_OAUTH_CLIENT("O3", "일치하는 OAuthClient가 존재하지 않습니다.");
+    NOT_EXISTED_OAUTH_CLIENT("O3", "일치하는 OAuthClient가 존재하지 않습니다."),
+
+    INVALID_MENU_NAME("ME01", format("메뉴의 이름은 1 ~ %d자여야 합니다.", Cafe.NAME_MAX_LENGTH)),
+    NOT_EXISTED_MENU_PRICE("ME02", "메뉴 가격이 필요합니다."),
+    NOT_EXISTED_MENU_BOARD_IMAGE("ME03", "메뉴판 이미지가 필요합니다.");
 
     private final String code;
     private final String message;
