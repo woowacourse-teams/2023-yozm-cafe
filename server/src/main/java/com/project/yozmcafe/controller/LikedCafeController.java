@@ -1,5 +1,6 @@
 package com.project.yozmcafe.controller;
 
+import com.project.yozmcafe.controller.dto.LikedCafeDetailResponse;
 import com.project.yozmcafe.controller.dto.LikedCafeResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.LikedCafeService;
@@ -25,6 +26,12 @@ public class LikedCafeController {
                                                                  @PathParam("page") final int page) {
         final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(memberId, page, PAGE_SIZE);
         return ResponseEntity.ok(likedCafes);
+    }
+
+    @GetMapping("/members/{memberId}/liked-cafes/details")
+    public ResponseEntity<List<LikedCafeDetailResponse>> getLikedCafeDetails(@PathVariable("memberId") final String memberId) {
+        final List<LikedCafeDetailResponse> likedCafeDetails = likedCafeService.findLikedCafeDetailsById(memberId);
+        return ResponseEntity.ok(likedCafeDetails);
     }
 
     @PostMapping("/cafes/{cafeId}/likes")
