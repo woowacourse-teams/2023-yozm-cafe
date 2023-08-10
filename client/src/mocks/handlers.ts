@@ -74,7 +74,6 @@ export const handlers = [
   rest.get('/api/members/:memberId/liked-cafes', (req, res, ctx) => {
     const PAGINATE_UNIT = 15;
 
-    const memberId = Number(req.params.memberId);
     const page = Number(req.url.searchParams.get('page') || 1);
     const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
 
@@ -87,6 +86,12 @@ export const handlers = [
           .map((cafe) => ({ cafeId: cafe.id, imageUrl: cafe.images[0] })),
       ),
     );
+  }),
+
+  // 카페 정보 단건 조회
+  rest.get('/api/cafes/:cafeId', (req, res, ctx) => {
+    const cafeId = Number(req.params.cafeId);
+    return res(ctx.status(200), ctx.json(cafes.find((cafe) => cafe.id === cafeId)));
   }),
 
   rest.get('/api/auth', async (req, res, ctx) => {
