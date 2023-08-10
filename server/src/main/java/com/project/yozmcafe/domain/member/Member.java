@@ -111,7 +111,7 @@ public class Member {
             return Collections.emptyList();
         }
 
-        List<LikedCafe> reverseLikedCafes = new ArrayList<>(this.likedCafes);
+        final List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
         reverse(reverseLikedCafes);
 
         return reverseLikedCafes.subList(startIndex, min(endIndex, likedCafes.size()));

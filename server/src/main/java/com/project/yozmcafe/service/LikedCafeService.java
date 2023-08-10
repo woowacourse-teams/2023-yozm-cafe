@@ -35,8 +35,8 @@ public class LikedCafeService {
     }
 
     private List<LikedCafe> getLikedCafes(final Pageable pageable, final Member member) {
-        int startIndex = pageable.getPageNumber() * pageable.getPageSize();
-        int endIndex = startIndex + pageable.getPageSize();
+        final int startIndex = pageable.getPageNumber() * pageable.getPageSize();
+        final int endIndex = startIndex + pageable.getPageSize();
 
         return member.getLikedCafesSection(startIndex, endIndex);
     }
