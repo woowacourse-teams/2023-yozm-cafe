@@ -1,12 +1,17 @@
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-import type { LikedCafe } from '../types';
+import useIntersection from '../hooks/useIntersection';
+import useLikedCafes from '../hooks/useLikedCafes';
 
-type LikedCafeListProps = {
-  likedCafes: LikedCafe[];
-};
+const LikedCafeList = () => {
+  const { likedCafes, fetchNextPage, isFetching, hasNextPage } = useLikedCafes();
 
-const LikedCafeList = (props: LikedCafeListProps) => {
-  const { likedCafes } = props;
+  const ref = useRef<HTMLDivElement>(null);
+  const intersection = useIntersection(ref, { threshold: 1 });
+
+  const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
+  if (shouldFetch) fetchNextPage();
 
   return (
     <Container>
@@ -15,11 +20,13 @@ const LikedCafeList = (props: LikedCafeListProps) => {
       </TitleContainer>
       <ScrollContainer>
         <GridContainer>
-          {/* 좋아요한 카페 이미지들을 렌더링 */}
           {likedCafes.map((cafe) => (
-            <CafeImage key={cafe.cafeId} src={cafe.imageUrl} alt={`Cafe ${cafe.cafeId}`} />
+            <Link to={`/my-profile/cafes/${cafe.cafeId}#${cafe.cafeId}`} key={cafe.cafeId}>
+              <CafeImage key={cafe.cafeId} src={cafe.imageUrl} alt={`Cafe ${cafe.cafeId}`} />
+            </Link>
           ))}
         </GridContainer>
+        <SensorContainer ref={ref} />
       </ScrollContainer>
     </Container>
   );
@@ -60,3 +67,5 @@ const GridContainer = styled.div`
 const CafeImage = styled.img`
   aspect-ratio: 1 / 1;
 `;
+
+const SensorContainer = styled.div``;
