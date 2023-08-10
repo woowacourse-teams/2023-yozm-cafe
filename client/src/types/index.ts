@@ -53,3 +53,25 @@ export type LikedCafe = {
 };
 
 export type AuthProvider = 'kakao' | 'google';
+
+export type CafeMenuBoard = {
+  id: number;
+  priority: number;
+  imageUrl: string;
+};
+
+export type CafeMenuItem = {
+  id: number;
+  priority: number;
+  name: string;
+  imageUrl: string | null;
+  description: string;
+  price: string;
+  recommended: boolean;
+};
+
+export type CafeMenu = {
+  cafeId: Cafe['id'];
+  menuBoards: CafeMenuBoard[];
+  menus: CafeMenuItem[];
+};
