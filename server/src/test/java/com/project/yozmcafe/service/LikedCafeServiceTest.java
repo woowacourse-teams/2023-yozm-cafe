@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.controller.dto.LikedCafeDetailResponse;
 import com.project.yozmcafe.controller.dto.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -56,6 +57,45 @@ class LikedCafeServiceTest {
         assertThatThrownBy(() -> likedCafeService.findLikedCafesById("findLikedCafesById_fail", 1, 15))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_MEMBER.getMessage());
+    }
+
+    @Test
+    @DisplayName("좋아요 카페 목록의 카페 정보들을 조회한다.")
+    void findLikedCafesDetails() {
+        //given
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 12));
+
+        final Member member = new Member("1234", "도치", "도치.img");
+        member.updateLikedCafesBy(savedCafe1, true);
+        member.updateLikedCafesBy(savedCafe2, true);
+        final Member savedMember = memberRepository.save(member);
+
+        //when
+        final List<LikedCafeDetailResponse> result = likedCafeService.findLikedCafeDetailsById(savedMember.getId());
+
+        //then
+        assertAll(
+                () -> assertThat(result).extracting("id").containsExactly(savedCafe2.getId(), savedCafe1.getId()),
+                () -> assertThat(result).extracting("isLiked").doesNotContain(false)
+        );
+    }
+
+    @Test
+    @DisplayName("좋아요 카페 목록의 카페 정보들을 조회할 때, 좋아요 된 카페가 없으면 빈 배열을 반환한다")
+    void findLikedCafesDetailsWhenLikeCafeNotExist() {
+        //given
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        final Member member = new Member("1234", "도치", "도치.img");
+        final Member savedMember = memberRepository.save(member);
+
+        //when
+        final List<LikedCafeDetailResponse> result = likedCafeService.findLikedCafeDetailsById(savedMember.getId());
+
+        //then
+        assertThat(result).isEmpty();
     }
 
     @Test

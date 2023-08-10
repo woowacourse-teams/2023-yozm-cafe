@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.controller.dto.LikedCafeDetailResponse;
 import com.project.yozmcafe.controller.dto.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -8,6 +9,7 @@ import com.project.yozmcafe.domain.member.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,6 +32,17 @@ public class LikedCafeService {
 
         return likedCafes.stream()
                 .map(LikedCafeResponse::from)
+                .toList();
+    }
+
+    public List<LikedCafeDetailResponse> findLikedCafeDetailsById(final String memberId) {
+        final Member member = memberService.findMemberByIdOrElseThrow(memberId);
+
+        final List<LikedCafe> likedCafes = member.getLikedCafes();
+        Collections.reverse(likedCafes);
+        
+        return likedCafes.stream()
+                .map(LikedCafeDetailResponse::fromLikedCafe)
                 .toList();
     }
 
