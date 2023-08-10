@@ -223,7 +223,7 @@ class MemberTest {
 
     @Test
     @DisplayName("좋아요한 카페 목록을 페이지 처리한다")
-    void getLikedCafesByPaging() {
+    void getLikedCafesSection() {
         //given
         final Member member = new Member("1234", "오션", "오션사진");
         final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
@@ -236,7 +236,7 @@ class MemberTest {
         member.updateLikedCafesBy(cafe4, true);
 
         //when
-        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
+        final List<LikedCafe> likedCafes = member.getLikedCafesSection(0, 2);
 
         //then
         assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe4, cafe3);
