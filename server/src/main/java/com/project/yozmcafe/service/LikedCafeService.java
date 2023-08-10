@@ -9,8 +9,9 @@ import com.project.yozmcafe.domain.member.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.reverse;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,7 +40,7 @@ public class LikedCafeService {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = member.getLikedCafes();
-        Collections.reverse(likedCafes);
+        reverse(likedCafes);
 
         return likedCafes.stream()
                 .map(LikedCafeDetailResponse::fromLikedCafe)
