@@ -1,32 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import CafeCard from '../components/CafeCard';
 import useLikedCafesDetail from '../hooks/useLikedCafesDetail';
 
 const LikedCafeDetail = () => {
-  const { cafeId } = useParams();
+  const params = useParams();
+  const cafeId = Number(params.cafeId);
 
   const { likedCafesDetail } = useLikedCafesDetail();
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    document.getElementById(String(cafeId))?.scrollIntoView();
+    ref.current?.scrollIntoView();
   }, []);
 
   return (
-    <Container>
+    <CardList>
       {likedCafesDetail.map((cafe) => (
-        <CardList key={cafe.id} id={String(cafe.id)}>
+        <CafeCardContainer key={cafe.id} ref={cafe.id === cafeId ? ref : undefined}>
           <CafeCard cafe={cafe} />
-        </CardList>
+        </CafeCardContainer>
       ))}
-    </Container>
+    </CardList>
   );
 };
 
 export default LikedCafeDetail;
 
-const Container = styled.ul`
+const CardList = styled.ul`
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
   height: 100%;
@@ -38,4 +40,4 @@ const Container = styled.ul`
   }
 `;
 
-const CardList = styled.div``;
+const CafeCardContainer = styled.div``;
