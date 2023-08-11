@@ -21,7 +21,7 @@ const LikedCafeList = () => {
       <ScrollContainer>
         <GridContainer>
           {likedCafes.map((cafe) => (
-            <Link to={`/my-profile/cafes/${cafe.cafeId}#${cafe.cafeId}`} key={cafe.cafeId}>
+            <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
               <CafeImage key={cafe.cafeId} src={cafe.imageUrl} alt={`Cafe ${cafe.cafeId}`} />
             </Link>
           ))}
