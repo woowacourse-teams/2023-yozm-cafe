@@ -5,6 +5,7 @@ import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -32,11 +34,20 @@ public class CafeAdminService {
     }
 
     @Transactional
-    public Long save(final CafeRequest cafeRequest) {
-        final Cafe cafe = cafeRequest.toCafe();
+    public Long save(final CafeRequest request, final List<String> images) {
+        final Cafe cafe = new Cafe(request.name(), request.address(), new Images(images), request.getDetail());
+
         return cafeRepository.save(cafe).getId();
     }
 
+
+    public static void main(final String[] args) {
+        System.out.println(LocalDateTime.now());
+    }
+
+    //이미지 삭제용 API 하나 (카페 id, 이미지 경로)
+    //이미지 추가용 API 하나 (카페 id, MultiPartFile)
+    //UpdateRequest에서는 이미지 관련 처리 X
     @Transactional
     public void update(final long cafeId, final CafeUpdateRequest cafeRequest) {
         final Cafe cafe = getOrThrow(cafeId);
