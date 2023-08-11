@@ -24,12 +24,18 @@ public class S3Client {
     }
 
     public void upload(final MultipartFile multipartFile) {
+        File tempFile = null;
         try {
-            final File file = new File(multipartFile.getOriginalFilename());
-            multipartFile.transferTo(file);
-            s3.putObject(new PutObjectRequest(bucket, multipartFile.getOriginalFilename(), file));
+            // 안전한 임시 파일 생성
+            tempFile = File.createTempFile("upload_", ".tmp");
+            multipartFile.transferTo(tempFile);
+            s3.putObject(new PutObjectRequest(bucket, multipartFile.getOriginalFilename(), tempFile));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();  // 임시 파일 삭제
+            }
         }
     }
 
