@@ -3,18 +3,28 @@ package com.project.yozmcafe.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.yozmcafe.domain.FileNameGenerator;
 import com.project.yozmcafe.domain.ImageResizer;
+import com.project.yozmcafe.domain.S3Client;
 
+@Service
 public class ImageService {
+
+    private final S3Client s3Client;
+
+    public ImageService(final S3Client s3Client) {
+        this.s3Client = s3Client;
+    }
 
     public List<String> upload(List<MultipartFile> files) {
         final List<ImageResizer> resizers = createResizers(files);
 
-        final List<List<MultipartFile>> resizedImages = getResizedImages(resizers);
-// TODO: 2023/08/11 s3 업로드 해야됨 
+        final List<MultipartFile> resizedImages = getResizedImages(resizers);
+        resizedImages.forEach(s3Client::upload);
+
         return resizers.stream()
                 .map(ImageResizer::getFileName)
                 .toList();
@@ -30,9 +40,10 @@ public class ImageService {
         return imageResizers;
     }
 
-    private List<List<MultipartFile>> getResizedImages(final List<ImageResizer> resizers) {
+    private List<MultipartFile> getResizedImages(final List<ImageResizer> resizers) {
         return resizers.stream()
                 .map(ImageResizer::generateResizedImages)
+                .flatMap(List::stream)
                 .toList();
     }
 
