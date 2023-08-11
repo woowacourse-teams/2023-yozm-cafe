@@ -2,6 +2,7 @@ package com.project.yozmcafe.domain;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -73,6 +74,9 @@ public class ResizedImageFile implements MultipartFile {
 
     @Override
     public void transferTo(final File dest) throws IOException, IllegalStateException {
-
+        dest.createNewFile();
+        FileOutputStream fos = new FileOutputStream(dest);
+        fos.write(this.getBytes());
+        fos.close();
     }
 }
