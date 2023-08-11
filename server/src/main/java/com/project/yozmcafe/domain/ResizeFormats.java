@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ResizeFormats {
-    ORIGINAL("ORIGINAL/", 0),
+    ORIGINAL("original/", 0),
     THUMBNAIL("100/", 100),
     MOBILE("500/", 500);
 
