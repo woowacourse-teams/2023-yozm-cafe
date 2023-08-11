@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -71,5 +73,76 @@ class CafeServiceTest {
                 () -> assertThat(result.get(0).isLiked()).isFalse(),
                 () -> assertThat(result.get(1).isLiked()).isFalse()
         );
+    }
+
+    @Test
+    @DisplayName("cafe를 likeCount가 많은 순으로 조회한다.")
+    void getCafesOrderByLikeCount1() {
+        //given
+        final PageRequest pageRequest = PageRequest.of(0, 5);
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 12));
+        final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 13));
+        final Cafe savedCafe4 = cafeRepository.save(Fixture.getCafe("카페4", "주소4", 14));
+        final Cafe savedCafe5 = cafeRepository.save(Fixture.getCafe("카페5", "주소5", 15));
+        final Cafe savedCafe6 = cafeRepository.save(Fixture.getCafe("카페6", "주소6", 16));
+        final Cafe savedCafe7 = cafeRepository.save(Fixture.getCafe("카페7", "주소7", 17));
+        final Cafe savedCafe8 = cafeRepository.save(Fixture.getCafe("카페8", "주소8", 18));
+
+        //when
+        final List<CafeRankResponse> result = cafeService.getCafesOrderByLikeCount(pageRequest);
+
+        //then
+        assertThat(result).extracting("id", "rank", "likeCount")
+                .containsExactly(tuple(savedCafe8.getId(), 1, savedCafe8.getLikeCount()),
+                        tuple(savedCafe7.getId(), 2, savedCafe7.getLikeCount()),
+                        tuple(savedCafe6.getId(), 3, savedCafe6.getLikeCount()),
+                        tuple(savedCafe5.getId(), 4, savedCafe5.getLikeCount()),
+                        tuple(savedCafe4.getId(), 5, savedCafe4.getLikeCount())
+                );
+    }
+
+    @Test
+    @DisplayName("cafe를 likeCount가 많은 순으로 조회할 때, 페이지에 맞는 카페들을 응답한다.")
+    void getCafesOrderByLikeCount2() {
+        //given
+        final PageRequest pageRequest = PageRequest.of(1, 5);
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 12));
+        final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 13));
+        cafeRepository.save(Fixture.getCafe("카페4", "주소4", 14));
+        cafeRepository.save(Fixture.getCafe("카페5", "주소5", 15));
+        cafeRepository.save(Fixture.getCafe("카페6", "주소6", 16));
+        cafeRepository.save(Fixture.getCafe("카페7", "주소7", 17));
+        cafeRepository.save(Fixture.getCafe("카페8", "주소8", 18));
+
+        //when
+        final List<CafeRankResponse> result = cafeService.getCafesOrderByLikeCount(pageRequest);
+
+        //then
+        assertThat(result).extracting("id", "rank", "likeCount")
+                .containsExactly(tuple(savedCafe3.getId(), 6, savedCafe3.getLikeCount()),
+                        tuple(savedCafe2.getId(), 7, savedCafe2.getLikeCount()),
+                        tuple(savedCafe1.getId(), 8, savedCafe1.getLikeCount())
+                );
+    }
+
+    @Test
+    @DisplayName("cafe를 likeCount가 많은 순으로 조회할 때, 최대 페이지를 초과하는 조회이면 빈 배열을 반환한다.")
+    void getCafesOrderByLikeCountWhenPageOut() {
+        //given
+        final PageRequest pageRequest = PageRequest.of(3, 5);
+        cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
+        cafeRepository.save(Fixture.getCafe("카페2", "주소2", 12));
+        cafeRepository.save(Fixture.getCafe("카페3", "주소3", 13));
+        cafeRepository.save(Fixture.getCafe("카페4", "주소4", 14));
+        cafeRepository.save(Fixture.getCafe("카페5", "주소5", 15));
+        cafeRepository.save(Fixture.getCafe("카페6", "주소6", 16));
+
+        //when
+        final List<CafeRankResponse> result = cafeService.getCafesOrderByLikeCount(pageRequest);
+
+        //then
+        assertThat(result).isEmpty();
     }
 }

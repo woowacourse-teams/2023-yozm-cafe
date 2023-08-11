@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -29,6 +30,18 @@ public class CafeService {
         return foundCafes.stream()
                 .map(CafeResponse::fromUnLoggedInUser)
                 .toList();
+    }
+
+    public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {
+        final List<Cafe> foundCafes = cafeRepository.findCafesByLikeCount(pageable).getContent();
+
+        return foundCafes.stream()
+                .map(cafe -> CafeRankResponse.fromCafe(getRank(pageable, foundCafes.indexOf(cafe)), cafe))
+                .toList();
+    }
+
+    private int getRank(final Pageable pageable, final int index) {
+        return (pageable.getPageSize() * pageable.getPageNumber()) + index + 1;
     }
 
     @Transactional
