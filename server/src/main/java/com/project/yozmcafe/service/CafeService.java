@@ -18,10 +18,12 @@ public class CafeService {
 
     private final CafeRepository cafeRepository;
     private final UnViewedCafeService unViewedCafeService;
+    private final CafeRankingManager cafeRankingManager;
 
-    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService) {
+    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService, final CafeRankingManager cafeRankingManager) {
         this.cafeRepository = cafeRepository;
         this.unViewedCafeService = unViewedCafeService;
+        this.cafeRankingManager = cafeRankingManager;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
@@ -36,12 +38,8 @@ public class CafeService {
         final List<Cafe> foundCafes = cafeRepository.findCafesByLikeCount(pageable).getContent();
 
         return foundCafes.stream()
-                .map(cafe -> CafeRankResponse.fromCafe(getRank(pageable, foundCafes.indexOf(cafe)), cafe))
+                .map(cafe -> CafeRankResponse.fromCafe(cafeRankingManager.getRank(foundCafes, cafe, pageable), cafe))
                 .toList();
-    }
-
-    private int getRank(final Pageable pageable, final int index) {
-        return (pageable.getPageSize() * pageable.getPageNumber()) + index + 1;
     }
 
     @Transactional
