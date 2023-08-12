@@ -3,11 +3,7 @@ package com.project.yozmcafe.controller.dto.cafe;
 import com.project.yozmcafe.domain.cafe.Cafe;
 
 public record CafeRankResponse(int rank, long id, String name, String address, String image, int likeCount) {
-    public static CafeRankResponse fromCafe(final int rank, final Cafe cafe) {
-        return of(rank, cafe);
-    }
-
-    private static CafeRankResponse of(final int rank, final Cafe cafe) {
+    public static CafeRankResponse of(final int rank, final Cafe cafe) {
         return new CafeRankResponse(
                 rank,
                 cafe.getId(),

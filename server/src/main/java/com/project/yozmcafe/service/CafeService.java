@@ -38,7 +38,7 @@ public class CafeService {
         final List<Cafe> foundCafes = cafeRepository.findCafesByLikeCount(pageable).getContent();
 
         return foundCafes.stream()
-                .map(cafe -> CafeRankResponse.fromCafe(cafeRankingManager.getRank(foundCafes, cafe, pageable), cafe))
+                .map(cafe -> CafeRankResponse.of(cafeRankingManager.getRank(foundCafes, cafe, pageable), cafe))
                 .toList();
     }
 
