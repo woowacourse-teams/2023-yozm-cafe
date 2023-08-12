@@ -27,10 +27,9 @@ public class ResizedImageFile implements MultipartFile {
 
     public static ResizedImageFile from(byte[] bytes, MultipartFile image, String fileName,
                                         ResizeFormats resizeFormats) {
-        String originalFileName = resizeFormats.getPath() + fileName;
         return new ResizedImageFile(
                 fileName,
-                originalFileName,
+                resizeFormats.addPathPrefix(fileName),
                 image.getContentType(),
                 bytes.length,
                 bytes
