@@ -28,6 +28,10 @@ public enum ResizeFormats {
                 .toList();
     }
 
+    public String addPathPrefix(final String fileName) {
+        return path + fileName;
+    }
+
     public String getPath() {
         return path;
     }
