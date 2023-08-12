@@ -19,7 +19,7 @@ public class CafeRankingManager {
         return (pageable.getPageSize() * pageable.getPageNumber()) + cafes.indexOf(cafe) + 1;
     }
 
-    private void validatePage(final Pageable pageable) {
+    public void validatePage(final Pageable pageable) {
         if (MAX_RANK / pageable.getPageSize() <= pageable.getPageNumber()) {
             throw new BadRequestException(RANK_OUT_OF_BOUNDS);
         }
