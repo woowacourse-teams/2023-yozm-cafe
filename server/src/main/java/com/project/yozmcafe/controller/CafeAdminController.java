@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,8 +43,12 @@ public class CafeAdminController {
 
     @PutMapping("/{cafeId}")
     public ResponseEntity<Void> update(@PathVariable("cafeId") final Long cafeId,
-                                       @RequestBody final CafeUpdateRequest request) {
-        cafeAdminService.update(cafeId, request);
+                                       @RequestPart final CafeUpdateRequest request,
+                                       @RequestPart final List<MultipartFile> images) {
+        final Images delectionImages = cafeAdminService.findImagesByCafeId(cafeId);
+        imageService.delete(delectionImages);
+        final List<String> savedImages = imageService.upload(images);
+        cafeAdminService.update(cafeId, request, savedImages);
         return ResponseEntity.noContent().build();
     }
 

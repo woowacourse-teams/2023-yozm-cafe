@@ -7,11 +7,11 @@ import static io.restassured.http.ContentType.MULTIPART;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -74,27 +74,20 @@ class CafeAdminControllerTest extends BaseControllerTest {
     @DisplayName("카페 업데이트")
     void update() {
         //given
+        doNothing().when(s3Client).upload(any(MockMultipartFile.class));
+        doNothing().when(s3Client).delete(anyString());
         String location = saveCafe();
-        CafeUpdateRequest updateRequest = makeCafeUpdateRequest();
+        String updateRequest = makeCafeUpdateRequest();
 
         //when, then
         given(spec).log().all()
-                .contentType(JSON)
+                .contentType(MULTIPART)
+                .multiPart("request", updateRequest, "application/json")
+                .multiPart("images", image, "image/png")
+                .accept(JSON)
                 .filter(document("어드민 API/카페 업데이트하기",
-                        requestFields(
-                                fieldWithPath("name").description("카페 이름"),
-                                fieldWithPath("address").description("카페 도로명 주소"),
-                                fieldWithPath("images.[]").description("이미지 URL 배열"),
-                                fieldWithPath("likeCount").description("좋아요 숫자"),
-                                fieldWithPath("detail.mapUrl").description("네이버 지도 URL"),
-                                fieldWithPath("detail.description").description("상세 설명"),
-                                fieldWithPath("detail.phone").description("전화번호"),
-                                fieldWithPath("detail.openingHours.[].day").description("요일"),
-                                fieldWithPath("detail.openingHours.[].open").description("영업 시작 시각"),
-                                fieldWithPath("detail.openingHours.[].close").description("영업 종료 시각"),
-                                fieldWithPath("detail.openingHours.[].opened").description("해당 요일 영업 여부")),
+                        requestPartBody("request"), requestPartBody("images"),
                         pathParameters(parameterWithName("cafeId").description("업데이트할 카페 ID"))))
-                .body(updateRequest)
                 .when()
                 .put("/admin/cafes/{cafeId}", location)
                 .then()
@@ -105,6 +98,7 @@ class CafeAdminControllerTest extends BaseControllerTest {
     @DisplayName("카페 삭제")
     void delete() {
         //given
+        doNothing().when(s3Client).delete(anyString());
         String location = saveCafe();
 
         //when, then
@@ -183,6 +177,7 @@ class CafeAdminControllerTest extends BaseControllerTest {
     }
 
     private String saveCafe() {
+        doNothing().when(s3Client).upload(any(MockMultipartFile.class));
         final String cafeRequest = makeCafeRequest();
 
         final String location = given().log().all()
@@ -208,11 +203,12 @@ class CafeAdminControllerTest extends BaseControllerTest {
         }
     }
 
-    private CafeUpdateRequest makeCafeUpdateRequest() {
-        return new CafeUpdateRequest("참치전문점", "해운대",
-                List.of("https://image5jvqbd.fmkorea.com/files/attach/new2/20221010/486616/3539993806/5096425812/9ccc34aeb4ea8d131d7f9b66919dfdec.jpg"),
-                detail(),
-                100);
+    private String makeCafeUpdateRequest() {
+        try {
+            return mapper.writeValueAsString(new CafeUpdateRequest("참치전문점", "해운대", detail(), 100));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private DetailRequest detail() {

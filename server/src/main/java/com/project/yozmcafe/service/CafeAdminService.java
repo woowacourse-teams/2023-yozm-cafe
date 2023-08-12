@@ -41,9 +41,9 @@ public class CafeAdminService {
     }
 
     @Transactional
-    public void update(final long cafeId, final CafeUpdateRequest cafeRequest) {
+    public void update(final long cafeId, final CafeUpdateRequest cafeRequest, List<String> images) {
         final Cafe cafe = getOrThrow(cafeId);
-        final Cafe requestedCafe = cafeRequest.toCafeWithId(cafeId);
+        final Cafe requestedCafe = cafeRequest.toCafeWithId(cafeId, images);
         cafe.update(requestedCafe);
     }
 
@@ -73,5 +73,9 @@ public class CafeAdminService {
                 .map(query -> query.setParameter("cafeId", cafeId))
                 .forEach(Query::executeUpdate);
         return cafe.getImages();
+    }
+
+    public Images findImagesByCafeId(final Long cafeId) {
+        return getOrThrow(cafeId).getImages();
     }
 }

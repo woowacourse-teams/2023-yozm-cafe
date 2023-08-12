@@ -75,8 +75,9 @@ class CafeAdminServiceTest {
         @Test
         @DisplayName("해당 카페가 존재하지 않으면 예외가 발생한다")
         void notExist() {
-            assertThatThrownBy(() -> cafeAdminService.update(0L, new CafeUpdateRequest(
-                    "name", "address", List.of("이미지"), detail(), 100)))
+            final Long cafeId = 0L;
+            final CafeUpdateRequest cafeUpdateRequest = new CafeUpdateRequest("name", "address", detail(), 100);
+            assertThatThrownBy(() -> cafeAdminService.update(cafeId, cafeUpdateRequest, List.of("image.png")))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage(NOT_EXISTED_CAFE.getMessage());
         }
@@ -87,10 +88,11 @@ class CafeAdminServiceTest {
             //given
             final Cafe cafe = saveCafe();
             final String nameForUpdate = "참치카페";
+            final CafeUpdateRequest cafeUpdateRequest = new CafeUpdateRequest(nameForUpdate, cafe.getAddress(),
+                    detailFrom(cafe), cafe.getLikeCount());
 
             //when
-            cafeAdminService.update(cafe.getId(), new CafeUpdateRequest(
-                    nameForUpdate, cafe.getAddress(), imagesFrom(cafe), detailFrom(cafe), cafe.getLikeCount()));
+            cafeAdminService.update(cafe.getId(), cafeUpdateRequest, imagesFrom(cafe));
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -103,10 +105,11 @@ class CafeAdminServiceTest {
             //given
             final Cafe cafe = saveCafe();
             final String addressForUpdate = "해운대";
+            final CafeUpdateRequest request = new CafeUpdateRequest(
+                    cafe.getName(), addressForUpdate, detailFrom(cafe), cafe.getLikeCount());
 
             //when
-            cafeAdminService.update(cafe.getId(), new CafeUpdateRequest(
-                    cafe.getName(), addressForUpdate, imagesFrom(cafe), detailFrom(cafe), cafe.getLikeCount()));
+            cafeAdminService.update(cafe.getId(), request, imagesFrom(cafe));
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -119,10 +122,11 @@ class CafeAdminServiceTest {
             //given
             final Cafe cafe = saveCafe();
             final List<String> imagesForUpdate = List.of("바뀐 이미지");
+            final CafeUpdateRequest request = new CafeUpdateRequest(cafe.getName(), cafe.getAddress(), detailFrom(cafe),
+                    cafe.getLikeCount());
 
             //when
-            cafeAdminService.update(cafe.getId(), new CafeUpdateRequest(
-                    cafe.getName(), cafe.getAddress(), imagesForUpdate, detailFrom(cafe), cafe.getLikeCount()));
+            cafeAdminService.update(cafe.getId(), request, imagesForUpdate);
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -139,7 +143,7 @@ class CafeAdminServiceTest {
 
             //when
             cafeAdminService.update(cafe.getId(), new CafeUpdateRequest(
-                    cafe.getName(), cafe.getAddress(), imagesFrom(cafe), detailFrom(cafe), likeCountForUpdate));
+                    cafe.getName(), cafe.getAddress(), detailFrom(cafe), likeCountForUpdate), imagesFrom(cafe));
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
