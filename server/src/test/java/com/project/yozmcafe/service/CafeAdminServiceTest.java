@@ -1,6 +1,29 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.cafe.*;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.time.LocalTime;
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
+import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Detail;
@@ -9,23 +32,10 @@ import com.project.yozmcafe.domain.cafe.available.Days;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.RollbackException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
-
-import java.time.LocalTime;
-import java.util.List;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -49,10 +59,10 @@ class CafeAdminServiceTest {
     @DisplayName("카페 생성 테스트")
     void construct() {
         //given
-        final CafeRequest request = new CafeRequest("연어카페", "주소", images(), detail());
+        final CafeRequest request = new CafeRequest("연어카페", "주소", detail());
 
         //when
-        cafeAdminService.save(request);
+        cafeAdminService.save(request, List.of("image1"));
 
         //then
         assertThat(cafeRepository.findAll()).hasSize(1);
@@ -66,7 +76,7 @@ class CafeAdminServiceTest {
         @DisplayName("해당 카페가 존재하지 않으면 예외가 발생한다")
         void notExist() {
             assertThatThrownBy(() -> cafeAdminService.update(0L, new CafeUpdateRequest(
-                    "name", "address", images(), detail(), 100)))
+                    "name", "address", List.of("이미지"), detail(), 100)))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage(NOT_EXISTED_CAFE.getMessage());
         }
@@ -199,18 +209,32 @@ class CafeAdminServiceTest {
         }
     }
 
-    private List<String> images() {
-        return List.of("이미지1", "이미지2");
+    private List<MultipartFile> images() {
+        try {
+            final File file = new File("src/test/resources/image.png");
+            final FileInputStream fileInputStream = new FileInputStream(file);
+            final MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
+            return List.of(image, image);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     private DetailRequest detail() {
-        final AvailableTimeRequest time1 = new AvailableTimeRequest(Days.MONDAY, LocalTime.now(), LocalTime.now(), true);
-        final AvailableTimeRequest time2 = new AvailableTimeRequest(Days.TUESDAY, LocalTime.now(), LocalTime.now(), true);
-        final AvailableTimeRequest time3 = new AvailableTimeRequest(Days.WEDNESDAY, LocalTime.now(), LocalTime.now(), true);
-        final AvailableTimeRequest time4 = new AvailableTimeRequest(Days.THURSDAY, LocalTime.now(), LocalTime.now(), true);
-        final AvailableTimeRequest time5 = new AvailableTimeRequest(Days.FRIDAY, LocalTime.now(), LocalTime.now(), true);
-        final AvailableTimeRequest time6 = new AvailableTimeRequest(Days.SATURDAY, LocalTime.now(), LocalTime.now(), true);
-        final AvailableTimeRequest time7 = new AvailableTimeRequest(Days.SUNDAY, LocalTime.now(), LocalTime.now(), true);
+        final AvailableTimeRequest time1 = new AvailableTimeRequest(Days.MONDAY, LocalTime.now(), LocalTime.now(),
+                true);
+        final AvailableTimeRequest time2 = new AvailableTimeRequest(Days.TUESDAY, LocalTime.now(), LocalTime.now(),
+                true);
+        final AvailableTimeRequest time3 = new AvailableTimeRequest(Days.WEDNESDAY, LocalTime.now(), LocalTime.now(),
+                true);
+        final AvailableTimeRequest time4 = new AvailableTimeRequest(Days.THURSDAY, LocalTime.now(), LocalTime.now(),
+                true);
+        final AvailableTimeRequest time5 = new AvailableTimeRequest(Days.FRIDAY, LocalTime.now(), LocalTime.now(),
+                true);
+        final AvailableTimeRequest time6 = new AvailableTimeRequest(Days.SATURDAY, LocalTime.now(), LocalTime.now(),
+                true);
+        final AvailableTimeRequest time7 = new AvailableTimeRequest(Days.SUNDAY, LocalTime.now(), LocalTime.now(),
+                true);
 
         return new DetailRequest(List.of(time1, time2, time3, time4, time5, time6, time7),
                 "mapUrl", "description", "phone");
@@ -234,6 +258,6 @@ class CafeAdminServiceTest {
     }
 
     private Cafe saveCafe() {
-        return cafeRepository.save(new Cafe("연어카페", "주소", new Images(images()), detail().toDetail()));
+        return cafeRepository.save(new Cafe("연어카페", "주소", new Images(List.of("image")), detail().toDetail()));
     }
 }

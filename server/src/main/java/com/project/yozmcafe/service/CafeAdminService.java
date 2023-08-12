@@ -1,22 +1,24 @@
 package com.project.yozmcafe.service;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.exception.BadRequestException;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,8 +34,8 @@ public class CafeAdminService {
     }
 
     @Transactional
-    public Long save(final CafeRequest cafeRequest) {
-        final Cafe cafe = cafeRequest.toCafe();
+    public Long save(final CafeRequest cafeRequest, List<String> imageNames) {
+        final Cafe cafe = cafeRequest.toCafe(imageNames);
         return cafeRepository.save(cafe).getId();
     }
 
