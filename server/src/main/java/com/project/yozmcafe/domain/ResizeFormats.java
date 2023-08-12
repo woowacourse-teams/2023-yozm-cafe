@@ -22,6 +22,12 @@ public enum ResizeFormats {
                 .toList();
     }
 
+    public static List<String> addAllPathPrefix(final String fileName) {
+        return Arrays.stream(ResizeFormats.values())
+                .map(resizeFormats -> resizeFormats.path + fileName)
+                .toList();
+    }
+
     public String getPath() {
         return path;
     }
