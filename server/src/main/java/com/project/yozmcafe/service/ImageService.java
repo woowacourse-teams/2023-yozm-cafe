@@ -8,7 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.yozmcafe.domain.FileNameGenerator;
 import com.project.yozmcafe.domain.ImageResizer;
+import com.project.yozmcafe.domain.ResizeFormats;
 import com.project.yozmcafe.domain.S3Client;
+import com.project.yozmcafe.domain.cafe.Images;
 
 @Service
 public class ImageService {
@@ -47,4 +49,10 @@ public class ImageService {
                 .toList();
     }
 
+    public void delete(final Images images) {
+        images.getUrls().stream()
+                .map(ResizeFormats::addAllPathPrefix)
+                .flatMap(List::stream)
+                .forEach(s3Client::delete);
+    }
 }
