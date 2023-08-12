@@ -14,6 +14,7 @@ import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.exception.BadRequestException;
 
 import jakarta.persistence.EntityManager;
@@ -63,12 +64,14 @@ public class CafeAdminService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void delete(final long cafeId) {
+    public Images delete(final long cafeId) {
+        final Cafe cafe = getOrThrow(cafeId);
         Stream.of(
                         entityManager.createQuery("DELETE FROM UnViewedCafe u WHERE u.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM LikedCafe l WHERE l.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM Cafe c WHERE c.id = :cafeId"))
                 .map(query -> query.setParameter("cafeId", cafeId))
                 .forEach(Query::executeUpdate);
+        return cafe.getImages();
     }
 }

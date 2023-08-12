@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
+import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.service.CafeAdminService;
 import com.project.yozmcafe.service.ImageService;
 
@@ -62,7 +63,8 @@ public class CafeAdminController {
 
     @DeleteMapping("/{cafeId}")
     public ResponseEntity<Void> delete(@PathVariable("cafeId") final Long cafeId) {
-        cafeAdminService.delete(cafeId);
+        final Images deletedImages = cafeAdminService.delete(cafeId);
+        imageService.delete(deletedImages);
         return ResponseEntity.noContent().build();
     }
 }
