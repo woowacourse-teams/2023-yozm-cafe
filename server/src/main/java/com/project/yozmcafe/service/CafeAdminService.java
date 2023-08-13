@@ -1,14 +1,5 @@
 package com.project.yozmcafe.service;
 
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
@@ -16,10 +7,17 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.exception.BadRequestException;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,9 +39,10 @@ public class CafeAdminService {
     }
 
     @Transactional
-    public void update(final long cafeId, final CafeUpdateRequest cafeRequest, List<String> images) {
+    public void update(final long cafeId, final CafeUpdateRequest request, List<String> images) {
         final Cafe cafe = getOrThrow(cafeId);
-        final Cafe requestedCafe = cafeRequest.toCafeWithId(cafeId, images);
+        final Cafe requestedCafe = request.toCafeWithId(cafeId, images);
+
         cafe.update(requestedCafe);
     }
 
@@ -64,18 +63,17 @@ public class CafeAdminService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Images delete(final long cafeId) {
-        final Cafe cafe = getOrThrow(cafeId);
+    public void delete(final long cafeId) {
         Stream.of(
                         entityManager.createQuery("DELETE FROM UnViewedCafe u WHERE u.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM LikedCafe l WHERE l.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM Cafe c WHERE c.id = :cafeId"))
                 .map(query -> query.setParameter("cafeId", cafeId))
                 .forEach(Query::executeUpdate);
-        return cafe.getImages();
     }
 
-    public Images findImagesByCafeId(final Long cafeId) {
-        return getOrThrow(cafeId).getImages();
+    public List<String> findImagesByCafeId(final Long cafeId) {
+        final Images images = getOrThrow(cafeId).getImages();
+        return images.getUrls();
     }
 }

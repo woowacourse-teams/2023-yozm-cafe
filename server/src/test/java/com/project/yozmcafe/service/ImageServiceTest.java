@@ -1,15 +1,7 @@
 package com.project.yozmcafe.service;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.doNothing;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.List;
-
+import com.project.yozmcafe.domain.S3Client;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 
-import com.project.yozmcafe.domain.S3Client;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.doNothing;
 
 @SpringBootTest
 class ImageServiceTest {
@@ -38,7 +37,7 @@ class ImageServiceTest {
         final MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
 
         //when
-        final List<String> result = imageService.upload(List.of(image));
+        final List<String> result = imageService.uploadAndGetImageNames(List.of(image));
 
         //then
         assertSoftly(softAssertions -> {

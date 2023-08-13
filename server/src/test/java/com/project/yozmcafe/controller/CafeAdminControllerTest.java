@@ -1,5 +1,23 @@
 package com.project.yozmcafe.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
+import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
+import com.project.yozmcafe.domain.S3Client;
+import com.project.yozmcafe.domain.cafe.available.Days;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockMultipartFile;
+
+import java.io.File;
+import java.time.LocalTime;
+import java.util.List;
+
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -17,25 +35,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
-import java.io.File;
-import java.time.LocalTime;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockMultipartFile;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
-import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
-import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
-import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
-import com.project.yozmcafe.domain.S3Client;
-import com.project.yozmcafe.domain.cafe.available.Days;
-
 class CafeAdminControllerTest extends BaseControllerTest {
 
 
@@ -45,7 +44,6 @@ class CafeAdminControllerTest extends BaseControllerTest {
     private S3Client s3Client;
 
     private File image = new File("src/test/resources/image.png");
-
 
     @Test
     @DisplayName("카페 저장하기")

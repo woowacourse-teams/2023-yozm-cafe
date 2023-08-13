@@ -1,24 +1,5 @@
 package com.project.yozmcafe.service;
 
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.time.LocalTime;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
@@ -32,10 +13,23 @@ import com.project.yozmcafe.domain.cafe.available.Days;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.RollbackException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.time.LocalTime;
+import java.util.List;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -213,15 +207,21 @@ class CafeAdminServiceTest {
         }
     }
 
-    private List<MultipartFile> images() {
-        try {
-            final File file = new File("src/test/resources/image.png");
-            final FileInputStream fileInputStream = new FileInputStream(file);
-            final MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
-            return List.of(image, image);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
+    @Test
+    @DisplayName("해당 카페의 사진들을 리턴한다")
+    void findImagesByCafeId() {
+        //given
+        final Cafe cafe = saveCafe();
+
+        //when
+        final List<String> imagesByCafeId = cafeAdminService.findImagesByCafeId(cafe.getId());
+
+        //then
+        assertThat(imagesByCafeId).containsExactly("image");
+    }
+
+    private Cafe saveCafe() {
+        return cafeRepository.save(new Cafe("연어카페", "주소", new Images(List.of("image")), detail().toDetail()));
     }
 
     private DetailRequest detail() {
@@ -259,9 +259,5 @@ class CafeAdminServiceTest {
 
     private List<String> imagesFrom(final Cafe cafe) {
         return cafe.getImages().getUrls();
-    }
-
-    private Cafe saveCafe() {
-        return cafeRepository.save(new Cafe("연어카페", "주소", new Images(List.of("image")), detail().toDetail()));
     }
 }

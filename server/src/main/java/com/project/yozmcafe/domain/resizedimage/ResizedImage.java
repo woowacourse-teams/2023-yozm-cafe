@@ -1,4 +1,6 @@
-package com.project.yozmcafe.domain;
+package com.project.yozmcafe.domain.resizedimage;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -6,9 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.springframework.web.multipart.MultipartFile;
-
-public class ResizedImageFile implements MultipartFile {
+public class ResizedImage implements MultipartFile {
 
     private final String name;
     private final String originalName;
@@ -16,8 +16,8 @@ public class ResizedImageFile implements MultipartFile {
     private final long size;
     private final byte[] bytes;
 
-    private ResizedImageFile(final String name, final String originalName, final String contentType, final long size,
-                             final byte[] bytes) {
+    private ResizedImage(final String name, final String originalName, final String contentType, final long size,
+                         final byte[] bytes) {
         this.name = name;
         this.originalName = originalName;
         this.contentType = contentType;
@@ -25,12 +25,11 @@ public class ResizedImageFile implements MultipartFile {
         this.bytes = bytes;
     }
 
-    public static ResizedImageFile from(byte[] bytes, MultipartFile image, String fileName,
-                                        ResizeFormats resizeFormats) {
-        return new ResizedImageFile(
-                fileName,
-                resizeFormats.addPathPrefix(fileName),
-                image.getContentType(),
+    public static ResizedImage of(byte[] bytes, String contentType, String name, String originalName) {
+        return new ResizedImage(
+                name,
+                originalName,
+                contentType,
                 bytes.length,
                 bytes
         );
@@ -62,18 +61,17 @@ public class ResizedImageFile implements MultipartFile {
     }
 
     @Override
-    public byte[] getBytes() throws IOException {
+    public byte[] getBytes() {
         return bytes;
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
         return new ByteArrayInputStream(bytes);
     }
 
     @Override
     public void transferTo(final File dest) throws IOException, IllegalStateException {
-        dest.createNewFile();
         FileOutputStream fos = new FileOutputStream(dest);
         fos.write(this.getBytes());
         fos.close();

@@ -1,16 +1,14 @@
 package com.project.yozmcafe.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.project.yozmcafe.domain.S3Client;
+import com.project.yozmcafe.domain.resizedimage.ImageName;
+import com.project.yozmcafe.domain.resizedimage.ImageResizer;
+import com.project.yozmcafe.domain.resizedimage.Size;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.yozmcafe.domain.FileNameGenerator;
-import com.project.yozmcafe.domain.ImageResizer;
-import com.project.yozmcafe.domain.ResizeFormats;
-import com.project.yozmcafe.domain.S3Client;
-import com.project.yozmcafe.domain.cafe.Images;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ImageService {
@@ -21,11 +19,9 @@ public class ImageService {
         this.s3Client = s3Client;
     }
 
-    public List<String> upload(List<MultipartFile> files) {
+    public List<String> uploadAndGetImageNames(final List<MultipartFile> files) {
         final List<ImageResizer> resizers = createResizers(files);
-
-        final List<MultipartFile> resizedImages = getResizedImages(resizers);
-        resizedImages.forEach(s3Client::upload);
+        resizers.forEach(this::resizeAndUpload);
 
         return resizers.stream()
                 .map(ImageResizer::getFileName)
@@ -34,24 +30,25 @@ public class ImageService {
 
     private List<ImageResizer> createResizers(final List<MultipartFile> files) {
         List<ImageResizer> imageResizers = new ArrayList<>();
+
         for (final MultipartFile file : files) {
-            final FileNameGenerator fileNameGenerator = FileNameGenerator.from(file.getOriginalFilename());
-            final String fileName = fileNameGenerator.getFileName();
-            imageResizers.add(new ImageResizer(file, fileName));
+            final ImageName imageName = ImageName.from(file.getOriginalFilename());
+            imageResizers.add(new ImageResizer(file, imageName.get()));
         }
         return imageResizers;
     }
 
-    private List<MultipartFile> getResizedImages(final List<ImageResizer> resizers) {
-        return resizers.stream()
-                .map(ImageResizer::generateResizedImages)
-                .flatMap(List::stream)
-                .toList();
+    private void resizeAndUpload(final ImageResizer imageResizer) {
+        final MultipartFile originalImage = imageResizer.getOriginalImage();
+        final List<MultipartFile> resizedImages = imageResizer.getResizedImages(Size.getAllSizesExceptOriginal());
+
+        s3Client.upload(originalImage);
+        resizedImages.forEach(s3Client::upload);
     }
 
-    public void delete(final Images images) {
-        images.getUrls().stream()
-                .map(ResizeFormats::addAllPathPrefix)
+    public void deleteAll(final List<String> imageNames) {
+        imageNames.stream()
+                .map(Size::getFileNamesWithPath)
                 .flatMap(List::stream)
                 .forEach(s3Client::delete);
     }

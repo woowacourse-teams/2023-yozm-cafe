@@ -1,102 +1,127 @@
 package com.project.yozmcafe.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import com.project.yozmcafe.domain.resizedimage.ImageResizer;
+import com.project.yozmcafe.domain.resizedimage.Size;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.project.yozmcafe.exception.BadRequestException;
-import com.project.yozmcafe.exception.ErrorCode;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ImageResizerTest {
 
-    @Test
-    @DisplayName("ImageResizer 생성시 Content-Type이 null이면 예외가 발생한다")
-    void construct_fail1() {
-        //given
-        final TestMultipartFile multipartFile = TestMultipartFile.getWithContentType(null);
+    @Nested
+    @DisplayName("ImageResizer 생성 테스트")
+    class ConstructTest {
+        @Test
+        @DisplayName("Content-Type이 null이면 예외가 발생한다")
+        void construct_fail1() {
+            //given
+            final TestMultipartFile multipartFile = TestMultipartFile.getWithContentType(null);
 
-        //when, then
-        assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.NOT_IMAGE.getMessage());
+            //when, then
+            assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(ErrorCode.NOT_IMAGE.getMessage());
+        }
+
+        @Test
+        @DisplayName("이미지가 아니면 예외가 발생한다")
+        void construct_fail2() {
+            //given
+            final TestMultipartFile multipartFile = TestMultipartFile.getWithContentType("file");
+
+            //when, then
+            assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(ErrorCode.NOT_IMAGE.getMessage());
+        }
+
+        @Test
+        @DisplayName("이미지가 사이즈가 5MB가 넘으면 예외가 발생한다")
+        void construct_fail3() {
+            //given
+            final TestMultipartFile multipartFile = TestMultipartFile.getWithSize(1024 * 1024 * 5 + 1);
+
+            //when, then
+            assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
+                    .isInstanceOf(BadRequestException.class)
+                    .hasMessage(ErrorCode.INVALID_IMAGE_SIZE.getMessage());
+        }
+
+        @Test
+        @DisplayName("예외가 발생하지 않는다")
+        void construct() throws Exception {
+            //given
+            final File file = new File("src/test/resources/image.png");
+            final FileInputStream fileInputStream = new FileInputStream(file);
+            final MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
+
+            //when, then
+            assertDoesNotThrow(() -> new ImageResizer(image, "fileName.png"));
+        }
     }
 
     @Test
-    @DisplayName("ImageResizer 생성시 이미지가 아니면 예외가 발생한다")
-    void construct_fail2() {
+    @DisplayName("원본 사이즈의 이미지를 리턴한다")
+    void getOriginalImage() throws Exception {
         //given
-        final TestMultipartFile multipartFile = TestMultipartFile.getWithContentType("file");
+        final MultipartFile image = makeMultipartFile();
+        final int expectedWidth = ImageIO.read(image.getInputStream()).getWidth();
 
-        //when, then
-        assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.NOT_IMAGE.getMessage());
+        //when
+        final MultipartFile originalImage = new ImageResizer(image, "").getOriginalImage();
+
+        //then
+        final int width = ImageIO.read(originalImage.getInputStream()).getWidth();
+        assertThat(width).isEqualTo(expectedWidth);
     }
 
     @Test
-    @DisplayName("ImageResizer 생성시 이미지가 사이즈가 5MB가 넘으면 예외가 발생한다")
-    void construct_fail3() {
+    @DisplayName("리사이즈된 이미지들을 리턴한다")
+    void getResizedImages() throws Exception {
         //given
-        final TestMultipartFile multipartFile = TestMultipartFile.getWithSize(1024 * 1024 * 5 + 1);
-
-        //when, then
-        assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(ErrorCode.INVALID_IMAGE_SIZE.getMessage());
-    }
-
-    @Test
-    @DisplayName("생성 테스트")
-    void construct() throws Exception {
-        //given
-        final File file = new File("src/test/resources/image.png");
-        final FileInputStream fileInputStream = new FileInputStream(file);
-        final MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
-
-        //when, then
-        assertDoesNotThrow(() -> new ImageResizer(image, "fileName.png"));
-    }
-
-    @Test
-    @DisplayName("리사이즈 테스트")
-    void resize() throws Exception {
-        //given
-        final File file = new File("src/test/resources/image.png");
-        final FileInputStream fileInputStream = new FileInputStream(file);
-        final MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
+        final MultipartFile image = makeMultipartFile();
         final ImageResizer imageResizer = new ImageResizer(image, "fileName.png");
 
         //when
-        final List<MultipartFile> results = imageResizer.generateResizedImages();
+        final List<MultipartFile> results = imageResizer.getResizedImages(Size.getAllSizesExceptOriginal());
         final List<String> fileNameWithPathResult = results.stream()
                 .map(MultipartFile::getOriginalFilename)
                 .toList();
 
         //then
         assertSoftly(softAssertions -> {
-            assertThat(results).hasSize(3);
+            assertThat(results).hasSize(Size.values().length - 1);
             assertThat(fileNameWithPathResult).containsExactlyInAnyOrder(
-                    "original/fileName.png",
                     "100/fileName.png",
                     "500/fileName.png"
             );
         });
+    }
 
+    private MultipartFile makeMultipartFile() throws IOException {
+        final File file = new File("src/test/resources/image.png");
+        final FileInputStream fileInputStream = new FileInputStream(file);
+        return new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
     }
 
     private record TestMultipartFile(String contentType, int size) implements MultipartFile {
+
 
         public static TestMultipartFile getWithContentType(final String contentType) {
             return new TestMultipartFile(contentType, 1);

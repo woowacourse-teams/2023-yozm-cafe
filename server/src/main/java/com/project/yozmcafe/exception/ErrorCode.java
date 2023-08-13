@@ -1,10 +1,10 @@
 package com.project.yozmcafe.exception;
 
-import static java.lang.String.format;
-
-import com.project.yozmcafe.domain.ImageResizer;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.Detail;
+import com.project.yozmcafe.domain.resizedimage.ImageResizer;
+
+import static java.lang.String.format;
 
 public enum ErrorCode {
     TOKEN_NOT_EXIST("T1", "토큰이 존재하지 않습니다."),

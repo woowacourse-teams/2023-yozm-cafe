@@ -1,9 +1,9 @@
-package com.project.yozmcafe.domain;
+package com.project.yozmcafe.domain.resizedimage;
 
 import java.util.Arrays;
 import java.util.List;
 
-public enum ResizeFormats {
+public enum Size {
     ORIGINAL("original/", 0),
     THUMBNAIL("100/", 100),
     MOBILE("500/", 500);
@@ -11,24 +11,24 @@ public enum ResizeFormats {
     private final String path;
     private final int width;
 
-    ResizeFormats(final String path, final int width) {
+    Size(final String path, final int width) {
         this.path = path;
         this.width = width;
     }
 
-    public static List<ResizeFormats> getResizedWidthExceptOriginal() {
-        return Arrays.stream(ResizeFormats.values())
+    public static List<Size> getAllSizesExceptOriginal() {
+        return Arrays.stream(Size.values())
                 .filter(resizeFormats -> !resizeFormats.equals(ORIGINAL))
                 .toList();
     }
 
-    public static List<String> addAllPathPrefix(final String fileName) {
-        return Arrays.stream(ResizeFormats.values())
-                .map(resizeFormats -> resizeFormats.path + fileName)
+    public static List<String> getFileNamesWithPath(final String fileName) {
+        return Arrays.stream(Size.values())
+                .map(size -> size.getFileNameWithPath(fileName))
                 .toList();
     }
 
-    public String addPathPrefix(final String fileName) {
+    public String getFileNameWithPath(final String fileName) {
         return path + fileName;
     }
 
