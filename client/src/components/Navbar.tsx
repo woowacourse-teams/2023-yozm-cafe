@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
 import Button from './Button';
@@ -19,25 +19,40 @@ const Navbar = () => {
     setIsLoginModalOpen(false);
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
+  const handleRankClick = () => {
+    navigate('/rank');
+  };
+
   const handleProfileClick = () => {
     navigate('/my-profile');
   };
 
   return (
     <Container>
-      <LogoContainer to="/">
-        <Logo fontSize="4xl" />
+      <LogoContainer>
+        <Logo onClick={handleLogoClick} fontSize="4xl" />
       </LogoContainer>
       <ButtonContainer>
-        {user ? (
-          <Button $variant="outlined" $fullWidth={true} $fullHeight={true} onClick={handleProfileClick}>
-            프로필
+        <RankButtonContainer>
+          <Button $fullWidth={true} $fullHeight={true} $variant="secondary" onClick={handleRankClick}>
+            랭킹
           </Button>
-        ) : (
-          <Button $fullWidth={true} $fullHeight={true} onClick={openLoginModal} aria-haspopup="dialog">
-            로그인
-          </Button>
-        )}
+        </RankButtonContainer>
+        <LoginAndProfileButtonContainer>
+          {user ? (
+            <Button $variant="outlined" $fullWidth={true} $fullHeight={true} onClick={handleProfileClick}>
+              프로필
+            </Button>
+          ) : (
+            <Button $fullWidth={true} $fullHeight={true} onClick={openLoginModal} aria-haspopup="dialog">
+              로그인
+            </Button>
+          )}
+        </LoginAndProfileButtonContainer>
       </ButtonContainer>
       <Suspense>{isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}</Suspense>
     </Container>
@@ -57,10 +72,21 @@ const Container = styled.nav`
 `;
 
 const ButtonContainer = styled.div`
-  flex: 3;
+  display: flex;
+  flex: 4;
+  align-items: center;
 `;
 
-const LogoContainer = styled(Link)`
-  flex: 7;
-  text-decoration: none;
+const LogoContainer = styled.div`
+  display: flex;
+  flex: 6;
+`;
+
+const RankButtonContainer = styled.div`
+  flex: 1;
+  margin-right: ${({ theme }) => theme.space[2]};
+`;
+
+const LoginAndProfileButtonContainer = styled.div`
+  flex: 3;
 `;
