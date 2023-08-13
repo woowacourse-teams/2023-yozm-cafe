@@ -5,6 +5,7 @@ const theme = {
 
     yellow: '#F7E600',
     gray: '#787878',
+    black: '#000000',
     white: '#FFFFFF',
 
     error: '#F14646',
