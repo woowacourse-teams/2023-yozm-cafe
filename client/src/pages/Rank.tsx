@@ -17,7 +17,6 @@ const Rank = () => {
   return (
     <Container>
       <TitleAndCategoryContainer>
-        <Title>랭킹</Title>
         <Category>좋아요 순</Category>
       </TitleAndCategoryContainer>
       {rankedCafes.map((cafe) => (
@@ -31,7 +30,7 @@ const Rank = () => {
           likeCount={cafe.likeCount}
         />
       ))}
-      <SensorContainer ref={ref}>sss</SensorContainer>
+      <SensorContainer ref={ref} />
     </Container>
   );
 };
@@ -49,19 +48,10 @@ const TitleAndCategoryContainer = styled.div`
   border-bottom: solid ${({ theme }) => theme.color.line.secondary} 0.3px;
 `;
 
-const Title = styled.h1`
-  padding-bottom: ${({ theme }) => theme.space[4]};
-  font-size: ${({ theme }) => theme.fontSize['4xl']};
-  font-weight: 600;
-`;
-
 const Category = styled.span`
   padding-bottom: ${({ theme }) => theme.space['2.5']};
   font-weight: 600;
   border-bottom: solid ${({ theme }) => theme.color.black} 2.5px;
 `;
 
-const SensorContainer = styled.div`
-  width: 100%;
-  background-color: red;
-`;
+const SensorContainer = styled.div``;
