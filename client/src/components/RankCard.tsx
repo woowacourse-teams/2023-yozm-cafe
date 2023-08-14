@@ -7,12 +7,12 @@ const RankCard = (props: Rank) => {
   const { id, rank, name, address, image, likeCount } = props;
   const navigate = useNavigate();
 
-  const handleProfileClick = () => {
+  const handleRankCardClick = () => {
     navigate(`/cafe/${id}`);
   };
 
   return (
-    <Container onClick={handleProfileClick}>
+    <Container onClick={handleRankCardClick}>
       <CafeRankContainer>
         <CafeRank>{rank}</CafeRank>
       </CafeRankContainer>
