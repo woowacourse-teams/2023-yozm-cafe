@@ -40,7 +40,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
     private JwtTokenProvider jwtTokenProvider;
 
     @Test
-    @DisplayName("사용자의 좋아요 한 카페 목록을 조회한다.")
+    @DisplayName("사용자가 좋아요 한 카페들의 대표 이미지들을 조회한다.")
     void getLikedCafes() {
         //given
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
@@ -52,7 +52,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("likedCafe/좋아요 카페 목록 조회",
+                .filter(document("likedCafe/좋아요 카페 대표 이미지 목록 조회",
                         queryParameters(parameterWithName("page").description("좋아요 목록 페이지 번호")),
                         pathParameters(parameterWithName("memberId").description("멤버 ID")),
                         responseFields(fieldWithPath("[].cafeId").description("카페 ID"),
@@ -68,15 +68,19 @@ class LikedCafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("멤버의 빈 좋아요 목록을 조회한다.")
+    @DisplayName("멤버의 빈 좋아요한 카페 대표 이미지들을 조회한다.")
     void getLikedCafes_empty() {
         //given
         final Member member = new Member("1", "오션", "오션.img");
         memberRepository.save(member);
 
         //when
-        final Response response = given().log().all()
-                .when().get("/members/{memberId}/liked-cafes?page=1", member.getId());
+        final Response response = given(spec).log().all()
+                .filter(document("likedCafe/좋아요 카페 대표 이미지 목록 조회- 비어 있는 경우",
+                        queryParameters(parameterWithName("page").description("좋아요 목록 페이지 번호")),
+                        pathParameters(parameterWithName("memberId").description("멤버 ID"))))
+                .when()
+                .get("/members/{memberId}/liked-cafes?page=1", member.getId());
 
         //then
         assertThat(response.jsonPath().getList("")).isEmpty();
@@ -110,7 +114,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
         //given
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "1동", 5));
         final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "2동", 5));
-        final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "3동", 7));
+        cafeRepository.save(Fixture.getCafe("카페3", "3동", 7));
         final Member member = new Member("1234", "도치", "도치.img");
         member.updateLikedCafesBy(savedCafe1, true);
         member.updateLikedCafesBy(savedCafe2, true);
@@ -118,10 +122,9 @@ class LikedCafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("likedCafe/좋아요 목록의 카페 상세조회",
+                .filter(document("likedCafe/좋아요 목록의 카페 조회",
                         pathParameters(parameterWithName("memberId").description("멤버 ID")),
-                        getCafeResponseFields()
-                ))
+                        getCafeResponseFields()))
                 .when()
                 .get("/members/{memberId}/liked-cafes/details", savedMember.getId());
 
@@ -132,6 +135,24 @@ class LikedCafeControllerTest extends BaseControllerTest {
                 .containsExactly(tuple(savedCafe2.getId(), savedCafe2.getName()),
                         tuple(savedCafe1.getId(), savedCafe1.getName())
                 );
+    }
+
+    @Test
+    @DisplayName("사용자의 빈 좋아요 카페 목록의 카페들을 조회한다.")
+    void getLikedCafeDetailsWhenEmpty() {
+        //given
+        cafeRepository.save(Fixture.getCafe("카페1", "1동", 5));
+        final Member savedMember = memberRepository.save(new Member("1234", "도치", "도치.img"));
+
+        //when
+        final Response response = given(spec).log().all()
+                .filter(document("likedCafe/좋아요 목록의 카페 조회 - 비어 있는 경우",
+                        pathParameters(parameterWithName("memberId").description("멤버 ID"))))
+                .when()
+                .get("/members/{memberId}/liked-cafes/details", savedMember.getId());
+
+        //then
+        assertThat(response.jsonPath().getList("")).isEmpty();
     }
 
     private ResponseFieldsSnippet getCafeResponseFields() {
