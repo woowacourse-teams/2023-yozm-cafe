@@ -8,11 +8,12 @@ import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
-@Transactional
+@Sql(scripts = "classpath:truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class LikedCafeServiceTest {
 
     @Autowired
@@ -99,6 +100,7 @@ class LikedCafeServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("member의 likedCafes에 cafeId에 해당하는 카페가 존재하지 않고, isLiked가 true인 경우 likedCafes에 카페를 추가한다.")
     void updateLikeAdd() {
         //given
@@ -118,6 +120,7 @@ class LikedCafeServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("member의 likedCafes에 cafeId에 해당하는 카페가 존재하고, isLiked가 false 경우 likedCafes에서 카페를 삭제한다.")
     void updateLikeRemove() {
         //given
@@ -138,6 +141,7 @@ class LikedCafeServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("member의 likedCafes에 cafeId에 해당하는 카페가 존재하고, isLiked가 true인 경우 기존의 상태를 유지한다.")
     void updateLikeAlreadySatisfied() {
         //given

@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static java.util.Collections.reverse;
-
 @Service
 @Transactional(readOnly = true)
 public class LikedCafeService {
@@ -40,7 +38,6 @@ public class LikedCafeService {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = member.getLikedCafes();
-        reverse(likedCafes);
 
         return likedCafes.stream()
                 .map(LikedCafeResponse::from)

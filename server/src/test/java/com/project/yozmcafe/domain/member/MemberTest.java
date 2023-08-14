@@ -239,6 +239,6 @@ class MemberTest {
         final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(1, 2);
 
         //then
-        assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe4, cafe3);
+        assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe1, cafe2);
     }
 }
