@@ -8,18 +8,6 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MENU_BOARD_IM
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Entity
-@Table(
-    name = "MenuBoard",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "UK_cafe_priority",
-            columnNames = {
-                "cafe_id",
-                "priority"
-            }
-        )
-    }
-)
 public class MenuBoard {
 
     @Id
@@ -30,7 +18,7 @@ public class MenuBoard {
     private Cafe cafe;
 
     @Column(nullable = false)
-    private Long priority;
+    private int priority;
 
     @Column(nullable = false)
     private String imageUrl;
@@ -38,11 +26,11 @@ public class MenuBoard {
     public MenuBoard() {
     }
 
-    public MenuBoard(final Cafe cafe, final Long priority, final String imageUrl) {
+    public MenuBoard(final Cafe cafe, final int priority, final String imageUrl) {
         this(null, cafe, priority, imageUrl);
     }
 
-    public MenuBoard(final Long id, final Cafe cafe, final Long priority, final String imageUrl) {
+    public MenuBoard(final Long id, final Cafe cafe, final int priority, final String imageUrl) {
         validate(imageUrl);
         this.id = id;
         this.priority = priority;
@@ -64,7 +52,7 @@ public class MenuBoard {
         return cafe;
     }
 
-    public Long getPriority() {
+    public int getPriority() {
         return priority;
     }
 

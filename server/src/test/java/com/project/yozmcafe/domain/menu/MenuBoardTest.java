@@ -18,7 +18,7 @@ class MenuBoardTest {
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
         //when & then
-        assertThatThrownBy(() -> new MenuBoard(cafe, 1L, imageUrl))
+        assertThatThrownBy(() -> new MenuBoard(cafe, 1, imageUrl))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.NOT_EXISTED_MENU_BOARD_IMAGE.getMessage());
     }
