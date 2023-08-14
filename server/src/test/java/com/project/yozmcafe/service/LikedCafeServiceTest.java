@@ -1,7 +1,7 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeDetailResponse;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
@@ -42,7 +42,7 @@ class LikedCafeServiceTest {
         memberRepository.save(member);
 
         //when
-        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(member.getId(), 1, 15);
+        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafesById(member.getId(), 1, 15);
 
         //then
         assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
@@ -73,7 +73,7 @@ class LikedCafeServiceTest {
         final Member savedMember = memberRepository.save(member);
 
         //when
-        final List<LikedCafeDetailResponse> result = likedCafeService.findLikedCafeDetailsById(savedMember.getId());
+        final List<LikedCafeResponse> result = likedCafeService.findLikedCafeDetailsById(savedMember.getId());
 
         //then
         assertAll(
@@ -92,7 +92,7 @@ class LikedCafeServiceTest {
         final Member savedMember = memberRepository.save(member);
 
         //when
-        final List<LikedCafeDetailResponse> result = likedCafeService.findLikedCafeDetailsById(savedMember.getId());
+        final List<LikedCafeResponse> result = likedCafeService.findLikedCafeDetailsById(savedMember.getId());
 
         //then
         assertThat(result).isEmpty();

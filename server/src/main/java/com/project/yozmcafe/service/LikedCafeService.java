@@ -1,7 +1,7 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeDetailResponse;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
@@ -26,24 +26,24 @@ public class LikedCafeService {
         this.memberService = memberService;
     }
 
-    public List<LikedCafeResponse> findLikedCafesById(final String memberId, final int pageNumber, final int pageSize) {
+    public List<LikedCafeThumbnailResponse> findLikedCafesById(final String memberId, final int pageNumber, final int pageSize) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(pageNumber, pageSize);
 
         return likedCafes.stream()
-                .map(LikedCafeResponse::from)
+                .map(LikedCafeThumbnailResponse::from)
                 .toList();
     }
 
-    public List<LikedCafeDetailResponse> findLikedCafeDetailsById(final String memberId) {
+    public List<LikedCafeResponse> findLikedCafeDetailsById(final String memberId) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = member.getLikedCafes();
         reverse(likedCafes);
 
         return likedCafes.stream()
-                .map(LikedCafeDetailResponse::fromLikedCafe)
+                .map(LikedCafeResponse::fromLikedCafe)
                 .toList();
     }
 

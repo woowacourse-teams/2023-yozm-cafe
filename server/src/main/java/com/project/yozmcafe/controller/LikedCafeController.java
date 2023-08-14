@@ -1,12 +1,16 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeDetailResponse;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.LikedCafeService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -22,15 +26,15 @@ public class LikedCafeController {
     }
 
     @GetMapping("/members/{memberId}/liked-cafes")
-    public ResponseEntity<List<LikedCafeResponse>> getLikedCafes(@PathVariable("memberId") final String memberId,
-                                                                 @PathParam("page") final int page) {
-        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(memberId, page, PAGE_SIZE);
+    public ResponseEntity<List<LikedCafeThumbnailResponse>> getLikedCafes(@PathVariable("memberId") final String memberId,
+                                                                          @PathParam("page") final int page) {
+        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafesById(memberId, page, PAGE_SIZE);
         return ResponseEntity.ok(likedCafes);
     }
 
     @GetMapping("/members/{memberId}/liked-cafes/details")
-    public ResponseEntity<List<LikedCafeDetailResponse>> getLikedCafeDetails(@PathVariable("memberId") final String memberId) {
-        final List<LikedCafeDetailResponse> likedCafeDetails = likedCafeService.findLikedCafeDetailsById(memberId);
+    public ResponseEntity<List<LikedCafeResponse>> getLikedCafeDetails(@PathVariable("memberId") final String memberId) {
+        final List<LikedCafeResponse> likedCafeDetails = likedCafeService.findLikedCafeDetailsById(memberId);
         return ResponseEntity.ok(likedCafeDetails);
     }
 

@@ -1,6 +1,6 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeDetailResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
@@ -26,7 +26,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 class LikedCafeControllerTest extends BaseControllerTest {
 
@@ -124,7 +126,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
                 .get("/members/{memberId}/liked-cafes/details", savedMember.getId());
 
         //then
-        List<LikedCafeDetailResponse> cafeDetailResponses = getCafeDetailResponses(response);
+        List<LikedCafeResponse> cafeDetailResponses = getCafeDetailResponses(response);
 
         assertThat(cafeDetailResponses).extracting("id", "name")
                 .containsExactly(tuple(savedCafe2.getId(), savedCafe2.getName()),
@@ -150,8 +152,8 @@ class LikedCafeControllerTest extends BaseControllerTest {
         );
     }
 
-    private List<LikedCafeDetailResponse> getCafeDetailResponses(final Response response) {
+    private List<LikedCafeResponse> getCafeDetailResponses(final Response response) {
         return response.then().log().all()
-                .extract().jsonPath().getList(".", LikedCafeDetailResponse.class);
+                .extract().jsonPath().getList(".", LikedCafeResponse.class);
     }
 }
