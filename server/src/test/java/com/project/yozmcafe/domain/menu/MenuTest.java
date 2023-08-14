@@ -17,7 +17,7 @@ class MenuTest {
     void invalidName(String name) {
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
-        assertThatThrownBy(() -> new Menu(cafe, 1L, name, "아메리카노.img", "고소한 아메리카노", "5000",
+        assertThatThrownBy(() -> new Menu(cafe, 1, name, "아메리카노.img", "고소한 아메리카노", "5000",
                 true))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.INVALID_MENU_NAME.getMessage());
@@ -28,7 +28,7 @@ class MenuTest {
     void invalidNameLength() {
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
-        assertThatThrownBy(() -> new Menu(cafe, 1L, "따뜻하면서도차갑고식지않는아이스아메리카노", "아메리카노.img", "고소한 아메리카노", "5000",
+        assertThatThrownBy(() -> new Menu(cafe, 1, "따뜻하면서도차갑고식지않는아이스아메리카노", "아메리카노.img", "고소한 아메리카노", "5000",
                 true))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.INVALID_MENU_NAME.getMessage());
@@ -39,7 +39,7 @@ class MenuTest {
     void invalidPrice(String price) {
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
-        assertThatThrownBy(() -> new Menu(cafe, 1L, "따듯한 아이스 아메리카노", "아메리카노.img", "고소한 아메리카노",
+        assertThatThrownBy(() -> new Menu(cafe, 1, "따듯한 아이스 아메리카노", "아메리카노.img", "고소한 아메리카노",
                 price, true))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.NOT_EXISTED_MENU_PRICE.getMessage());

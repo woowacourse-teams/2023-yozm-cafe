@@ -33,7 +33,7 @@ public class Menu {
     private Cafe cafe;
 
     @Column(nullable = false)
-    private Long priority;
+    private int priority;
 
     @Column(nullable = false)
     private String name;
@@ -50,11 +50,11 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final Cafe cafe, final Long priority, final String name, final String imageUrl, final String description, final String price, final boolean isRecommended) {
+    public Menu(final Cafe cafe, final int priority, final String name, final String imageUrl, final String description, final String price, final boolean isRecommended) {
         this(null, cafe, priority, name, imageUrl, description, price, isRecommended);
     }
 
-    public Menu(final Long id, final Cafe cafe, final Long priority, final String name, final String imageUrl, final String description,
+    public Menu(final Long id, final Cafe cafe, final int priority, final String name, final String imageUrl, final String description,
                 final String price, final boolean isRecommended) {
         validate(name, price);
         this.id = id;
@@ -84,7 +84,7 @@ public class Menu {
         return cafe;
     }
 
-    public Long getPriority() {
+    public int getPriority() {
         return priority;
     }
 
