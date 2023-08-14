@@ -5,22 +5,20 @@ import com.project.yozmcafe.domain.cafe.LikedCafe;
 
 import java.util.List;
 
-public record LikedCafeResponse(Long id, String name, String address, List<String> images, boolean isLiked,
-                                int likeCount, DetailResponse detail) {
+public record LikedCafeResponse(Long id, String name, String address, List<String> images,
+                                boolean isLiked, int likeCount, DetailResponse detail) {
 
     private static final boolean IS_LIKED_CAFE = true;
 
-    public static LikedCafeResponse fromLikedCafe(final LikedCafe likedCafe) {
-        return of(likedCafe.getCafe(), IS_LIKED_CAFE);
-    }
+    public static LikedCafeResponse from(final LikedCafe likedCafe) {
+        Cafe cafe = likedCafe.getCafe();
 
-    private static LikedCafeResponse of(final Cafe cafe, final boolean isLiked) {
         return new LikedCafeResponse(
                 cafe.getId(),
                 cafe.getName(),
                 cafe.getAddress(),
                 cafe.getImages().getUrls(),
-                isLiked,
+                IS_LIKED_CAFE,
                 cafe.getLikeCount(),
                 DetailResponse.from(cafe.getDetail()));
     }

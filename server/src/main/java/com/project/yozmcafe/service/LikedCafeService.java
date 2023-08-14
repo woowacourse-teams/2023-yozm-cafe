@@ -43,7 +43,7 @@ public class LikedCafeService {
         reverse(likedCafes);
 
         return likedCafes.stream()
-                .map(LikedCafeResponse::fromLikedCafe)
+                .map(LikedCafeResponse::from)
                 .toList();
     }
 
