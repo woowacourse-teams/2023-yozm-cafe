@@ -15,8 +15,10 @@ class MenuTest {
     @ParameterizedTest(name = "메뉴의 이름이 공백이면 예외가 발생한다.")
     @NullAndEmptySource
     void invalidName(String name) {
+        //given
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
+        //when & then
         assertThatThrownBy(() -> new Menu(cafe, 1, name, "아메리카노.img", "고소한 아메리카노", "5000",
                 true))
                 .isInstanceOf(BadRequestException.class)
@@ -26,8 +28,10 @@ class MenuTest {
     @Test
     @DisplayName("메뉴 이름 길이가 " + Menu.MAX_NAME_LENGTH + "를 초과하면 예외가 발생한다.")
     void invalidNameLength() {
+        //given
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
+        //when & then
         assertThatThrownBy(() -> new Menu(cafe, 1, "따뜻하면서도차갑고식지않는아이스아메리카노", "아메리카노.img", "고소한 아메리카노", "5000",
                 true))
                 .isInstanceOf(BadRequestException.class)
@@ -37,8 +41,10 @@ class MenuTest {
     @ParameterizedTest(name = "메뉴 가격이 공백이면 예외가 발생한다.")
     @NullAndEmptySource
     void invalidPrice(String price) {
+        //given
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
+        //when & then
         assertThatThrownBy(() -> new Menu(cafe, 1, "따듯한 아이스 아메리카노", "아메리카노.img", "고소한 아메리카노",
                 price, true))
                 .isInstanceOf(BadRequestException.class)

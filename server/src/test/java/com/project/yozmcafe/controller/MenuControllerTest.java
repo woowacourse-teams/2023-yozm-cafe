@@ -33,13 +33,13 @@ class MenuControllerTest extends BaseControllerTest {
     @Test
     @DisplayName("특정 카페의 메뉴와 메뉴판을 조회 한다.")
     void getMenus() {
-        Cafe cafe = cafeRepository.save(Fixture.getCafe("오션카페", "선릉역", 1));
-
+        //given
+        final Cafe cafe = cafeRepository.save(Fixture.getCafe("오션카페", "선릉역", 1));
         final Menu savedMenu = menuRepository.save(new Menu(cafe, 1, "뜨거운 아이스 아메리카노",
                 "아메리카노.img", "뜨겁지만 차가워요", "5000", true));
-
         final MenuBoard savedMenuBoard = menuBoardRepository.save(new MenuBoard(cafe, 1L, "메뉴판"));
 
+        //when
         final Response response = given(spec).log().all()
                 .filter(document("메뉴/메뉴 조회",
                         pathParameters(
@@ -61,6 +61,7 @@ class MenuControllerTest extends BaseControllerTest {
                 .when()
                 .get("/cafes/{cafeId}/menus", cafe.getId());
 
+        //then
         assertAll(
                 () -> assertThat(response.jsonPath().getString("menus[0].name")).isEqualTo(savedMenu.getName()),
                 () -> assertThat(response.jsonPath().getString("menus[0].imageUrl")).isEqualTo(savedMenu.getImageUrl()),

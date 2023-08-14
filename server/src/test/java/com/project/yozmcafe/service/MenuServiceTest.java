@@ -35,13 +35,16 @@ class MenuServiceTest {
     @Test
     @DisplayName("특정 카페의 메뉴판과 메뉴 목록을 조회한다.")
     void getMenus() {
+        //given
         final Cafe savedCafe = cafeRepository.save(Fixture.getCafe("오션카페", "서울카페", 0));
         final Menu savedMenu = menuRepository.save(new Menu(savedCafe, 1, "따뜻한 아이스 아메리카노", "아메리카노.img", "고소한 아메리카노", "5000",
                 true));
         final MenuBoard savedMenuBoard = menuBoardRepository.save(new MenuBoard(savedCafe, 1L, "메뉴판 이미지"));
 
+        //when
         final MenuResponse menuResponse = menuService.getMenus(savedCafe.getId());
 
+        //then
         assertAll(
                 () -> assertThat(menuResponse.cafeId()).isEqualTo(savedCafe.getId()),
                 () -> assertThat(menuResponse.menuBoards()).containsExactly(MenuBoardResponse.from(savedMenuBoard)),
@@ -52,17 +55,19 @@ class MenuServiceTest {
     @Test
     @DisplayName("카페의 메뉴판과 메뉴 목록은 isRecommend, priority 순으로 정렬하여 조회한다.")
     void getMenus_sort() {
+        //given
         final Cafe savedCafe = cafeRepository.save(Fixture.getCafe("오션카페", "서울카페", 0));
         final Menu savedMenu = menuRepository.save(new Menu(savedCafe, 1, "따뜻한 아이스 아메리카노", "아메리카노.img", "고소한 아메리카노", "5000",
                 false));
         final Menu savedMenu2 = menuRepository.save(new Menu(savedCafe, 2, "따뜻한 아이스 아메리카노", "아메리카노.img", "고소한 아메리카노", "5000",
                 true));
-
         final MenuBoard savedMenuBoard = menuBoardRepository.save(new MenuBoard(savedCafe, 1L, "메뉴판 이미지"));
         final MenuBoard savedMenuBoard2 = menuBoardRepository.save(new MenuBoard(savedCafe, 2L, "메뉴판 이미지"));
 
+        //when
         final MenuResponse menuResponse = menuService.getMenus(savedCafe.getId());
 
+        //then
         assertAll(
                 () -> assertThat(menuResponse.cafeId()).isEqualTo(savedCafe.getId()),
                 () -> assertThat(menuResponse.menuBoards()).containsExactly(MenuBoardResponse.from(savedMenuBoard),
