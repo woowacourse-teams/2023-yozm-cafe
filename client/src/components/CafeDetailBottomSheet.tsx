@@ -35,7 +35,6 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
       <Suspense>
         <CafeMenu cafeId={cafe.id} />
       </Suspense>
-      <Spacer $size={'4'} />
       <InfoContainer>
         <LocationDetail>
           <BsGeoAlt />
@@ -160,5 +159,14 @@ const CafeMenu = (props: CafeMenuProps) => {
     data: { menus },
   } = useCafeMenus(cafeId);
 
-  return <CafeMenuMiniList menus={menus} />;
+  const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
+
+  return (
+    recommendedMenus.length > 0 && (
+      <>
+        <CafeMenuMiniList menus={recommendedMenus} />
+        <Spacer $size={'8'} />
+      </>
+    )
+  );
 };

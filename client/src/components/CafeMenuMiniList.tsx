@@ -9,16 +9,9 @@ type CafeMenuMiniListProps = {
 const CafeMenuMiniList = (props: CafeMenuMiniListProps) => {
   const { menus } = props;
 
-  const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
-  const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
-
   return (
     <MenuList>
-      {recommendedMenus.map((menuItem) => (
-        <MenuListItem key={menuItem.id} menuItem={menuItem} />
-      ))}
-      <Divider />
-      {otherMenus.map((menuItem) => (
+      {menus.map((menuItem) => (
         <MenuListItem key={menuItem.id} menuItem={menuItem} />
       ))}
     </MenuList>
