@@ -67,7 +67,7 @@ export type CafeMenuItem = {
   imageUrl: string | null;
   description: string;
   price: string;
-  recommended: boolean;
+  isRecommended: boolean;
 };
 
 export type CafeMenu = {

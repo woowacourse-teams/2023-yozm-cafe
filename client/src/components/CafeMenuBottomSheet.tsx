@@ -28,8 +28,8 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
     event.stopPropagation();
   };
 
-  const recommendedMenus = menus.filter((menuItem) => menuItem.recommended);
-  const otherMenus = menus.filter((menuItem) => !menuItem.recommended);
+  const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
+  const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
 
   return createPortal(
     <Container onClick={handlePreventClickPropagation}>

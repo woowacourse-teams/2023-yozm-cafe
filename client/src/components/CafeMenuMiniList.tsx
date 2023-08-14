@@ -9,8 +9,8 @@ type CafeMenuMiniListProps = {
 const CafeMenuMiniList = (props: CafeMenuMiniListProps) => {
   const { menus } = props;
 
-  const recommendedMenus = menus.filter((menuItem) => menuItem.recommended);
-  const otherMenus = menus.filter((menuItem) => !menuItem.recommended);
+  const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
+  const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
 
   return (
     <MenuList>
