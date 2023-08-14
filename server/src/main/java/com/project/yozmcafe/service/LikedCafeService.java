@@ -6,6 +6,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,17 +25,24 @@ public class LikedCafeService {
         this.memberService = memberService;
     }
 
-    public List<LikedCafeThumbnailResponse> findLikedCafesById(final String memberId, final int pageNumber, final int pageSize) {
+    public List<LikedCafeThumbnailResponse> findLikedCafeThumbnailsById(final String memberId, final Pageable pageable) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
-        final List<LikedCafe> likedCafes = member.getLikedCafesByPaging(pageNumber, pageSize);
+        final List<LikedCafe> likedCafes = getLikedCafes(pageable, member);
 
         return likedCafes.stream()
                 .map(LikedCafeThumbnailResponse::from)
                 .toList();
     }
 
-    public List<LikedCafeResponse> findLikedCafeDetailsById(final String memberId) {
+    private List<LikedCafe> getLikedCafes(final Pageable pageable, final Member member) {
+        final int startIndex = pageable.getPageNumber() * pageable.getPageSize();
+        final int endIndex = startIndex + pageable.getPageSize();
+
+        return member.getLikedCafesSection(startIndex, endIndex);
+    }
+
+    public List<LikedCafeResponse> findLikedCafesById(final String memberId) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = member.getLikedCafes();

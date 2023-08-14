@@ -4,7 +4,8 @@ import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.LikedCafeService;
-import jakarta.websocket.server.PathParam;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,15 +28,16 @@ public class LikedCafeController {
 
     @GetMapping("/members/{memberId}/liked-cafes")
     public ResponseEntity<List<LikedCafeThumbnailResponse>> getLikedCafes(@PathVariable("memberId") final String memberId,
-                                                                          @PathParam("page") final int page) {
-        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafesById(memberId, page, PAGE_SIZE);
+                                                                          @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
+        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsById(memberId, pageable);
+
         return ResponseEntity.ok(likedCafes);
     }
 
     @GetMapping("/members/{memberId}/liked-cafes/details")
     public ResponseEntity<List<LikedCafeResponse>> getLikedCafeDetails(@PathVariable("memberId") final String memberId) {
-        final List<LikedCafeResponse> likedCafeDetails = likedCafeService.findLikedCafeDetailsById(memberId);
-        return ResponseEntity.ok(likedCafeDetails);
+        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(memberId);
+        return ResponseEntity.ok(likedCafes);
     }
 
     @PostMapping("/cafes/{cafeId}/likes")
