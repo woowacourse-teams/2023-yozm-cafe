@@ -38,17 +38,17 @@ const Navbar = () => {
       </LogoContainer>
       <ButtonContainer>
         <RankButtonContainer>
-          <Button $fullWidth={true} $fullHeight={true} $variant="secondary" onClick={handleRankClick}>
+          <Button $fullWidth $fullHeight $variant="secondary" onClick={handleRankClick}>
             랭킹
           </Button>
         </RankButtonContainer>
         <LoginAndProfileButtonContainer>
           {user ? (
-            <Button $variant="outlined" $fullWidth={true} $fullHeight={true} onClick={handleProfileClick}>
+            <Button $variant="outlined" $fullWidth $fullHeight onClick={handleProfileClick}>
               프로필
             </Button>
           ) : (
-            <Button $fullWidth={true} $fullHeight={true} onClick={openLoginModal} aria-haspopup="dialog">
+            <Button $fullWidth $fullHeight onClick={openLoginModal} aria-haspopup="dialog">
               로그인
             </Button>
           )}
