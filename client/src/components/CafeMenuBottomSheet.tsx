@@ -59,7 +59,7 @@ const Container = styled.div`
   flex-direction: column;
 
   width: 100%;
-  height: 450px;
+  height: 600px;
   padding: ${({ theme }) => theme.space[4]};
   padding-bottom: 0;
 
