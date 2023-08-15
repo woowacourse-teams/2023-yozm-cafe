@@ -14,9 +14,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class CafeRankingManagerTest {
+class CafeRankGeneratorTest {
 
-    private final CafeRankingManager cafeRankingManager = new CafeRankingManager();
+    private final CafeRankGenerator cafeRankGenerator = new CafeRankGenerator();
 
     @Test
     @DisplayName("카페의 순위를 계산한다.")
@@ -34,7 +34,7 @@ class CafeRankingManagerTest {
         final Pageable pageRequest = PageRequest.of(1, 5);
 
         //when
-        final int rank = cafeRankingManager.getRank(cafes, cafe6, pageRequest);
+        final int rank = cafeRankGenerator.makeRank(cafes.indexOf(cafe6), pageRequest);
 
         //then
         assertThat(rank).isEqualTo(6);
@@ -54,7 +54,7 @@ class CafeRankingManagerTest {
         final Pageable pageRequest = PageRequest.of(3, 10);
 
         //when, then
-        assertThatThrownBy(() -> cafeRankingManager.getRank(cafes, cafe1, pageRequest))
+        assertThatThrownBy(() -> cafeRankGenerator.makeRank(cafes.indexOf(cafe1), pageRequest))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(ErrorCode.RANK_OUT_OF_BOUNDS.getMessage());
     }

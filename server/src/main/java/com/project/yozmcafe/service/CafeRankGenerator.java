@@ -1,22 +1,19 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 import static com.project.yozmcafe.exception.ErrorCode.RANK_OUT_OF_BOUNDS;
 
 @Component
-public class CafeRankingManager {
+public class CafeRankGenerator {
 
     private static final int MAX_RANK = 30;
 
-    public int getRank(final List<Cafe> cafes, final Cafe cafe, Pageable pageable) {
+    public int makeRank(final int index, final Pageable pageable) {
         validatePage(pageable);
-        return (pageable.getPageSize() * pageable.getPageNumber()) + cafes.indexOf(cafe) + 1;
+        return (pageable.getPageSize() * pageable.getPageNumber()) + index + 1;
     }
 
     public void validatePage(final Pageable pageable) {
