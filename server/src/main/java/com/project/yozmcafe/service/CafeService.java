@@ -36,7 +36,9 @@ public class CafeService {
 
     public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {
         cafeRankGenerator.validatePage(pageable);
-        final List<Cafe> foundCafes = cafeRepository.findCafesByLikeCount(pageable);
+
+        final List<Long> ids = cafeRepository.findCafeIdsOrderByLikeCount(pageable);
+        final List<Cafe> foundCafes = cafeRepository.findCafesByIdsOrderByLikeCount(ids);
 
         return foundCafes.stream()
                 .map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe))
