@@ -69,9 +69,7 @@ create table if not exists `yozm-cafe`.menu (
     PRIMARY KEY (id),
     CONSTRAINT menu_cafe_id
         foreign key (cafe_id) references cafe (id)
-            ON DELETE CASCADE,
-    CONSTRAINT UK_cafe_priority
-        UNIQUE (cafe_id, priority)
+            ON DELETE CASCADE
 );
 
 create table if not exists `yozm-cafe`.menu_board (
@@ -82,7 +80,5 @@ create table if not exists `yozm-cafe`.menu_board (
     PRIMARY KEY (id),
     CONSTRAINT menu_board_cafe_id
         foreign key (cafe_id) references cafe (id)
-            ON DELETE CASCADE,
-    CONSTRAINT UK_cafe_priority
-        UNIQUE (cafe_id, priority)
+            ON DELETE CASCADE
 );
