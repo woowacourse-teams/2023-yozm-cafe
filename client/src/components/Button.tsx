@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  $variant?: 'default' | 'outlined' | 'secondary';
+  $variant?: 'default' | 'outlined' | 'tonal';
   $fullWidth?: boolean;
   $fullHeight?: boolean;
 };
@@ -20,7 +20,7 @@ const Button = (props: ButtonProps) => {
 export default Button;
 
 const ButtonVariants = {
-  secondary: css`
+  tonal: css`
     color: ${(props) => props.theme.color.white};
     background-color: ${(props) => props.theme.color.tertiary};
     border: none;
