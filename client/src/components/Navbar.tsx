@@ -38,7 +38,7 @@ const Navbar = () => {
       </LogoContainer>
       <ButtonContainer>
         <RankButtonContainer>
-          <Button $fullWidth $fullHeight $variant="tonal" onClick={handleRankClick}>
+          <Button $fullWidth $fullHeight $variant="secondary" onClick={handleRankClick}>
             랭킹
           </Button>
         </RankButtonContainer>
