@@ -73,20 +73,18 @@ const Container = styled.nav`
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex: 5;
   align-items: center;
 `;
 
 const LogoContainer = styled.div`
-  display: flex;
-  flex: 5;
+  flex: 6;
 `;
 
 const RankButtonContainer = styled.div`
-  flex: 1.5;
+  width: 44px;
   margin-right: ${({ theme }) => theme.space[2]};
 `;
 
 const LoginAndProfileButtonContainer = styled.div`
-  flex: 3.5;
+  width: 133px;
 `;
