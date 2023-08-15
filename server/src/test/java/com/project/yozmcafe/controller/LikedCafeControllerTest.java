@@ -75,10 +75,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
         memberRepository.save(member);
 
         //when
-        final Response response = given(spec).log().all()
-                .filter(document("likedCafe/좋아요 카페 대표 이미지 목록 조회- 비어 있는 경우",
-                        queryParameters(parameterWithName("page").description("좋아요 목록 페이지 번호")),
-                        pathParameters(parameterWithName("memberId").description("멤버 ID"))))
+        final Response response = given().log().all()
                 .when()
                 .get("/members/{memberId}/liked-cafes?page=1", member.getId());
 
@@ -145,9 +142,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
         final Member savedMember = memberRepository.save(new Member("1234", "도치", "도치.img"));
 
         //when
-        final Response response = given(spec).log().all()
-                .filter(document("likedCafe/좋아요 목록의 카페 조회 - 비어 있는 경우",
-                        pathParameters(parameterWithName("memberId").description("멤버 ID"))))
+        final Response response = given().log().all()
                 .when()
                 .get("/members/{memberId}/liked-cafes/details", savedMember.getId());
 
