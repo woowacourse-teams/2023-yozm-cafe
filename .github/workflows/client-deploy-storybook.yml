@@ -2,7 +2,7 @@ name: Client Deploy Storybook
 
 on:
   push:
-    branches: ['dev']
+    branches: [dev]
     paths: client/**
 
   workflow_dispatch:
