@@ -31,7 +31,7 @@ public enum ErrorCode {
     NOT_EXISTED_OAUTH_PROVIDER("O2", "잘못된 Provider Name 입니다."),
     NOT_EXISTED_OAUTH_CLIENT("O3", "일치하는 OAuthClient가 존재하지 않습니다."),
 
-    RANK_OUT_OF_BOUNDS("R1", "순위 범위를 벗어나는 요청입니다.");
+    RANK_OUT_OF_BOUNDS("R1", "좋아요 개수 랭킹 범위를 벗어나는 요청입니다. 좋아요 랭킹 요청의 페이지 확인이 필요합니다");
 
     private final String code;
     private final String message;
