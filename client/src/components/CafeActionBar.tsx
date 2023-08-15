@@ -29,7 +29,7 @@ const CafeActionBar = (props: CafeActionBarProps) => {
   return (
     <Container>
       <Action>
-        <ShareButton url={`https://yozm.cafe/cafe/${cafe.id}`} />
+        <ShareButton url={`https://yozm.cafe/cafes/${cafe.id}`} />
         <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
       </Action>
     </Container>
