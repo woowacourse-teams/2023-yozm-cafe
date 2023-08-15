@@ -36,7 +36,7 @@ public class CafeService {
 
     public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {
         cafeRankingManager.validatePage(pageable);
-        final List<Cafe> foundCafes = cafeRepository.findCafesByLikeCount(pageable).getContent();
+        final List<Cafe> foundCafes = cafeRepository.findCafesByLikeCount(pageable);
 
         return foundCafes.stream()
                 .map(cafe -> CafeRankResponse.of(cafeRankingManager.getRank(foundCafes, cafe, pageable), cafe))
