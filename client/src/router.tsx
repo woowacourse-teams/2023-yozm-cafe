@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'my-profile', element: <MyProfile /> },
-      { path: '/cafe/:cafeId', element: <Cafe /> },
+      { path: '/cafes/:cafeId', element: <Cafe /> },
     ],
   },
   {
