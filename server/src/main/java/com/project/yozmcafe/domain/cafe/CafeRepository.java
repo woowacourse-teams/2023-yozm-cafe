@@ -20,4 +20,5 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             "WHERE c.id IN :ids " +
             "ORDER BY c.likeCount DESC ")
     List<Cafe> findCafesByIdsOrderByLikeCount(@Param("ids") List<Long> ids);
+  
 }

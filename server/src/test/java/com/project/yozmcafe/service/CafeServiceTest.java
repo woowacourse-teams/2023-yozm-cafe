@@ -24,6 +24,11 @@ import static com.project.yozmcafe.exception.ErrorCode.RANK_OUT_OF_BOUNDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -162,5 +167,32 @@ class CafeServiceTest {
         assertThatThrownBy(() -> cafeService.getCafesOrderByLikeCount(pageRequest))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(RANK_OUT_OF_BOUNDS.getMessage());
+    }
+
+    @DisplayName("id로 카페를 단 건 조회한다.")
+    void getCafeById() {
+        //given
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+
+        //when
+        final CafeResponse result = cafeService.getCafeById(savedCafe1.getId());
+
+        //then
+        assertThat(result.id()).isEqualTo(savedCafe1.getId());
+    }
+
+    @Test
+    @DisplayName("id로 카페를 단 건 조회할 때, 존재하지 않는 카페이면 예외가 발생한다.")
+    void getCafeByIdFailWhenNotExist() {
+        //given
+        cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        final long notExistCafeId = 9999L;
+
+        //when, then
+        assertThatThrownBy(() -> cafeService.getCafeById(notExistCafeId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_CAFE.getMessage());
     }
 }

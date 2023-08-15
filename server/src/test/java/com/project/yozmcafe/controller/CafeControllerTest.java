@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -31,6 +34,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 class CafeControllerTest extends BaseControllerTest {
 
@@ -160,6 +165,44 @@ class CafeControllerTest extends BaseControllerTest {
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).isEmpty()
+        );
+    }
+
+    @Test
+    @DisplayName("카페 id로 해당하는 카페를 조회한다.")
+    void findById() {
+        //when
+        final Response response = given(spec).log().all()
+                .filter(document(CAFE_API + "카페 id로 단 건 조회",
+                        pathParameters(parameterWithName("cafeId").description("카페 Id")),
+                        getOneCafeResponseFields()))
+                .when()
+                .get("/cafes/{cafeId}", cafe3.getId());
+
+        //then
+        final Long resultId = response.then().log().all().extract().jsonPath().getLong("id");
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(resultId).isEqualTo(cafe3.getId())
+        );
+    }
+
+    @Test
+    @DisplayName("카페 id로 해당하는 카페를 조회할 때, 존재하지 않는 카페이면 statusCode 400을 응답한다")
+    void findByIdWhenNotExist() {
+        //when
+        final Response response = given(spec).log().all()
+                .filter(document(CAFE_API + "카페 id로 단 건 조회 예외",
+                        pathParameters(parameterWithName("cafeId").description("카페 Id"))
+                ))
+                .when()
+                .get("/cafes/{cafeId}", 9999999L);
+
+        //then
+        final String errorResponseMessage = response.getBody().jsonPath().getString("message");
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(400),
+                () -> assertThat(errorResponseMessage).isEqualTo(NOT_EXISTED_CAFE.getMessage())
         );
     }
 
@@ -327,6 +370,7 @@ class CafeControllerTest extends BaseControllerTest {
         );
     }
 
+
     private ResponseFieldsSnippet getCafeRankResponseFields() {
         return responseFields(
                 fieldWithPath("[].rank").description("카페 순위"),
@@ -335,6 +379,22 @@ class CafeControllerTest extends BaseControllerTest {
                 fieldWithPath("[].address").description("카페 주소"),
                 fieldWithPath("[].image").description("카페 대표 이미지 url"),
                 fieldWithPath("[].likeCount").description("카페의 좋아요 갯수")
+
+    private ResponseFieldsSnippet getOneCafeResponseFields() {
+        return responseFields(
+                fieldWithPath(".id").description("카페 아이디"),
+                fieldWithPath(".name").description("카페 이름"),
+                fieldWithPath(".address").description("카페 주소"),
+                fieldWithPath(".images[]").description("카페 이미지 url"),
+                fieldWithPath(".isLiked").description("해당 카페의 좋아요 여부(비회원은 default = false)"),
+                fieldWithPath(".likeCount").description("카페의 좋아요 갯수"),
+                fieldWithPath(".detail.phone").description("카페의 전화번호"),
+                fieldWithPath(".detail.mapUrl").description("카페의 네이버 지도 url"),
+                fieldWithPath(".detail.description").description("카페의 상세정보"),
+                fieldWithPath(".detail.openingHours[].day").description("요일"),
+                fieldWithPath(".detail.openingHours[].open").description("카페 오픈시간"),
+                fieldWithPath(".detail.openingHours[].close").description("카페 종료시간"),
+                fieldWithPath(".detail.openingHours[].opened").description("카페 해당요일 영업여부")
         );
     }
 
