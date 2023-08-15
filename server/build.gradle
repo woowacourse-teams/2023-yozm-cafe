@@ -44,9 +44,9 @@ ext {
 
 openapi3 {
     server = 'http://localhost:8080'
-    title = 'USER-API'
-    description = '사용자 리소스 API 입니다.'
-    version = '0.1.0'
+    title = '요즘카페-API'
+    description = '요즘카페 API 목록입니다.'
+    version = '1.0.0'
     format = 'yaml'
 }
 
