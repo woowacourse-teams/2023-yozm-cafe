@@ -1,12 +1,16 @@
+import { useRef } from 'react';
 import { styled } from 'styled-components';
-import type { LikedCafe } from '../types';
+import useIntersection from '../hooks/useIntersection';
+import useLikedCafes from '../hooks/useLikedCafes';
 
-type LikedCafeListProps = {
-  likedCafes: LikedCafe[];
-};
+const LikedCafeList = () => {
+  const { likedCafes, fetchNextPage, isFetching, hasNextPage } = useLikedCafes();
 
-const LikedCafeList = (props: LikedCafeListProps) => {
-  const { likedCafes } = props;
+  const ref = useRef<HTMLDivElement>(null);
+  const intersection = useIntersection(ref, { threshold: 1 });
+
+  const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
+  if (shouldFetch) fetchNextPage();
 
   return (
     <Container>
@@ -20,6 +24,7 @@ const LikedCafeList = (props: LikedCafeListProps) => {
             <CafeImage key={cafe.cafeId} src={cafe.imageUrl} alt={`Cafe ${cafe.cafeId}`} />
           ))}
         </GridContainer>
+        <SensorContainer ref={ref} />
       </ScrollContainer>
     </Container>
   );
@@ -60,3 +65,5 @@ const GridContainer = styled.div`
 const CafeImage = styled.img`
   aspect-ratio: 1 / 1;
 `;
+
+const SensorContainer = styled.div``;

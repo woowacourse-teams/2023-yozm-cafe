@@ -10,10 +10,10 @@
     "solo5star <solo_5@naver.com>"
   ],
   "scripts": {
-    "start": "webpack serve",
-    "build": "webpack --config webpack.prod.js",
-    "storybook": "storybook dev -p 6006",
-    "build:storybook": "storybook build"
+    "start": "cross-env NODE_ENV=development webpack serve",
+    "build": "cross-env NODE_ENV=production webpack",
+    "storybook": "cross-env NODE_ENV=development storybook dev -p 6006",
+    "build:storybook": "cross-env NODE_ENV=production storybook build"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",
@@ -29,6 +29,7 @@
     "@babel/core": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@storybook/addon-essentials": "7.0.25",
     "@storybook/addon-interactions": "7.0.25",
     "@storybook/addon-links": "7.0.25",
@@ -43,6 +44,7 @@
     "@typescript-eslint/parser": "^5.61.0",
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^11.0.0",
+    "cross-env": "^7.0.3",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
@@ -59,6 +61,7 @@
     "msw": "^1.2.2",
     "postcss-styled-syntax": "^0.4.0",
     "prettier": "^2.8.8",
+    "react-refresh": "^0.14.0",
     "storybook": "7.0.25",
     "stylelint": "^15.9.0",
     "stylelint-config-clean-order": "^5.0.1",

@@ -55,7 +55,7 @@ const CafeCard = (props: CardProps) => {
       </CarouselImageList>
       <DotsContainer>
         {cafe.images.map((_, index) => (
-          <Dot key={index} active={index === currentImageIndex} />
+          <Dot key={index} $active={index === currentImageIndex} />
         ))}
       </DotsContainer>
       <AsidePosition>
@@ -125,13 +125,13 @@ const DotsContainer = styled.div`
   gap: ${({ theme }) => theme.space[2]};
 `;
 
-const Dot = styled.div<{ active: boolean }>`
+const Dot = styled.div<{ $active: boolean }>`
   cursor: pointer;
 
   width: 8px;
   height: 8px;
 
-  background-color: ${({ active, theme }) => (active ? theme.color.white : theme.color.gray)};
+  background-color: ${({ $active, theme }) => ($active ? theme.color.white : theme.color.gray)};
   border-radius: 50%;
 `;
 
