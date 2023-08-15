@@ -1,7 +1,6 @@
 package com.project.yozmcafe.controller.dto.cafe;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.LikedCafe;
 
 import java.util.List;
 
@@ -10,9 +9,7 @@ public record LikedCafeResponse(Long id, String name, String address, List<Strin
 
     private static final boolean IS_LIKED_CAFE = true;
 
-    public static LikedCafeResponse from(final LikedCafe likedCafe) {
-        Cafe cafe = likedCafe.getCafe();
-
+    public static LikedCafeResponse from(final Cafe cafe) {
         return new LikedCafeResponse(
                 cafe.getId(),
                 cafe.getName(),

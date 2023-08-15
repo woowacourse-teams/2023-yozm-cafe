@@ -48,6 +48,7 @@ public class LikedCafeService {
         final List<LikedCafe> likedCafes = member.getLikedCafes();
 
         return likedCafes.stream()
+                .map(LikedCafe::getCafe)
                 .map(LikedCafeResponse::from)
                 .toList();
     }
