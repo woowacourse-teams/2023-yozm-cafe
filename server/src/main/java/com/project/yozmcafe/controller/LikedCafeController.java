@@ -29,7 +29,7 @@ public class LikedCafeController {
     @GetMapping("/members/{memberId}/liked-cafes")
     public ResponseEntity<List<LikedCafeThumbnailResponse>> getLikedCafeThumbnails(@PathVariable("memberId") final String memberId,
                                                                                    @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
-        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsById(memberId, pageable);
+        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(memberId, pageable);
 
         return ResponseEntity.ok(likedCafes);
     }

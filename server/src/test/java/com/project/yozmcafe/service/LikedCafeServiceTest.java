@@ -45,7 +45,7 @@ class LikedCafeServiceTest {
         memberRepository.save(member);
 
         //when
-        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsById(member.getId(), pageRequest);
+        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
 
         //then
         assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
@@ -59,7 +59,7 @@ class LikedCafeServiceTest {
 
         //when
         //then
-        assertThatThrownBy(() -> likedCafeService.findLikedCafeThumbnailsById("findLikedCafesById_fail", pageRequest))
+        assertThatThrownBy(() -> likedCafeService.findLikedCafeThumbnailsByMemberId("findLikedCafesById_fail", pageRequest))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_MEMBER.getMessage());
     }
@@ -76,7 +76,7 @@ class LikedCafeServiceTest {
         member.updateLikedCafesBy(cafe2, true);
 
         //when
-        final List<LikedCafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsById(member.getId(), pageRequest);
+        final List<LikedCafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
 
         //then
         assertThat(likedCafesById).isEmpty();

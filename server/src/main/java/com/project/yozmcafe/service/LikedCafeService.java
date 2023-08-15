@@ -25,7 +25,7 @@ public class LikedCafeService {
         this.memberService = memberService;
     }
 
-    public List<LikedCafeThumbnailResponse> findLikedCafeThumbnailsById(final String memberId, final Pageable pageable) {
+    public List<LikedCafeThumbnailResponse> findLikedCafeThumbnailsByMemberId(final String memberId, final Pageable pageable) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = getLikedCafes(pageable, member);
