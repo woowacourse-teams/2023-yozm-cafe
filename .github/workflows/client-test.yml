@@ -2,10 +2,10 @@ name: Client Test
 
 on:
   push:
-    branches: ['main']
+    branches: [main, dev]
     paths: client/**
   pull_request:
-    branches: [ main ]
+    branches: [main, dev]
     paths: client/**
 
 jobs:
