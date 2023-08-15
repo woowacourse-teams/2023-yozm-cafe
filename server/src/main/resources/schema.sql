@@ -59,7 +59,7 @@ create table if not exists `yozm-cafe`.un_viewed_cafe
 
 create table if not exists `yozm-cafe`.menu (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    cafe_id BIGINT,
+    cafe_id BIGINT NOT NULL,
     priority INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     image_url VARCHAR(512),
@@ -74,8 +74,8 @@ create table if not exists `yozm-cafe`.menu (
 
 create table if not exists `yozm-cafe`.menu_board (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    cafe_id BIGINT,
-    priority BIGINT NOT NULL,
+    cafe_id BIGINT NOT NULL,
+    priority INT NOT NULL,
     image_url VARCHAR(512) NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT menu_board_cafe_id
