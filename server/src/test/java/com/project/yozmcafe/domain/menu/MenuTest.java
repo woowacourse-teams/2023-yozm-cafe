@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MenuTest {
     @ParameterizedTest(name = "메뉴의 이름이 공백이면 예외가 발생한다.")
     @NullAndEmptySource
-    void invalidName(String name) {
+    void invalidName(final String name) {
         //given
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
@@ -40,7 +40,7 @@ class MenuTest {
 
     @ParameterizedTest(name = "메뉴 가격이 공백이면 예외가 발생한다.")
     @NullAndEmptySource
-    void invalidPrice(String price) {
+    void invalidPrice(final String price) {
         //given
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 

@@ -13,7 +13,7 @@ class MenuBoardTest {
 
     @ParameterizedTest(name = "메뉴판 이미지가 공백이면 예외가 발생한다.")
     @NullAndEmptySource
-    void invalidImageUrl(String imageUrl) {
+    void invalidImageUrl(final String imageUrl) {
         //given
         final Cafe cafe = Fixture.getCafe("오션카페", "서울카페", 0);
 
