@@ -9,14 +9,13 @@ const useLikedCafesDetail = () => {
 
   const queryResult = useSuspenseQuery({
     queryKey: ['likedCafesDetail', identity],
-    queryFn: () => client.getLikedCafeDetail(user?.id as string).then((likedCafesDetail) => likedCafesDetail),
+    queryFn: () => client.getLikedCafeDetail(user?.id as string),
     enabled: !!user,
   });
 
   return {
     ...queryResult,
-    data: queryResult.data as NonNullable<typeof queryResult.data>,
-    likedCafesDetail: queryResult.data ?? [],
+    likedCafesDetail: queryResult.data,
   };
 };
 
