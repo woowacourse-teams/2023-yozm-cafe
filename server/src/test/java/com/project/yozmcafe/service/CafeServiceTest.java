@@ -6,6 +6,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,9 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.project.yozmcafe.exception.ErrorCode.RANK_OUT_OF_BOUNDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -77,12 +80,12 @@ class CafeServiceTest {
 
     @Test
     @DisplayName("cafe를 likeCount가 많은 순으로 조회한다.")
-    void getCafesOrderByLikeCount1() {
+    void getCafesOrderByLikeCount() {
         //given
         final PageRequest pageRequest = PageRequest.of(0, 5);
-        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
-        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 12));
-        final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 13));
+        cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
+        cafeRepository.save(Fixture.getCafe("카페2", "주소2", 12));
+        cafeRepository.save(Fixture.getCafe("카페3", "주소3", 13));
         final Cafe savedCafe4 = cafeRepository.save(Fixture.getCafe("카페4", "주소4", 14));
         final Cafe savedCafe5 = cafeRepository.save(Fixture.getCafe("카페5", "주소5", 15));
         final Cafe savedCafe6 = cafeRepository.save(Fixture.getCafe("카페6", "주소6", 16));
@@ -104,7 +107,7 @@ class CafeServiceTest {
 
     @Test
     @DisplayName("cafe를 likeCount가 많은 순으로 조회할 때, 페이지에 맞는 카페들을 응답한다.")
-    void getCafesOrderByLikeCount2() {
+    void getCafesOrderByLikeCountWhenNotFirstPage() {
         //given
         final PageRequest pageRequest = PageRequest.of(1, 5);
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
@@ -128,8 +131,8 @@ class CafeServiceTest {
     }
 
     @Test
-    @DisplayName("cafe를 likeCount가 많은 순으로 조회할 때, 최대 페이지를 초과하는 조회이면 빈 배열을 반환한다.")
-    void getCafesOrderByLikeCountWhenPageOut() {
+    @DisplayName("cafe를 likeCount가 많은 순으로 조회할 때, 해당 순위 페이지에 카페가 존재하지 않으면 빈 배열을 반환한다.")
+    void getCafesOrderByLikeCountWhenNotExist() {
         //given
         final PageRequest pageRequest = PageRequest.of(3, 5);
         cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
@@ -144,5 +147,20 @@ class CafeServiceTest {
 
         //then
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("cafe를 likeCount가 많은 순으로 조회할 때, 최대 순위 페이지를 초과하는 요청이면 예외가 발생한다.")
+    void getCafesOrderByLikeCountWhenPageOutFail() {
+        //given
+        final PageRequest pageRequest = PageRequest.of(4, 10);
+        cafeRepository.save(Fixture.getCafe("카페1", "주소1", 11));
+        cafeRepository.save(Fixture.getCafe("카페2", "주소2", 12));
+        cafeRepository.save(Fixture.getCafe("카페3", "주소3", 13));
+
+        //when,then
+        assertThatThrownBy(() -> cafeService.getCafesOrderByLikeCount(pageRequest))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(RANK_OUT_OF_BOUNDS.getMessage());
     }
 }

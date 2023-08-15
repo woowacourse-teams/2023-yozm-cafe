@@ -261,7 +261,7 @@ class CafeControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("/cafes/rank?page=? 요청을 보낼 때, 좋아요 된 카페가 존재하지 않으면 빈 배열을 반환한다.")
-    void getCafesOrderByLikeCount2() {
+    void getCafesOrderByLikeCountWhenNotExist() {
         //given
         cafeRepository.save(Fixture.getCafe("n5", "address5", 20));
 
@@ -282,7 +282,7 @@ class CafeControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("/cafes/rank?page=? 요청을 보낼 때, 순위 범위를 초과하는 요청이면 statusCode 400을 응답한다")
-    void getCafesOrderByLikeCount3() {
+    void getCafesOrderByLikeCountWhenRankOutBoundFail() {
         //when
         final Response response = given(spec).log().all()
                 .filter(document(CAFE_API + "좋아요 개수 순위에 따라 카페정보 조회 - 범위 초과 예외", getPageRequestParam()))
