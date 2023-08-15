@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import RankCard from '../components/RankCard';
 import useIntersection from '../hooks/useIntersection';
@@ -10,9 +10,14 @@ const Rank = () => {
   const ref = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(ref, { threshold: 1 });
 
-  const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
+  useMemo(() => {
+    const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
 
-  if (shouldFetch) fetchNextPage();
+    if (shouldFetch) {
+      fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [intersection]);
 
   return (
     <Container>
