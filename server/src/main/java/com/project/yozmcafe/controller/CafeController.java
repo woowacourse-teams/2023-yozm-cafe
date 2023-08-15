@@ -43,6 +43,7 @@ public class CafeController {
     public ResponseEntity<List<CafeRankResponse>> getCafesOrderByLikeCount(@PageableDefault(size = RANKING_PAGE_SIZE) final Pageable pageable) {
         final List<CafeRankResponse> cafeRankResponses = cafeService.getCafesOrderByLikeCount(pageable);
         return ResponseEntity.ok(cafeRankResponses);
+    }
 
     @GetMapping("/{cafeId}")
     public ResponseEntity<CafeResponse> getCafeById(@PathVariable("cafeId") final long cafeId) {

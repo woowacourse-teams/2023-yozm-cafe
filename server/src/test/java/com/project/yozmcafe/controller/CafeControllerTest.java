@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -33,9 +31,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-
-import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 class CafeControllerTest extends BaseControllerTest {
 
@@ -379,6 +376,8 @@ class CafeControllerTest extends BaseControllerTest {
                 fieldWithPath("[].address").description("카페 주소"),
                 fieldWithPath("[].image").description("카페 대표 이미지 url"),
                 fieldWithPath("[].likeCount").description("카페의 좋아요 갯수")
+        );
+    }
 
     private ResponseFieldsSnippet getOneCafeResponseFields() {
         return responseFields(
