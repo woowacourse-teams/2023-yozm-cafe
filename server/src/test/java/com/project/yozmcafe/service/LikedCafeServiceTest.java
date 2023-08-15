@@ -96,7 +96,7 @@ class LikedCafeServiceTest {
         final Member savedMember = memberRepository.save(member);
 
         //when
-        final List<LikedCafeResponse> result = likedCafeService.findLikedCafesById(savedMember.getId());
+        final List<LikedCafeResponse> result = likedCafeService.findLikedCafesByMemberId(savedMember.getId());
 
         //then
         assertAll(
@@ -115,7 +115,7 @@ class LikedCafeServiceTest {
         final Member savedMember = memberRepository.save(member);
 
         //when
-        final List<LikedCafeResponse> result = likedCafeService.findLikedCafesById(savedMember.getId());
+        final List<LikedCafeResponse> result = likedCafeService.findLikedCafesByMemberId(savedMember.getId());
 
         //then
         assertThat(result).isEmpty();

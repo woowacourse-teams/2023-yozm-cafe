@@ -36,7 +36,7 @@ public class LikedCafeController {
 
     @GetMapping("/members/{memberId}/liked-cafes/details")
     public ResponseEntity<List<LikedCafeResponse>> getLikedCafes(@PathVariable("memberId") final String memberId) {
-        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(memberId);
+        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesByMemberId(memberId);
         return ResponseEntity.ok(likedCafes);
     }
 

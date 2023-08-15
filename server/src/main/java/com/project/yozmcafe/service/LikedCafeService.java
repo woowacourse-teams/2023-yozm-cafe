@@ -42,7 +42,7 @@ public class LikedCafeService {
         return member.getLikedCafesSection(startIndex, endIndex);
     }
 
-    public List<LikedCafeResponse> findLikedCafesById(final String memberId) {
+    public List<LikedCafeResponse> findLikedCafesByMemberId(final String memberId) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
         final List<LikedCafe> likedCafes = member.getLikedCafes();
