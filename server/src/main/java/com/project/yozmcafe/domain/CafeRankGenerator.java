@@ -9,7 +9,7 @@ import static com.project.yozmcafe.exception.ErrorCode.RANK_OUT_OF_BOUNDS;
 @Component
 public class CafeRankGenerator {
 
-    private static final int MAX_RANK = 30;
+    public static final int MAX_RANK = 30;
 
     public int makeRank(final int index, final Pageable pageable) {
         validatePage(pageable);
