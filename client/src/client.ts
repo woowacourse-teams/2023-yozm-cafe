@@ -88,16 +88,12 @@ class Client {
     return this.fetchJson<LikedCafe[]>(`/members/${userId}/liked-cafes?page=${page}`);
   }
 
+  getLikedCafeDetail(userId: string) {
+    return this.fetchJson<Cafe[]>(`/members/${userId}/liked-cafes/details`);
+  }
+
   async setLikedCafe(cafeId: Cafe['id'], isLiked: Cafe['isLiked']) {
     await this.fetch(`/cafes/${cafeId}/likes?isLiked=${isLiked}`, { method: 'POST' });
-  }
-
-  addFavoriteCafe(cafeId: Cafe['id']) {
-    return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'POST' });
-  }
-
-  removeFavoriteCafe(cafeId: Cafe['id']) {
-    return this.fetchJson<void>(`/cafes/${cafeId}/likes`, { method: 'DELETE' });
   }
 
   /**
