@@ -56,3 +56,29 @@ create table if not exists `yozm-cafe`.un_viewed_cafe
     constraint un_viewed_cafe_MEMBER_ID
         foreign key (member_id) references member (id)
 );
+
+create table if not exists `yozm-cafe`.menu (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    cafe_id BIGINT NOT NULL,
+    priority INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(512),
+    description VARCHAR(255),
+    price VARCHAR(255) NOT NULL,
+    is_recommended bit NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT menu_cafe_id
+        foreign key (cafe_id) references cafe (id)
+            ON DELETE CASCADE
+);
+
+create table if not exists `yozm-cafe`.menu_board (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    cafe_id BIGINT NOT NULL,
+    priority INT NOT NULL,
+    image_url VARCHAR(512) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT menu_board_cafe_id
+        foreign key (cafe_id) references cafe (id)
+            ON DELETE CASCADE
+);

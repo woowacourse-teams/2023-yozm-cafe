@@ -1,12 +1,7 @@
 package com.project.yozmcafe.domain.cafe;
 
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -40,6 +35,7 @@ public class Cafe {
 
     @Embedded
     private Detail detail;
+
     private int likeCount;
 
     protected Cafe() {
