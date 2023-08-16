@@ -75,3 +75,12 @@ export type CafeMenu = {
   menuBoards: CafeMenuBoard[];
   menus: CafeMenuItem[];
 };
+
+export type Rank = {
+  id: number;
+  rank: number;
+  name: string;
+  address: string;
+  image: string;
+  likeCount: number;
+};

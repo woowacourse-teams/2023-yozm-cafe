@@ -1,4 +1,4 @@
-import type { AuthProvider, AuthUrl, Cafe, CafeMenu, LikedCafe, User } from './types';
+import type { AuthProvider, AuthUrl, Cafe, CafeMenu, LikedCafe, Rank, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -72,6 +72,14 @@ class Client {
     return this.fetchJson<Cafe[]>(`/cafes`);
   }
 
+  getCafe(cafeId: Cafe['id']) {
+    return this.fetchJson<Cafe>(`/cafes/${cafeId}`);
+  }
+
+  getCafeRank(page = 1) {
+    return this.fetchJson<Rank[]>(`/cafes/ranks?page=${page}`);
+  }
+
   getCafesForGuest(page = 1) {
     return this.fetchJson<Cafe[]>(`/cafes/guest?page=${page}`);
   }
@@ -82,6 +90,10 @@ class Client {
 
   getLikedCafeList(userId: string, page = 1) {
     return this.fetchJson<LikedCafe[]>(`/members/${userId}/liked-cafes?page=${page}`);
+  }
+
+  getLikedCafeDetail(userId: string) {
+    return this.fetchJson<Cafe[]>(`/members/${userId}/liked-cafes/details`);
   }
 
   async setLikedCafe(cafeId: Cafe['id'], isLiked: Cafe['isLiked']) {

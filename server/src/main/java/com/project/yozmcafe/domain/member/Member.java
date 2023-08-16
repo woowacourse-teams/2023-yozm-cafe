@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,6 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static java.lang.Math.min;
-import static java.util.Collections.reverse;
 
 @Entity
 public class Member {
@@ -32,6 +32,7 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
     private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
 
+    @OrderBy("createdAt Desc")
     @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
     private List<LikedCafe> likedCafes = new ArrayList<>();
 
@@ -107,12 +108,11 @@ public class Member {
     }
 
     public List<LikedCafe> getLikedCafesSection(final int startIndex, final int endIndex) {
-        if (startIndex >= likedCafes.size()){
+        if (startIndex >= likedCafes.size()) {
             return Collections.emptyList();
         }
 
         final List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-        reverse(reverseLikedCafes);
 
         return reverseLikedCafes.subList(startIndex, min(endIndex, likedCafes.size()));
     }
