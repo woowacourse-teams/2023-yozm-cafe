@@ -1,5 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
+import com.project.yozmcafe.domain.BaseEntity;
 import com.project.yozmcafe.domain.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class LikedCafe {
+public class LikedCafe extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

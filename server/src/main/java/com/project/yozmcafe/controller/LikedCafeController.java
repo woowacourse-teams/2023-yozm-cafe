@@ -1,12 +1,17 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.LikedCafeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -22,9 +27,16 @@ public class LikedCafeController {
     }
 
     @GetMapping("/members/{memberId}/liked-cafes")
-    public ResponseEntity<List<LikedCafeResponse>> getLikedCafes(@PathVariable("memberId") final String memberId,
-                                                                 @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
-        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesById(memberId, pageable);
+    public ResponseEntity<List<LikedCafeThumbnailResponse>> getLikedCafeThumbnails(@PathVariable("memberId") final String memberId,
+                                                                                   @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
+        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(memberId, pageable);
+
+        return ResponseEntity.ok(likedCafes);
+    }
+
+    @GetMapping("/members/{memberId}/liked-cafes/details")
+    public ResponseEntity<List<LikedCafeResponse>> getLikedCafes(@PathVariable("memberId") final String memberId) {
+        final List<LikedCafeResponse> likedCafes = likedCafeService.findLikedCafesByMemberId(memberId);
         return ResponseEntity.ok(likedCafes);
     }
 
