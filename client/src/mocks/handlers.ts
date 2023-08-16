@@ -88,6 +88,12 @@ export const handlers = [
     );
   }),
 
+  // 카페 정보 단건 조회
+  rest.get('/api/cafes/:cafeId', (req, res, ctx) => {
+    const cafeId = Number(req.params.cafeId);
+    return res(ctx.status(200), ctx.json(cafes.find((cafe) => cafe.id === cafeId)));
+  }),
+
   // 좋아요 순으로 랭킹 목록 조회
   rest.get('/api/cafes/ranks', (req, res, ctx) => {
     const PAGINATE_UNIT = 10;

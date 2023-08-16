@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Auth from './pages/Auth';
+import Cafe from './pages/Cafe';
 import Home from './pages/Home';
 import LikedCafeDetail from './pages/LikedCafeDetail';
 import Loading from './pages/Loading';
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'my-profile', element: <MyProfile /> },
+      { path: '/cafes/:cafeId', element: <Cafe /> },
       { path: 'rank', element: <Rank /> },
       { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetail /> },
     ],

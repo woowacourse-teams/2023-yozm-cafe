@@ -3,6 +3,7 @@ import useCafeLikes from '../hooks/useCafeLikes';
 import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
 import LikeButton from './LikeButton';
+import ShareButton from './ShareButton';
 
 type CafeActionBarProps = {
   cafe: Cafe;
@@ -25,7 +26,8 @@ const CafeActionBar = (props: CafeActionBarProps) => {
   return (
     <Container>
       <Action>
-        <LikeButton likeCount={cafe.likeCount} active={isLiked} onChange={handleLikeCountIncrease} />
+        <ShareButton url={`https://yozm.cafe/cafes/${cafe.id}`} />
+        <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
       </Action>
     </Container>
   );

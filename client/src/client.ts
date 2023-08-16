@@ -72,6 +72,10 @@ class Client {
     return this.fetchJson<Cafe[]>(`/cafes`);
   }
 
+  getCafe(cafeId: Cafe['id']) {
+    return this.fetchJson<Cafe>(`/cafes/${cafeId}`);
+  }
+
   getCafeRank(page = 1) {
     return this.fetchJson<Rank[]>(`/cafes/ranks?page=${page}`);
   }
