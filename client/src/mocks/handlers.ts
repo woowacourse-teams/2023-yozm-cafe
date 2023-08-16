@@ -96,6 +96,7 @@ export const handlers = [
     const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
 
     return res(ctx.status(200), ctx.json(RankCafes.slice(start, end)));
+  }),
 
   // 좋아요 한 카페 목록 상세 조회
   rest.get('/api/members/:memberId/liked-cafes/details', (req, res, ctx) => {
