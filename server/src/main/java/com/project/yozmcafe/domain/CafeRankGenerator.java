@@ -17,7 +17,8 @@ public class CafeRankGenerator {
     }
 
     public void validatePage(final Pageable pageable) {
-        if (MAX_RANK / pageable.getPageSize() <= pageable.getPageNumber()) {
+        final int maxPage = MAX_RANK / pageable.getPageSize();
+        if (maxPage <= pageable.getPageNumber()) {
             throw new BadRequestException(RANK_OUT_OF_BOUNDS);
         }
     }
