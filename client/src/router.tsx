@@ -6,6 +6,7 @@ import LikedCafeDetail from './pages/LikedCafeDetail';
 import Loading from './pages/Loading';
 import MyProfile from './pages/MyProfile';
 import NotFound from './pages/NotFound';
+import Rank from './pages/Rank';
 import Root from './pages/Root';
 import TestAuthorizationCode from './pages/TestAuthorizationCode';
 
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'my-profile', element: <MyProfile /> },
+      { path: 'rank', element: <Rank /> },
       { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetail /> },
     ],
   },

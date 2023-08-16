@@ -1,86 +1,36 @@
-import type { Cafe, LikedCafe } from '../types';
+import type { Cafe, Rank } from '../types';
 
-export const likedCafes: LikedCafe[] = [
-  {
-    cafeId: 1,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 2,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 3,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 4,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 5,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 6,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 7,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 8,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 9,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 10,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 11,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 12,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 13,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 14,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 15,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 16,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 17,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 18,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 19,
-    imageUrl: '/images/cafe-image-1.png',
-  },
-  {
-    cafeId: 20,
-    imageUrl: '/images/cafe-image-1.png',
-  },
+export const RankCafes: Rank[] = [
+  { id: 1, rank: 1, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 50 },
+  { id: 2, rank: 2, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 49 },
+  { id: 3, rank: 3, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 48 },
+  { id: 4, rank: 4, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 47 },
+  { id: 5, rank: 5, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 46 },
+  { id: 6, rank: 6, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 45 },
+  { id: 7, rank: 7, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 44 },
+  { id: 8, rank: 8, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 43 },
+  { id: 9, rank: 9, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 42 },
+  { id: 10, rank: 10, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 41 },
+  { id: 11, rank: 11, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 40 },
+  { id: 12, rank: 12, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 39 },
+  { id: 13, rank: 13, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 38 },
+  { id: 14, rank: 14, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 37 },
+  { id: 15, rank: 15, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 36 },
+  { id: 16, rank: 16, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 35 },
+  { id: 17, rank: 17, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 34 },
+  { id: 18, rank: 18, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 33 },
+  { id: 19, rank: 19, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 32 },
+  { id: 20, rank: 20, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 31 },
+  { id: 21, rank: 21, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 30 },
+  { id: 22, rank: 22, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 29 },
+  { id: 23, rank: 23, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 28 },
+  { id: 24, rank: 24, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 27 },
+  { id: 25, rank: 25, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 26 },
+  { id: 26, rank: 26, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 25 },
+  { id: 27, rank: 27, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 24 },
+  { id: 28, rank: 28, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 23 },
+  { id: 29, rank: 29, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 22 },
+  { id: 30, rank: 30, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 10 },
 ];
 
 export const cafes: Cafe[] = [

@@ -3,13 +3,14 @@ import theme from '../styles/theme';
 
 type LogoProps = {
   fontSize: keyof typeof theme.fontSize;
+  onClick?: () => void;
 };
 
 const Logo = (props: LogoProps) => {
-  const { fontSize } = props;
+  const { fontSize, onClick } = props;
 
   return (
-    <Container fontSize={fontSize} aria-label="요즘카페 로고">
+    <Container fontSize={fontSize} onClick={onClick} aria-label="요즘카페 로고">
       요즘카페
     </Container>
   );
