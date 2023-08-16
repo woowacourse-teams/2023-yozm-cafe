@@ -1,4 +1,4 @@
-package com.project.yozmcafe.service;
+package com.project.yozmcafe.domain;
 
 import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;

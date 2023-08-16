@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.exception.ErrorCode;
