@@ -40,6 +40,10 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
     testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
+
+    //Monitoring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 ext {
