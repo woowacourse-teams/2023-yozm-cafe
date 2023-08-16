@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useIntersection from '../hooks/useIntersection';
 import useLikedCafes from '../hooks/useLikedCafes';
@@ -19,9 +20,10 @@ const LikedCafeList = () => {
       </TitleContainer>
       <ScrollContainer>
         <GridContainer>
-          {/* 좋아요한 카페 이미지들을 렌더링 */}
           {likedCafes.map((cafe) => (
-            <CafeImage key={cafe.cafeId} src={cafe.imageUrl} alt={`Cafe ${cafe.cafeId}`} />
+            <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
+              <CafeImage key={cafe.cafeId} src={cafe.imageUrl} alt={`Cafe ${cafe.cafeId}`} />
+            </Link>
           ))}
         </GridContainer>
         <SensorContainer ref={ref} />
