@@ -1,4 +1,4 @@
-import type { AuthProvider, AuthUrl, Cafe, LikedCafe, Rank, User } from './types';
+import type { AuthProvider, AuthUrl, Cafe, CafeMenu, LikedCafe, Rank, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -98,6 +98,10 @@ class Client {
 
   async setLikedCafe(cafeId: Cafe['id'], isLiked: Cafe['isLiked']) {
     await this.fetch(`/cafes/${cafeId}/likes?isLiked=${isLiked}`, { method: 'POST' });
+  }
+
+  getCafeMenu(cafeId: Cafe['id']) {
+    return this.fetchJson<CafeMenu>(`/cafes/${cafeId}/menus`);
   }
 
   /**
