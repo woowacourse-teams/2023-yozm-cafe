@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { ImageEnv } from '../environment';
+import { IMAGE_HOST } from '../environment';
 import useIntersection from '../hooks/useIntersection';
 import type { Cafe } from '../types';
 import CafeActionBar from './CafeActionBar';
@@ -51,11 +51,7 @@ const CafeCard = (props: CardProps) => {
       </CardQuantityContainer>
       <CarouselImageList ref={ref}>
         {cafe.images.map((image, index) => (
-          <CarouselImage
-            key={index}
-            src={`https://image.yozm.cafe/${ImageEnv}/500/${image}`}
-            alt={`${cafe}의 이미지`}
-          />
+          <CarouselImage key={index} src={`${IMAGE_HOST}/500/${image}`} alt={`${cafe}의 이미지`} />
         ))}
       </CarouselImageList>
       <DotsContainer>
