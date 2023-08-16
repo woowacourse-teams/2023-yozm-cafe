@@ -1,11 +1,12 @@
-name: Deploy
+name: Client Test
 
 on:
   push:
-    branches: ['dev']
+    branches: [main, dev]
     paths: client/**
-
-  workflow_dispatch:
+  pull_request:
+    branches: [main, dev]
+    paths: client/**
 
 jobs:
   deploy:
@@ -13,8 +14,6 @@ jobs:
       run:
         working-directory: client
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: true
@@ -41,11 +40,5 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
-      - name: Build storybook
-        run: yarn run build:storybook
-
-      - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./client/storybook-static
+      - name: Build
+        run: yarn build

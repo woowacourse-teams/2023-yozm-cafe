@@ -53,3 +53,12 @@ export type LikedCafe = {
 };
 
 export type AuthProvider = 'kakao' | 'google';
+
+export type Rank = {
+  id: number;
+  rank: number;
+  name: string;
+  address: string;
+  image: string;
+  likeCount: number;
+};
