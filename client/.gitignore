@@ -134,3 +134,4 @@ storybook-static/
 
 # cypress screenshots
 cypress/screenshots
+cypress/videos
