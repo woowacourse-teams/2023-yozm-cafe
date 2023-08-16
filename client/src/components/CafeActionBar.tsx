@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import useCafeActions from '../hooks/useCafeActions';
+import useCafeLikes from '../hooks/useCafeLikes';
 import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
 import LikeButton from './LikeButton';
@@ -11,7 +11,7 @@ type CafeActionBarProps = {
 
 const CafeActionBar = (props: CafeActionBarProps) => {
   const { cafe } = props;
-  const { setLikedCafe } = useCafeActions();
+  const { isLiked, setLiked } = useCafeLikes(cafe);
   const { data: user } = useUser();
 
   const handleLikeCountIncrease = () => {
@@ -20,10 +20,7 @@ const CafeActionBar = (props: CafeActionBarProps) => {
       return;
     }
 
-    setLikedCafe({
-      cafeId: cafe.id,
-      isLiked: !cafe.isLiked,
-    });
+    setLiked({ isLiked: !isLiked });
   };
 
   return (

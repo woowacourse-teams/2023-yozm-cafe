@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { cafes } from '../data/mockData';
+import { RankCafes, cafes } from '../data/mockData';
 import type { Identity, User } from '../types';
 
 let pageState = 1;
@@ -92,6 +92,21 @@ export const handlers = [
   rest.get('/api/cafes/:cafeId', (req, res, ctx) => {
     const cafeId = Number(req.params.cafeId);
     return res(ctx.status(200), ctx.json(cafes.find((cafe) => cafe.id === cafeId)));
+  }
+           
+  // 좋아요 순으로 랭킹 목록 조회
+  rest.get('/api/cafes/ranks', (req, res, ctx) => {
+    const PAGINATE_UNIT = 10;
+
+    const page = Number(req.url.searchParams.get('page') || 1);
+    const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
+
+    return res(ctx.status(200), ctx.json(RankCafes.slice(start, end)));
+  }),
+
+  // 좋아요 한 카페 목록 상세 조회
+  rest.get('/api/members/:memberId/liked-cafes/details', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(cafes.filter((cafe) => cafe.isLiked)));
   }),
 
   rest.get('/api/auth', async (req, res, ctx) => {
