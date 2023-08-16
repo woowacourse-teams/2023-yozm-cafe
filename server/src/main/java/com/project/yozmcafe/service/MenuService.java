@@ -41,6 +41,7 @@ public class MenuService {
         return MenuResponse.of(cafeId, menuBoards, menus);
     }
 
+    @Transactional
     public void saveMenu(final Long cafeId,
                          final MenuRequest menuRequest,
                          final String imageName) {
@@ -51,6 +52,7 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
+    @Transactional
     public void saveMenuBoard(final Long cafeId,
                               final MenuBoardRequest menuBoardRequest,
                               final String imageName) {
