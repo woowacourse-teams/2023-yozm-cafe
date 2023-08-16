@@ -5,6 +5,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -71,5 +74,33 @@ class CafeServiceTest {
                 () -> assertThat(result.get(0).isLiked()).isFalse(),
                 () -> assertThat(result.get(1).isLiked()).isFalse()
         );
+    }
+
+    @Test
+    @DisplayName("id로 카페를 단 건 조회한다.")
+    void getCafeById() {
+        //given
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+
+        //when
+        final CafeResponse result = cafeService.getCafeById(savedCafe1.getId());
+
+        //then
+        assertThat(result.id()).isEqualTo(savedCafe1.getId());
+    }
+
+    @Test
+    @DisplayName("id로 카페를 단 건 조회할 때, 존재하지 않는 카페이면 예외가 발생한다.")
+    void getCafeByIdFailWhenNotExist() {
+        //given
+        cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        final long notExistCafeId = 9999L;
+
+        //when, then
+        assertThatThrownBy(() -> cafeService.getCafeById(notExistCafeId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTED_CAFE.getMessage());
     }
 }
