@@ -131,3 +131,6 @@ dist
 
 # storybook static files
 storybook-static/
+
+# cypress screenshots
+cypress/screenshots
