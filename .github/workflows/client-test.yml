@@ -42,3 +42,6 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: E2E test
+        run: yarn test
