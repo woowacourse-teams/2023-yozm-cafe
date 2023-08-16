@@ -31,7 +31,11 @@ public enum ErrorCode {
     NOT_EXISTED_OAUTH_PROVIDER("O2", "잘못된 Provider Name 입니다."),
     NOT_EXISTED_OAUTH_CLIENT("O3", "일치하는 OAuthClient가 존재하지 않습니다."),
 
-    RANK_OUT_OF_BOUNDS("R1", "좋아요 개수 랭킹 범위를 벗어나는 요청입니다. 좋아요 랭킹 요청의 페이지 확인이 필요합니다");
+    RANK_OUT_OF_BOUNDS("R1", "좋아요 개수 랭킹 범위를 벗어나는 요청입니다. 좋아요 랭킹 요청의 페이지 확인이 필요합니다"),
+  
+    INVALID_MENU_NAME("ME01", format("메뉴의 이름은 1 ~ %d자여야 합니다.", Cafe.NAME_MAX_LENGTH)),
+    NOT_EXISTED_MENU_PRICE("ME02", "메뉴 가격이 필요합니다."),
+    NOT_EXISTED_MENU_BOARD_IMAGE("ME03", "메뉴판 이미지가 필요합니다.");
 
     private final String code;
     private final String message;

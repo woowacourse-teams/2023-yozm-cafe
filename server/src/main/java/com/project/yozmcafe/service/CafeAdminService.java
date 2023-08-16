@@ -65,6 +65,8 @@ public class CafeAdminService {
         Stream.of(
                         entityManager.createQuery("DELETE FROM UnViewedCafe u WHERE u.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM LikedCafe l WHERE l.cafe.id = :cafeId"),
+                        entityManager.createQuery("DELETE FROM MenuBoard mb WHERE mb.cafe.id = :cafeId"),
+                        entityManager.createQuery("DELETE FROM Menu me WHERE me.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM Cafe c WHERE c.id = :cafeId"))
                 .map(query -> query.setParameter("cafeId", cafeId))
                 .forEach(Query::executeUpdate);

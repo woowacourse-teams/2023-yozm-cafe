@@ -1,8 +1,9 @@
 import { styled } from 'styled-components';
-import useCafeActions from '../hooks/useCafeActions';
+import useCafeLikes from '../hooks/useCafeLikes';
 import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
 import LikeButton from './LikeButton';
+import ShareButton from './ShareButton';
 
 type CafeActionBarProps = {
   cafe: Cafe;
@@ -10,7 +11,7 @@ type CafeActionBarProps = {
 
 const CafeActionBar = (props: CafeActionBarProps) => {
   const { cafe } = props;
-  const { setLikedCafe } = useCafeActions();
+  const { isLiked, setLiked } = useCafeLikes(cafe);
   const { data: user } = useUser();
 
   const handleLikeCountIncrease = () => {
@@ -19,15 +20,13 @@ const CafeActionBar = (props: CafeActionBarProps) => {
       return;
     }
 
-    setLikedCafe({
-      cafeId: cafe.id,
-      isLiked: !cafe.isLiked,
-    });
+    setLiked({ isLiked: !isLiked });
   };
 
   return (
     <Container>
       <Action>
+        <ShareButton url={`https://yozm.cafe/cafes/${cafe.id}`} />
         <LikeButton likeCount={cafe.likeCount} active={cafe.isLiked} onChange={handleLikeCountIncrease} />
       </Action>
     </Container>
