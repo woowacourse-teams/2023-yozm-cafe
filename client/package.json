@@ -13,7 +13,10 @@
     "start": "cross-env NODE_ENV=development webpack serve",
     "build": "cross-env NODE_ENV=production webpack",
     "storybook": "cross-env NODE_ENV=development storybook dev -p 6006",
-    "build:storybook": "cross-env NODE_ENV=production storybook build"
+    "build:storybook": "cross-env NODE_ENV=production storybook build",
+    "cypress:open": "cypress open --e2e --browser chrome",
+    "cypress:run": "cypress run --e2e --browser chrome --headless",
+    "test": "start-server-and-test start http://localhost:3000 cypress:run"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",
@@ -45,6 +48,7 @@
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
+    "cypress": "^12.17.4",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
@@ -62,6 +66,7 @@
     "postcss-styled-syntax": "^0.4.0",
     "prettier": "^2.8.8",
     "react-refresh": "^0.14.0",
+    "start-server-and-test": "^2.0.0",
     "storybook": "7.0.25",
     "stylelint": "^15.9.0",
     "stylelint-config-clean-order": "^5.0.1",

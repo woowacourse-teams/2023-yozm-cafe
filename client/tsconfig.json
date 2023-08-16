@@ -108,5 +108,11 @@
   },
   "include": [
     "src/**/*"
-  ]
+  ],
+  "ts-node": {
+    "esm": true,
+    "compilerOptions": {
+      "module": "ES2015"
+    }
+  }
 }
