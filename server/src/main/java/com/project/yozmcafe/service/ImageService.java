@@ -1,14 +1,15 @@
 package com.project.yozmcafe.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.resizedimage.ImageName;
 import com.project.yozmcafe.domain.resizedimage.ImageResizer;
 import com.project.yozmcafe.domain.resizedimage.Size;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ImageService {
@@ -51,5 +52,13 @@ public class ImageService {
                 .map(Size::getFileNamesWithPath)
                 .flatMap(List::stream)
                 .forEach(s3Client::delete);
+    }
+
+    public String singleImageUploadAndGetName(final MultipartFile image, Size size) {
+        final ImageName imageName = ImageName.from(image.getOriginalFilename());
+        final ImageResizer imageResizer = new ImageResizer(image, imageName.get());
+        final List<MultipartFile> resizedImages = imageResizer.getResizedImages(List.of(size));
+        s3Client.upload(resizedImages.get(0));
+        return imageResizer.getFileName();
     }
 }
