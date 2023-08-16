@@ -43,7 +43,7 @@ jobs:
         run: ./gradlew openapi3
 
       - name: Move to api directory
-        run: echo server/build/api-spec/openapi3.yaml > api-docs/openapi.yaml
+        run: echo server/build/api-spec/openapi3.yaml > api/openapi.yaml
         working-directory: ./
 
       - name: Deploy to GitHub Pages
