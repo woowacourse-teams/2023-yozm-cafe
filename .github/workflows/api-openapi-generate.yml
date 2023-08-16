@@ -18,6 +18,14 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: true
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: yozm-cafe
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 20000:3306
 
     steps:
       - name: Use repository source
