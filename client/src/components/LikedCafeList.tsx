@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useIntersection from '../hooks/useIntersection';
@@ -10,8 +10,14 @@ const LikedCafeList = () => {
   const ref = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(ref, { threshold: 1 });
 
-  const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
-  if (shouldFetch) fetchNextPage();
+  useMemo(() => {
+    const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
+
+    if (shouldFetch) {
+      fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [intersection]);
 
   return (
     <Container>
