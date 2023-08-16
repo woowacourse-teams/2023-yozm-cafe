@@ -1,6 +1,8 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
@@ -20,10 +22,12 @@ public class CafeService {
 
     private final CafeRepository cafeRepository;
     private final UnViewedCafeService unViewedCafeService;
+    private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService) {
+    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
         this.unViewedCafeService = unViewedCafeService;
+        this.cafeRankGenerator = cafeRankGenerator;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
@@ -31,6 +35,17 @@ public class CafeService {
 
         return foundCafes.stream()
                 .map(CafeResponse::fromUnLoggedInUser)
+                .toList();
+    }
+
+    public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {
+        cafeRankGenerator.validatePage(pageable);
+
+        final List<Long> ids = cafeRepository.findCafeIdsOrderByLikeCount(pageable);
+        final List<Cafe> foundCafes = cafeRepository.findCafesByIdsOrderByLikeCount(ids);
+
+        return foundCafes.stream()
+                .map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe))
                 .toList();
     }
 

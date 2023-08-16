@@ -8,7 +8,7 @@ const RankCard = (props: Rank) => {
   const navigate = useNavigate();
 
   const handleRankCardClick = () => {
-    navigate(`/cafe/${id}`);
+    navigate(`/cafes/${id}`);
   };
 
   return (
