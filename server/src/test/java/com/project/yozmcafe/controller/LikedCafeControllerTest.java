@@ -1,5 +1,6 @@
 package com.project.yozmcafe.controller;
 
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
@@ -12,16 +13,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+
+import java.util.List;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 class LikedCafeControllerTest extends BaseControllerTest {
 
@@ -33,7 +40,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
     private JwtTokenProvider jwtTokenProvider;
 
     @Test
-    @DisplayName("사용자의 좋아요 한 카페 목록을 조회한다.")
+    @DisplayName("사용자가 좋아요 한 카페들의 대표 이미지들을 조회한다.")
     void getLikedCafes() {
         //given
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("오션의 귀여운 카페", "인천 오션동", 5));
@@ -45,7 +52,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document("likedCafe/좋아요 카페 목록 조회",
+                .filter(document("likedCafe/좋아요 카페 대표 이미지 목록 조회",
                         queryParameters(parameterWithName("page").description("좋아요 목록 페이지 번호")),
                         pathParameters(parameterWithName("memberId").description("멤버 ID")),
                         responseFields(fieldWithPath("[].cafeId").description("카페 ID"),
@@ -61,7 +68,7 @@ class LikedCafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("멤버의 빈 좋아요 목록을 조회한다.")
+    @DisplayName("멤버의 빈 좋아요한 카페 대표 이미지들을 조회한다.")
     void getLikedCafes_empty() {
         //given
         final Member member = new Member("1", "오션", "오션.img");
@@ -69,7 +76,8 @@ class LikedCafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given().log().all()
-                .when().get("/members/{memberId}/liked-cafes?page=1", member.getId());
+                .when()
+                .get("/members/{memberId}/liked-cafes?page=1", member.getId());
 
         //then
         assertThat(response.jsonPath().getList("")).isEmpty();
@@ -95,5 +103,73 @@ class LikedCafeControllerTest extends BaseControllerTest {
         //then
         response.then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("사용자의 좋아요 카페 목록의 카페들을 조회한다.")
+    void getLikedCafeDetails() {
+        //given
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "1동", 5));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "2동", 5));
+        cafeRepository.save(Fixture.getCafe("카페3", "3동", 7));
+        final Member member = new Member("1234", "도치", "도치.img");
+        member.updateLikedCafesBy(savedCafe1, true);
+        member.updateLikedCafesBy(savedCafe2, true);
+        Member savedMember = memberRepository.save(member);
+
+        //when
+        final Response response = given(spec).log().all()
+                .filter(document("likedCafe/좋아요 목록의 카페 조회",
+                        pathParameters(parameterWithName("memberId").description("멤버 ID")),
+                        getCafeResponseFields()))
+                .when()
+                .get("/members/{memberId}/liked-cafes/details", savedMember.getId());
+
+        //then
+        List<LikedCafeResponse> cafeDetailResponses = getCafeDetailResponses(response);
+
+        assertThat(cafeDetailResponses).extracting("id", "name")
+                .containsExactly(tuple(savedCafe2.getId(), savedCafe2.getName()),
+                        tuple(savedCafe1.getId(), savedCafe1.getName())
+                );
+    }
+
+    @Test
+    @DisplayName("사용자의 빈 좋아요 카페 목록의 카페들을 조회한다.")
+    void getLikedCafeDetailsWhenEmpty() {
+        //given
+        cafeRepository.save(Fixture.getCafe("카페1", "1동", 5));
+        final Member savedMember = memberRepository.save(new Member("1234", "도치", "도치.img"));
+
+        //when
+        final Response response = given().log().all()
+                .when()
+                .get("/members/{memberId}/liked-cafes/details", savedMember.getId());
+
+        //then
+        assertThat(response.jsonPath().getList("")).isEmpty();
+    }
+
+    private ResponseFieldsSnippet getCafeResponseFields() {
+        return responseFields(
+                fieldWithPath("[].id").description("카페 아이디"),
+                fieldWithPath("[].name").description("카페 이름"),
+                fieldWithPath("[].address").description("카페 주소"),
+                fieldWithPath("[].images[]").description("카페 이미지 url"),
+                fieldWithPath("[].isLiked").description("해당 카페의 좋아요 여부(비회원은 default = false)"),
+                fieldWithPath("[].likeCount").description("카페의 좋아요 갯수"),
+                fieldWithPath("[].detail.phone").description("카페의 전화번호"),
+                fieldWithPath("[].detail.mapUrl").description("카페의 네이버 지도 url"),
+                fieldWithPath("[].detail.description").description("카페의 상세정보"),
+                fieldWithPath("[].detail.openingHours[].day").description("요일"),
+                fieldWithPath("[].detail.openingHours[].open").description("카페 오픈시간"),
+                fieldWithPath("[].detail.openingHours[].close").description("카페 종료시간"),
+                fieldWithPath("[].detail.openingHours[].opened").description("카페 해당요일 영업여부")
+        );
+    }
+
+    private List<LikedCafeResponse> getCafeDetailResponses(final Response response) {
+        return response.then().log().all()
+                .extract().jsonPath().getList(".", LikedCafeResponse.class);
     }
 }

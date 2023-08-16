@@ -40,6 +40,7 @@ create table if not exists `yozm-cafe`.liked_cafe
     id        bigint auto_increment primary key,
     cafe_id   bigint      not null,
     member_id varchar(30) not null,
+    created_at datetime(6) not null,
     constraint liked_cafe_MEMBER_ID
         foreign key (member_id) references member (id),
     constraint liked_cafe_CAFE_ID
