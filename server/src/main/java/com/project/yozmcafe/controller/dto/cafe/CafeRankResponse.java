@@ -9,7 +9,7 @@ public record CafeRankResponse(int rank, long id, String name, String address, S
                 cafe.getId(),
                 cafe.getName(),
                 cafe.getAddress(),
-                cafe.getImages().getRepresentativeImage(),
+                cafe.getRepresentativeImage(),
                 cafe.getLikeCount()
         );
     }
