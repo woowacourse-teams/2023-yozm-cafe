@@ -1,9 +1,11 @@
 package com.project.yozmcafe.domain.resizedimage;
 
-import com.project.yozmcafe.exception.BadRequestException;
-import org.springframework.web.multipart.MultipartFile;
+import static com.project.yozmcafe.domain.resizedimage.Size.ORIGINAL;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -11,11 +13,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static com.project.yozmcafe.domain.resizedimage.Size.ORIGINAL;
-import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
-import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
+import javax.imageio.ImageIO;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.project.yozmcafe.exception.BadRequestException;
 
 public class ImageResizer {
 
@@ -91,7 +93,7 @@ public class ImageResizer {
         final BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = canvas.getGraphics();
-        graphics.drawImage(image.getScaledInstance(width, height, Image.SCALE_FAST), 0, 0, null);
+        graphics.drawImage(image.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
         graphics.dispose();
 
         return canvas;
