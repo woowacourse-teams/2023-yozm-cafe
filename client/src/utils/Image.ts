@@ -1,7 +1,7 @@
 import { IMAGE_HOST } from '../environment';
 
 class Image {
-  static getUrl(options: { filename: string; size: 100 | 500 }) {
+  static getUrl(options: { filename: string; size: '100' | '500' | 'original' }) {
     const { filename, size } = options;
     const paths = [IMAGE_HOST({ size }), filename];
 
