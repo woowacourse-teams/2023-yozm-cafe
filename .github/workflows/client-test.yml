@@ -27,18 +27,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Cache node_modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Install dependencies
         uses: cypress-io/github-action@v5
-        if: steps.cache.outputs.cache-hit != 'true'
         with:
           install-command: yarn --frozen-lockfile
           parallel: true
