@@ -29,7 +29,7 @@ const LikedCafeList = () => {
         <GridContainer>
           {likedCafes.map((cafe) => (
             <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
-              <CafeImage key={cafe.cafeId} src={`${IMAGE_HOST}/100/${cafe.imageUrl}`} alt={`Cafe ${cafe.cafeId}`} />
+              <CafeImage key={cafe.cafeId} src={`${IMAGE_HOST}/500/${cafe.imageUrl}`} alt={`Cafe ${cafe.cafeId}`} />
             </Link>
           ))}
         </GridContainer>
