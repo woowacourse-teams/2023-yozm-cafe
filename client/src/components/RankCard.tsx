@@ -61,11 +61,11 @@ const CafeDetailContainer = styled.div`
   cursor: pointer;
 
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 
   width: 100%;
   margin: ${({ theme }) => theme.space[4]} ${({ theme }) => theme.space[7]} ${({ theme }) => theme.space[4]} 0;
-  padding: ${({ theme }) => theme.space[5]} ${({ theme }) => theme.space['2.5']};
+  padding: ${({ theme }) => theme.space['2.5']} ${({ theme }) => theme.space[5]};
 
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 50px;
