@@ -37,11 +37,12 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
+        uses: cypress-io/github-action@v5
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn build
-
-      - name: E2E test
-        run: yarn test
+        with:
+          install-command: yarn --frozen-lockfile
+          parallel: true
+          build: yarn build
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+          command: yarn cypress:run
