@@ -31,7 +31,7 @@ const LikedCafeList = () => {
             <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
               <CafeImage
                 key={cafe.cafeId}
-                src={Image.getUrl({ size: 100, filename: cafe.imageUrl })}
+                src={Image.getUrl({ size: 500, filename: cafe.imageUrl })}
                 alt={`Cafe ${cafe.cafeId}`}
               />
             </Link>
@@ -70,13 +70,15 @@ const ScrollContainer = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 열 */
+  grid-template-columns: repeat(3, 1fr);
   gap: ${({ theme }) => theme.space['0.5']};
   margin-bottom: ${({ theme }) => theme.space['10']};
 `;
 
 const CafeImage = styled.img`
   aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
 `;
 
 const SensorContainer = styled.div``;
