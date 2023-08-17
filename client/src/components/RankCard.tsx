@@ -2,6 +2,7 @@ import { PiHeartFill } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import type { Rank } from '../types';
+import Image from '../utils/image';
 
 const RankCard = (props: Rank) => {
   const { id, rank, name, address, image, likeCount } = props;
@@ -18,7 +19,7 @@ const RankCard = (props: Rank) => {
       </CafeRankContainer>
       <CafeDetailContainer>
         <CafeDetailSummaryContainer>
-          <Image src={image} alt={`${image}}의 이미지`} />
+          <CafeImage src={Image.getUrl({ size: 100, filename: image })} alt={`${image}}의 이미지`} />
           <TitleAndAddressContainer>
             <Title>{name}</Title>
             <Address>{address}</Address>
@@ -51,7 +52,7 @@ const CafeRank = styled.span`
   font-weight: bold;
 `;
 
-const Image = styled.img`
+const CafeImage = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -61,11 +62,11 @@ const CafeDetailContainer = styled.div`
   cursor: pointer;
 
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 
   width: 100%;
   margin: ${({ theme }) => theme.space[4]} ${({ theme }) => theme.space[7]} ${({ theme }) => theme.space[4]} 0;
-  padding: ${({ theme }) => theme.space[5]} ${({ theme }) => theme.space['2.5']};
+  padding: ${({ theme }) => theme.space['2.5']} ${({ theme }) => theme.space[5]};
 
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 50px;

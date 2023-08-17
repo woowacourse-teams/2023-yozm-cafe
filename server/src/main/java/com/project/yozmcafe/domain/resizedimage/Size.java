@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Size {
-    ORIGINAL("original/", 0),
     THUMBNAIL("100/", 100),
     MOBILE("500/", 500);
 
@@ -14,12 +13,6 @@ public enum Size {
     Size(final String path, final int width) {
         this.path = path;
         this.width = width;
-    }
-
-    public static List<Size> getAllSizesExceptOriginal() {
-        return Arrays.stream(Size.values())
-                .filter(resizeFormats -> !resizeFormats.equals(ORIGINAL))
-                .toList();
     }
 
     public static List<String> getFileNamesWithPath(final String fileName) {

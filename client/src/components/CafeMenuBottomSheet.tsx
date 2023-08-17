@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
+import Image from '../utils/image';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
 
@@ -101,6 +102,7 @@ const Container = styled.div`
 
   width: 100%;
   height: 600px;
+  max-height: 100vh;
   padding: ${({ theme }) => theme.space[4]};
   padding-bottom: 0;
 
@@ -147,7 +149,8 @@ const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.color.white};
 
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${({ $imageUrl }) => $imageUrl});
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(${({ $imageUrl }) => Image.getUrl({ size: 500, filename: $imageUrl })});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;

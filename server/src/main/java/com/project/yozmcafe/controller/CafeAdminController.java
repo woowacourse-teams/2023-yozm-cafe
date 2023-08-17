@@ -1,5 +1,8 @@
 package com.project.yozmcafe.controller;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 import java.net.URI;
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class CafeAdminController {
     @PostMapping
     public ResponseEntity<String> save(@RequestPart final CafeRequest request,
                                        @RequestPart final List<MultipartFile> images) {
-        final List<String> uploadedFileNames = imageService.uploadAndGetImageNames(images);
+        final List<String> uploadedFileNames = imageService.resizeAndUpload(images, List.of(Size.values()));
         final Long savedId = cafeAdminService.save(request, uploadedFileNames);
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + savedId)).build();
@@ -55,7 +58,7 @@ public class CafeAdminController {
         final List<String> originalImages = cafeAdminService.findImagesByCafeId(cafeId);
         imageService.deleteAll(originalImages);
 
-        final List<String> savedImages = imageService.uploadAndGetImageNames(images);
+        final List<String> savedImages = imageService.resizeAndUpload(images, List.of(Size.values()));
         cafeAdminService.update(cafeId, request, savedImages);
 
         return ResponseEntity.noContent().build();
@@ -85,9 +88,14 @@ public class CafeAdminController {
     @PostMapping("/{cafeId}/menus")
     public ResponseEntity<String> saveMenus(@PathVariable("cafeId") final Long cafeId,
                                             @RequestPart final MenuRequest menuRequest,
-                                            @RequestPart final MultipartFile image) {
-        String uploadedFileName = imageService.singleImageUploadAndGetName(image, Size.THUMBNAIL);
-        menuService.saveMenu(cafeId, menuRequest, uploadedFileName);
+                                            @RequestPart(required = false) final MultipartFile image) {
+        if (isNull(image)) {
+            menuService.saveMenuWithoutImage(cafeId, menuRequest);
+        }
+        if (nonNull(image)) {
+            String uploadedFileName = imageService.resizeAndUpload(image, Size.THUMBNAIL);
+            menuService.saveMenu(cafeId, menuRequest, uploadedFileName);
+        }
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
     }
@@ -96,7 +104,7 @@ public class CafeAdminController {
     public ResponseEntity<String> saveMenuBoards(@PathVariable("cafeId") final Long cafeId,
                                                  @RequestPart final MenuBoardRequest menuBoardRequest,
                                                  @RequestPart final MultipartFile image) {
-        String uploadedFileName = imageService.uploadOriginalImage(image);
+        String uploadedFileName = imageService.resizeAndUpload(image, Size.MOBILE);
         menuService.saveMenuBoard(cafeId, menuBoardRequest, uploadedFileName);
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
