@@ -31,7 +31,7 @@ const LikedCafeList = () => {
             <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
               <CafeImage
                 key={cafe.cafeId}
-                src={Image.getUrl({ size: 500, filename: cafe.imageUrl })}
+                src={Image.getUrl({ size: '500', filename: cafe.imageUrl })}
                 alt={`Cafe ${cafe.cafeId}`}
               />
             </Link>

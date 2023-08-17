@@ -19,7 +19,7 @@ const RankCard = (props: Rank) => {
       </CafeRankContainer>
       <CafeDetailContainer>
         <CafeDetailSummaryContainer>
-          <CafeImage src={Image.getUrl({ size: 100, filename: image })} alt={`${image}}의 이미지`} />
+          <CafeImage src={Image.getUrl({ size: '100', filename: image })} alt={`${image}}의 이미지`} />
           <TitleAndAddressContainer>
             <Title>{name}</Title>
             <Address>{address}</Address>

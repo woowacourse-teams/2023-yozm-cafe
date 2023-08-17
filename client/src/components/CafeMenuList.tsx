@@ -43,7 +43,7 @@ const MenuListItem = (props: MenuListItemProps) => {
   return (
     <MenuListItemContainer>
       {menuItem.imageUrl ? (
-        <MenuItemImage src={Image.getUrl({ size: 100, filename: menuItem.imageUrl })} />
+        <MenuItemImage src={Image.getUrl({ size: '100', filename: menuItem.imageUrl })} />
       ) : (
         <MenuItemImageAlt>
           <MenuItemImageAltIcon />

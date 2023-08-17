@@ -21,13 +21,13 @@ const ImageModal = (props: ImageModalProps) => {
   return (
     <Container>
       <ActiveImageContainer onClick={handleContainerClick}>
-        <ActiveImage src={Image.getUrl({ size: 500, filename: activeImage })} />
+        <ActiveImage src={Image.getUrl({ size: 'original', filename: activeImage })} />
       </ActiveImageContainer>
       <ImageList>
         {imageUrls.map((imageUrl, index) => (
           <ImageListItem key={index}>
             <ImageListItemButton onClick={() => setActiveImage(imageUrl)}>
-              <ImageListItemImage src={Image.getUrl({ size: 500, filename: imageUrl })} />
+              <ImageListItemImage src={Image.getUrl({ size: 'original', filename: imageUrl })} />
             </ImageListItemButton>
           </ImageListItem>
         ))}
@@ -79,10 +79,12 @@ const ImageListItem = styled.li`
 
 const ImageListItemButton = styled.button`
   cursor: pointer;
+  width: 100%;
   height: 100%;
 `;
 
 const ImageListItemImage = styled.img`
+  width: 100%;
   height: 100%;
   object-fit: cover;
 `;
