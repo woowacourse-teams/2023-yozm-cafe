@@ -18,7 +18,7 @@ import static java.util.Objects.requireNonNull;
 
 public class ImageResizer {
 
-    public static final int MAX_IMAGE_SIZE = 1024 * 1024 * 5;
+    public static final int MAX_IMAGE_SIZE = 1024 * 1024 * 10;
     private static final String CONTENT_TYPE_DELIMITER = "/";
     private static final String IMAGE_FORMAT_PREFIX = "image/";
     private static final int FORMAT_INDEX = 1;
