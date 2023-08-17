@@ -13,4 +13,14 @@ public record MenuRequest(int priority, String name, String description, String 
                 this.price,
                 this.recommended);
     }
+
+    public Menu toMenuWithoutImage(final Cafe cafe) {
+        return new Menu(cafe,
+                this.priority,
+                this.name,
+                null,
+                this.description,
+                this.price,
+                this.recommended);
+    }
 }
