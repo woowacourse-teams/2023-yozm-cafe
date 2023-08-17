@@ -2,7 +2,7 @@ import { PiHeartFill } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import type { Rank } from '../types';
-import Image from '../utils/image';
+import Image from '../utils/Image';
 
 const RankCard = (props: Rank) => {
   const { id, rank, name, address, image, likeCount } = props;

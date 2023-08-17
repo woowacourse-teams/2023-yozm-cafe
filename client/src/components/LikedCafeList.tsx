@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useIntersection from '../hooks/useIntersection';
 import useLikedCafes from '../hooks/useLikedCafes';
-import Image from '../utils/image';
+import Image from '../utils/Image';
 
 const LikedCafeList = () => {
   const { likedCafes, fetchNextPage, isFetching, hasNextPage } = useLikedCafes();
