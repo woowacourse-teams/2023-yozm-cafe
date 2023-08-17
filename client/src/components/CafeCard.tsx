@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import useIntersection from '../hooks/useIntersection';
 import type { Cafe } from '../types';
-import Image from '../utils/image';
+import Image from '../utils/Image';
 import CafeActionBar from './CafeActionBar';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
 import CafeSummary from './CafeSummary';

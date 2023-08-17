@@ -1,7 +1,7 @@
 import { PiCoffeeFill } from 'react-icons/pi';
 import { styled } from 'styled-components';
 import type { CafeMenuItem } from '../types';
-import Image from '../utils/image';
+import Image from '../utils/Image';
 
 type CafeMenuMiniListProps = {
   menus: CafeMenuItem[];

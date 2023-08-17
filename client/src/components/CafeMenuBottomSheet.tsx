@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
-import Image from '../utils/image';
+import Image from '../utils/Image';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
 
