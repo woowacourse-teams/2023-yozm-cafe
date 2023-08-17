@@ -50,10 +50,10 @@ class ImageResizerTest {
         }
 
         @Test
-        @DisplayName("이미지가 사이즈가 5MB가 넘으면 예외가 발생한다")
+        @DisplayName("이미지가 사이즈가 10MB가 넘으면 예외가 발생한다")
         void construct_fail3() {
             //given
-            final TestMultipartFile multipartFile = TestMultipartFile.getWithSize(1024 * 1024 * 5 + 1);
+            final TestMultipartFile multipartFile = TestMultipartFile.getWithSize(1024 * 1024 * 10 + 1);
 
             //when, then
             assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
