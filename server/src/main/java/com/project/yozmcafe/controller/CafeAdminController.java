@@ -2,6 +2,7 @@ package com.project.yozmcafe.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -86,9 +87,13 @@ public class CafeAdminController {
     public ResponseEntity<String> saveMenus(@PathVariable("cafeId") final Long cafeId,
                                             @RequestPart final MenuRequest menuRequest,
                                             @RequestPart final MultipartFile image) {
+        if (Objects.isNull(image)) {
+            menuService.saveMenuWithoutImage(cafeId, menuRequest);
+            return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
+        }
+        
         String uploadedFileName = imageService.singleImageUploadAndGetName(image, Size.THUMBNAIL);
         menuService.saveMenu(cafeId, menuRequest, uploadedFileName);
-
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
     }
 
