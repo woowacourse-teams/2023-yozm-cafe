@@ -59,20 +59,16 @@ const CafeCard = (props: CardProps) => {
           <Dot key={index} $active={index === currentImageIndex} />
         ))}
       </DotsContainer>
-      <AsidePosition>
-        <Aside>
-          <CafeSummary
-            title={cafe.name}
-            address={cafe.address}
-            onClick={(event) => {
-              event.stopPropagation();
-              setIsShowDetail(true);
-            }}
-          />
-          <CafeActionBar cafe={cafe} />
-        </Aside>
-        {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
-      </AsidePosition>
+      <CafeSummary
+        title={cafe.name}
+        address={cafe.address}
+        onClick={(event) => {
+          event.stopPropagation();
+          setIsShowDetail(true);
+        }}
+      />
+      <CafeActionBar cafe={cafe} />
+      {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
     </Container>
   );
 };
@@ -153,17 +149,4 @@ const CardQuantityContents = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xs};
   background-color: ${({ theme }) => theme.color.background.secondary};
   border-radius: 10px;
-`;
-
-const AsidePosition = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-`;
-
-const Aside = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column-reverse;
-  padding-bottom: ${({ theme }) => theme.space[10]};
 `;
