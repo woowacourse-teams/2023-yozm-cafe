@@ -61,4 +61,12 @@ public class ImageService {
         s3Client.upload(resizedImages.get(0));
         return imageResizer.getFileName();
     }
+
+    public String uploadOriginalImage(final MultipartFile image) {
+        final ImageName imageName = ImageName.from(image.getOriginalFilename());
+        final ImageResizer imageResizer = new ImageResizer(image, imageName.get());
+        final MultipartFile originalImage = imageResizer.getOriginalImage();
+        s3Client.upload(originalImage);
+        return imageResizer.getFileName();
+    }
 }

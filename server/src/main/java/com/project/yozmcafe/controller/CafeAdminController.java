@@ -96,7 +96,7 @@ public class CafeAdminController {
     public ResponseEntity<String> saveMenuBoards(@PathVariable("cafeId") final Long cafeId,
                                                  @RequestPart final MenuBoardRequest menuBoardRequest,
                                                  @RequestPart final MultipartFile image) {
-        String uploadedFileName = imageService.singleImageUploadAndGetName(image, Size.MOBILE);
+        String uploadedFileName = imageService.uploadOriginalImage(image);
         menuService.saveMenuBoard(cafeId, menuBoardRequest, uploadedFileName);
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
