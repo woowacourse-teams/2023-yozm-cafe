@@ -1,6 +1,7 @@
 import { PiHeartFill } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { IMAGE_HOST } from '../environment';
 import type { Rank } from '../types';
 
 const RankCard = (props: Rank) => {
@@ -18,7 +19,7 @@ const RankCard = (props: Rank) => {
       </CafeRankContainer>
       <CafeDetailContainer>
         <CafeDetailSummaryContainer>
-          <Image src={image} alt={`${image}}의 이미지`} />
+          <Image src={`${IMAGE_HOST}/100/${image}`} alt={`${image}}의 이미지`} />
           <TitleAndAddressContainer>
             <Title>{name}</Title>
             <Address>{address}</Address>
@@ -61,11 +62,11 @@ const CafeDetailContainer = styled.div`
   cursor: pointer;
 
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 
   width: 100%;
   margin: ${({ theme }) => theme.space[4]} ${({ theme }) => theme.space[7]} ${({ theme }) => theme.space[4]} 0;
-  padding: ${({ theme }) => theme.space[5]} ${({ theme }) => theme.space['2.5']};
+  padding: ${({ theme }) => theme.space['2.5']} ${({ theme }) => theme.space[5]};
 
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 50px;
