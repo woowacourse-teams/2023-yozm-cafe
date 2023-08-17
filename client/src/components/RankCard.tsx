@@ -1,6 +1,7 @@
 import { PiHeartFill } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { IMAGE_HOST } from '../environment';
 import type { Rank } from '../types';
 
 const RankCard = (props: Rank) => {
@@ -18,7 +19,7 @@ const RankCard = (props: Rank) => {
       </CafeRankContainer>
       <CafeDetailContainer>
         <CafeDetailSummaryContainer>
-          <Image src={image} alt={`${image}}의 이미지`} />
+          <Image src={`${IMAGE_HOST}/100/${image}`} alt={`${image}}의 이미지`} />
           <TitleAndAddressContainer>
             <Title>{name}</Title>
             <Address>{address}</Address>
