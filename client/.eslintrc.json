@@ -1,5 +1,8 @@
 {
   "root": true,
+  "env": {
+    "browser": true
+  },
   "extends": [
     "eslint:recommended",
     "standard",
@@ -12,11 +15,13 @@
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
+    "compat",
     "@typescript-eslint",
     "prettier"
   ],
   "rules": {
     "prettier/prettier": "warn",
+    "compat/compat": "warn",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {

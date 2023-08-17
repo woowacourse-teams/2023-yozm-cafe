@@ -5,6 +5,7 @@ import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -32,15 +33,16 @@ public class CafeAdminService {
     }
 
     @Transactional
-    public Long save(final CafeRequest cafeRequest) {
-        final Cafe cafe = cafeRequest.toCafe();
+    public Long save(final CafeRequest cafeRequest, List<String> imageNames) {
+        final Cafe cafe = cafeRequest.toCafe(imageNames);
         return cafeRepository.save(cafe).getId();
     }
 
     @Transactional
-    public void update(final long cafeId, final CafeUpdateRequest cafeRequest) {
+    public void update(final long cafeId, final CafeUpdateRequest request, List<String> images) {
         final Cafe cafe = getOrThrow(cafeId);
-        final Cafe requestedCafe = cafeRequest.toCafeWithId(cafeId);
+        final Cafe requestedCafe = request.toCafeWithId(cafeId, images);
+
         cafe.update(requestedCafe);
     }
 
@@ -65,8 +67,15 @@ public class CafeAdminService {
         Stream.of(
                         entityManager.createQuery("DELETE FROM UnViewedCafe u WHERE u.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM LikedCafe l WHERE l.cafe.id = :cafeId"),
+                        entityManager.createQuery("DELETE FROM MenuBoard mb WHERE mb.cafe.id = :cafeId"),
+                        entityManager.createQuery("DELETE FROM Menu me WHERE me.cafe.id = :cafeId"),
                         entityManager.createQuery("DELETE FROM Cafe c WHERE c.id = :cafeId"))
                 .map(query -> query.setParameter("cafeId", cafeId))
                 .forEach(Query::executeUpdate);
+    }
+
+    public List<String> findImagesByCafeId(final Long cafeId) {
+        final Images images = getOrThrow(cafeId).getImages();
+        return images.getUrls();
     }
 }

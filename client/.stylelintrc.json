@@ -4,6 +4,15 @@
   ],
   "customSyntax": "postcss-styled-syntax",
   "plugins": [
-    "stylelint-order"
-  ]
+    "stylelint-order",
+    "stylelint-no-unsupported-browser-features"
+  ],
+  "rules": {
+    "plugin/no-unsupported-browser-features": [
+      true,
+      {
+        "severity": "warning"
+      }
+    ]
+  }
 }

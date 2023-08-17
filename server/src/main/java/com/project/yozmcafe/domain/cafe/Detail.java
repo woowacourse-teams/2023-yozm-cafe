@@ -21,7 +21,7 @@ public class Detail {
     public static final int MAP_URL_MAX_LENGTH = 512;
     public static final int PHONE_MAX_LENGTH = 20;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<AvailableTime> availableTimes;
     @Column(nullable = false)
     private String mapUrl;
