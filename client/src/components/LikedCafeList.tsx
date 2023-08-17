@@ -73,6 +73,8 @@ const GridContainer = styled.div`
 
 const CafeImage = styled.img`
   aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
 `;
 
 const SensorContainer = styled.div``;
