@@ -1,1 +1,1046 @@
-server/build/api-spec/openapi3.yaml
+openapi: 3.0.1
+info:
+  title: 요즘카페-API
+  description: 요즘카페 API 목록입니다.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+tags: []
+paths:
+  /admin/cafes:
+    get:
+      tags:
+      - admin
+      operationId: 어드민 API/카페 전체 조회하기
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/admin-cafes-2033645187'
+              examples:
+                어드민 API/카페 전체 조회하기:
+                  value: "[{\"id\":1,\"name\":\"????\",\"address\":\"???\",\"images\"\
+                    :[\"20230817105309042616.png\"],\"isLiked\":false,\"likeCount\"\
+                    :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
+                    }},{\"id\":2,\"name\":\"????\",\"address\":\"???\",\"images\"\
+                    :[\"20230817105309516704.png\"],\"isLiked\":false,\"likeCount\"\
+                    :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
+                    }}]"
+    post:
+      tags:
+      - admin
+      operationId: 어드민 API/카페 저장하기
+      responses:
+        "201":
+          description: "201"
+          headers:
+            Location:
+              description: 카페 저장 위치
+              schema:
+                type: string
+  /admin/cafes/{cafeId}:
+    get:
+      tags:
+      - admin
+      operationId: 어드민 API/카페 단건 조회하기
+      parameters:
+      - name: cafeId
+        in: path
+        description: 조회할 카페 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/admin-cafes-cafeId-1978468758'
+              examples:
+                어드민 API/카페 단건 조회하기:
+                  value: "{\"id\":1,\"name\":\"????\",\"address\":\"???\",\"images\"\
+                    :[\"20230817105311141248.png\"],\"isLiked\":false,\"likeCount\"\
+                    :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
+                    }}"
+    put:
+      tags:
+      - admin
+      operationId: 어드민 API/카페 업데이트하기
+      parameters:
+      - name: cafeId
+        in: path
+        description: 업데이트할 카페 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "204"
+    delete:
+      tags:
+      - admin
+      operationId: 어드민 API/카페 삭제하기
+      parameters:
+      - name: cafeId
+        in: path
+        description: 삭제할 카페 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "204"
+  /auth:
+    get:
+      tags:
+      - auth
+      operationId: OAuth/토큰 갱신
+      parameters:
+      - name: Authorization
+        in: header
+        description: Access Token
+        required: true
+        schema:
+          type: string
+        example: eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIyNjk1ODQsImV4cCI6MTY5MjI2OTk0NCwic3ViIjoiMUwifQ.zjZDXuiU3zX6GDrVvCTpBKBx6fwpB_I1hOIJ_O9sJMY
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth-providerName1498709238'
+              examples:
+                OAuth/토큰 갱신:
+                  value: "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIyNjk1ODQsImV4cCI6MTY5MjI2OTk0NCwic3ViIjoiMUwifQ.zjZDXuiU3zX6GDrVvCTpBKBx6fwpB_I1hOIJ_O9sJMY\"\
+                    }"
+    delete:
+      tags:
+      - auth
+      operationId: OAuth/OAuth 로그아웃
+      responses:
+        "200":
+          description: "200"
+  /auth/urls:
+    get:
+      tags:
+      - auth
+      operationId: OAuth/OAuth Provider Url
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth-urls391138538'
+              examples:
+                OAuth/OAuth Provider Url:
+                  value: "[{\"provider\":\"google\",\"authorizationUrl\":\"testtesttesttesttesttest?response_type=code&redirect_uri=testtesttesttesttesttest&client_id=testtesttesttesttesttest&scope=testtesttesttesttesttest\"\
+                    },{\"provider\":\"kakao\",\"authorizationUrl\":\"testtesttesttesttesttest?response_type=code&redirect_uri=testtesttesttesttesttest&client_id=testtesttesttesttesttest&scope=testtesttesttesttesttest\"\
+                    }]"
+  /auth/{providerName}:
+    post:
+      tags:
+      - auth
+      operationId: OAuth/OAuth 로그인
+      parameters:
+      - name: providerName
+        in: path
+        description: OAuth Provider
+        required: true
+        schema:
+          type: string
+      - name: code
+        in: query
+        description: Authorization Code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth-providerName1498709238'
+              examples:
+                OAuth/OAuth 로그인:
+                  value: "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIyNjk1ODMsImV4cCI6MTY5MjI2OTk0Mywic3ViIjoib3BlbklkIn0.4xsTMtI1H3IqWlQiyAfQuuKnHOsFmDC8LMyC3BJO7AY\"\
+                    }"
+  /cafes:
+    get:
+      tags:
+      - cafes
+      operationId: cafeApi/로그인 한 사용자 카페 조회
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-237648523'
+              examples:
+                cafeApi/로그인 한 사용자 카페 조회:
+                  value: "[{\"id\":1,\"name\":\"n1\",\"address\":\"address1\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":2,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":4,\"name\":\"n4\",\"address\":\"address4\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":4,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":5,\"name\":\"n5\",\"address\":\"address5\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }}]"
+                cafeApi/로그인 한 사용자 카페 조회 시 남은 카페가 5개 미만인 경우:
+                  value: "[{\"id\":1,\"name\":\"n1\",\"address\":\"address1\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":2,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":4,\"name\":\"n4\",\"address\":\"address4\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":4,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }}]"
+  /cafes/guest:
+    get:
+      tags:
+      - cafes
+      operationId: cafeApi/비회원 사용자 카페 조회
+      parameters:
+      - name: page
+        in: query
+        description: 페이지 번호
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-guest127288789'
+              examples:
+                cafeApi/비회원 사용자 카페 조회:
+                  value: "[{\"id\":1,\"name\":\"n1\",\"address\":\"address1\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":2,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":4,\"name\":\"n4\",\"address\":\"address4\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":4,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":5,\"name\":\"n5\",\"address\":\"address5\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }}]"
+                cafeApi/비회원 사용자 카페 조회 page가 최대 page를 초과하면 빈 배열 반환:
+                  value: "[]"
+  /cafes/ranks:
+    get:
+      tags:
+      - cafes
+      operationId: cafeApi/좋아요 개수 순위에 따라 카페정보 조회
+      parameters:
+      - name: page
+        in: query
+        description: 페이지 번호
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-ranks486549215'
+              examples:
+                cafeApi/좋아요 개수 순위에 따라 카페정보 조회 - 범위 초과 예외:
+                  value: "{\"code\":\"R1\",\"message\":\"좋아요 개수 랭킹 범위를 벗어나는 요청입니다\
+                    . 좋아요 랭킹은 30위까지 가능합니다. 요청의 페이지 확인이 필요합니다.\"}"
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-ranks-1893807122'
+              examples:
+                cafeApi/좋아요 개수 순위에 따라 카페정보 조회:
+                  value: "[{\"rank\":1,\"id\":10,\"name\":\"n10\",\"address\":\"address5\"\
+                    ,\"image\":\"image1\",\"likeCount\":70},{\"rank\":2,\"id\":9,\"\
+                    name\":\"n9\",\"address\":\"address5\",\"image\":\"image1\",\"\
+                    likeCount\":69},{\"rank\":3,\"id\":8,\"name\":\"n8\",\"address\"\
+                    :\"address5\",\"image\":\"image1\",\"likeCount\":68},{\"rank\"\
+                    :4,\"id\":7,\"name\":\"n7\",\"address\":\"address5\",\"image\"\
+                    :\"image1\",\"likeCount\":67},{\"rank\":5,\"id\":6,\"name\":\"\
+                    n6\",\"address\":\"address5\",\"image\":\"image1\",\"likeCount\"\
+                    :66},{\"rank\":6,\"id\":5,\"name\":\"n5\",\"address\":\"address5\"\
+                    ,\"image\":\"image1\",\"likeCount\":50},{\"rank\":7,\"id\":4,\"\
+                    name\":\"n4\",\"address\":\"address4\",\"image\":\"image1\",\"\
+                    likeCount\":4},{\"rank\":8,\"id\":3,\"name\":\"n3\",\"address\"\
+                    :\"address3\",\"image\":\"image1\",\"likeCount\":3},{\"rank\"\
+                    :9,\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"image\"\
+                    :\"image1\",\"likeCount\":2},{\"rank\":10,\"id\":1,\"name\":\"\
+                    n1\",\"address\":\"address1\",\"image\":\"image1\",\"likeCount\"\
+                    :1}]"
+                cafeApi/좋아요 개수 순위에 따라 카페정보 조회 - 카페가 존재하지 않는 경우:
+                  value: "[]"
+  /cafes/{cafeId}:
+    get:
+      tags:
+      - cafes
+      operationId: cafeApi/카페 id로 단 건 조회
+      parameters:
+      - name: cafeId
+        in: path
+        description: 카페 Id
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-ranks486549215'
+              examples:
+                cafeApi/카페 id로 단 건 조회 예외:
+                  value: "{\"code\":\"C1\",\"message\":\"카페가 존재하지 않습니다.\"}"
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-cafeId2097339250'
+              examples:
+                cafeApi/카페 id로 단 건 조회:
+                  value: "{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\"\
+                    ,\"close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\"\
+                    :\"10:53\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\"\
+                    :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }}"
+  /cafes/{cafeId}/likes:
+    post:
+      tags:
+      - cafes
+      operationId: likedCafe/좋아요
+      parameters:
+      - name: cafeId
+        in: path
+        description: 카페 ID
+        required: true
+        schema:
+          type: string
+      - name: isLiked
+        in: query
+        description: "true 일 경우 좋아요 추가, false 일 경우 좋아요 취소"
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+  /cafes/{cafeId}/menus:
+    get:
+      tags:
+      - cafes
+      operationId: 메뉴/메뉴 조회
+      parameters:
+      - name: cafeId
+        in: path
+        description: 카페 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-cafeId-menus1554637279'
+              examples:
+                메뉴/메뉴 조회:
+                  value: "{\"cafeId\":1,\"menuBoards\":[{\"id\":1,\"priority\":1,\"\
+                    imageUrl\":\"메뉴판\"}],\"menus\":[{\"id\":1,\"name\":\"뜨거운 아이스 아\
+                    메리카노\",\"priority\":1,\"imageUrl\":\"아메리카노.img\",\"description\"\
+                    :\"뜨겁지만 차가워요\",\"price\":\"5000\",\"isRecommended\":true}]}"
+  /members/{memberId}:
+    get:
+      tags:
+      - members
+      operationId: 멤버 조회
+      parameters:
+      - name: memberId
+        in: path
+        description: 멤버 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/members-memberId-1619908362'
+              examples:
+                멤버 조회:
+                  value: "{\"id\":\"12413\",\"name\":\"연어\",\"imageUrl\":\"image\"\
+                    }"
+  /members/{memberId}/liked-cafes:
+    get:
+      tags:
+      - members
+      operationId: likedCafe/좋아요 카페 대표 이미지 목록 조회
+      parameters:
+      - name: memberId
+        in: path
+        description: 멤버 ID
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: 좋아요 목록 페이지 번호
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/members-memberId-liked-cafes1706193255'
+              examples:
+                likedCafe/좋아요 카페 대표 이미지 목록 조회:
+                  value: "[{\"cafeId\":2,\"imageUrl\":\"image1\"},{\"cafeId\":1,\"\
+                    imageUrl\":\"image1\"}]"
+  /members/{memberId}/liked-cafes/details:
+    get:
+      tags:
+      - members
+      operationId: likedCafe/좋아요 목록의 카페 조회
+      parameters:
+      - name: memberId
+        in: path
+        description: 멤버 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-237648523'
+              examples:
+                likedCafe/좋아요 목록의 카페 조회:
+                  value: "[{\"id\":2,\"name\":\"카페2\",\"address\":\"2동\",\"images\"\
+                    :[\"image1\",\"image2\"],\"isLiked\":true,\"likeCount\":5,\"detail\"\
+                    :{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\",\"\
+                    close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"WEDNESDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"10:53\",\"\
+                    close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\":\"\
+                    mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }},{\"id\":1,\"name\":\"카페1\",\"address\":\"1동\",\"images\":[\"\
+                    image1\",\"image2\"],\"isLiked\":true,\"likeCount\":5,\"detail\"\
+                    :{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:53\",\"\
+                    close\":\"10:53\",\"opened\":true},{\"day\":\"TUESDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\":\"WEDNESDAY\"\
+                    ,\"open\":\"10:53\",\"close\":\"10:53\",\"opened\":true},{\"day\"\
+                    :\"THURSDAY\",\"open\":\"10:53\",\"close\":\"10:53\",\"opened\"\
+                    :true},{\"day\":\"FRIDAY\",\"open\":\"10:53\",\"close\":\"10:53\"\
+                    ,\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"10:53\",\"\
+                    close\":\"10:53\",\"opened\":true},{\"day\":\"SUNDAY\",\"open\"\
+                    :\"10:53\",\"close\":\"10:53\",\"opened\":true}],\"mapUrl\":\"\
+                    mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
+                    }}]"
+components:
+  schemas:
+    cafes-ranks-1893807122:
+      type: array
+      items:
+        type: object
+        properties:
+          image:
+            type: string
+            description: 카페 대표 이미지 url
+          address:
+            type: string
+            description: 카페 주소
+          name:
+            type: string
+            description: 카페 이름
+          rank:
+            type: number
+            description: 카페 순위
+          likeCount:
+            type: number
+            description: 카페의 좋아요 갯수
+          id:
+            type: number
+            description: 카페 아이디
+    cafes-237648523:
+      type: array
+      items:
+        type: object
+        properties:
+          images:
+            type: array
+            description: 카페 이미지 url
+            items:
+              oneOf:
+              - type: object
+              - type: boolean
+              - type: string
+              - type: number
+          address:
+            type: string
+            description: 카페 주소
+          isLiked:
+            type: boolean
+            description: 해당 카페의 좋아요 여부(비회원은 default = false)
+          name:
+            type: string
+            description: 카페 이름
+          likeCount:
+            type: number
+            description: 카페의 좋아요 갯수
+          detail:
+            type: object
+            properties:
+              phone:
+                type: string
+                description: 카페의 전화번호
+              mapUrl:
+                type: string
+                description: 카페의 네이버 지도 url
+              description:
+                type: string
+                description: 카페의 상세정보
+              openingHours:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    opened:
+                      type: boolean
+                      description: 카페 해당요일 영업여부
+                    close:
+                      type: string
+                      description: 카페 종료시간
+                    day:
+                      type: string
+                      description: 요일
+                    open:
+                      type: string
+                      description: 카페 오픈시간
+          id:
+            type: number
+            description: 카페 아이디
+    cafes-cafeId2097339250:
+      type: object
+      properties:
+        images:
+          type: array
+          description: 카페 이미지 url
+          items:
+            oneOf:
+            - type: object
+            - type: boolean
+            - type: string
+            - type: number
+        address:
+          type: string
+          description: 카페 주소
+        isLiked:
+          type: boolean
+          description: 해당 카페의 좋아요 여부(비회원은 default = false)
+        name:
+          type: string
+          description: 카페 이름
+        likeCount:
+          type: number
+          description: 카페의 좋아요 갯수
+        detail:
+          type: object
+          properties:
+            phone:
+              type: string
+              description: 카페의 전화번호
+            mapUrl:
+              type: string
+              description: 카페의 네이버 지도 url
+            description:
+              type: string
+              description: 카페의 상세정보
+            openingHours:
+              type: array
+              items:
+                type: object
+                properties:
+                  opened:
+                    type: boolean
+                    description: 카페 해당요일 영업여부
+                  close:
+                    type: string
+                    description: 카페 종료시간
+                  day:
+                    type: string
+                    description: 요일
+                  open:
+                    type: string
+                    description: 카페 오픈시간
+        id:
+          type: number
+          description: 카페 아이디
+    auth-providerName1498709238:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Access Token
+    cafes-guest127288789:
+      type: array
+      description: page가 초과하여 빈배열 반환
+      items:
+        type: object
+        properties:
+          images:
+            type: array
+            description: 카페 이미지 url
+            items:
+              oneOf:
+              - type: object
+              - type: boolean
+              - type: string
+              - type: number
+          address:
+            type: string
+            description: 카페 주소
+          isLiked:
+            type: boolean
+            description: 해당 카페의 좋아요 여부(비회원은 default = false)
+          name:
+            type: string
+            description: 카페 이름
+          likeCount:
+            type: number
+            description: 카페의 좋아요 갯수
+          detail:
+            type: object
+            properties:
+              phone:
+                type: string
+                description: 카페의 전화번호
+              mapUrl:
+                type: string
+                description: 카페의 네이버 지도 url
+              description:
+                type: string
+                description: 카페의 상세정보
+              openingHours:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    opened:
+                      type: boolean
+                      description: 카페 해당요일 영업여부
+                    close:
+                      type: string
+                      description: 카페 종료시간
+                    day:
+                      type: string
+                      description: 요일
+                    open:
+                      type: string
+                      description: 카페 오픈시간
+          id:
+            type: number
+            description: 카페 아이디
+        description: page가 초과하여 빈배열 반환
+    members-memberId-1619908362:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          description: 멤버 사진
+        name:
+          type: string
+          description: 멤버 이름
+        id:
+          type: string
+          description: 멤버 아이디
+    admin-cafes-2033645187:
+      type: array
+      items:
+        type: object
+        properties:
+          images:
+            type: array
+            description: 이미지 URL 배열
+            items:
+              oneOf:
+              - type: object
+              - type: boolean
+              - type: string
+              - type: number
+          address:
+            type: string
+            description: 카페 도로명 주소
+          isLiked:
+            type: boolean
+            description: 좋아요 누른 여부
+          name:
+            type: string
+            description: 카페 이름
+          likeCount:
+            type: number
+            description: 좋아요 숫자
+          detail:
+            type: object
+            properties:
+              phone:
+                type: string
+                description: 전화번호
+              mapUrl:
+                type: string
+                description: 네이버 지도 URL
+              description:
+                type: string
+                description: 상세 설명
+              openingHours:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    opened:
+                      type: boolean
+                      description: 해당 요일 영업 여부
+                    close:
+                      type: string
+                      description: 영업 종료 시각
+                    day:
+                      type: string
+                      description: 요일
+                    open:
+                      type: string
+                      description: 영업 시작 시각
+          id:
+            type: number
+            description: 카페 ID
+    members-memberId-liked-cafes1706193255:
+      type: array
+      items:
+        type: object
+        properties:
+          imageUrl:
+            type: string
+            description: 카페 대표 사진
+          cafeId:
+            type: number
+            description: 카페 ID
+    cafes-cafeId-menus1554637279:
+      type: object
+      properties:
+        menuBoards:
+          type: array
+          items:
+            type: object
+            properties:
+              imageUrl:
+                type: string
+                description: 메뉴판 이미지 url
+              id:
+                type: number
+                description: 메뉴판 ID
+              priority:
+                type: number
+                description: 메뉴판 우선순위
+        menus:
+          type: array
+          items:
+            type: object
+            properties:
+              price:
+                type: string
+                description: 메뉴 가격
+              imageUrl:
+                type: string
+                description: 메뉴 이미지 url
+              isRecommended:
+                type: boolean
+                description: 대표 메뉴 여부
+              name:
+                type: string
+                description: 메뉴 이름
+              description:
+                type: string
+                description: 메뉴 설명
+              id:
+                type: number
+                description: 메뉴 ID
+              priority:
+                type: number
+                description: 메뉴 우선순위
+        cafeId:
+          type: number
+          description: 카페 ID
+    admin-cafes-cafeId-1978468758:
+      type: object
+      properties:
+        images:
+          type: array
+          description: 이미지 URL 배열
+          items:
+            oneOf:
+            - type: object
+            - type: boolean
+            - type: string
+            - type: number
+        address:
+          type: string
+          description: 카페 도로명 주소
+        isLiked:
+          type: boolean
+          description: 좋아요 누른 여부
+        name:
+          type: string
+          description: 카페 이름
+        likeCount:
+          type: number
+          description: 좋아요 숫자
+        detail:
+          type: object
+          properties:
+            phone:
+              type: string
+              description: 전화번호
+            mapUrl:
+              type: string
+              description: 네이버 지도 URL
+            description:
+              type: string
+              description: 상세 설명
+            openingHours:
+              type: array
+              items:
+                type: object
+                properties:
+                  opened:
+                    type: boolean
+                    description: 해당 요일 영업 여부
+                  close:
+                    type: string
+                    description: 영업 종료 시각
+                  day:
+                    type: string
+                    description: 요일
+                  open:
+                    type: string
+                    description: 영업 시작 시각
+        id:
+          type: number
+          description: 카페 ID
+    auth-urls391138538:
+      type: array
+      items:
+        type: object
+        properties:
+          authorizationUrl:
+            type: string
+            description: Provider 인증 Url
+          provider:
+            type: string
+            description: OAuth Provider 이름
+    cafes-ranks486549215:
+      type: object
