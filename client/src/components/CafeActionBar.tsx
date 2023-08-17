@@ -35,7 +35,11 @@ const CafeActionBar = (props: CafeActionBarProps) => {
     <Container onClick={handlePreventClickPropagation}>
       <Action>
         <ShareButton url={`https://yozm.cafe/cafes/${cafe.id}`} />
-        <LikeButton likeCount={cafe.likeCount} active={isLiked} onChange={handleLikeCountIncrease} />
+        <LikeButton
+          likeCount={cafe.likeCount + (isLiked ? 1 : 0)}
+          active={isLiked}
+          onChange={handleLikeCountIncrease}
+        />
       </Action>
       <Action onClick={() => setIsMenuOpened(true)}>
         <ActionButton label="메뉴">
