@@ -25,12 +25,6 @@ public class UnViewedCafeService {
     }
 
     @Transactional
-    public void removeUnViewedCafeByCafeId(final Member member, final long cafeId) {
-        member.removeUnViewedCafe(cafeId);
-        refillWhenUnViewedCafesSizeUnderTwenty(member);
-    }
-
-    @Transactional
     public void refillWhenUnViewedCafesSizeUnderTwenty(final Member member) {
         if (member.isUnViewedCafesSizeUnder(DEFAULT_SIZE_CONDITION)) {
             final List<Cafe> shuffledCafes = shuffleStrategy.shuffle(cafeRepository.findAll());
