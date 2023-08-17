@@ -53,6 +53,16 @@ public class MenuService {
     }
 
     @Transactional
+    public void saveMenuWithoutImage(final Long cafeId,
+                                     final MenuRequest menuRequest) {
+        final Cafe cafe = cafeRepository.findById(cafeId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
+
+        Menu menu = menuRequest.toMenuWithoutImage(cafe);
+        menuRepository.save(menu);
+    }
+
+    @Transactional
     public void saveMenuBoard(final Long cafeId,
                               final MenuBoardRequest menuBoardRequest,
                               final String imageName) {
