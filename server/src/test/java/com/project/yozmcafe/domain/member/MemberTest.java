@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class MemberTest {
 
@@ -51,33 +50,6 @@ class MemberTest {
 
         //then
         assertThat(member.getUnViewedCafes()).hasSize(3);
-    }
-
-    @Test
-    @DisplayName("회원의 unViewedCafe 기록을 삭제한다.")
-    void removeUnViewedCafe() {
-        //given
-        Member member = new Member("3", "폴로", "폴로사진");
-        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
-        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 4);
-        final Cafe cafe3 = Fixture.getCafe(3L, "카페3", "주소3", 5);
-        member.addUnViewedCafes(List.of(cafe1, cafe2, cafe3));
-
-        //when
-        member.removeUnViewedCafe(cafe1.getId());
-
-        //then
-        assertThat(member.getUnViewedCafes()).hasSize(2);
-    }
-
-    @Test
-    @DisplayName("회원의 unViewedCafe 기록 삭제 - 삭제할 카페가 UnViewedCafe에 존재하지 않아도 예외가 발생하지 않는다")
-    void removeUnViewedCafe2() {
-        //given
-        Member member = new Member("id", "연어", "image");
-
-        //when, then
-        assertDoesNotThrow(() -> member.removeUnViewedCafe(1L));
     }
 
     @Test
