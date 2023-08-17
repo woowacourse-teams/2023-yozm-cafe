@@ -1,5 +1,6 @@
 import { PiCoffeeFill } from 'react-icons/pi';
 import { styled } from 'styled-components';
+import { IMAGE_HOST } from '../environment';
 import type { CafeMenuItem } from '../types';
 
 type CafeMenuListProps = {
@@ -42,7 +43,7 @@ const MenuListItem = (props: MenuListItemProps) => {
   return (
     <MenuListItemContainer>
       {menuItem.imageUrl ? (
-        <MenuItemImage src={menuItem.imageUrl} />
+        <MenuItemImage src={`${IMAGE_HOST}/100/${menuItem.imageUrl}`} />
       ) : (
         <MenuItemImageAlt>
           <MenuItemImageAltIcon />
