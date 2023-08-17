@@ -29,7 +29,7 @@ const LikedCafeList = () => {
         <GridContainer>
           {likedCafes.map((cafe) => (
             <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
-              <CafeImage key={cafe.cafeId} src={`${IMAGE_HOST}/100/${cafe.imageUrl}`} alt={`Cafe ${cafe.cafeId}`} />
+              <CafeImage key={cafe.cafeId} src={`${IMAGE_HOST}/500/${cafe.imageUrl}`} alt={`Cafe ${cafe.cafeId}`} />
             </Link>
           ))}
         </GridContainer>
@@ -73,6 +73,8 @@ const GridContainer = styled.div`
 
 const CafeImage = styled.img`
   aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
 `;
 
 const SensorContainer = styled.div``;
