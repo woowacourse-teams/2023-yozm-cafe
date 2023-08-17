@@ -32,7 +32,14 @@ const CafeSummary = (props: CafeSummaryProps) => {
 
 const Container = styled.div`
   cursor: pointer;
+
+  position: absolute;
+  bottom: 0;
+
   display: flex;
+
+  width: 100%;
+  margin-bottom: 38px;
   padding: ${({ theme }) => theme.space[3]};
 `;
 

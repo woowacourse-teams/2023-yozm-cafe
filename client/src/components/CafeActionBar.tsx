@@ -55,6 +55,10 @@ const CafeActionBar = (props: CafeActionBarProps) => {
 export default CafeActionBar;
 
 const Container = styled.aside`
+  position: absolute;
+  right: 0;
+  bottom: 133px;
+
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space[3]};
