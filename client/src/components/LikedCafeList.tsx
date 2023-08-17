@@ -66,7 +66,7 @@ const ScrollContainer = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 열 */
+  grid-template-columns: repeat(3, 1fr);
   gap: ${({ theme }) => theme.space['0.5']};
   margin-bottom: ${({ theme }) => theme.space['10']};
 `;
