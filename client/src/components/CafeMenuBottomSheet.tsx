@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
-import { IMAGE_HOST } from '../environment';
 import useCafeMenus from '../hooks/useCafeMenus';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
+import Image from '../utils/image';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
 
@@ -148,7 +148,8 @@ const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.color.white};
 
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${({ $imageUrl }) => `${IMAGE_HOST}/500/${$imageUrl}`});
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(${({ $imageUrl }) => Image.getUrl({ size: 500, filename: $imageUrl })});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
