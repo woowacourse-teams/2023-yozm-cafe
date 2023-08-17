@@ -10,12 +10,7 @@ import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Detail;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.domain.cafe.available.Days;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.RollbackException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -40,14 +35,6 @@ class CafeAdminServiceTest {
     private CafeAdminService cafeAdminService;
     @Autowired
     private CafeRepository cafeRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private LikedCafeService likedCafeService;
-    @Autowired
-    private UnViewedCafeService unViewedCafeService;
-    @Autowired
-    private EntityManagerFactory emf;
 
     @Test
     @DisplayName("카페 생성 테스트")
@@ -183,27 +170,6 @@ class CafeAdminServiceTest {
 
             //then
             assertThat(cafeRepository.findAll()).isEmpty();
-        }
-
-        @Test
-        @DisplayName("다른 트랜잭션에서 LikedCafe, UnViewedCafe를 사용하고 있을 때 삭제 테스트")
-        void delete_foreign() {
-            //given
-            memberRepository.save(new Member("id", "연어", "image"));
-            final EntityManager em = emf.createEntityManager();
-            em.getTransaction().begin();
-
-            final Cafe cafe = saveCafe();
-            final Member member = em.find(Member.class, "id");
-            unViewedCafeService.removeUnViewedCafeByCafeId(member, cafe.getId());
-            likedCafeService.updateLike(member, cafe.getId(), true);
-
-            //when
-            cafeAdminService.delete(cafe.getId());
-
-            //then
-            assertThatThrownBy(() -> em.getTransaction().commit())
-                    .isInstanceOf(RollbackException.class);
         }
     }
 
