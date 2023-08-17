@@ -39,7 +39,7 @@ const Container = styled.div`
   display: flex;
 
   width: 100%;
-  margin-bottom: 38px;
+  margin-bottom: 40px;
   padding: ${({ theme }) => theme.space[3]};
 `;
 
