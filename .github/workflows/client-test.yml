@@ -30,6 +30,7 @@ jobs:
       - name: Install dependencies
         uses: cypress-io/github-action@v5
         with:
+          working-directory: client
           install-command: yarn --frozen-lockfile
           parallel: true
           build: yarn build
