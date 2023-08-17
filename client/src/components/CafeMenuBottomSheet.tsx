@@ -101,6 +101,7 @@ const Container = styled.div`
 
   width: 100%;
   height: 600px;
+  max-height: 100vh;
   padding: ${({ theme }) => theme.space[4]};
   padding-bottom: 0;
 
