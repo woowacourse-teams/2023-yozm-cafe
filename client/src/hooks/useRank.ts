@@ -6,7 +6,12 @@ const useRank = () => {
     queryKey: ['rank'],
     queryFn: ({ pageParam = 1 }) =>
       client.getCafeRank(pageParam).then((rankedCafes) => ({ rankedCafes, page: pageParam })),
-    getNextPageParam: (lastPage) => (lastPage.rankedCafes.length > 0 ? lastPage.page + 1 : undefined),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.rankedCafes.length > 0 && lastPage.page < 3) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
   });
 
   return {
