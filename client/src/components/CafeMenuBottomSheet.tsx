@@ -150,7 +150,7 @@ const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
   color: ${({ theme }) => theme.color.white};
 
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${({ $imageUrl }) => Image.getUrl({ size: '500', filename: $imageUrl })});
+    url(${({ $imageUrl }) => Image.getUrl({ size: 'original', filename: $imageUrl })});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
