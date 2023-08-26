@@ -1,8 +1,0 @@
-agent/docker
-!agent/docker/.gitkeep
-
-logs/**
-!logs/.gitkeep
-
-data/**
-!data/.gitkeep

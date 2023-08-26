@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  teamcity:
+    image: jetbrains/teamcity-server:2023.05.2-linux
+    restart: unless-stopped
+    user: root:root
+    ports:
+      - 8111:8111
+    volumes:
+      - ./database.properties:/data/teamcity_server/datadir/config/database.properties
+      - teamcity-data:/data/teamcity_server/datadir
+      - ./logs:/opt/teamcity/logs
+
+  agent-1:
+    image: jetbrains/teamcity-agent:2023.05.2-linux-sudo
+    restart: unless-stopped
+    privileged: true
+    user: root:root
+    environment:
+      - SERVER_URL=http://teamcity:8111
+      - AGENT_NAME=Agent 1
+      - DOCKER_IN_DOCKER=start
+
+  agent-2:
+    image: jetbrains/teamcity-agent:2023.05.2-linux-sudo
+    restart: unless-stopped
+    privileged: true
+    user: root:root
+    environment:
+      - SERVER_URL=http://teamcity:8111
+      - AGENT_NAME=Agent 2
+      - DOCKER_IN_DOCKER=start
+
+  agent-3:
+    image: jetbrains/teamcity-agent:2023.05.2-linux-sudo
+    restart: unless-stopped
+    privileged: true
+    user: root:root
+    environment:
+      - SERVER_URL=http://teamcity:8111
+      - AGENT_NAME=Agent 3
+      - DOCKER_IN_DOCKER=start
+
+  teamcity-db:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=teamcity_password
+      - POSTGRES_USER=teamcity_user
+      - POSTGRES_DB=teamcity_db
+      - PG_DATA=/var/lib/postgresql/data
+    volumes:
+      - teamcity-db-data:/var/lib/postgresql/data
+
+volumes:
+  teamcity-data:
+  teamcity-db-data:
