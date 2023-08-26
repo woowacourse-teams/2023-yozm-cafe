@@ -47,6 +47,19 @@ const ResetStyle = createGlobalStyle`
   input,
   select {
     margin: 0;
+    padding: 0;
+  }
+
+  button {
+    color: inherit;
+    text-shadow: inherit;
+    background: unset;
+    border: unset;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: unset;
   }
 
   html {

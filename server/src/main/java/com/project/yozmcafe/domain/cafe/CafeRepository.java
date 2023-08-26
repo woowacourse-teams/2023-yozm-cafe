@@ -1,24 +1,24 @@
 package com.project.yozmcafe.domain.cafe;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface CafeRepository extends JpaRepository<Cafe, Long> {
+
     Slice<Cafe> findSliceBy(Pageable pageable);
 
+    @Query("SELECT c.id FROM Cafe c ORDER BY c.likeCount DESC")
+    List<Long> findCafeIdsOrderByLikeCount(Pageable pageable);
 
-    @Query(value = "SELECT c FROM Cafe AS c "
-            + "INNER JOIN UnViewedCafe AS u "
-            + "ON c.id = u.cafe.id "
-            + "WHERE u.member.id = :memberId")
-    Slice<Cafe> findUnViewedCafesByMember(final Pageable pageable, final @Param("memberId") String memberId);
-
-    @Query(value = "SELECT u FROM UnViewedCafe AS u "
-            + "WHERE u.member.id = :memberId AND u.cafe.id = :cafeId")
-    Optional<UnViewedCafe> findUnViewedCafeByMemberAndCafe(final String memberId, final Long cafeId);
+    @Query("SELECT c FROM Cafe c " +
+            "JOIN FETCH c.images.urls " +
+            "WHERE c.id IN :ids " +
+            "ORDER BY c.likeCount DESC ")
+    List<Cafe> findCafesByIdsOrderByLikeCount(@Param("ids") List<Long> ids);
+  
 }

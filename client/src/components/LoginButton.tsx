@@ -1,14 +1,20 @@
-import { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import { styled } from 'styled-components';
-import theme, { Theme } from '../styles/theme';
+import type { Theme } from '../styles/theme';
+import theme from '../styles/theme';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   $color: keyof Theme['color'];
-  $border?: string;
 };
 
-const LoginButton = ({ children, ...rest }: ButtonProps) => {
-  return <Container {...rest}>{children}</Container>;
+const LoginButton = (props: ButtonProps) => {
+  const { children, ...rest } = props;
+
+  return (
+    <Container {...rest}>
+      <ButtonContent>{children}</ButtonContent>
+    </Container>
+  );
 };
 
 export default LoginButton;
@@ -16,14 +22,19 @@ export default LoginButton;
 const Container = styled.button<ButtonProps>`
   cursor: pointer;
 
-  width: 360px;
-  height: 48px;
-  padding: ${({ theme }) => theme.space['2.5']} ${({ theme }) => theme.space['5']};
+  width: 44px;
+  height: 44px;
 
   font-size: ${({ theme }) => theme.fontSize.base};
-  font-weight: 600;
+  font-weight: 500;
 
   background-color: ${(props) => theme.color[props.$color]};
-  border: ${(props) => props.$border};
-  border-radius: 40px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: ${({ theme }) => theme.shadow[1]};
+`;
+
+const ButtonContent = styled.div`
+  display: flex;
+  justify-content: center;
 `;

@@ -1,70 +1,90 @@
-import { useQuery } from '@tanstack/react-query';
-import { PiHouseLight, PiUserCircleLight } from 'react-icons/pi';
-import { Link, useLocation } from 'react-router-dom';
+import { Suspense, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import client from '../client';
+import useUser from '../hooks/useUser';
+import Button from './Button';
+import LoginModal from './LoginModal';
+import Logo from './Logo';
 
 const Navbar = () => {
-  const { pathname } = useLocation();
+  const { data: user } = useUser();
+  const navigate = useNavigate();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  const { data: isLoggedIn } = useQuery<boolean>(['isLoggedIn'], {
-    enabled: false,
-    initialData: client.accessToken !== null,
-  });
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
+  const handleRankClick = () => {
+    navigate('/rank');
+  };
+
+  const handleProfileClick = () => {
+    navigate('/my-profile');
+  };
 
   return (
     <Container>
-      <IconContainer to="/" $isActive={pathname === '/'}>
-        <Icon as={PiHouseLight} />
-        <IconName>홈</IconName>
-      </IconContainer>
-      {isLoggedIn ? (
-        <IconContainer to="/my-profile" $isActive={pathname === '/my-profile'}>
-          <ProfileImage src="/images/profile-example.png" alt="Profile" />
-          <IconName>프로필</IconName>
-        </IconContainer>
-      ) : (
-        <IconContainer to="/login" $isActive={pathname === '/login'}>
-          <Icon as={PiUserCircleLight} />
-          <IconName>로그인</IconName>
-        </IconContainer>
-      )}
+      <LogoContainer>
+        <Logo onClick={handleLogoClick} fontSize="4xl" />
+      </LogoContainer>
+      <ButtonContainer>
+        <RankButtonContainer>
+          <Button $fullWidth $fullHeight $variant="secondary" onClick={handleRankClick}>
+            랭킹
+          </Button>
+        </RankButtonContainer>
+        <LoginAndProfileButtonContainer>
+          {user ? (
+            <Button $variant="outlined" $fullWidth $fullHeight onClick={handleProfileClick}>
+              프로필
+            </Button>
+          ) : (
+            <Button $fullWidth $fullHeight onClick={openLoginModal} aria-haspopup="dialog">
+              로그인
+            </Button>
+          )}
+        </LoginAndProfileButtonContainer>
+      </ButtonContainer>
+      <Suspense>{isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}</Suspense>
     </Container>
   );
 };
 
 export default Navbar;
 
-const IconName = styled.span`
-  font-size: small;
-`;
-
-const IconContainer = styled(Link)<{ $isActive: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-
-  color: ${({ $isActive, theme }) => ($isActive ? theme.color.primary : theme.color.gray)};
-  text-decoration: none;
-`;
-
 const Container = styled.nav`
   display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: space-between;
 
   width: 100%;
   height: 66px;
-
-  border-top: 1px solid ${({ theme }) => theme.color.line.secondary};
+  padding: 0 ${({ theme }) => theme.space[4]};
 `;
 
-const Icon = styled.div`
-  font-size: ${({ theme }) => theme.fontSize['4xl']};
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-const ProfileImage = styled.img`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+const LogoContainer = styled.div`
+  flex: 6;
+`;
+
+const RankButtonContainer = styled.div`
+  width: 44px;
+  margin-right: ${({ theme }) => theme.space[2]};
+`;
+
+const LoginAndProfileButtonContainer = styled.div`
+  width: 133px;
 `;

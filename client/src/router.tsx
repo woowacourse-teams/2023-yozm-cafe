@@ -1,12 +1,15 @@
 import { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Auth from './pages/Auth';
+import Cafe from './pages/Cafe';
 import Home from './pages/Home';
+import LikedCafeDetail from './pages/LikedCafeDetail';
 import Loading from './pages/Loading';
-import Login from './pages/Login';
 import MyProfile from './pages/MyProfile';
 import NotFound from './pages/NotFound';
+import Rank from './pages/Rank';
 import Root from './pages/Root';
+import TestAuthorizationCode from './pages/TestAuthorizationCode';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +19,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'my-profile', element: <MyProfile /> },
-      { path: 'login', element: <Login /> },
+      { path: '/cafes/:cafeId', element: <Cafe /> },
+      { path: 'rank', element: <Rank /> },
+      { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetail /> },
     ],
   },
   {
@@ -26,6 +31,10 @@ const router = createBrowserRouter([
         <Auth />
       </Suspense>
     ),
+  },
+  {
+    path: '/test',
+    children: [{ path: 'auth/:provider', element: <TestAuthorizationCode /> }],
   },
 ]);
 

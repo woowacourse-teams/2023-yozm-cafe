@@ -1,10 +1,12 @@
 const theme = {
   color: {
     primary: '#F08080',
-    secondary: '#FFD3D8',
+    secondary: '#f4a9a8',
+    tertiary: '#FFD3D8',
 
     yellow: '#F7E600',
     gray: '#787878',
+    black: '#000000',
     white: '#FFFFFF',
 
     error: '#F14646',
@@ -22,6 +24,7 @@ const theme = {
 
     background: {
       primary: '#f8f8f8',
+      secondary: 'rgba(0, 0, 0, 0.5);',
     },
   },
   fontSize: {

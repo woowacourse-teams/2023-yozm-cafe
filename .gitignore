@@ -4,6 +4,9 @@ server/build/
 !server/gradle/wrapper/gradle-wrapper.jar
 !server/src/main/**/build/
 !server/src/test/**/build/
+logs
+.logs
+server/.logs
 
 ### STS ###
 server/.apt_generated
@@ -36,3 +39,5 @@ server/.nb-gradle/
 
 ### VS Code ###
 server/.vscode/
+
+.env

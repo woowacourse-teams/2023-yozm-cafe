@@ -1,19 +1,24 @@
+import { useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { IMAGE_HOST } from '../environment';
+import useIntersection from '../hooks/useIntersection';
+import useLikedCafes from '../hooks/useLikedCafes';
 
 const LikedCafeList = () => {
-  // 가상의 카페 데이터 배열
-  const cafes = [
-    { id: 1, image: '/images/cafe-image-1.png' },
-    { id: 2, image: '/images/cafe-image-2.png' },
-    { id: 3, image: '/images/cafe-image-3.png' },
-    { id: 4, image: '/images/cafe-image-4.png' },
-    { id: 5, image: '/images/cafe-image-5.png' },
-    { id: 6, image: '/images/cafe-image-5.png' },
-    { id: 7, image: '/images/cafe-image-5.png' },
-    { id: 8, image: '/images/cafe-image-5.png' },
-    { id: 9, image: '/images/cafe-image-5.png' },
-    { id: 10, image: '/images/cafe-image-5.png' },
-  ];
+  const { likedCafes, fetchNextPage, isFetching, hasNextPage } = useLikedCafes();
+
+  const ref = useRef<HTMLDivElement>(null);
+  const intersection = useIntersection(ref, { threshold: 1 });
+
+  useMemo(() => {
+    const shouldFetch = hasNextPage && !isFetching && intersection?.isIntersecting;
+
+    if (shouldFetch) {
+      fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [intersection]);
 
   return (
     <Container>
@@ -22,10 +27,13 @@ const LikedCafeList = () => {
       </TitleContainer>
       <ScrollContainer>
         <GridContainer>
-          {cafes.map((cafe) => (
-            <CafeImage key={cafe.id} src={cafe.image} alt={`Cafe ${cafe.id}`} />
+          {likedCafes.map((cafe) => (
+            <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
+              <CafeImage key={cafe.cafeId} src={`${IMAGE_HOST}/100/${cafe.imageUrl}`} alt={`Cafe ${cafe.cafeId}`} />
+            </Link>
           ))}
         </GridContainer>
+        <SensorContainer ref={ref} />
       </ScrollContainer>
     </Container>
   );
@@ -54,21 +62,17 @@ const TitleContainer = styled.article`
 const ScrollContainer = styled.div`
   overflow-y: scroll;
   flex: 1;
-
-  &::-webkit-scrollbar {
-    width: 0; /* 스크롤 바 너비 설정 */
-  }
 `;
 
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 열 */
-  gap: ${({ theme }) => theme.space['3']};
+  gap: ${({ theme }) => theme.space['0.5']};
   margin-bottom: ${({ theme }) => theme.space['10']};
 `;
 
 const CafeImage = styled.img`
-  width: 145px;
-  height: 200px;
-  border-radius: 20px;
+  aspect-ratio: 1 / 1;
 `;
+
+const SensorContainer = styled.div``;

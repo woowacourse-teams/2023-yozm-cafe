@@ -1,10 +1,55 @@
 version: "3"
 services:
-  web:
+  client:
     image: nginx
-    restart: always
+    restart: unless-stopped
     ports:
       - 80:80
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ~/public:/usr/share/nginx/html
+
+  server:
+    build:
+      context: ../server
+      dockerfile: ../server/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/yozm-cafe?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_AUTH_KEY: ${AUTH_KEY?"AUTH_KEY should not empty"}
+
+      SPRING_AUTH_GOOGLE_TOKENURI: https://www.googleapis.com/oauth2/v4/token
+      SPRING_AUTH_GOOGLE_AUTHURI: https://accounts.google.com/o/oauth2/v2/auth
+      SPRING_AUTH_GOOGLE_REDIRECTURI: http://localhost:3000/auth/google
+      SPRING_AUTH_GOOGLE_SCOPE: https%3A//www.googleapis.com/auth/userinfo.profile
+      SPRING_AUTH_GOOGLE_CLIENTID: ${AUTH_GOOGLE_CLIENTID?"AUTH_GOOGLE_CLIENTID should not empty"}
+      SPRING_AUTH_GOOGLE_CLIENTSECRET: ${AUTH_GOOGLE_CLIENTSECRET?"AUTH_GOOGLE_CLIENTSECRET should not empty"}
+
+      SPRING_AUTH_KAKAO_TOKENURI: https://kauth.kakao.com/oauth/token
+      SPRING_AUTH_KAKAO_AUTHURI: https://kauth.kakao.com/oauth/authorize
+      SPRING_AUTH_KAKAO_REDIRECTURI: http://localhost:3000/auth/kakao
+      SPRING_AUTH_KAKAO_SCOPE: openid,profile_nickname,profile_image
+      SPRING_AUTH_KAKAO_CLIENTID: ${AUTH_KAKAO_CLIENTID?"AUTH_KAKAO_CLIENTID should not empty"}
+      SPRING_AUTH_KAKAO_CLIENTSECRET: ${AUTH_KAKAO_CLIENTSECRET?"AUTH_KAKAO_CLIENTSECRET should not empty"}
+
+  mysql:
+    image: library/mysql:8.0.33
+    restart: unless-stopped
+    ports:
+      - 20000:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: yozm-cafe
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: Asia/Seoul
+    command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_general_ci"]
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
 import Navbar from '../components/Navbar';
@@ -5,10 +6,12 @@ import Navbar from '../components/Navbar';
 const Root = () => {
   return (
     <>
-      <PageContent>
-        <Outlet />
-      </PageContent>
       <Navbar />
+      <PageContent>
+        <Suspense>
+          <Outlet />
+        </Suspense>
+      </PageContent>
     </>
   );
 };

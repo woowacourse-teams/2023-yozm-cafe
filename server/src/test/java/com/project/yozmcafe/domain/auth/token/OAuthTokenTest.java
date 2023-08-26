@@ -1,11 +1,15 @@
 package com.project.yozmcafe.domain.auth.token;
 
-import com.project.yozmcafe.controller.auth.MemberInfo;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_OAUTH_USER_INFO;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.exception.OAuthException;
 
 class OAuthTokenTest {
 
@@ -25,5 +29,20 @@ class OAuthTokenTest {
                 () -> assertThat(memberInfo.openId()).isEqualTo("oceanId"),
                 () -> assertThat(memberInfo.image()).isEqualTo("oceanPicture")
         );
+    }
+
+    @Test
+    @DisplayName("Provider로 부터 받은 토큰의 payload에 subject, name, image 중 하나라도 존재하지 않으면 예외가 발생한다.")
+    void parseFail() {
+        //given
+        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaW1hZ2UiOiJpbWFnZSIsImlhdCI6MTUxNjIzOTAyMn0.SlwtSp0oOJpBToHUNul58kOEhbU7EfcFN3hESoo-DU4";
+        final GoogleToken googleToken = new GoogleToken(token);
+
+        //when & then
+        assertThatThrownBy(googleToken::toUserInfo)
+                .isInstanceOf(OAuthException.class)
+                .hasMessage(INVALID_OAUTH_USER_INFO.getMessage());
+
+
     }
 }

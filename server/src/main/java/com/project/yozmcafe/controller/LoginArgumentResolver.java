@@ -1,8 +1,8 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_TOKEN;
+import static com.project.yozmcafe.exception.ErrorCode.TOKEN_NOT_EXIST;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -10,7 +10,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.naming.AuthenticationException;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.TokenException;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
 
 @Component
 public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
@@ -32,18 +35,19 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
+                                  final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         final String token = parseTokenFrom(webRequest);
 
         jwtTokenProvider.validate(token);
         return memberRepository.findById(jwtTokenProvider.getMemberId(token))
-                .orElseThrow(() -> new AuthenticationException("유효하지 않은 토큰입니다."));
+                .orElseThrow(() -> new TokenException(INVALID_TOKEN));
     }
 
-    private String parseTokenFrom(final NativeWebRequest webRequest) throws AuthenticationException {
+    private String parseTokenFrom(final NativeWebRequest webRequest) {
         String value = webRequest.getHeader(AUTHORIZATION);
         if (value == null) {
-            throw new AuthenticationException("유효한 사용자만 접근 가능합니다.");
+            throw new TokenException(TOKEN_NOT_EXIST);
         }
 
         return value.replace(BEARER, "");

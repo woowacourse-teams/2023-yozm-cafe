@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { Navigate, json, useParams, useSearchParams } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import { AuthProvider } from '../types';
+import type { AuthProvider } from '../types';
 
 const isAuthProvider = (provider: string | undefined): provider is AuthProvider => {
   return (['kakao', 'google'] satisfies AuthProvider[]).some((it) => it === provider);
@@ -29,7 +30,13 @@ const Auth = () => {
     );
   }
 
-  useAuth({ provider, code });
+  const { identity, issueAccessToken } = useAuth();
+
+  useEffect(() => {
+    issueAccessToken({ provider, code });
+  }, []);
+
+  if (!identity) return <></>;
 
   return <Navigate to="/" />;
 };

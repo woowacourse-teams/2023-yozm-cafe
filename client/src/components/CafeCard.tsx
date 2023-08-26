@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
+import { IMAGE_HOST } from '../environment';
 import useIntersection from '../hooks/useIntersection';
-import { Cafe } from '../types';
+import type { Cafe } from '../types';
 import CafeActionBar from './CafeActionBar';
-import CafeInfoModal from './CafeInfoModal';
+import CafeDetailBottomSheet from './CafeDetailBottomSheet';
+import CafeSummary from './CafeSummary';
 
 type CardProps = {
   cafe: Cafe;
@@ -13,23 +15,63 @@ type CardProps = {
 const CafeCard = (props: CardProps) => {
   const { cafe, onIntersect } = props;
 
-  const ref = useRef<HTMLImageElement>(null);
+  const [isShowDetail, setIsShowDetail] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const ref = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(ref, { threshold: 0.7 });
 
   useEffect(() => {
     if (intersection) {
       onIntersect?.(intersection);
     }
-  }, [intersection?.isIntersecting, onIntersect]);
+  }, [intersection?.isIntersecting]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        const { scrollLeft, clientWidth } = ref.current;
+        const index = Math.round(scrollLeft / clientWidth);
+        setCurrentImageIndex(index);
+      }
+    };
+
+    ref.current?.addEventListener('scroll', handleScroll);
+    return () => {
+      ref.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <Container>
-      <Image ref={ref} src={cafe.images.urls[0]} />
+      <CardQuantityContainer>
+        <CardQuantityContents>
+          {`${currentImageIndex + 1}`}/{cafe.images.length}
+        </CardQuantityContents>
+      </CardQuantityContainer>
+      <CarouselImageList ref={ref}>
+        {cafe.images.map((image, index) => (
+          <CarouselImage key={index} src={`${IMAGE_HOST}/500/${image}`} alt={`${cafe}의 이미지`} />
+        ))}
+      </CarouselImageList>
+      <DotsContainer>
+        {cafe.images.map((_, index) => (
+          <Dot key={index} $active={index === currentImageIndex} />
+        ))}
+      </DotsContainer>
       <AsidePosition>
         <Aside>
-          <CafeInfoModal title={cafe.name} address={cafe.address} content={cafe.detail.description} />
-          <CafeActionBar />
+          <CafeSummary
+            title={cafe.name}
+            address={cafe.address}
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsShowDetail(true);
+            }}
+          />
+          <CafeActionBar cafe={cafe} />
         </Aside>
+        {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
       </AsidePosition>
     </Container>
   );
@@ -39,14 +81,78 @@ export default CafeCard;
 
 const Container = styled.div`
   position: relative;
+
   overflow: hidden;
+
+  height: 100%;
+
+  color: ${({ theme }) => theme.color.white};
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+
+  & svg {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
+  }
+`;
+
+const CarouselImageList = styled.div`
+  scroll-snap-type: x mandatory;
+
+  overflow-x: auto;
+  display: flex;
+
+  width: 100%;
   height: 100%;
 `;
 
-const Image = styled.img`
-  width: 100%;
+const CarouselImage = styled.img`
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  flex: 0 0 100%;
+
+  min-width: 100%;
   height: 100%;
+
   object-fit: cover;
+`;
+
+const DotsContainer = styled.div`
+  position: absolute;
+  bottom: ${({ theme }) => theme.space[5]};
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: ${({ theme }) => theme.space[2]};
+`;
+
+const Dot = styled.div<{ $active: boolean }>`
+  cursor: pointer;
+
+  width: 8px;
+  height: 8px;
+
+  background-color: ${({ $active, theme }) => ($active ? theme.color.white : theme.color.gray)};
+  border-radius: 50%;
+`;
+
+const CardQuantityContainer = styled.div`
+  position: absolute;
+
+  display: flex;
+  justify-content: flex-end;
+
+  width: 100%;
+  padding: ${({ theme }) => theme.space['2.5']} ${({ theme }) => theme.space['2.5']} 0 0;
+
+  text-shadow: none;
+`;
+
+const CardQuantityContents = styled.div`
+  padding: ${({ theme }) => theme.space[1]} ${({ theme }) => theme.space[2]};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  background-color: ${({ theme }) => theme.color.background.secondary};
+  border-radius: 10px;
 `;
 
 const AsidePosition = styled.div`
@@ -57,10 +163,7 @@ const AsidePosition = styled.div`
 
 const Aside = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column-reverse;
-  gap: 40px;
-
-  margin: 20px;
+  padding-bottom: ${({ theme }) => theme.space[10]};
 `;

@@ -1,14 +1,17 @@
-import { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'default' | 'outlined' | 'disabled';
-  fullWidth?: boolean;
+  $variant?: 'default' | 'outlined' | 'secondary';
+  $fullWidth?: boolean;
+  $fullHeight?: boolean;
 };
 
-const Button = ({ children, variant = 'default', fullWidth = false, ...rest }: ButtonProps) => {
+const Button = (props: ButtonProps) => {
+  const { children, $variant = 'default', $fullWidth = false, $fullHeight = false, ...rest } = props;
+
   return (
-    <Container variant={variant} fullWidth={fullWidth} {...rest}>
+    <Container $variant={$variant} $fullWidth={$fullWidth} $fullHeight={$fullHeight} {...rest}>
       {children}
     </Container>
   );
@@ -17,9 +20,9 @@ const Button = ({ children, variant = 'default', fullWidth = false, ...rest }: B
 export default Button;
 
 const ButtonVariants = {
-  disabled: css`
+  secondary: css`
     color: ${(props) => props.theme.color.white};
-    background-color: ${(props) => props.theme.color.gray};
+    background-color: ${(props) => props.theme.color.secondary};
     border: none;
   `,
   outlined: css`
@@ -43,6 +46,7 @@ const Container = styled.button<ButtonProps>`
   font-weight: 500;
 
   border-radius: 40px;
-  ${(props) => ButtonVariants[props.variant || 'default']}
-  ${(props) => props.fullWidth && 'width: 100%;'}
+  ${(props) => ButtonVariants[props.$variant || 'default']}
+  ${(props) => props.$fullWidth && 'width: 100%;'}
+  ${(props) => props.$fullHeight && 'height: 100%;'}
 `;

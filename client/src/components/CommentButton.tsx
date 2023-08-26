@@ -9,6 +9,7 @@ const CommentButton = () => {
   return (
     <Container>
       <Button onClick={handleClick} />
+      <Text>댓글</Text>
     </Container>
   );
 };
@@ -24,4 +25,8 @@ const Container = styled.aside`
 const Button = styled(PiChatFill)`
   cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['5xl']};
+`;
+
+const Text = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.sm};
 `;

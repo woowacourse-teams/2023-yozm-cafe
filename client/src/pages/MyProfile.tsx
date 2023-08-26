@@ -1,23 +1,32 @@
+import { Navigate, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import LikedCafeList from '../components/LikedCafeList';
-import Logo from '../components/Logo';
 import ProfileInfo from '../components/ProfileInfo';
+import useAuth from '../hooks/useAuth';
+import useUser from '../hooks/useUser';
 
 const MyProfile = () => {
+  const navigate = useNavigate();
+  const { data: user } = useUser();
+  const { clearAuthorization } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/" />;
+  }
+
+  const handleLogout = async () => {
+    await clearAuthorization();
+    navigate('/');
+  };
+
   return (
     <Container>
-      <Logo fontSize="2xl" />
-      <ProfileInfo userImage="/images/profile-example.png" userName="김고니" />
+      <ProfileInfo userImage={user.imageUrl} userName={user.name} />
       <ButtonContainer>
-        <EditButtonContainer>
-          <Button fullWidth>프로필 수정하기</Button>
-        </EditButtonContainer>
-        <LogOutButton>
-          <Button variant="outlined" fullWidth>
-            로그아웃
-          </Button>
-        </LogOutButton>
+        <Button $variant="default" $fullWidth onClick={handleLogout}>
+          로그아웃
+        </Button>
       </ButtonContainer>
       <LikedCafeListContainer>
         <LikedCafeList />
@@ -35,16 +44,12 @@ const Container = styled.section`
 
 const ButtonContainer = styled.article`
   display: flex;
+  justify-content: center;
   margin: ${({ theme }) => theme.space['3']} 0;
-`;
 
-const EditButtonContainer = styled.div`
-  flex: 6;
-  margin-right: ${({ theme }) => theme.space['2.5']};
-`;
-
-const LogOutButton = styled.div`
-  flex: 4;
+  & > * {
+    width: 120px;
+  }
 `;
 
 const LikedCafeListContainer = styled.div`
