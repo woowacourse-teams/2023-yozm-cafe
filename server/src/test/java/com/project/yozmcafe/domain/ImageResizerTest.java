@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ImageResizerTest {
@@ -52,10 +50,10 @@ class ImageResizerTest {
         }
 
         @Test
-        @DisplayName("이미지가 사이즈가 5MB가 넘으면 예외가 발생한다")
+        @DisplayName("이미지가 사이즈가 10MB가 넘으면 예외가 발생한다")
         void construct_fail3() {
             //given
-            final TestMultipartFile multipartFile = TestMultipartFile.getWithSize(1024 * 1024 * 5 + 1);
+            final TestMultipartFile multipartFile = TestMultipartFile.getWithSize(1024 * 1024 * 10 + 1);
 
             //when, then
             assertThatThrownBy(() -> new ImageResizer(multipartFile, "fileName.png"))
@@ -77,21 +75,6 @@ class ImageResizerTest {
     }
 
     @Test
-    @DisplayName("원본 사이즈의 이미지를 리턴한다")
-    void getOriginalImage() throws Exception {
-        //given
-        final MultipartFile image = makeMultipartFile();
-        final int expectedWidth = ImageIO.read(image.getInputStream()).getWidth();
-
-        //when
-        final MultipartFile originalImage = new ImageResizer(image, "").getOriginalImage();
-
-        //then
-        final int width = ImageIO.read(originalImage.getInputStream()).getWidth();
-        assertThat(width).isEqualTo(expectedWidth);
-    }
-
-    @Test
     @DisplayName("리사이즈된 이미지들을 리턴한다")
     void getResizedImages() throws Exception {
         //given
@@ -99,19 +82,16 @@ class ImageResizerTest {
         final ImageResizer imageResizer = new ImageResizer(image, "fileName.png");
 
         //when
-        final List<MultipartFile> results = imageResizer.getResizedImages(Size.getAllSizesExceptOriginal());
+        final List<MultipartFile> results = imageResizer.getResizedImages(List.of(Size.values()));
         final List<String> fileNameWithPathResult = results.stream()
                 .map(MultipartFile::getOriginalFilename)
                 .toList();
 
         //then
-        assertSoftly(softAssertions -> {
-            assertThat(results).hasSize(Size.values().length - 1);
-            assertThat(fileNameWithPathResult).containsExactlyInAnyOrder(
-                    "100/fileName.png",
-                    "500/fileName.png"
-            );
-        });
+        assertThat(fileNameWithPathResult).containsExactlyInAnyOrder(
+                "100/fileName.png",
+                "500/fileName.png"
+        );
     }
 
     private MultipartFile makeMultipartFile() throws IOException {

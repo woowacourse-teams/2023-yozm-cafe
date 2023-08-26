@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { IMAGE_HOST } from '../environment';
 import useIntersection from '../hooks/useIntersection';
 import type { Cafe } from '../types';
+import Image from '../utils/Image';
 import CafeActionBar from './CafeActionBar';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
 import CafeSummary from './CafeSummary';
@@ -51,7 +51,7 @@ const CafeCard = (props: CardProps) => {
       </CardQuantityContainer>
       <CarouselImageList ref={ref}>
         {cafe.images.map((image, index) => (
-          <CarouselImage key={index} src={`${IMAGE_HOST}/500/${image}`} alt={`${cafe}의 이미지`} />
+          <CarouselImage key={index} src={Image.getUrl({ size: '500', filename: image })} alt={`${cafe}의 이미지`} />
         ))}
       </CarouselImageList>
       <DotsContainer>
@@ -59,20 +59,16 @@ const CafeCard = (props: CardProps) => {
           <Dot key={index} $active={index === currentImageIndex} />
         ))}
       </DotsContainer>
-      <AsidePosition>
-        <Aside>
-          <CafeSummary
-            title={cafe.name}
-            address={cafe.address}
-            onClick={(event) => {
-              event.stopPropagation();
-              setIsShowDetail(true);
-            }}
-          />
-          <CafeActionBar cafe={cafe} />
-        </Aside>
-        {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
-      </AsidePosition>
+      <CafeSummary
+        title={cafe.name}
+        address={cafe.address}
+        onClick={(event) => {
+          event.stopPropagation();
+          setIsShowDetail(true);
+        }}
+      />
+      <CafeActionBar cafe={cafe} />
+      {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
     </Container>
   );
 };
@@ -153,17 +149,4 @@ const CardQuantityContents = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xs};
   background-color: ${({ theme }) => theme.color.background.secondary};
   border-radius: 10px;
-`;
-
-const AsidePosition = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-`;
-
-const Aside = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column-reverse;
-  padding-bottom: ${({ theme }) => theme.space[10]};
 `;

@@ -1,9 +1,9 @@
 import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { IMAGE_HOST } from '../environment';
 import useIntersection from '../hooks/useIntersection';
 import useLikedCafes from '../hooks/useLikedCafes';
+import Image from '../utils/Image';
 
 const LikedCafeList = () => {
   const { likedCafes, fetchNextPage, isFetching, hasNextPage } = useLikedCafes();
@@ -29,7 +29,11 @@ const LikedCafeList = () => {
         <GridContainer>
           {likedCafes.map((cafe) => (
             <Link to={`/my-profile/cafes/${cafe.cafeId}`} key={cafe.cafeId}>
-              <CafeImage key={cafe.cafeId} src={`${IMAGE_HOST}/100/${cafe.imageUrl}`} alt={`Cafe ${cafe.cafeId}`} />
+              <CafeImage
+                key={cafe.cafeId}
+                src={Image.getUrl({ size: '500', filename: cafe.imageUrl })}
+                alt={`Cafe ${cafe.cafeId}`}
+              />
             </Link>
           ))}
         </GridContainer>
@@ -66,13 +70,15 @@ const ScrollContainer = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 열 */
+  grid-template-columns: repeat(3, 1fr);
   gap: ${({ theme }) => theme.space['0.5']};
   margin-bottom: ${({ theme }) => theme.space['10']};
 `;
 
 const CafeImage = styled.img`
   aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
 `;
 
 const SensorContainer = styled.div``;

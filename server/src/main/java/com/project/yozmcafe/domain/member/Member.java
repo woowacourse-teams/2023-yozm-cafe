@@ -54,13 +54,6 @@ public class Member {
         unViewedCafes.addAll(allUnViewedCafes);
     }
 
-    public void removeUnViewedCafe(final long cafeId) {
-        unViewedCafes.stream()
-                .filter(unViewedCafe -> unViewedCafe.equalsCafeId(cafeId))
-                .findFirst()
-                .ifPresent(unViewedCafes::remove);
-    }
-
     public boolean isUnViewedCafesSizeUnder(final int sizeExclusive) {
         return unViewedCafes.size() < sizeExclusive;
     }

@@ -1,11 +1,9 @@
 package com.project.yozmcafe.domain.resizedimage;
 
-import static com.project.yozmcafe.domain.resizedimage.Size.ORIGINAL;
-import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
-import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
+import com.project.yozmcafe.exception.BadRequestException;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -13,15 +11,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import org.springframework.web.multipart.MultipartFile;
-
-import com.project.yozmcafe.exception.BadRequestException;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 
 public class ImageResizer {
 
-    public static final int MAX_IMAGE_SIZE = 1024 * 1024 * 5;
+    public static final int MAX_IMAGE_SIZE = 1024 * 1024 * 10;
     private static final String CONTENT_TYPE_DELIMITER = "/";
     private static final String IMAGE_FORMAT_PREFIX = "image/";
     private static final int FORMAT_INDEX = 1;
@@ -49,31 +46,13 @@ public class ImageResizer {
         return !requireNonNull(contentType).startsWith(IMAGE_FORMAT_PREFIX);
     }
 
-    public MultipartFile getOriginalImage() {
-        final byte[] bytes = toByteArray(getBufferedImage());
-
-        return toMultipartFile(bytes, ORIGINAL);
-    }
-
-    private BufferedImage getBufferedImage() {
-        try {
-            return ImageIO.read(image.getInputStream());
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private ResizedImage toMultipartFile(final byte[] bytes, final Size imageSize) {
-        return ResizedImage.of(bytes, image.getContentType(), fileName, imageSize.getFileNameWithPath(fileName));
-    }
-
     public List<MultipartFile> getResizedImages(final List<Size> sizes) {
         return sizes.stream()
                 .map(this::getResizedImage)
                 .toList();
     }
 
-    private MultipartFile getResizedImage(final Size size) {
+    public MultipartFile getResizedImage(final Size size) {
         final BufferedImage bufferedImage = getBufferedImage();
 
         final int width = size.getWidth();
@@ -82,6 +61,14 @@ public class ImageResizer {
 
         final byte[] bytes = toByteArray(scaledImage);
         return toMultipartFile(bytes, size);
+    }
+
+    private BufferedImage getBufferedImage() {
+        try {
+            return ImageIO.read(image.getInputStream());
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private int getResizedHeight(final int resizedWidth, final BufferedImage bufferedImage) {
@@ -108,6 +95,10 @@ public class ImageResizer {
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private ResizedImage toMultipartFile(final byte[] bytes, final Size imageSize) {
+        return ResizedImage.of(bytes, image.getContentType(), fileName, imageSize.getFileNameWithPath(fileName));
     }
 
     private String getFormat() {
