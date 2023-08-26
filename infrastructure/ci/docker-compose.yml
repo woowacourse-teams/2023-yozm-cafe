@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   teamcity:
-    image: jetbrains/teamcity-server:2023.05.2-linux
+    image: jetbrains/teamcity-server:2023.05.3-linux
     restart: unless-stopped
     user: root:root
     ports:
@@ -12,30 +12,45 @@ services:
       - ./logs:/opt/teamcity/logs
 
   agent-1:
-    image: jetbrains/teamcity-agent:2023.05.2-linux-sudo
+    image: jetbrains/teamcity-agent:2023.05.3-linux-sudo
     restart: unless-stopped
     privileged: true
     user: root:root
+    volumes:
+      # Preserve checked out sources
+      - /opt/buildagent/work:/opt/buildagent/work
+      # Keep internal build agent caches
+      - /opt/buildagent/system:/opt/buildagent/system
     environment:
       - SERVER_URL=http://teamcity:8111
       - AGENT_NAME=Agent 1
       - DOCKER_IN_DOCKER=start
 
   agent-2:
-    image: jetbrains/teamcity-agent:2023.05.2-linux-sudo
+    image: jetbrains/teamcity-agent:2023.05.3-linux-sudo
     restart: unless-stopped
     privileged: true
     user: root:root
+    volumes:
+      # Preserve checked out sources
+      - /opt/buildagent/work:/opt/buildagent/work
+      # Keep internal build agent caches
+      - /opt/buildagent/system:/opt/buildagent/system
     environment:
       - SERVER_URL=http://teamcity:8111
       - AGENT_NAME=Agent 2
       - DOCKER_IN_DOCKER=start
 
   agent-3:
-    image: jetbrains/teamcity-agent:2023.05.2-linux-sudo
+    image: jetbrains/teamcity-agent:2023.05.3-linux-sudo
     restart: unless-stopped
     privileged: true
     user: root:root
+    volumes:
+      # Preserve checked out sources
+      - /opt/buildagent/work:/opt/buildagent/work
+      # Keep internal build agent caches
+      - /opt/buildagent/system:/opt/buildagent/system
     environment:
       - SERVER_URL=http://teamcity:8111
       - AGENT_NAME=Agent 3
