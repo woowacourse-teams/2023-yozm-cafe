@@ -52,6 +52,18 @@ services:
     volumes:
       - teamcity-db-data:/var/lib/postgresql/data
 
+  webhook-broker:
+    image: denoland/deno
+    restart: unless-stopped
+    volumes:
+      - ./webhook-broker:/app
+    command: run --allow-net --allow-read --allow-env /app/app.js
+    environment:
+      - SLACK_CHANNEL=${SLACK_CHANNEL:?'SLACK_CHANNEL required'}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:?'SLACK_WEBHOOK_URL required'}
+      - SLACK_USERNAME=TeamCity
+      - 'SLACK_ICON_EMOJI=:teamcity:'
+
 volumes:
   teamcity-data:
   teamcity-db-data:

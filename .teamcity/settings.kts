@@ -24,6 +24,9 @@ val deployTargetDevHost = DslContext.getParameter("deploy_target.dev.host")
 val deployTargetDevPort = DslContext.getParameter("deploy_target.dev.port")
 val deployTargetDevUsername = DslContext.getParameter("deploy_target.dev.username")
 
+// 빌드 알림을 받을 Webhook URL을 설정합니다
+val webhookUrl = DslContext.getParameter("webhook.url")
+
 project {
     description = "yozm.cafe 프로젝트의 CI/CD 파이프라인 스크립트입니다"
 
@@ -51,6 +54,13 @@ project {
     buildType(ServerBuildType("dev", gitHubDev, deployTargetDevHost, deployTargetDevPort, deployTargetDevUsername))
     buildType(ClientBuildType("prod", gitHubProd, deployTargetProdHost, deployTargetProdPort, deployTargetProdUsername))
     buildType(ClientBuildType("dev", gitHubDev, deployTargetDevHost, deployTargetDevPort, deployTargetDevUsername))
+
+    // 웹훅 설정을 추가합니다
+    params {
+        param("teamcity.internal.webhooks.enable", "true")
+        param("teamcity.internal.webhooks.events", "BUILD_STARTED;BUILD_FINISHED;BUILD_INTERRUPTED")
+        param("teamcity.internal.webhooks.url", webhookUrl)
+    }
 }
 
 open class ServerBuildType(
