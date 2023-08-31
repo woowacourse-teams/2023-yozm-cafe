@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  web:
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - letsencrypt:/etc/letsencrypt:ro
+      - /home/ubuntu/public:/usr/share/nginx/html:ro
+    environment:
+      - DOMAIN=${DOMAIN?:'DOMAIN required'}
+
+  certbot:
+    image: certbot/certbot
+    ports:
+      - 80:80
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+    command:
+      - certonly
+      - --standalone
+      - -d ${DOMAIN:?'DOMAIN required'}
+      - -m ${EMAIL:?'EMAIL required'}
+      - --preferred-challenges=http
+      - --agree-tos
+      - --verbose
+
+  mysql:
+    image: library/mysql:8.0.33
+    restart: unless-stopped
+    ports:
+      - 20000:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    environment:
+      - MYSQL_DATABASE=yozm-cafe
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?'MYSQL_ROOT_PASSWORD required'}
+      - MYSQL_USER=${MYSQL_USER:?'MYSQL_USER required'}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:?'MYSQL_PASSWORD required'}
+      - TZ=Asia/Seoul
+
+volumes:
+  letsencrypt:
+  db-data:
