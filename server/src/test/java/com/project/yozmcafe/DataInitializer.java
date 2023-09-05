@@ -22,6 +22,7 @@ public class DataInitializer {
     private static final int OFF = 0;
     private static final int ON = 1;
     private static final int FIRST_COLUMN = 1;
+    private static final String FLYWAY = "flyway";
 
     @Autowired
     private DataSource dataSource;
@@ -57,7 +58,12 @@ public class DataInitializer {
             final ResultSet resultSet = statement.executeQuery("SHOW TABLES ");
 
             while (resultSet.next()) {
-                deleteDMLs.add("TRUNCATE " + resultSet.getString(FIRST_COLUMN));
+                final String tableName = resultSet.getString(FIRST_COLUMN);
+                if (tableName.contains(FLYWAY)) {
+                    continue;
+                }
+
+                deleteDMLs.add("TRUNCATE " + tableName);
             }
         } catch (Exception e) {
             e.printStackTrace();
