@@ -1,113 +1,85 @@
-create table cafe
+create table if not exists `yozm-cafe`.cafe
 (
-    like_count  integer      not null,
-    id          bigint       not null auto_increment,
-    address     varchar(255) not null,
-    description text,
-    map_url     varchar(255) not null,
-    name        varchar(255) not null,
-    phone       varchar(255),
-    primary key (id)
-) engine = InnoDB;
+    like_count  int default 0 not null,
+    id          bigint auto_increment primary key,
+    address     varchar(50)   not null,
+    description text          null,
+    map_url     varchar(512)  not null,
+    name        varchar(20)   not null,
+    phone       varchar(20)   null
+);
 
-create table cafe_available_times
+create table if not exists `yozm-cafe`.cafe_available_times
 (
-    close     time(6),
-    is_opened bit                                                                           not null,
-    open      time(6),
-    cafe_id   bigint                                                                        not null,
-    day       enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY') not null
-) engine = InnoDB;
+    is_opened bit                                                                                 not null,
+    cafe_id   bigint                                                                              not null,
+    close     time(6)                                                                             null,
+    open      time(6)                                                                             null,
+    day       enum ('FRIDAY', 'MONDAY', 'SATURDAY', 'SUNDAY', 'THURSDAY', 'TUESDAY', 'WEDNESDAY') not null,
+    constraint cafe_available_times_CAFE_ID
+        foreign key (cafe_id) references cafe (id)
+);
 
-create table image
+create table if not exists `yozm-cafe`.image
 (
-    cafe_id bigint not null,
-    urls    varchar(255)
-) engine = InnoDB;
+    cafe_id bigint       not null,
+    urls    varchar(512) null,
+    constraint image_CAFE_ID
+        foreign key (cafe_id) references cafe (id)
+);
 
-create table liked_cafe
+create table if not exists `yozm-cafe`.member
 (
-    cafe_id    bigint       not null,
-    created_at datetime(6)  not null,
-    id         bigint       not null auto_increment,
-    member_id  varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
+    id    varchar(30)  not null primary key,
+    image varchar(512) not null,
+    name  varchar(30)  not null
+);
 
-create table member
+create table if not exists `yozm-cafe`.liked_cafe
 (
-    id    varchar(255) not null,
-    image varchar(255) not null,
-    name  varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
+    id        bigint auto_increment primary key,
+    cafe_id   bigint      not null,
+    member_id varchar(30) not null,
+    created_at datetime(6) not null,
+    constraint liked_cafe_MEMBER_ID
+        foreign key (member_id) references member (id),
+    constraint liked_cafe_CAFE_ID
+        foreign key (cafe_id) references cafe (id)
+);
 
-create table menu
+create table if not exists `yozm-cafe`.un_viewed_cafe
 (
-    is_recommended bit          not null,
-    priority       integer      not null,
-    cafe_id        bigint,
-    id             bigint       not null auto_increment,
-    description    varchar(255),
-    image_url      varchar(255),
-    name           varchar(255) not null,
-    price          varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
+    id        bigint auto_increment primary key,
+    cafe_id   bigint      not null,
+    member_id varchar(30) not null,
+    constraint un_viewed_cafe_CAFE_ID
+        foreign key (cafe_id) references cafe (id),
+    constraint un_viewed_cafe_MEMBER_ID
+        foreign key (member_id) references member (id)
+);
 
-create table menu_board
-(
-    priority  integer      not null,
-    cafe_id   bigint,
-    id        bigint       not null auto_increment,
-    image_url varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
+create table if not exists `yozm-cafe`.menu (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    cafe_id BIGINT NOT NULL,
+    priority INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(512),
+    description VARCHAR(255),
+    price VARCHAR(255) NOT NULL,
+    is_recommended bit NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT menu_cafe_id
+        foreign key (cafe_id) references cafe (id)
+            ON DELETE CASCADE
+);
 
-create table un_viewed_cafe
-(
-    cafe_id   bigint       not null,
-    id        bigint       not null auto_increment,
-    member_id varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
-
-alter table cafe_available_times
-    add constraint FK1eebpj2bed3mal340d8nou5xi
-        foreign key (cafe_id)
-            references cafe (id);
-
-alter table image
-    add constraint FKkthb3su6c118fakq82y94jjjr
-        foreign key (cafe_id)
-            references cafe (id);
-
-alter table liked_cafe
-    add constraint FKfncygvj9jkg45uh27u8pkc52s
-        foreign key (cafe_id)
-            references cafe (id);
-
-alter table liked_cafe
-    add constraint FK9dt8t5y60j1st5u92796ok6bi
-        foreign key (member_id)
-            references member (id);
-
-alter table menu
-    add constraint FKjjv0yqktkrnpmwrn9blohdt8f
-        foreign key (cafe_id)
-            references cafe (id);
-
-alter table menu_board
-    add constraint FK405r7r8rox1bg3uedcglecghd
-        foreign key (cafe_id)
-            references cafe (id);
-
-alter table un_viewed_cafe
-    add constraint FK3uxrbq5jgdug89g997qrhkjfx
-        foreign key (cafe_id)
-            references cafe (id);
-
-alter table un_viewed_cafe
-    add constraint FK6uiso4q9dkagnkqbpeyc3s200
-        foreign key (member_id)
-            references member (id)
+create table if not exists `yozm-cafe`.menu_board (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    cafe_id BIGINT NOT NULL,
+    priority INT NOT NULL,
+    image_url VARCHAR(512) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT menu_board_cafe_id
+        foreign key (cafe_id) references cafe (id)
+            ON DELETE CASCADE
+);
