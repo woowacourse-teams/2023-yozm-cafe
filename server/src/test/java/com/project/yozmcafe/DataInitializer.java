@@ -4,8 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class DataInitializer implements InitializingBean {
+@Profile("test")
+public class DataInitializer {
 
     private static final int OFF = 0;
     private static final int ON = 1;
@@ -27,11 +28,15 @@ public class DataInitializer implements InitializingBean {
     @PersistenceContext
     private EntityManager em;
 
-    private static final List<String> deleteDMLs = new ArrayList<>();
+    private final List<String> deleteDMLs = new ArrayList<>();
 
     @BeforeEach
     @Transactional
     public void deleteAll() {
+        if (deleteDMLs.isEmpty()) {
+            init();
+        }
+
         setForeignKeyEnabled(OFF);
         truncateAllTables();
         setForeignKeyEnabled(ON);
@@ -47,8 +52,7 @@ public class DataInitializer implements InitializingBean {
                 .forEach(Query::executeUpdate);
     }
 
-    @Override
-    public void afterPropertiesSet() {
+    private void init() {
         try (final Statement statement = dataSource.getConnection().createStatement()) {
             final ResultSet resultSet = statement.executeQuery("SHOW TABLES ");
 
