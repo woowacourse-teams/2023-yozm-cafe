@@ -1,4 +1,4 @@
-package com.project.yozmcafe.controller;
+package com.project.yozmcafe.controller.filter;
 
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
@@ -8,25 +8,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Objects;
 
-@Component
-public class LoggingFilter extends OncePerRequestFilter {
+public class UriLoggingFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String KEY = "user";
     private static final String ANONYMOUS = "anonymous";
     private static final String BEARER = "Bearer ";
 
-    private static final Logger logger = LoggerFactory.getLogger("API Request");
+    private static final Logger LOGGER = LoggerFactory.getLogger(UriLoggingFilter.class);
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public LoggingFilter(final JwtTokenProvider jwtTokenProvider) {
+    public UriLoggingFilter(final JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -35,7 +33,7 @@ public class LoggingFilter extends OncePerRequestFilter {
                                     final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
         MDC.put(KEY, getMemberIdFromJwt(request));
-        logger.info("Request For '{}'", request.getRequestURI());
+        LOGGER.info("Request For '{}'", request.getRequestURI());
         MDC.clear();
 
         filterChain.doFilter(request, response);
