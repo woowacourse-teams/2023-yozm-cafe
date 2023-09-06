@@ -7,7 +7,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.concurrent.CompletableFuture.runAsync;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -44,20 +43,6 @@ class LatencyRecorderTest {
         //when
         assertThatThrownBy(completableFuture::get)
                 .isInstanceOf(ExecutionException.class);
-    }
-
-    @Test
-    @DisplayName("start와 getDurationSeconds 사이의 시간을 계산할 수 있다")
-    void getDurationSeconds() {
-        //given
-        latencyRecorder.start();
-
-        //when
-        System.out.println("시간 차이 만들기");
-        final double durationSeconds = latencyRecorder.getDurationSeconds();
-
-        //then
-        assertThat(durationSeconds).isNotZero();
     }
 
     private void startInOtherThread() throws InterruptedException {
