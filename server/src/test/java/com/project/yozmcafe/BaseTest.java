@@ -7,7 +7,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 
 /**
  * Application Context들이 필요할 때 상속하면 됩니다.
@@ -22,7 +21,6 @@ public abstract class BaseTest {
 
     @Autowired
     private DataInitializer dataInitializer;
-    @Container
     protected static MySQLContainer container;
 
     static {
