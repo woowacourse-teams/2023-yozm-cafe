@@ -20,6 +20,8 @@ public abstract class BaseTest {
     private static final String ROOT = "root";
     private static final String ROOT_PASSWORD = "test";
 
+    @Autowired
+    private DataInitializer dataInitializer;
     @Container
     protected static MySQLContainer container;
 
@@ -38,9 +40,6 @@ public abstract class BaseTest {
         registry.add("spring.datasource.username", () -> ROOT);
         registry.add("spring.datasource.password", () -> ROOT_PASSWORD);
     }
-
-    @Autowired
-    private DataInitializer dataInitializer;
 
     @BeforeEach
     void delete() {
