@@ -17,13 +17,16 @@ import org.testcontainers.junit.jupiter.Container;
 @ActiveProfiles("test")
 public abstract class BaseTest {
 
+    private static final String ROOT = "root";
+    private static final String ROOT_PASSWORD = "test";
+
     @Container
     protected static MySQLContainer container;
 
     static {
         container = (MySQLContainer) new MySQLContainer("mysql:8.0")
                 .withDatabaseName("yozm-cafe")
-                .withEnv("MYSQL_ROOT_PASSWORD", "test")
+                .withEnv("MYSQL_ROOT_PASSWORD", ROOT_PASSWORD)
                 .withReuse(true);
 
         container.start();
@@ -32,8 +35,8 @@ public abstract class BaseTest {
     @DynamicPropertySource
     static void configureProperties(final DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", container::getJdbcUrl);
-        registry.add("spring.datasource.username", () -> "root");
-        registry.add("spring.datasource.password", () -> "test");
+        registry.add("spring.datasource.username", () -> ROOT);
+        registry.add("spring.datasource.password", () -> ROOT_PASSWORD);
     }
 
     @Autowired
