@@ -26,8 +26,7 @@ public abstract class BaseTest {
     static {
         container = (MySQLContainer) new MySQLContainer("mysql:8.0")
                 .withDatabaseName("yozm-cafe")
-                .withEnv("MYSQL_ROOT_PASSWORD", ROOT_PASSWORD)
-                .withReuse(true);
+                .withEnv("MYSQL_ROOT_PASSWORD", ROOT_PASSWORD);
 
         container.start();
     }
