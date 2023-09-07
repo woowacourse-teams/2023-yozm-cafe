@@ -1,12 +1,12 @@
 package com.project.yozmcafe.service;
 
 
+import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.resizedimage.Size;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,8 +23,7 @@ import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
 
-@SpringBootTest
-class ImageServiceTest {
+class ImageServiceTest extends BaseTest {
 
     @Autowired
     private ImageService imageService;
@@ -46,7 +45,7 @@ class ImageServiceTest {
         final int expectedUploadCount = images.size() * Size.values().length;
         assertSoftly(soft -> {
             verify(s3Client, times(expectedUploadCount)).upload(any());
-            assertThat(names.size()).isEqualTo(images.size());
+            assertThat(names).hasSameSizeAs(images);
         });
     }
 

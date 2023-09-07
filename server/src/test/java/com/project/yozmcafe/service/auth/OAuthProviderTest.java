@@ -1,24 +1,23 @@
 package com.project.yozmcafe.service.auth;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
+import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 @Transactional
-class OAuthProviderTest {
+class OAuthProviderTest extends BaseTest {
 
     @Test
     @DisplayName("OAuthProvider와 OAuthClient가 매핑되지 않으면 실패")
-    void setUp() {
+    void setUpProvider() {
         assertDoesNotThrow(() -> OAuthProvider.GOOGLE);
     }
 

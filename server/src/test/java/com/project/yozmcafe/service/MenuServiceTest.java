@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.menu.MenuBoardResponse;
 import com.project.yozmcafe.controller.dto.menu.MenuItemResponse;
 import com.project.yozmcafe.controller.dto.menu.MenuResponse;
@@ -13,15 +14,13 @@ import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
 @Transactional
-class MenuServiceTest {
+class MenuServiceTest extends BaseTest {
 
     @Autowired
     private MenuService menuService;
