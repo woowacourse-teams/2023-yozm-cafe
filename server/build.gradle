@@ -23,6 +23,8 @@ dependencies {
 
     //DB
     runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation "org.testcontainers:junit-jupiter:1.19.0"
+    testImplementation 'org.testcontainers:mysql'
 
     //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -44,6 +46,10 @@ dependencies {
     //Monitoring
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    //Flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 ext {

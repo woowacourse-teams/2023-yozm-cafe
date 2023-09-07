@@ -1,5 +1,6 @@
 package com.project.yozmcafe.controller;
 
+import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.util.AcceptanceContext;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import static com.project.yozmcafe.exception.ErrorCode.TOKEN_NOT_EXIST;
 import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class LoginArgumentResolverTest {
+class LoginArgumentResolverTest extends BaseTest {
 
     @LocalServerPort
     private int port;

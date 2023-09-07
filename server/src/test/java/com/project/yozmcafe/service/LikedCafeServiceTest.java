@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service;
 
+import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -12,9 +13,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -23,9 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
-@Sql(scripts = "classpath:truncate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class LikedCafeServiceTest {
+class LikedCafeServiceTest extends BaseTest {
 
     @Autowired
     private LikedCafeService likedCafeService;
@@ -191,7 +188,8 @@ class LikedCafeServiceTest {
         final Cafe cafe = Fixture.getCafe(1L, "카페", "카페주소", 10);
 
         //when & then
-        assertThatThrownBy(() -> likedCafeService.updateLike(member, cafe.getId(), true))
+        final long cafeId = cafe.getId();
+        assertThatThrownBy(() -> likedCafeService.updateLike(member, cafeId, true))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당하는 카페가 존재하지 않습니다.");
     }

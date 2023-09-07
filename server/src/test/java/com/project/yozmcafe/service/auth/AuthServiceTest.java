@@ -1,5 +1,6 @@
 package com.project.yozmcafe.service.auth;
 
+import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -12,8 +13,6 @@ import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.Mockito.doReturn;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@SpringBootTest
 @Transactional
-class AuthServiceTest {
+class AuthServiceTest extends BaseTest {
 
     @SpyBean
     private GoogleOAuthClient googleOAuthClient;
