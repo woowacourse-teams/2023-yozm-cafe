@@ -1,6 +1,5 @@
 package com.project.yozmcafe.domain.cafe;
 
-import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -22,9 +22,6 @@ class CafeRepositoryTest {
 
     @Autowired
     private CafeRepository cafeRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     private Cafe cafe1;
     private Cafe cafe2;
@@ -56,7 +53,10 @@ class CafeRepositoryTest {
         final List<Cafe> cafes = cafeRepository.findSliceBy(pageRequest).getContent();
 
         //then
-        assertThat(cafes).hasSize(5);
-        assertThat(cafes).containsExactlyInAnyOrder(cafe1, cafe2, cafe3, cafe4, cafe5);
+        assertSoftly(soft -> {
+                    assertThat(cafes).hasSize(5);
+                    assertThat(cafes).containsExactlyInAnyOrder(cafe1, cafe2, cafe3, cafe4, cafe5);
+                }
+        );
     }
 }

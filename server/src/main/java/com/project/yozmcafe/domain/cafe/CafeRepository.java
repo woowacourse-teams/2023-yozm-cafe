@@ -7,10 +7,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CafeRepository extends JpaRepository<Cafe, Long> {
 
+    @Query("select distinct c from Cafe c left join fetch c.images.urls")
     Slice<Cafe> findSliceBy(Pageable pageable);
+
+    @Query("select c from Cafe c left join fetch c.images.urls where c.id = :cafeId")
+    Optional<Cafe> findById(@Param("cafeId") Long cafeId);
+
+    @Query("select distinct c from Cafe c left join fetch c.images.urls")
+    List<Cafe> findAll();
 
     @Query("SELECT c.id FROM Cafe c ORDER BY c.likeCount DESC")
     List<Long> findCafeIdsOrderByLikeCount(Pageable pageable);
@@ -20,5 +28,4 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             "WHERE c.id IN :ids " +
             "ORDER BY c.likeCount DESC ")
     List<Cafe> findCafesByIdsOrderByLikeCount(@Param("ids") List<Long> ids);
-  
 }

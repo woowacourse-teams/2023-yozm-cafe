@@ -5,4 +5,6 @@ TRUNCATE TABLE image;
 TRUNCATE TABLE liked_cafe;
 TRUNCATE TABLE member;
 TRUNCATE TABLE un_viewed_cafe;
+TRUNCATE TABLE menu;
+TRUNCATE TABLE menu_board;
 SET foreign_key_checks = 1;
