@@ -1,13 +1,14 @@
 package com.project.yozmcafe.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.resizedimage.ImageName;
 import com.project.yozmcafe.domain.resizedimage.ImageResizer;
 import com.project.yozmcafe.domain.resizedimage.Size;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 public class ImageService {
@@ -23,7 +24,10 @@ public class ImageService {
                 .map(this::multipartfileToImageResizer)
                 .toList();
 
-        resizers.forEach(resizer -> resizer.getResizedImages(sizes).forEach(s3Client::upload));
+        resizers.parallelStream()
+                .forEach(resizer -> resizer.getResizedImages(sizes)
+                        .forEach(s3Client::upload)
+                );
 
         return resizers.stream()
                 .map(ImageResizer::getFileName)
