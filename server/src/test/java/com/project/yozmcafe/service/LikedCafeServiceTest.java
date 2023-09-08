@@ -2,7 +2,7 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeThumbnailResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
@@ -42,7 +42,7 @@ class LikedCafeServiceTest extends BaseTest {
         memberRepository.save(member);
 
         //when
-        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
+        final List<CafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
 
         //then
         assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
@@ -73,7 +73,7 @@ class LikedCafeServiceTest extends BaseTest {
         member.updateLikedCafesBy(cafe2, true);
 
         //when
-        final List<LikedCafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
+        final List<CafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
 
         //then
         assertThat(likedCafesById).isEmpty();
