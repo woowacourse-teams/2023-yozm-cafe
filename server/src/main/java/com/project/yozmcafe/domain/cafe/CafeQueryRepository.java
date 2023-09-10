@@ -37,14 +37,16 @@ public class CafeQueryRepository {
         if (!isCafeName && !isMenu && !isAddress) {
             return queryFactory.selectFrom(cafe)
                     .leftJoin(menu).on(menu.cafe.eq(cafe))
-                    .where(booleanBuilder.or(containsCafeName(true, searchWord))
+                    .where(booleanBuilder
+                            .or(containsCafeName(true, searchWord))
                             .or(containsAddress(true, searchWord))
                             .or(containsMenu(true, searchWord)))
                     .fetch();
         }
 
         final JPAQuery<Cafe> baseQuery = queryFactory.selectFrom(cafe)
-                .where(booleanBuilder.and(containsCafeName(isCafeName, searchWord))
+                .where(booleanBuilder
+                        .and(containsCafeName(isCafeName, searchWord))
                         .and(containsAddress(isAddress, searchWord))
                         .and(containsMenu(isMenu, searchWord)));
 
