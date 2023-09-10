@@ -38,7 +38,8 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     List<Long> findCafeIdsOrderByLikeCount(Pageable pageable);
 
     @Query("""
-            SELECT c FROM Cafe c
+            SELECT c
+            FROM Cafe c
             JOIN FETCH c.images.urls
             WHERE c.id IN :ids
             ORDER BY c.likeCount DESC
