@@ -5,6 +5,7 @@ import com.project.yozmcafe.domain.cafe.Detail;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.domain.cafe.available.AvailableTime;
 import com.project.yozmcafe.domain.cafe.available.Days;
+import com.project.yozmcafe.domain.menu.Menu;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -32,5 +33,11 @@ public class Fixture {
 
     public static Cafe getCafe(Long id, String name, String address, int likeCount) {
         return new Cafe(id, name, address, getImages(), getDetail(), likeCount);
+    }
+
+    public static Menu getMenu(final Long id, final Cafe cafe, final int priority,
+                               final String name, final String imageUrl, final String description,
+                               final String price, final boolean isRecommended) {
+        return new Menu(id, cafe, priority, name, imageUrl, description, price, isRecommended);
     }
 }
