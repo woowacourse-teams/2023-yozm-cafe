@@ -10,9 +10,20 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    @Query(value = "select distinct m from Member m left join fetch m.unViewedCafes uvc left join fetch uvc.cafe where m.id = :id")
+    @Query("""
+            select m 
+            from Member m 
+            left join fetch m.unViewedCafes uvc 
+            left join fetch uvc.cafe 
+            where m.id = :id
+            """)
     Optional<Member> findById(String id);
 
-    @Query(value = "select distinct m from Member m left join fetch m.unViewedCafes uvc left join fetch uvc.cafe")
+    @Query("""
+            select m 
+            from Member m 
+            left join fetch m.unViewedCafes uvc 
+            left join fetch uvc.cafe
+            """)
     List<Member> findAll();
 }
