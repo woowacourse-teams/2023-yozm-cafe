@@ -2,8 +2,10 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.CafeQueryRepository;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
@@ -21,11 +23,14 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 public class CafeService {
 
     private final CafeRepository cafeRepository;
+    private final CafeQueryRepository cafeQueryRepository;
     private final UnViewedCafeService unViewedCafeService;
     private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+    public CafeService(final CafeRepository cafeRepository, final CafeQueryRepository cafeQueryRepository,
+                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
+        this.cafeQueryRepository = cafeQueryRepository;
         this.unViewedCafeService = unViewedCafeService;
         this.cafeRankGenerator = cafeRankGenerator;
     }
@@ -65,5 +70,13 @@ public class CafeService {
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
         return CafeResponse.fromUnLoggedInUser(foundCafe);
+    }
+
+    public List<CafeSearchResponse> searchCafesByWord(final String searchWord, final boolean isCafeName, final boolean isMenu, final boolean isAddress) {
+        final List<Cafe> searchedCafes = cafeQueryRepository.searchCafesByWord(searchWord, isCafeName, isMenu, isAddress);
+
+        return searchedCafes.stream()
+                .map(CafeSearchResponse::from)
+                .toList();
     }
 }
