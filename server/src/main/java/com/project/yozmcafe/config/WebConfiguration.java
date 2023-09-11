@@ -10,21 +10,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebConfiguration implements WebMvcConfigurer {
 
     private final LoginArgumentResolver loginArgumentResolver;
+    private final StringToOAuthProviderConverter stringToOAuthProviderConverter;
 
-    public WebMvcConfig(LoginArgumentResolver loginArgumentResolver) {
+    public WebConfiguration(final LoginArgumentResolver loginArgumentResolver,
+                            final StringToOAuthProviderConverter stringToOAuthProviderConverter) {
         this.loginArgumentResolver = loginArgumentResolver;
+        this.stringToOAuthProviderConverter = stringToOAuthProviderConverter;
     }
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(loginArgumentResolver);
     }
 
     @Override
     public void addFormatters(final FormatterRegistry registry) {
-        registry.addConverter(new StringToOAuthProviderConverter());
+        registry.addConverter(stringToOAuthProviderConverter);
     }
 }
