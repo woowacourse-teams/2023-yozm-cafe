@@ -84,3 +84,13 @@ export type Rank = {
   image: string;
   likeCount: number;
 };
+
+export type Position = {
+  lat: number;
+  lng: number;
+};
+
+export type Marker = Position & {
+  id: number;
+  title: string;
+};
