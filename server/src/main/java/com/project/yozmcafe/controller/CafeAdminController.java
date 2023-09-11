@@ -22,9 +22,7 @@ import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.controller.dto.cafe.MenuBoardRequest;
 import com.project.yozmcafe.controller.dto.cafe.MenuRequest;
-import com.project.yozmcafe.domain.resizedimage.Size;
 import com.project.yozmcafe.service.CafeAdminService;
-import com.project.yozmcafe.service.ImageService;
 import com.project.yozmcafe.service.MenuService;
 
 @Controller
@@ -32,22 +30,17 @@ import com.project.yozmcafe.service.MenuService;
 public class CafeAdminController {
 
     private final CafeAdminService cafeAdminService;
-    private final ImageService imageService;
     private final MenuService menuService;
 
-    public CafeAdminController(final CafeAdminService cafeAdminService, final ImageService imageService,
-                               final MenuService menuService) {
+    public CafeAdminController(final CafeAdminService cafeAdminService, final MenuService menuService) {
         this.cafeAdminService = cafeAdminService;
-        this.imageService = imageService;
         this.menuService = menuService;
     }
 
     @PostMapping
     public ResponseEntity<String> save(@RequestPart final CafeRequest request,
                                        @RequestPart final List<MultipartFile> images) {
-        final List<String> uploadedFileNames = imageService.resizeAndUpload(images, List.of(Size.values()));
-        final Long savedId = cafeAdminService.save(request, uploadedFileNames);
-
+        final Long savedId = cafeAdminService.save(request, images);
         return ResponseEntity.created(URI.create("/admin/cafes/" + savedId)).build();
     }
 
@@ -55,11 +48,7 @@ public class CafeAdminController {
     public ResponseEntity<Void> update(@PathVariable("cafeId") final Long cafeId,
                                        @RequestPart final CafeUpdateRequest request,
                                        @RequestPart final List<MultipartFile> images) {
-        final List<String> originalImages = cafeAdminService.findImagesByCafeId(cafeId);
-        imageService.deleteAll(originalImages);
-
-        final List<String> savedImages = imageService.resizeAndUpload(images, List.of(Size.values()));
-        cafeAdminService.update(cafeId, request, savedImages);
+        cafeAdminService.update(cafeId, request, images);
 
         return ResponseEntity.noContent().build();
     }
@@ -78,10 +67,7 @@ public class CafeAdminController {
 
     @DeleteMapping("/{cafeId}")
     public ResponseEntity<Void> delete(@PathVariable("cafeId") final Long cafeId) {
-        final List<String> originalImages = cafeAdminService.findImagesByCafeId(cafeId);
-        imageService.deleteAll(originalImages);
         cafeAdminService.delete(cafeId);
-
         return ResponseEntity.noContent().build();
     }
 
@@ -93,8 +79,7 @@ public class CafeAdminController {
             menuService.saveMenuWithoutImage(cafeId, menuRequest);
         }
         if (nonNull(image)) {
-            String uploadedFileName = imageService.resizeAndUpload(image, Size.THUMBNAIL);
-            menuService.saveMenu(cafeId, menuRequest, uploadedFileName);
+            menuService.saveMenu(cafeId, menuRequest, image);
         }
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
@@ -104,8 +89,7 @@ public class CafeAdminController {
     public ResponseEntity<String> saveMenuBoards(@PathVariable("cafeId") final Long cafeId,
                                                  @RequestPart final MenuBoardRequest menuBoardRequest,
                                                  @RequestPart final MultipartFile image) {
-        String uploadedFileName = imageService.resizeAndUpload(image, Size.MOBILE);
-        menuService.saveMenuBoard(cafeId, menuBoardRequest, uploadedFileName);
+        menuService.saveMenuBoard(cafeId, menuBoardRequest, image);
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
     }
