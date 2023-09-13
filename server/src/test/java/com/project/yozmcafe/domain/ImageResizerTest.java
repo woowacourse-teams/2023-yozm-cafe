@@ -1,14 +1,8 @@
 package com.project.yozmcafe.domain;
 
-import com.project.yozmcafe.domain.resizedimage.ImageResizer;
-import com.project.yozmcafe.domain.resizedimage.Size;
-import com.project.yozmcafe.exception.BadRequestException;
-import com.project.yozmcafe.exception.ErrorCode;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,9 +10,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.project.yozmcafe.domain.resizedimage.ImageResizer;
+import com.project.yozmcafe.domain.resizedimage.Size;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
 
 class ImageResizerTest {
 
@@ -75,14 +78,14 @@ class ImageResizerTest {
     }
 
     @Test
-    @DisplayName("리사이즈된 이미지들을 리턴한다")
-    void getResizedImages() throws Exception {
+    @DisplayName("모든 사이즈로 리사이즈된 이미지들을 리턴한다")
+    void resizeImageToAllSize() throws Exception {
         //given
         final MultipartFile image = makeMultipartFile();
         final ImageResizer imageResizer = new ImageResizer(image, "fileName.png");
 
         //when
-        final List<MultipartFile> results = imageResizer.getResizedImages(List.of(Size.values()));
+        final List<MultipartFile> results = imageResizer.resizeImageToAllSizes();
         final List<String> fileNameWithPathResult = results.stream()
                 .map(MultipartFile::getOriginalFilename)
                 .toList();
@@ -92,6 +95,22 @@ class ImageResizerTest {
                 "100/fileName.png",
                 "500/fileName.png"
         );
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Size.class)
+    @DisplayName("특정 사이즈로 리사이즈된 이미지들을 리턴한다")
+    void resizeImageToMobileSize(final Size size) throws Exception {
+        //given
+        final String fileName = "fileName.png";
+        final MultipartFile image = makeMultipartFile();
+        final ImageResizer imageResizer = new ImageResizer(image, fileName);
+
+        //when
+        final MultipartFile resizedImage = imageResizer.resizeToFixedImage(size);
+
+        //then
+        assertThat(resizedImage.getOriginalFilename()).isEqualTo(size.getFileNameWithPath(fileName));
     }
 
     private MultipartFile makeMultipartFile() throws IOException {

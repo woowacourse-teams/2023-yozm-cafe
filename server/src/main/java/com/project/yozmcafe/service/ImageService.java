@@ -1,5 +1,8 @@
 package com.project.yozmcafe.service;
 
+import static com.project.yozmcafe.domain.resizedimage.Size.MOBILE;
+import static com.project.yozmcafe.domain.resizedimage.Size.THUMBNAIL;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,17 +22,16 @@ public class ImageService {
         this.s3Client = s3Client;
     }
 
-    public List<String> resizeAndUpload(final List<MultipartFile> files, final List<Size> sizes) {
-        final List<ImageResizer> resizers = files.stream()
+    public List<String> resizeToAllSizesAndUpload(final List<MultipartFile> files) {
+        final List<ImageResizer> imageResizers = files.stream()
                 .map(this::multipartfileToImageResizer)
                 .toList();
 
-        resizers.parallelStream()
-                .forEach(resizer -> resizer.getResizedImages(sizes)
-                        .forEach(s3Client::upload)
-                );
+        imageResizers.parallelStream()
+                .forEach(imageResizer -> imageResizer.resizeImageToAllSizes()
+                        .forEach(s3Client::upload));
 
-        return resizers.stream()
+        return imageResizers.stream()
                 .map(ImageResizer::getFileName)
                 .toList();
     }
@@ -39,19 +41,27 @@ public class ImageService {
         return new ImageResizer(file, imageName.get());
     }
 
+    public String resizeToThumbnailSizeAndUpload(MultipartFile file) {
+        return resizeToFixedImageAndUpload(file, THUMBNAIL);
+    }
+
+    public String resizeToMobileSizeAndUpload(MultipartFile file) {
+        return resizeToFixedImageAndUpload(file, MOBILE);
+    }
+
+    private String resizeToFixedImageAndUpload(final MultipartFile file, final Size size) {
+        final ImageResizer imageResizer = multipartfileToImageResizer(file);
+
+        final MultipartFile resizedImages = imageResizer.resizeToFixedImage(size);
+        s3Client.upload(resizedImages);
+
+        return imageResizer.getFileName();
+    }
+
     public void deleteAll(final List<String> imageNames) {
         imageNames.stream()
                 .map(Size::getFileNamesWithPath)
                 .flatMap(List::stream)
                 .forEach(s3Client::delete);
-    }
-
-    public String resizeAndUpload(final MultipartFile image, final Size size) {
-        final ImageResizer imageResizer = multipartfileToImageResizer(image);
-
-        final MultipartFile resizedImages = imageResizer.getResizedImage(size);
-        s3Client.upload(resizedImages);
-
-        return imageResizer.getFileName();
     }
 }
