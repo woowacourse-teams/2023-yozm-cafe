@@ -48,7 +48,7 @@ public class MenuService {
         final Cafe cafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
-        Menu menu = menuRequest.toMenu(cafe, imageName);
+        final Menu menu = menuRequest.toMenu(cafe, imageName);
         menuRepository.save(menu);
     }
 
@@ -58,7 +58,7 @@ public class MenuService {
         final Cafe cafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
-        Menu menu = menuRequest.toMenuWithoutImage(cafe);
+        final Menu menu = menuRequest.toMenuWithoutImage(cafe);
         menuRepository.save(menu);
     }
 
@@ -69,7 +69,7 @@ public class MenuService {
         final Cafe cafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
-        MenuBoard menuBoard = menuBoardRequest.toMenu(cafe, imageName);
+        final MenuBoard menuBoard = menuBoardRequest.toMenu(cafe, imageName);
         menuBoardRepository.save(menuBoard);
     }
 }
