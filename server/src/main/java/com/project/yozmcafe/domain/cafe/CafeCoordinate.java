@@ -5,6 +5,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -17,7 +18,7 @@ public class CafeCoordinate {
     private Long id;
     private Point coordinate;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Cafe cafe;
 
     public CafeCoordinate() {
