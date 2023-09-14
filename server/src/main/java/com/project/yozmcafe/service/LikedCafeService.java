@@ -31,6 +31,7 @@ public class LikedCafeService {
         final List<LikedCafe> likedCafes = getLikedCafes(pageable, member);
 
         return likedCafes.stream()
+                .map(LikedCafe::getCafe)
                 .map(CafeThumbnailResponse::from)
                 .toList();
     }
