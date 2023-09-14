@@ -3,10 +3,12 @@ package com.project.yozmcafe.service;
 import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.domain.menu.MenuRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +34,8 @@ class CafeServiceTest extends BaseTest {
     private CafeRepository cafeRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MenuRepository menuRepository;
 
     @Test
     @DisplayName("로그인 된 사용자의 안본 카페 목록을 조회한다.")
@@ -184,5 +188,32 @@ class CafeServiceTest extends BaseTest {
         assertThatThrownBy(() -> cafeService.getCafeById(notExistCafeId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_CAFE.getMessage());
+    }
+
+    @Test
+    @DisplayName("메뉴가 검색 조건에 있을 때 카페를 검색해 조회한다.")
+    void getCafesByKeyWordWhenMenuExist() {
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        menuRepository.save(Fixture.getMenu(null, savedCafe1, 1, "카페 메뉴", "image", "description", "2000", true));
+
+        List<CafeSearchResponse> cafeResponse = cafeService.getCafesByKeyWord("카페", "카페 메뉴", "주소");
+        assertThat(cafeResponse).extracting("id", "name")
+                .containsOnly(tuple(savedCafe1.getId(), savedCafe1.getName()));
+    }
+
+    @Test
+    @DisplayName("메뉴가 검색 조건에 없을 때 카페를 검색해 조회한다.")
+    void getCafesByKeyWordWhenMenuNotExist() {
+        final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
+        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
+        final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 11));
+        menuRepository.save(Fixture.getMenu(null, savedCafe1, 1, "카페 메뉴1", "image", "description", "2000", true));
+        menuRepository.save(Fixture.getMenu(null, savedCafe2, 1, "카페 메뉴2", "image", "description", "2000", true));
+        menuRepository.save(Fixture.getMenu(null, savedCafe3, 1, "카페 메뉴3", "image", "description", "2000", true));
+
+        List<CafeSearchResponse> cafeResponse = cafeService.getCafesByKeyWord("카페1", "", "주소");
+        assertThat(cafeResponse).extracting("id", "name")
+                .containsOnly(tuple(savedCafe1.getId(), savedCafe1.getName()));
     }
 }

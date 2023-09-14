@@ -5,11 +5,11 @@ import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeQueryRepository;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.exception.BadRequestException;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +23,12 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 public class CafeService {
 
     private final CafeRepository cafeRepository;
-    private final CafeQueryRepository cafeQueryRepository;
     private final UnViewedCafeService unViewedCafeService;
     private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final CafeQueryRepository cafeQueryRepository,
-                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService,
+                       final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
-        this.cafeQueryRepository = cafeQueryRepository;
         this.unViewedCafeService = unViewedCafeService;
         this.cafeRankGenerator = cafeRankGenerator;
     }
@@ -72,10 +70,16 @@ public class CafeService {
         return CafeResponse.fromUnLoggedInUser(foundCafe);
     }
 
-    public List<CafeSearchResponse> searchCafesByWord(final String searchWord, final boolean isCafeName, final boolean isMenu, final boolean isAddress) {
-        final List<Cafe> searchedCafes = cafeQueryRepository.searchCafesByWord(searchWord, isCafeName, isMenu, isAddress);
+    public List<CafeSearchResponse> getCafesByKeyWord(final String cafeNameKeyWord, final String menuKeyWord, final String addressKeyWord) {
+        List<Cafe> cafes;
+        if (StringUtils.isBlank(menuKeyWord)) {
+            cafes = cafeRepository.findAllBy(cafeNameKeyWord, addressKeyWord);
+        }
+        else {
+            cafes = cafeRepository.findAllBy(cafeNameKeyWord, menuKeyWord, addressKeyWord);
+        }
 
-        return searchedCafes.stream()
+        return cafes.stream()
                 .map(CafeSearchResponse::from)
                 .toList();
     }

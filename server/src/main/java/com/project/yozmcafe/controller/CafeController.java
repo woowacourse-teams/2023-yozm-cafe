@@ -54,11 +54,11 @@ public class CafeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CafeSearchResponse>> getCafeBySearch(@RequestParam("query") final String searchWord,
-                                                      @RequestParam(value = "isCafeName", required = false, defaultValue = "false") final boolean isCafeName,
-                                                      @RequestParam(value = "isMenu", required = false, defaultValue = "false") final boolean isMenu,
-                                                      @RequestParam(value = "isAddress", required = false, defaultValue = "false") final boolean isAddress) {
-        final List<CafeSearchResponse> cafeSearchResponses = cafeService.searchCafesByWord(searchWord, isCafeName, isMenu, isAddress);
+    public ResponseEntity<List<CafeSearchResponse>> getCafeBySearch(
+                                                      @RequestParam(value = "cafeName", required = false, defaultValue = "") final String cafeName,
+                                                      @RequestParam(value = "menu", required = false, defaultValue = "") final String menu,
+                                                      @RequestParam(value = "address", required = false, defaultValue = "") final String address) {
+        final List<CafeSearchResponse> cafeSearchResponses = cafeService.getCafesByKeyWord(cafeName, menu, address);
         return ResponseEntity.ok(cafeSearchResponses);
     }
 }

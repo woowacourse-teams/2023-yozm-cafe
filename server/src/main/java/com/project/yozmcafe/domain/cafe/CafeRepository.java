@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CafeRepository extends JpaRepository<Cafe, Long> {
+public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeCustomRepository {
 
     Slice<Cafe> findSliceBy(Pageable pageable);
 

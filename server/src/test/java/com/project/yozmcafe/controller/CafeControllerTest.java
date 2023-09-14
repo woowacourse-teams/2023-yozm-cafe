@@ -349,7 +349,7 @@ class CafeControllerTest extends BaseControllerTest {
                         getSearchRequestParam(),
                         getCafeSearchResponseFields()))
                 .when()
-                .get("/cafes/search?query=요즘커피&isCafeName=false&isMenu=true&isAddress=false");
+                .get("/cafes/search?cafeName=n1&menu=요즘커피&address=address");
 
         //then
         final List<CafeSearchResponse> cafeSearchResponses = getCafeSearchResponses(response);
@@ -361,12 +361,12 @@ class CafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("사용자가 검색 요청을 보내면, 검색어와 기준에 맞는 카페를 응답한다.")
-    void getCafesBySearch2() {
+    @DisplayName("사용자가 검색 요청을 보내면, 검색어와 기준에 맞는 카페를 응답한다. - 메뉴 검색하지 않을 경우")
+    void getCafesBySearchWhenNotSearchMenu() {
         //given, when
         final Response response = given().log().all()
                 .when()
-                .get("/cafes/search?query=n2");
+                .get("/cafes/search?cafeName=n2&address=2");
 
         //then
         final List<CafeSearchResponse> cafeSearchResponses = getCafeSearchResponses(response);
@@ -462,10 +462,9 @@ class CafeControllerTest extends BaseControllerTest {
 
     private QueryParametersSnippet getSearchRequestParam() {
         return queryParameters(
-                parameterWithName("query").description("검색한 단어"),
-                parameterWithName("isCafeName").description("카페의 이름 검색 여부"),
-                parameterWithName("isMenu").description("카페의 메뉴 검색 여부"),
-                parameterWithName("isAddress").description("카페의 주소 검색 여부")
+                parameterWithName("cafeName").description("카페명 검색어"),
+                parameterWithName("menu").description("카페의 메뉴 검색어"),
+                parameterWithName("address").description("카페의 주소 검색어")
         );
     }
 
