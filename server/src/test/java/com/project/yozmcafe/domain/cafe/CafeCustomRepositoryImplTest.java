@@ -41,7 +41,7 @@ class CafeCustomRepositoryImplTest extends BaseTest {
         final String address = "";
 
         // when
-        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
+        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, address);
 
         // then
         assertAll(
@@ -82,7 +82,7 @@ class CafeCustomRepositoryImplTest extends BaseTest {
         final String address = "카페 주소";
 
         // when
-        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
+        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, address);
 
         // then
         assertAll(
@@ -114,11 +114,10 @@ class CafeCustomRepositoryImplTest extends BaseTest {
     void findByNameAndAddress() {
         // given
         final String cafeName = "카페";
-        final String menu = "";
         final String address = "주소3";
 
         // when
-        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
+        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, address);
 
         // then
         assertThat(cafes).extracting(Cafe::getName).containsOnly(cafe3.getName());

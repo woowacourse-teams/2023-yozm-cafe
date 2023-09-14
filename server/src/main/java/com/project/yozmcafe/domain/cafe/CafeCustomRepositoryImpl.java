@@ -27,6 +27,7 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                         contains(menu.name, menuWord),
                         contains(cafe.name, cafeNameWord),
                         contains(cafe.address, addressWord))
+                .distinct()
                 .fetch();
     }
 
@@ -36,6 +37,7 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .where(
                         contains(cafe.name, cafeNameWord),
                         contains(cafe.address, addressWord))
+                .distinct()
                 .fetch();
     }
 
