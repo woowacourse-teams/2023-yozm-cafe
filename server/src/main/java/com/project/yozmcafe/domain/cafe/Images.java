@@ -12,7 +12,7 @@ public class Images {
 
     private static final int REPRESENTATIVE_INDEX = 0;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "image")
     private List<String> urls;
 
