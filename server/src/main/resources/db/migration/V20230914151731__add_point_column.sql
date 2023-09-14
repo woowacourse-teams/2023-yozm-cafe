@@ -1,2 +1,8 @@
-ALTER TABLE `yozm-cafe`.cafe
-    ADD COLUMN coordinate POINT NOT NULL DEFAULT (ST_GeomFromText('POINT(37.546912668813 127.0411420343)', 4326));
+CREATE TABLE cafe_coordinates
+(
+    id         BIGINT NOT NULL AUTO_INCREMENT,
+    coordinate POINT  NOT NULL,
+    cafe_id    BIGINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (cafe_id) REFERENCES cafe (id)
+);
