@@ -51,11 +51,11 @@ public class ImageResizer {
 
     public List<MultipartFile> resizeImageToAllSizes() {
         return Arrays.stream(Size.values())
-                .map(this::resizeToFixedImage)
+                .map(this::resizeToFixedSize)
                 .toList();
     }
 
-    public MultipartFile resizeToFixedImage(final Size size) {
+    public MultipartFile resizeToFixedSize(final Size size) {
         final BufferedImage bufferedImage = getBufferedImage();
 
         final int width = size.getWidth();

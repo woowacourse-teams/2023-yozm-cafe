@@ -107,7 +107,7 @@ class ImageResizerTest {
         final ImageResizer imageResizer = new ImageResizer(image, fileName);
 
         //when
-        final MultipartFile resizedImage = imageResizer.resizeToFixedImage(size);
+        final MultipartFile resizedImage = imageResizer.resizeToFixedSize(size);
 
         //then
         assertThat(resizedImage.getOriginalFilename()).isEqualTo(size.getFileNameWithPath(fileName));

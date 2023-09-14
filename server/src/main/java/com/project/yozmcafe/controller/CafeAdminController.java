@@ -92,7 +92,7 @@ public class CafeAdminController {
             menuService.saveMenuWithoutImage(cafeId, menuRequest);
         }
         if (nonNull(image)) {
-            String uploadedFileName = imageService.resizeToThumbnailSizeAndUpload(image);
+            final String uploadedFileName = imageService.resizeToThumbnailSizeAndUpload(image);
             menuService.saveMenu(cafeId, menuRequest, uploadedFileName);
         }
 
@@ -103,7 +103,7 @@ public class CafeAdminController {
     public ResponseEntity<String> saveMenuBoards(@PathVariable("cafeId") final Long cafeId,
                                                  @RequestPart final MenuBoardRequest menuBoardRequest,
                                                  @RequestPart final MultipartFile image) {
-        String uploadedFileName = imageService.resizeToMobileSizeAndUpload(image);
+        final String uploadedFileName = imageService.resizeToMobileSizeAndUpload(image);
         menuService.saveMenuBoard(cafeId, menuBoardRequest, uploadedFileName);
 
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();

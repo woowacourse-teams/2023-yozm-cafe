@@ -42,17 +42,17 @@ public class ImageService {
     }
 
     public String resizeToThumbnailSizeAndUpload(MultipartFile file) {
-        return resizeToFixedImageAndUpload(file, THUMBNAIL);
+        return resizeToFixedSizeAndUpload(file, THUMBNAIL);
     }
 
     public String resizeToMobileSizeAndUpload(MultipartFile file) {
-        return resizeToFixedImageAndUpload(file, MOBILE);
+        return resizeToFixedSizeAndUpload(file, MOBILE);
     }
 
-    private String resizeToFixedImageAndUpload(final MultipartFile file, final Size size) {
+    private String resizeToFixedSizeAndUpload(final MultipartFile file, final Size size) {
         final ImageResizer imageResizer = multipartfileToImageResizer(file);
 
-        final MultipartFile resizedImages = imageResizer.resizeToFixedImage(size);
+        final MultipartFile resizedImages = imageResizer.resizeToFixedSize(size);
         s3Client.upload(resizedImages);
 
         return imageResizer.getFileName();
