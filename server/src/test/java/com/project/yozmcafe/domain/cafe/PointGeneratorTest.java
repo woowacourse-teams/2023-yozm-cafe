@@ -19,8 +19,8 @@ class PointGeneratorTest {
 
         //when
         final int srid = point.getSRID();
-        final double resultLatitude = point.getX();
-        final double resultLongitude = point.getY();
+        final double resultLatitude = point.getY();
+        final double resultLongitude = point.getX();
 
         //then
         SoftAssertions.assertSoftly(softAssertions -> {

@@ -13,7 +13,7 @@ public class PointGenerator {
     }
 
     public static Point generateWithCoordinate(final double latitude, final double longitude) {
-        final Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(latitude, longitude));
+        final Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude));
         point.setSRID(SRID);
         return point;
     }

@@ -1,8 +1,10 @@
-package com.project.yozmcafe.domain.cafe;
+package com.project.yozmcafe.domain.cafe.coordinate;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import org.locationtech.jts.geom.Point;
+
+import com.project.yozmcafe.domain.cafe.Cafe;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +18,7 @@ public class CafeCoordinate {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     private Point coordinate;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -35,11 +38,11 @@ public class CafeCoordinate {
     }
 
     public double getLatitude() {
-        return coordinate.getX();
+        return coordinate.getY();
     }
 
     public double getLongitude() {
-        return coordinate.getY();
+        return coordinate.getX();
     }
 
     public Long getId() {
