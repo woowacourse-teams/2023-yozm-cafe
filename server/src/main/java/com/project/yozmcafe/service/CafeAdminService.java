@@ -14,10 +14,10 @@ import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeCoordinate;
-import com.project.yozmcafe.domain.cafe.CafeCoordinateRepository;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Images;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 
 import jakarta.persistence.EntityManager;

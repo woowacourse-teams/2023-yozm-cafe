@@ -3,8 +3,8 @@ package com.project.yozmcafe.controller.dto.cafe;
 import org.locationtech.jts.geom.Point;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeCoordinate;
 import com.project.yozmcafe.domain.cafe.PointGenerator;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
 
 public record CafeCoordinateRequest(double latitude, double longitude) {
 

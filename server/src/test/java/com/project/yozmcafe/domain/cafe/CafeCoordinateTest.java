@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
 import com.project.yozmcafe.fixture.Fixture;
 
 class CafeCoordinateTest {

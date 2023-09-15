@@ -21,12 +21,12 @@ import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeCoordinate;
-import com.project.yozmcafe.domain.cafe.CafeCoordinateRepository;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Detail;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.domain.cafe.available.Days;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 
 class CafeAdminServiceTest extends BaseTest {
