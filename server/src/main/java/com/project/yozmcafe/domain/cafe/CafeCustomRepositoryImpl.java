@@ -22,12 +22,10 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
     public List<Cafe> findAllBy(final String cafeNameWord, final String menuWord, final String addressWord) {
         return from(cafe)
                 .leftJoin(menu).on(menu.cafe.eq(cafe))
-                .innerJoin(cafe.images.urls).fetchJoin()
                 .where(
                         contains(menu.name, menuWord),
                         contains(cafe.name, cafeNameWord),
                         contains(cafe.address, addressWord))
-                .distinct()
                 .fetch();
     }
 
@@ -37,7 +35,6 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .where(
                         contains(cafe.name, cafeNameWord),
                         contains(cafe.address, addressWord))
-                .distinct()
                 .fetch();
     }
 
