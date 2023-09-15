@@ -8,6 +8,8 @@ public class PointGenerator {
 
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
     private static final int SRID = 4326;
+    private static final String STRING_POINT_FORMAT = "POINT(%s)";
+    private static final String STRING_POINT_DELIMITER = " ";
 
     private PointGenerator() {
     }
@@ -16,5 +18,14 @@ public class PointGenerator {
         final Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude));
         point.setSRID(SRID);
         return point;
+    }
+
+    public static String generateStringPoint(final double latitude, final double longitude) {
+        final String coordinate = String.join(
+                STRING_POINT_DELIMITER,
+                String.valueOf(latitude),
+                String.valueOf(longitude)
+        );
+        return String.format(STRING_POINT_FORMAT, coordinate);
     }
 }
