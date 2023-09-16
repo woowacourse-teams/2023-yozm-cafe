@@ -1,32 +1,29 @@
-package com.project.yozmcafe.domain;
+package com.project.yozmcafe.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.resizedimage.ImageName;
 import com.project.yozmcafe.domain.resizedimage.ImageResizer;
 import com.project.yozmcafe.domain.resizedimage.Size;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
-public class ImageHandler {
+public class ImageService {
 
     private final S3Client s3Client;
 
-    public ImageHandler(final S3Client s3Client) {
+    public ImageService(final S3Client s3Client) {
         this.s3Client = s3Client;
     }
 
-    public List<String> resizeAndUploadToAllSizes(final List<MultipartFile> files) {
+    public List<String> resizeAndUpload(final List<MultipartFile> files, final List<Size> sizes) {
         final List<ImageResizer> resizers = files.stream()
                 .map(this::multipartfileToImageResizer)
                 .toList();
 
-        resizers.parallelStream()
-                .forEach(resizer -> resizer.resizeImageToAllSizes()
-                        .forEach(s3Client::upload)
-                );
+        resizers.forEach(resizer -> resizer.getResizedImages(sizes).forEach(s3Client::upload));
 
         return resizers.stream()
                 .map(ImageResizer::getFileName)
@@ -45,7 +42,7 @@ public class ImageHandler {
                 .forEach(s3Client::delete);
     }
 
-    public String resizeAndUploadToFixedSize(final MultipartFile image, final Size size) {
+    public String resizeAndUpload(final MultipartFile image, final Size size) {
         final ImageResizer imageResizer = multipartfileToImageResizer(image);
 
         final MultipartFile resizedImages = imageResizer.getResizedImage(size);

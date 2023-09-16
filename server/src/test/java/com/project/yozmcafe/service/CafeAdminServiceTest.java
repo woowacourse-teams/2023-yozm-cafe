@@ -1,71 +1,44 @@
 package com.project.yozmcafe.service;
 
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.time.LocalTime;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
-import com.project.yozmcafe.domain.ImageHandler;
-import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Detail;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.domain.cafe.available.Days;
 import com.project.yozmcafe.exception.BadRequestException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalTime;
+import java.util.List;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CafeAdminServiceTest extends BaseTest {
-
-    private static MultipartFile imageFile;
 
     @Autowired
     private CafeAdminService cafeAdminService;
     @Autowired
     private CafeRepository cafeRepository;
-    @SpyBean
-    private S3Client s3Client;
-    @SpyBean
-    private ImageHandler imageHandler;
-
-    @BeforeAll
-    public static void beforeAll() throws IOException {
-        final File file = new File("src/test/resources/image.png");
-        final FileInputStream fileInputStream = new FileInputStream(file);
-        imageFile = new MockMultipartFile("image", "image.png", "image/png", fileInputStream);
-    }
 
     @Test
     @DisplayName("카페 생성 테스트")
     void construct() {
         //given
-        doNothing().when(s3Client).upload(any());
         final CafeRequest request = new CafeRequest("연어카페", "주소", detail());
 
         //when
-        cafeAdminService.save(request, List.of(imageFile, imageFile));
+        cafeAdminService.save(request, List.of("image1"));
 
         //then
         assertThat(cafeRepository.findAll()).hasSize(1);
@@ -80,8 +53,7 @@ class CafeAdminServiceTest extends BaseTest {
         void notExist() {
             final Long cafeId = 0L;
             final CafeUpdateRequest cafeUpdateRequest = new CafeUpdateRequest("name", "address", detail(), 100);
-            final List<MultipartFile> imageFiles = List.of(imageFile, imageFile);
-            assertThatThrownBy(() -> cafeAdminService.update(cafeId, cafeUpdateRequest, imageFiles))
+            assertThatThrownBy(() -> cafeAdminService.update(cafeId, cafeUpdateRequest, List.of("image.png")))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage(NOT_EXISTED_CAFE.getMessage());
         }
@@ -90,16 +62,13 @@ class CafeAdminServiceTest extends BaseTest {
         @DisplayName("이름 수정")
         void update1() {
             //given
-            doNothing().when(s3Client).upload(any());
-            doNothing().when(s3Client).delete(any());
-
             final Cafe cafe = saveCafe();
             final String nameForUpdate = "참치카페";
             final CafeUpdateRequest cafeUpdateRequest = new CafeUpdateRequest(nameForUpdate, cafe.getAddress(),
                     detailFrom(cafe), cafe.getLikeCount());
 
             //when
-            cafeAdminService.update(cafe.getId(), cafeUpdateRequest, List.of(imageFile));
+            cafeAdminService.update(cafe.getId(), cafeUpdateRequest, imagesFrom(cafe));
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -110,15 +79,13 @@ class CafeAdminServiceTest extends BaseTest {
         @DisplayName("주소 수정")
         void update2() {
             //given
-            doNothing().when(s3Client).upload(any());
-            doNothing().when(s3Client).delete(any());
             final Cafe cafe = saveCafe();
             final String addressForUpdate = "해운대";
             final CafeUpdateRequest request = new CafeUpdateRequest(
                     cafe.getName(), addressForUpdate, detailFrom(cafe), cafe.getLikeCount());
 
             //when
-            cafeAdminService.update(cafe.getId(), request, List.of(imageFile));
+            cafeAdminService.update(cafe.getId(), request, imagesFrom(cafe));
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -129,18 +96,13 @@ class CafeAdminServiceTest extends BaseTest {
         @DisplayName("이미지 수정")
         void update3() {
             //given
-            doNothing().when(s3Client).upload(any());
-            doNothing().when(s3Client).delete(any());
-            final List<String> imagesForUpdate = List.of("changedImage1", "changedImage2");
-            doReturn(imagesForUpdate).when(imageHandler).resizeAndUploadToAllSizes(any());
-
             final Cafe cafe = saveCafe();
-            final CafeUpdateRequest request = new CafeUpdateRequest(cafe.getName(), cafe.getAddress(),
-                    detailFrom(cafe),
+            final List<String> imagesForUpdate = List.of("바뀐 이미지");
+            final CafeUpdateRequest request = new CafeUpdateRequest(cafe.getName(), cafe.getAddress(), detailFrom(cafe),
                     cafe.getLikeCount());
 
             //when
-            cafeAdminService.update(cafe.getId(), request, List.of(imageFile, imageFile));
+            cafeAdminService.update(cafe.getId(), request, imagesForUpdate);
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -152,15 +114,12 @@ class CafeAdminServiceTest extends BaseTest {
         @DisplayName("좋아요 수 수정")
         void update4() {
             //given
-            doNothing().when(s3Client).upload(any());
-            doNothing().when(s3Client).delete(any());
             final Cafe cafe = saveCafe();
             final int likeCountForUpdate = 10000;
 
             //when
-            final CafeUpdateRequest request = new CafeUpdateRequest(cafe.getName(), cafe.getAddress(), detailFrom(cafe),
-                    likeCountForUpdate);
-            cafeAdminService.update(cafe.getId(), request, List.of(imageFile, imageFile));
+            cafeAdminService.update(cafe.getId(), new CafeUpdateRequest(
+                    cafe.getName(), cafe.getAddress(), detailFrom(cafe), likeCountForUpdate), imagesFrom(cafe));
 
             //then
             final Cafe persisted = cafeRepository.findById(cafe.getId()).get();
@@ -199,7 +158,6 @@ class CafeAdminServiceTest extends BaseTest {
         @DisplayName("단건 삭제")
         void delete() {
             //given
-            doNothing().when(s3Client).delete(any());
             final Cafe cafe = saveCafe();
 
             //when
@@ -224,7 +182,6 @@ class CafeAdminServiceTest extends BaseTest {
     }
 
     private Cafe saveCafe() {
-        doNothing().when(s3Client).upload(any());
         return cafeRepository.save(new Cafe("연어카페", "주소", new Images(List.of("image")), detail().toDetail()));
     }
 
@@ -233,8 +190,7 @@ class CafeAdminServiceTest extends BaseTest {
                 true);
         final AvailableTimeRequest time2 = new AvailableTimeRequest(Days.TUESDAY, LocalTime.now(), LocalTime.now(),
                 true);
-        final AvailableTimeRequest time3 = new AvailableTimeRequest(Days.WEDNESDAY, LocalTime.now(),
-                LocalTime.now(),
+        final AvailableTimeRequest time3 = new AvailableTimeRequest(Days.WEDNESDAY, LocalTime.now(), LocalTime.now(),
                 true);
         final AvailableTimeRequest time4 = new AvailableTimeRequest(Days.THURSDAY, LocalTime.now(), LocalTime.now(),
                 true);
@@ -260,5 +216,9 @@ class CafeAdminServiceTest extends BaseTest {
                 .toList();
 
         return new DetailRequest(availableTimes, detail.getMapUrl(), detail.getDescription(), detail.getPhone());
+    }
+
+    private List<String> imagesFrom(final Cafe cafe) {
+        return cafe.getImages().getUrls();
     }
 }
