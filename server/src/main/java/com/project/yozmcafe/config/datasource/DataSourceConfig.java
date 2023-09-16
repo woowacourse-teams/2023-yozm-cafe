@@ -54,8 +54,7 @@ public class DataSourceConfig {
 
     @Bean
     @Primary
-    public DataSource dataSource(
-            @Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSource) {
+    public DataSource dataSource(@Qualifier(ROUTING_DATA_SOURCE) DataSource routingDataSource) {
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 }
