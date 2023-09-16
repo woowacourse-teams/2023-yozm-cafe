@@ -1,8 +1,14 @@
 package com.project.yozmcafe.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import com.project.yozmcafe.domain.resizedimage.ImageResizer;
+import com.project.yozmcafe.domain.resizedimage.Size;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,15 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.project.yozmcafe.domain.resizedimage.ImageResizer;
-import com.project.yozmcafe.exception.BadRequestException;
-import com.project.yozmcafe.exception.ErrorCode;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ImageResizerTest {
 
@@ -82,7 +82,7 @@ class ImageResizerTest {
         final ImageResizer imageResizer = new ImageResizer(image, "fileName.png");
 
         //when
-        final List<MultipartFile> results = imageResizer.resizeImageToAllSizes();
+        final List<MultipartFile> results = imageResizer.getResizedImages(List.of(Size.values()));
         final List<String> fileNameWithPathResult = results.stream()
                 .map(MultipartFile::getOriginalFilename)
                 .toList();
