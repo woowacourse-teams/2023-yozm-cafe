@@ -26,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     position: fixed;
 
+    overflow-y: hidden;
     display: flex;
     justify-content: center;
 
