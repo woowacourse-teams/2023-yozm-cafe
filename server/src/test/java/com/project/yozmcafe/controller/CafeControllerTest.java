@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.QueryParametersSnippet;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -366,7 +367,6 @@ class CafeControllerTest extends BaseControllerTest {
                 fieldWithPath("[].detail.openingHours[].opened").description("카페 해당요일 영업여부")
         );
     }
-
 
     private ResponseFieldsSnippet getCafeRankResponseFields() {
         return responseFields(

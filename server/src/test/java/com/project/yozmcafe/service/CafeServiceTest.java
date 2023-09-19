@@ -37,14 +37,15 @@ class CafeServiceTest extends BaseTest {
     @DisplayName("로그인 된 사용자의 안본 카페 목록을 조회한다.")
     void getCafesForLoginMember() {
         //given
-        final Member member = memberRepository.save(new Member("1", "폴로", "img"));
+        final Member member = new Member("1", "폴로", "img");
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
         member.addUnViewedCafes(Arrays.asList(cafe1, cafe2));
         member.updateLikedCafesBy(cafe1, true);
+        memberRepository.save(member);
 
         //when
-        final List<CafeResponse> result = cafeService.getCafesForLoginMember(member, 5);
+        final List<CafeResponse> result = cafeService.getCafesForLoginMember(member.getId(), 5);
 
         //then
         assertAll(
@@ -163,7 +164,6 @@ class CafeServiceTest extends BaseTest {
     void getCafeById() {
         //given
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
-        final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
 
         //when
         final CafeResponse result = cafeService.getCafeById(savedCafe1.getId());
