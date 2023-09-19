@@ -6,22 +6,28 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
+
 @Service
 @Transactional(readOnly = true)
 public class LikedCafeService {
 
     private final CafeRepository cafeRepository;
+    private final MemberRepository memberRepository;
     private final MemberService memberService;
 
-    public LikedCafeService(final CafeRepository cafeRepository,
+    public LikedCafeService(final CafeRepository cafeRepository, final MemberRepository memberRepository,
                             final MemberService memberService) {
         this.cafeRepository = cafeRepository;
+        this.memberRepository = memberRepository;
         this.memberService = memberService;
     }
 
@@ -54,7 +60,9 @@ public class LikedCafeService {
     }
 
     @Transactional
-    public void updateLike(final Member member, final long cafeId, final boolean isLiked) {
+    public void updateLike(final String memberId, final long cafeId, final boolean isLiked) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_MEMBER));
         final Cafe cafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 카페가 존재하지 않습니다."));
 

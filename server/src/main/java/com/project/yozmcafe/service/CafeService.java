@@ -7,6 +7,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,17 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
 
 @Service
 @Transactional(readOnly = true)
 public class CafeService {
 
     private final CafeRepository cafeRepository;
+    private final MemberRepository memberRepository;
     private final UnViewedCafeService unViewedCafeService;
     private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+    public CafeService(final CafeRepository cafeRepository, final MemberRepository memberRepository,
+                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
+        this.memberRepository = memberRepository;
         this.unViewedCafeService = unViewedCafeService;
         this.cafeRankGenerator = cafeRankGenerator;
     }
@@ -50,7 +55,9 @@ public class CafeService {
     }
 
     @Transactional
-    public List<CafeResponse> getCafesForLoginMember(final Member member, final int size) {
+    public List<CafeResponse> getCafesForLoginMember(final String memberId, final int size) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_MEMBER));
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
