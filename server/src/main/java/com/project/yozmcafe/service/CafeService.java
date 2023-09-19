@@ -2,6 +2,7 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 
@@ -70,17 +72,18 @@ public class CafeService {
         return CafeResponse.fromUnLoggedInUser(foundCafe);
     }
 
-    public List<CafeSearchResponse> getCafesByKeyWord(final String cafeNameKeyWord, final String menuKeyWord, final String addressKeyWord) {
-        List<Cafe> cafes;
-        if (StringUtils.isBlank(menuKeyWord)) {
-            cafes = cafeRepository.findAllBy(cafeNameKeyWord, addressKeyWord);
-        }
-        else {
-            cafes = cafeRepository.findAllBy(cafeNameKeyWord, menuKeyWord, addressKeyWord);
-        }
+    public List<CafeSearchResponse> getCafesBySearch(final CafeSearchRequest searchRequest) {
+        final List<Cafe> cafes = mapSearchMethod(searchRequest).get();
 
         return cafes.stream()
                 .map(CafeSearchResponse::from)
                 .toList();
+    }
+
+    private Supplier<List<Cafe>> mapSearchMethod(final CafeSearchRequest cafeSearchRequest) {
+        if (StringUtils.isBlank(cafeSearchRequest.menu())) {
+            return () -> cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.address());
+        }
+        return () -> cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.menu(), cafeSearchRequest.address());
     }
 }

@@ -3,6 +3,7 @@ package com.project.yozmcafe.service;
 import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -195,9 +196,10 @@ class CafeServiceTest extends BaseTest {
     void getCafesByKeyWordWhenMenuExist() {
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
         final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
-        menuRepository.save(Fixture.getMenu(null, savedCafe1, 1, "카페 메뉴", "image", "description", "2000", true));
+        menuRepository.save(Fixture.getMenu(savedCafe1, 1, "카페 메뉴"));
 
-        List<CafeSearchResponse> cafeResponse = cafeService.getCafesByKeyWord("카페", "카페 메뉴", "주소");
+        final CafeSearchRequest cafeSearchRequest = new CafeSearchRequest("카페", "카페 메뉴", "주소");
+        List<CafeSearchResponse> cafeResponse = cafeService.getCafesBySearch(cafeSearchRequest);
         assertThat(cafeResponse).extracting("id", "name")
                 .containsOnly(tuple(savedCafe1.getId(), savedCafe1.getName()));
     }
@@ -208,11 +210,12 @@ class CafeServiceTest extends BaseTest {
         final Cafe savedCafe1 = cafeRepository.save(Fixture.getCafe("카페1", "주소1", 10));
         final Cafe savedCafe2 = cafeRepository.save(Fixture.getCafe("카페2", "주소2", 11));
         final Cafe savedCafe3 = cafeRepository.save(Fixture.getCafe("카페3", "주소3", 11));
-        menuRepository.save(Fixture.getMenu(null, savedCafe1, 1, "카페 메뉴1", "image", "description", "2000", true));
-        menuRepository.save(Fixture.getMenu(null, savedCafe2, 1, "카페 메뉴2", "image", "description", "2000", true));
-        menuRepository.save(Fixture.getMenu(null, savedCafe3, 1, "카페 메뉴3", "image", "description", "2000", true));
+        menuRepository.save(Fixture.getMenu(savedCafe1, 1, "카페 메뉴1"));
+        menuRepository.save(Fixture.getMenu(savedCafe2, 1, "카페 메뉴2"));
+        menuRepository.save(Fixture.getMenu(savedCafe3, 1, "카페 메뉴3"));
 
-        List<CafeSearchResponse> cafeResponse = cafeService.getCafesByKeyWord("카페1", "", "주소");
+        final CafeSearchRequest cafeSearchRequest = new CafeSearchRequest("카페1", null, "주소");
+        List<CafeSearchResponse> cafeResponse = cafeService.getCafesBySearch(cafeSearchRequest);
         assertThat(cafeResponse).extracting("id", "name")
                 .containsOnly(tuple(savedCafe1.getId(), savedCafe1.getName()));
     }

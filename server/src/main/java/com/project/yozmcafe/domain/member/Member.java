@@ -7,12 +7,16 @@ import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
+import static java.lang.Math.min;
 
 @Entity
 public class Member {
@@ -23,6 +27,13 @@ public class Member {
     private String name;
     @Column(nullable = false)
     private String image;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
+    private List<UnViewedCafe> unViewedCafes = new ArrayList<>();
+
+    @OrderBy("createdAt Desc")
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = {PERSIST, MERGE})
+    private List<LikedCafe> likedCafes = new ArrayList<>();
 
     protected Member() {
     }
@@ -88,14 +99,13 @@ public class Member {
         return result;
     }
 
-    public List<LikedCafe> getLikedCafesSection(final int startIndex, final int endIndex) {
-        if (startIndex >= likedCafes.size()) {
-            return Collections.emptyList();
-        }
+    public List<Cafe> getLikedCafes(final int startIndex, final int endIndex) {
+        final List<LikedCafe> likedCafes = new ArrayList<>(this.likedCafes);
+        final List<Cafe> cafes = likedCafes.stream()
+                .map(LikedCafe::getCafe)
+                .toList();
 
-        final List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-
-        return reverseLikedCafes.subList(startIndex, min(endIndex, likedCafes.size()));
+        return cafes.subList(startIndex, min(endIndex, this.likedCafes.size()));
     }
 
     public String getId() {
@@ -110,4 +120,11 @@ public class Member {
         return image;
     }
 
+    public List<UnViewedCafe> getUnViewedCafes() {
+        return unViewedCafes;
+    }
+
+    public List<LikedCafe> getLikedCafes() {
+        return likedCafes;
+    }
 }

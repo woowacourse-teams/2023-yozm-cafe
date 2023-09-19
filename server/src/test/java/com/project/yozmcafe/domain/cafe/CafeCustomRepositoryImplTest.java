@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CafeCustomRepositoryImplTest extends BaseTest {
 
@@ -37,8 +37,7 @@ class CafeCustomRepositoryImplTest extends BaseTest {
     void findByCafeName() {
         // given
         final String cafeName = "도치 카페";
-        final String menu = "";
-        final String address = "";
+        final String address = null;
 
         // when
         final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, address);
@@ -54,14 +53,15 @@ class CafeCustomRepositoryImplTest extends BaseTest {
     @DisplayName("메뉴 이름으로 카페를 조회한다")
     void findByMenuName() {
         // given
-        final String cafeName = "";
+        final String cafeName = null;
         final String menu = "도치 음료";
-        final String address = "";
-        menuRepository.save(Fixture.getMenu(null, cafe1, 1, "도치 음료1", "imageUrl1", "description", "3000원", true));
-        menuRepository.save(Fixture.getMenu(null, cafe1, 2, "도치 음료2", "imageUrl1", "description", "3000원", true));
-        menuRepository.save(Fixture.getMenu(null, cafe1, 3, "아무 음료", "imageUrl2", "description", "3500원", true));
-        menuRepository.save(Fixture.getMenu(null, cafe2, 2, "도치 음료", "imageUrl3", "description", "4000원", false));
-        menuRepository.save(Fixture.getMenu(null, cafe3, 1, "도치", "imageUrl4", "description", "2000원", true));
+        final String address = null;
+
+        menuRepository.save(Fixture.getMenu(cafe1, 1, "도치 음료1"));
+        menuRepository.save(Fixture.getMenu(cafe1, 2, "도치 음료2"));
+        menuRepository.save(Fixture.getMenu(cafe1, 3, "아무 음료"));
+        menuRepository.save(Fixture.getMenu(cafe2, 2, "도치 음료"));
+        menuRepository.save(Fixture.getMenu(cafe3, 1, "도치"));
 
         // when
         final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
@@ -77,8 +77,7 @@ class CafeCustomRepositoryImplTest extends BaseTest {
     @DisplayName("주소로 카페를 조회한다")
     void findByAddress() {
         // given
-        final String cafeName = "";
-        final String menu = "";
+        final String cafeName = null;
         final String address = "카페 주소";
 
         // when
@@ -98,9 +97,10 @@ class CafeCustomRepositoryImplTest extends BaseTest {
         // given
         final String cafeName = "카페1";
         final String menu = "음료";
-        final String address = "";
-        menuRepository.save(Fixture.getMenu(null, cafe1, 1, "음료1", "imageUrl1", "description", "3000원", true));
-        menuRepository.save(Fixture.getMenu(null, cafe2, 1, "음료2", "imageUrl2", "description", "3000원", true));
+        final String address = null;
+
+        menuRepository.save(Fixture.getMenu(cafe1, 1, "음료1"));
+        menuRepository.save(Fixture.getMenu(cafe2, 1, "음료2"));
 
         // when
         final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
@@ -124,14 +124,33 @@ class CafeCustomRepositoryImplTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("카페 메뉴,주소로 카페를 조회한다")
+    void findByMenuAndAddress() {
+        // given
+        final String cafeName = null;
+        final String menu = "음료";
+        final String address = "카페 주소";
+
+        menuRepository.save(Fixture.getMenu(cafe2, 1, "음료2"));
+        menuRepository.save(Fixture.getMenu(cafe3, 1, "음료3"));
+
+        // when
+        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
+
+        // then
+        assertThat(cafes).extracting(Cafe::getName).containsOnly(cafe2.getName(), cafe3.getName());
+    }
+
+    @Test
     @DisplayName("카페 이름,메뉴,주소로 카페를 조회한다")
     void findByAllFilters() {
         // given
         final String cafeName = "카페";
         final String menu = "도치 음료";
         final String address = "주소";
-        menuRepository.save(Fixture.getMenu(null, cafe1, 1, "도치 음료", "imageUrl1", "description", "3000원", true));
-        menuRepository.save(Fixture.getMenu(null, cafe2, 1, "도치 음료", "imageUrl1", "description", "3000원", true));
+
+        menuRepository.save(Fixture.getMenu(cafe1, 1, "도치 음료"));
+        menuRepository.save(Fixture.getMenu(cafe2, 1, "도치 음료"));
 
         // when
         final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, menu, address);
@@ -141,6 +160,24 @@ class CafeCustomRepositoryImplTest extends BaseTest {
                 () -> assertThat(cafes).extracting(Cafe::getName).containsOnly(cafe1.getName(), cafe2.getName()),
                 () -> assertThat(cafes).hasSize(2)
         );
+    }
+
+    @Test
+    @DisplayName("아무 조건을 걸지 않고 카페를 조회한다")
+    void findByNoFilters() {
+        // given
+        final String cafeName = null;
+        final String address = null;
+
+        menuRepository.save(Fixture.getMenu(cafe2, 1, "음료2"));
+        menuRepository.save(Fixture.getMenu(cafe3, 1, "음료3"));
+
+        // when
+        final List<Cafe> cafes = cafeCustomRepositoryImpl.findAllBy(cafeName, address);
+
+        // then
+        assertThat(cafes).extracting(Cafe::getName)
+                .containsOnly(cafe1.getName(), cafe2.getName(), cafe3.getName(), cafe4.getName());
     }
 }
 

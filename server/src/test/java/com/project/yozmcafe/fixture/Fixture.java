@@ -35,9 +35,8 @@ public class Fixture {
         return new Cafe(id, name, address, getImages(), getDetail(), likeCount);
     }
 
-    public static Menu getMenu(final Long id, final Cafe cafe, final int priority,
-                               final String name, final String imageUrl, final String description,
-                               final String price, final boolean isRecommended) {
-        return new Menu(id, cafe, priority, name, imageUrl, description, price, isRecommended);
+    public static Menu getMenu(final Cafe cafe, final int priority, final String name) {
+        return new Menu(null, cafe, priority, name, "image", "description",
+                "1000원", false);
     }
 }

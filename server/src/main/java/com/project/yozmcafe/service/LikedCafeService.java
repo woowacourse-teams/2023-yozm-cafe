@@ -1,7 +1,7 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeThumbnailResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
@@ -28,19 +28,11 @@ public class LikedCafeService {
     public List<CafeThumbnailResponse> findLikedCafeThumbnailsByMemberId(final String memberId, final Pageable pageable) {
         final Member member = memberService.findMemberByIdOrElseThrow(memberId);
 
-        final List<LikedCafe> likedCafes = getLikedCafes(pageable, member);
+        final List<Cafe> likedCafes = member.getLikedCafes((int) pageable.getOffset(), pageable.getPageSize());
 
         return likedCafes.stream()
-                .map(LikedCafe::getCafe)
                 .map(CafeThumbnailResponse::from)
                 .toList();
-    }
-
-    private List<LikedCafe> getLikedCafes(final Pageable pageable, final Member member) {
-        final int startIndex = pageable.getPageNumber() * pageable.getPageSize();
-        final int endIndex = startIndex + pageable.getPageSize();
-
-        return member.getLikedCafesSection(startIndex, endIndex);
     }
 
     public List<LikedCafeResponse> findLikedCafesByMemberId(final String memberId) {

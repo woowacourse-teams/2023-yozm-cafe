@@ -1,8 +1,8 @@
 package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.BaseTest;
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeThumbnailResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
@@ -65,12 +65,15 @@ class LikedCafeServiceTest extends BaseTest {
     @DisplayName("좋아요 목록 수를 초과한 page 요청 시 빈 list를 반환한다.")
     void findLikedCafesById_empty() {
         //given
-        final Member member = memberRepository.save(new Member("1234", "오션", "오션사진"));
         final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
         final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
-        final PageRequest pageRequest = PageRequest.of(1, 2);
+        cafeRepository.save(cafe1);
+        cafeRepository.save(cafe2);
+        Member member = new Member("1234", "오션", "오션사진");
         member.updateLikedCafesBy(cafe1, true);
         member.updateLikedCafesBy(cafe2, true);
+        memberRepository.save(member);
+        final PageRequest pageRequest = PageRequest.of(1, 2);
 
         //when
         final List<CafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);

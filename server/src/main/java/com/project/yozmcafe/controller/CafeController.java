@@ -2,6 +2,7 @@ package com.project.yozmcafe.controller;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.CafeService;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -54,11 +54,8 @@ public class CafeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CafeSearchResponse>> getCafeBySearch(
-                                                      @RequestParam(value = "cafeName", required = false, defaultValue = "") final String cafeName,
-                                                      @RequestParam(value = "menu", required = false, defaultValue = "") final String menu,
-                                                      @RequestParam(value = "address", required = false, defaultValue = "") final String address) {
-        final List<CafeSearchResponse> cafeSearchResponses = cafeService.getCafesByKeyWord(cafeName, menu, address);
+    public ResponseEntity<List<CafeSearchResponse>> getCafeBySearch(final CafeSearchRequest cafeSearchRequest) {
+        final List<CafeSearchResponse> cafeSearchResponses = cafeService.getCafesBySearch(cafeSearchRequest);
         return ResponseEntity.ok(cafeSearchResponses);
     }
 }

@@ -341,7 +341,7 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("사용자가 검색 요청을 보내면, 검색어와 기준에 맞는 카페를 응답한다.")
     void getCafesBySearch() {
         //given
-        menuRepository.save(Fixture.getMenu(null, cafe1, 1, "요즘커피", "image1", "description", "2000", false));
+        menuRepository.save(Fixture.getMenu(cafe1, 1, "요즘커피"));
 
         //when
         final Response response = given(spec).log().all()
