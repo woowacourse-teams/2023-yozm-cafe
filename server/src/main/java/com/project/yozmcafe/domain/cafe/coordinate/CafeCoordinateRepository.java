@@ -13,7 +13,7 @@ public interface CafeCoordinateRepository extends JpaRepository<CafeCoordinate, 
     @Query(nativeQuery = true,
             value = """
                       SELECT c.id, c.name, c.address, ST_X(co.coordinate) AS latitude, ST_Y(co.coordinate) AS longitude
-                      FROM cafe_coordinates co
+                      FROM cafe_coordinate co
                       JOIN cafe AS c
                       ON co.cafe_id = c.id
                       WHERE ST_CONTAINS(ST_Buffer(ST_GeomFromText(:point, 4326), :radius), co.coordinate);
