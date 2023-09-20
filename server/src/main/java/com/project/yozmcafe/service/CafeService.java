@@ -7,7 +7,6 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,21 +15,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
 
 @Service
 @Transactional(readOnly = true)
 public class CafeService {
 
     private final CafeRepository cafeRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final UnViewedCafeService unViewedCafeService;
     private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final MemberRepository memberRepository,
-                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+    public CafeService(final CafeRepository cafeRepository, final MemberService memberService, final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
-        this.memberRepository = memberRepository;
+        this.memberService = memberService;
         this.unViewedCafeService = unViewedCafeService;
         this.cafeRankGenerator = cafeRankGenerator;
     }
@@ -38,12 +35,10 @@ public class CafeService {
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
         final List<Cafe> foundCafes = cafeRepository.findSliceBy(pageable).getContent();
 
-        return foundCafes.stream()
-                .map(cafe -> {
-                    cafe.getImages().getUrls().size();
-                    return CafeResponse.fromUnLoggedInUser(cafe);
-                })
-                .toList();
+        return foundCafes.stream().map(cafe -> {
+            cafe.getImages().getUrls().size();
+            return CafeResponse.fromUnLoggedInUser(cafe);
+        }).toList();
     }
 
     public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {
@@ -52,27 +47,20 @@ public class CafeService {
         final List<Long> ids = cafeRepository.findCafeIdsOrderByLikeCount(pageable);
         final List<Cafe> foundCafes = cafeRepository.findCafesByIdsOrderByLikeCount(ids);
 
-        return foundCafes.stream()
-                .map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe))
-                .toList();
+        return foundCafes.stream().map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe)).toList();
     }
 
     @Transactional
     public List<CafeResponse> getCafesForLoginMember(final String memberId, final int size) {
-        final Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_MEMBER));
+        final Member member = memberService.findMemberByIdOrElseThrow(memberId);
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
-        return cafes.stream()
-                .map(UnViewedCafe::getCafe)
-                .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))
-                .toList();
+        return cafes.stream().map(UnViewedCafe::getCafe).map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe))).toList();
     }
 
     public CafeResponse getCafeById(final long cafeId) {
-        final Cafe foundCafe = cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
+        final Cafe foundCafe = cafeRepository.findById(cafeId).orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
         return CafeResponse.fromUnLoggedInUser(foundCafe);
     }
