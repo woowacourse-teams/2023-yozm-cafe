@@ -5,7 +5,9 @@ import webpackCommonConfig from './webpack.common.js';
 /** @type {import('webpack').Configuration} */
 export default merge(webpackCommonConfig, {
   mode: 'production',
-  plugins: [new BundleAnalyzerPlugin()],
+  plugins: [
+    // new BundleAnalyzerPlugin()
+  ],
   optimization: {
     usedExports: true,
     minimize: true,
