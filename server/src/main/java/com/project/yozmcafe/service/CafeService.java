@@ -35,10 +35,9 @@ public class CafeService {
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
         final List<Cafe> foundCafes = cafeRepository.findSliceBy(pageable).getContent();
 
-        return foundCafes.stream().map(cafe -> {
-            cafe.getImages().getUrls().size();
-            return CafeResponse.fromUnLoggedInUser(cafe);
-        }).toList();
+        return foundCafes.stream()
+                .map(CafeResponse::fromUnLoggedInUser)
+                .toList();
     }
 
     public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {

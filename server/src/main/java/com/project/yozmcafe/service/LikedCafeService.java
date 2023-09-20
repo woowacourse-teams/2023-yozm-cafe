@@ -6,7 +6,6 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +17,10 @@ import java.util.List;
 public class LikedCafeService {
 
     private final CafeRepository cafeRepository;
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
 
-    public LikedCafeService(final CafeRepository cafeRepository, final MemberRepository memberRepository,
-                            final MemberService memberService) {
+    public LikedCafeService(final CafeRepository cafeRepository, final MemberService memberService) {
         this.cafeRepository = cafeRepository;
-        this.memberRepository = memberRepository;
         this.memberService = memberService;
     }
 
@@ -52,10 +48,7 @@ public class LikedCafeService {
 
         return likedCafes.stream()
                 .map(LikedCafe::getCafe)
-                .map(cafe -> {
-                    cafe.getImages().getUrls().size();
-                    return LikedCafeResponse.from(cafe);
-                })
+                .map(LikedCafeResponse::from)
                 .toList();
     }
 
