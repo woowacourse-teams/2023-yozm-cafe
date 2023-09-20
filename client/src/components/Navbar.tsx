@@ -34,7 +34,7 @@ const Navbar = () => {
   return (
     <Container>
       <LogoContainer>
-        <Logo onClick={handleLogoClick} fontSize="4xl" />
+          <Logo />
       </LogoContainer>
       <ButtonContainer>
         <RankButtonContainer>
@@ -78,6 +78,10 @@ const ButtonContainer = styled.div`
 
 const LogoContainer = styled.div`
   flex: 6;
+`;
+
+const Logo = styled.img.attrs({ src: '/assets/logo.svg' })`
+  height: ${({ theme }) => theme.fontSize['4xl']};
 `;
 
 const RankButtonContainer = styled.div`
