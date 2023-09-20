@@ -1,51 +1,41 @@
 import { useState } from 'react';
-import { styled } from 'styled-components';
 import CafeCard from '../components/CafeCard';
+import ScrollSnapContainer from '../components/ScrollSnapContainer';
 import useCafes from '../hooks/useCafes';
-import useUser from '../hooks/useUser';
+import type { Cafe } from '../types';
+import { easeOutExpo } from '../utils/timingFunctions';
 
 const PREFETCH_OFFSET = 2;
 
 const HomePage = () => {
-  const { data: user } = useUser();
   const { cafes, fetchNextPage, isFetching, hasNextPage } = useCafes();
-  const [activeCafe, setActiveCafe] = useState(cafes[0]);
+
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const shouldFetch =
     hasNextPage &&
     !isFetching &&
-    cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length;
+    cafes.findIndex((cafe) => cafe.id === cafes[activeIndex].id) + PREFETCH_OFFSET >= cafes.length;
 
   if (shouldFetch) {
     fetchNextPage();
   }
 
+  const itemRenderer = (cafe: Cafe) => <CafeCard key={cafe.id} cafe={cafe} />;
+
   return (
-    <CardList>
-      {cafes.map((cafe) => (
-        <CafeCard
-          key={cafe.id}
-          cafe={cafe}
-          onIntersect={(intersection: IntersectionObserverEntry) => {
-            if (intersection.isIntersecting) {
-              setActiveCafe(cafe);
-            }
-          }}
-        />
-      ))}
-    </CardList>
+    <ScrollSnapContainer
+      style={{ height: '100%' }}
+      scrollPosition={scrollPosition}
+      onScrollPositionChange={setScrollPosition}
+      activeIndex={activeIndex}
+      onActiveIndexChange={setActiveIndex}
+      items={cafes}
+      timingFn={easeOutExpo}
+      itemRenderer={itemRenderer}
+    />
   );
 };
 
 export default HomePage;
-
-const CardList = styled.ul`
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  height: 100%;
-
-  & > * {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-`;
