@@ -7,7 +7,7 @@ import { easeOutExpo } from '../utils/timingFunctions';
 
 const PREFETCH_OFFSET = 2;
 
-const Home = () => {
+const HomePage = () => {
   const { cafes, fetchNextPage, isFetching, hasNextPage } = useCafes();
 
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -38,4 +38,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

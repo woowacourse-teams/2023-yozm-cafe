@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import CafeCard from '../components/CafeCard';
 import useCafe from '../hooks/useCafe';
 
-const Cafe = () => {
+const CafePage = () => {
   const { cafeId } = useParams();
   const { data: cafe } = useCafe(Number(cafeId));
 
@@ -34,7 +34,7 @@ const Cafe = () => {
   );
 };
 
-export default Cafe;
+export default CafePage;
 
 const CardList = styled.ul`
   scroll-snap-type: y mandatory;

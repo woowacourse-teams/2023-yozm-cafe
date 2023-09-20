@@ -8,13 +8,6 @@ const GlobalStyle = createGlobalStyle`
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
   }
 
-  @font-face {
-    font-family: 'BMJUA';
-    font-weight: normal;
-    font-style: normal;
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
-  }
-
   * {
     font-family: 'Pretendard', sans-serif;
 

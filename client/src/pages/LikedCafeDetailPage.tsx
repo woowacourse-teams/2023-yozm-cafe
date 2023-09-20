@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import CafeCard from '../components/CafeCard';
 import useLikedCafesDetail from '../hooks/useLikedCafesDetail';
 
-const LikedCafeDetail = () => {
+const LikedCafeDetailPage = () => {
   const params = useParams();
   const cafeId = Number(params.cafeId);
 
@@ -26,7 +26,7 @@ const LikedCafeDetail = () => {
   );
 };
 
-export default LikedCafeDetail;
+export default LikedCafeDetailPage;
 
 const CardList = styled.ul`
   scroll-snap-type: y mandatory;

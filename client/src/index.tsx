@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { MSW } from './environment';
-import { worker } from './mocks/worker';
 
 declare global {
   interface Document {
@@ -19,6 +18,7 @@ Object.assign(document, { bodyRoot: document.getElementById('root') });
 
 const main = async () => {
   if (MSW) {
+    const { worker } = await import('./mocks/worker');
     await worker.start();
   }
 
