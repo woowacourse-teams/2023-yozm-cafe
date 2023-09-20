@@ -7,4 +7,4 @@ CREATE TABLE cafe_coordinate
     FOREIGN KEY (cafe_id) REFERENCES cafe (id)
 );
 
-CREATE SPATIAL INDEX idx_coordinates ON cafe_coordinates (coordinate);
+CREATE SPATIAL INDEX idx_coordinates ON cafe_coordinate (coordinate);
