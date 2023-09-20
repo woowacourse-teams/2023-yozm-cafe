@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.yozmcafe.BaseTest;
+import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -42,12 +43,18 @@ class LocationServiceTest extends BaseTest {
         final CafeCoordinate coordinate2 = new CafeCoordinate(PointGenerator.generateWithCoordinate(60, 50), cafe2);
         cafeCoordinateRepository.save(coordinate2);
 
-        //when
-        final List<CafeLocationResponse> results = locationService.findCafesFromLocations(
+        final CafeLocationRequest cafeLocationRequest = new CafeLocationRequest(
                 20.00001,
                 10.00001,
                 0.004504504505,
-                1);
+                1
+        );
+
+        //when
+
+        final List<CafeLocationResponse> results = locationService.findCafesFromLocations(
+                cafeLocationRequest
+        );
 
         //then
         assertSoftly(softAssertions -> {

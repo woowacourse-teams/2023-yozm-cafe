@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
 import com.project.yozmcafe.service.LocationService;
 
@@ -23,16 +23,9 @@ public class LocationController {
 
     @GetMapping
     public ResponseEntity<List<CafeLocationResponse>> findCafesFromLocation(
-            @RequestParam("latitude") final double latitude,
-            @RequestParam("longitude") final double longitude,
-            @RequestParam("latitudeDelta") final double latitudeDelta,
-            @RequestParam("longitudeDelta") final double longitudeDelta) {
+            final CafeLocationRequest cafeLocationRequest) {
         final List<CafeLocationResponse> cafesFromLocations = locationService.findCafesFromLocations(
-                latitude,
-                longitude,
-                latitudeDelta,
-                longitudeDelta
-        );
+                cafeLocationRequest);
         return ResponseEntity.ok(cafesFromLocations);
     }
 }

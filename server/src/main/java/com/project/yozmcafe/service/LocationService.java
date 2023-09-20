@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
 import com.project.yozmcafe.domain.cafe.PointGenerator;
 import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
@@ -21,14 +22,16 @@ public class LocationService {
         this.cafeCoordinateRepository = cafeCoordinateRepository;
     }
 
-    public List<CafeLocationResponse> findCafesFromLocations(final double latitude,
-                                                             final double longitude,
-                                                             final double latitudeDelta,
-                                                             final double longitudeDelta) {
+    public List<CafeLocationResponse> findCafesFromLocations(final CafeLocationRequest cafeLocationRequest) {
+        final double latitude = cafeLocationRequest.latitude();
+        final double longitude = cafeLocationRequest.longitude();
+        final double latitudeDelta = cafeLocationRequest.latitudeDelta();
+        final double longitudeDelta = cafeLocationRequest.longitudeDelta();
+
         final String point = PointGenerator.generateStringPoint(latitude, longitude);
         final double radius = RadiusCalculator.calculate(latitude, latitudeDelta, longitudeDelta);
-        final List<CafePinDto> cafeLocationDtos = cafeCoordinateRepository.findCafePinsFromCoordinate(point,
-                radius);
+        final List<CafePinDto> cafeLocationDtos = cafeCoordinateRepository.findCafePinsFromCoordinate(point, radius);
+
         return cafeLocationDtos.stream()
                 .map(CafeLocationResponse::from)
                 .toList();
