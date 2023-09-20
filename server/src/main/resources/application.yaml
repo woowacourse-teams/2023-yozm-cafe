@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    master:
+      jdbc-url: jdbc:mysql://localhost:20000/yozm-cafe?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    slave:
+      jdbc-url: jdbc:mysql://localhost:20001/yozm-cafe?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+  auth:
+    key: testtesttesttesttesttesttesttesttesttesttesttesttesttesttest
+    accessTokenExpired: 360000
+    refreshTokenExpired: 36000000
+    google:
+      tokenUri: testtesttesttesttesttest
+      authUri: testtesttesttesttesttest
+      clientId: testtesttesttesttesttest
+      clientSecret: testtesttesttesttesttest
+      redirectUri: testtesttesttesttesttest
+      scope: testtesttesttesttesttest
+    kakao:
+      tokenUri: testtesttesttesttesttest
+      authUri: testtesttesttesttesttest
+      clientId: testtesttesttesttesttest
+      clientSecret: testtesttesttesttesttest
+      redirectUri: testtesttesttesttesttest
+      scope: testtesttesttesttesttest
+
+  servlet:
+    multipart:
+      max-file-size: 11MB
+      max-request-size: 110MB
+
+  flyway:
+    enabled: true
+    baseline-version: 20230901153300
+    baseline-on-migrate: true
+    out-of-order: true
+
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+
+s3:
+  bucket: 2023-team-project/2023-yozm-cafe/dev/images
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, logfile
+
+  endpoint:
+    logfile:
+      external-file: ./logs/spring-boot-logger.log
