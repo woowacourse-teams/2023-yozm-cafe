@@ -14,6 +14,10 @@ services:
     command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_general_ci" ]
     volumes:
       - db-data:/var/lib/mysql
+      # my.cnf의 server_id 값은 복제에 참여한 MySQL 서버들이 고유하게 가지고 있는 식별 값이다.
+      # 이 값은 바이너리 로그에 이벤트별로 이벤트가 최초로 발생한 MySQL을 식별하기 위해 사용되며, 기본값이 모두 1이다.
+      # 이 때문에 Master 서버와 Slave 서버를 구별할 수 있도록 Slave 서버의 server_id를 바꾸어 주기 위해 volume 매핑을 진행해야한다.
+      # my.cnf 파일이 존재해야한다.
       - ./my.cnf:/etc/my.cnf
 
 volumes:
