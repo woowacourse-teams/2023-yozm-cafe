@@ -2,7 +2,6 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
-import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
@@ -12,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
@@ -23,14 +23,12 @@ public class CafeService {
     private final CafeRepository cafeRepository;
     private final MemberService memberService;
     private final UnViewedCafeService unViewedCafeService;
-    private final CafeRankGenerator cafeRankGenerator;
 
     public CafeService(final CafeRepository cafeRepository, final MemberService memberService,
-                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+                       final UnViewedCafeService unViewedCafeService) {
         this.cafeRepository = cafeRepository;
         this.memberService = memberService;
         this.unViewedCafeService = unViewedCafeService;
-        this.cafeRankGenerator = cafeRankGenerator;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
@@ -42,14 +40,17 @@ public class CafeService {
     }
 
     public List<CafeRankResponse> getCafesOrderByLikeCount(final Pageable pageable) {
-        cafeRankGenerator.validatePage(pageable);
-
         final List<Long> ids = cafeRepository.findCafeIdsOrderByLikeCount(pageable);
-        final List<Cafe> foundCafes = cafeRepository.findCafesByIdsOrderByLikeCount(ids);
+        final List<Cafe> cafes = cafeRepository.findCafesByIdsOrderByLikeCount(ids);
 
-        return foundCafes.stream()
-                .map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe))
-                .toList();
+        final List<CafeRankResponse> response = new ArrayList<>();
+
+        int rank = (int) pageable.getOffset();
+        for (final Cafe cafe : cafes) {
+            response.add(CafeRankResponse.of(++rank, cafe));
+        }
+
+        return response;
     }
 
     @Transactional
@@ -64,7 +65,7 @@ public class CafeService {
                 .toList();
     }
 
-    public CafeResponse getCafeById(final long cafeId) {
+    public CafeResponse getCafeByIdOrThrow(final long cafeId) {
         final Cafe foundCafe = cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 

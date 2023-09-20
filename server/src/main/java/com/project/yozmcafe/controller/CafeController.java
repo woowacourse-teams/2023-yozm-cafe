@@ -17,8 +17,7 @@ import java.util.List;
 @RequestMapping("/cafes")
 public class CafeController {
 
-    private static final int PAGE_SIZE = 5;
-    private static final int RANKING_PAGE_SIZE = 10;
+    private static final int CAFE_PAGE_SIZE = 5;
 
     private final CafeService cafeService;
 
@@ -27,26 +26,27 @@ public class CafeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(@LoginUser final String memberId) {
-        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(memberId, PAGE_SIZE);
+    public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(final Member member) {
+        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(member, CAFE_PAGE_SIZE);
         return ResponseEntity.ok(cafeResponses);
     }
 
     @GetMapping("/guest")
-    public ResponseEntity<List<CafeResponse>> getCafesForUnLoggedInMember(@PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
+    public ResponseEntity<List<CafeResponse>> getCafesForUnLoggedInMember(
+            @PageableDefault(size = CAFE_PAGE_SIZE) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);
     }
 
     @GetMapping("/ranks")
-    public ResponseEntity<List<CafeRankResponse>> getCafesOrderByLikeCount(@PageableDefault(size = RANKING_PAGE_SIZE) final Pageable pageable) {
+    public ResponseEntity<List<CafeRankResponse>> getCafesOrderByLikeCount(@PageableDefault final Pageable pageable) {
         final List<CafeRankResponse> cafeRankResponses = cafeService.getCafesOrderByLikeCount(pageable);
         return ResponseEntity.ok(cafeRankResponses);
     }
 
     @GetMapping("/{cafeId}")
     public ResponseEntity<CafeResponse> getCafeById(@PathVariable("cafeId") final long cafeId) {
-        CafeResponse cafeResponse = cafeService.getCafeById(cafeId);
+        CafeResponse cafeResponse = cafeService.getCafeByIdOrThrow(cafeId);
         return ResponseEntity.ok(cafeResponse);
     }
 }

@@ -115,7 +115,7 @@ class CafeControllerTest extends BaseControllerTest {
         assertAll(
                 () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).hasSize(4),
-                () -> assertThat(cafeResponse.likeCount()).isEqualTo(0),
+                () -> assertThat(cafeResponse.likeCount()).isZero(),
                 () -> assertThat(cafeResponse.isLiked()).isFalse()
         );
     }
@@ -318,19 +318,6 @@ class CafeControllerTest extends BaseControllerTest {
                 () -> assertThat(response.statusCode()).isEqualTo(200),
                 () -> assertThat(cafeRankResponses).isEmpty()
         );
-    }
-
-    @Test
-    @DisplayName("/cafes/rank?page=? 요청을 보낼 때, 순위 범위를 초과하는 요청이면 statusCode 400을 응답한다")
-    void getCafesOrderByLikeCountWhenRankOutBoundFail() {
-        //when
-        final Response response = given(spec).log().all()
-                .filter(document(CAFE_API + "좋아요 개수 순위에 따라 카페정보 조회 - 범위 초과 예외", getPageRequestParam()))
-                .when()
-                .get("/cafes/ranks?page=4");
-
-        //then
-        assertThat(response.statusCode()).isEqualTo(400);
     }
 
     private Member saveMemberAndUnViewedCafes() {
