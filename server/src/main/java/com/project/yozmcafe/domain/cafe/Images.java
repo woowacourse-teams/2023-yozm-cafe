@@ -17,12 +17,12 @@ public class Images {
 
     @ElementCollection
     @CollectionTable(name = "image")
-    private List<String> urls;
+    private List<String> urls = new ArrayList<>();
 
     protected Images() {
     }
 
-    public Images(List<String> urls) {
+    public Images(final List<String> urls) {
         this.urls = urls;
     }
 
