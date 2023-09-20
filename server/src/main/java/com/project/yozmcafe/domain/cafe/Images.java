@@ -1,5 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
+import com.project.yozmcafe.exception.BadRequestException;
 import java.util.List;
 
 import jakarta.persistence.CollectionTable;
@@ -9,6 +10,7 @@ import jakarta.persistence.Embeddable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_IMAGE;
 
 @Embeddable
 public class Images {
@@ -23,6 +25,10 @@ public class Images {
     }
 
     public Images(final List<String> urls) {
+        if (urls.isEmpty()) {
+            throw new BadRequestException(NOT_EXISTED_CAFE_IMAGE);
+        }
+
         this.urls = urls;
     }
 
