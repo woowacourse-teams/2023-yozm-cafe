@@ -10,15 +10,14 @@ import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.exception.BadRequestException;
-import io.micrometer.common.util.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Service
 @Transactional(readOnly = true)
@@ -73,17 +72,17 @@ public class CafeService {
     }
 
     public List<CafeSearchResponse> getCafesBySearch(final CafeSearchRequest searchRequest) {
-        final List<Cafe> cafes = mapSearchMethod(searchRequest).get();
+        final List<Cafe> cafes = searchWith(searchRequest);
 
         return cafes.stream()
                 .map(CafeSearchResponse::from)
                 .toList();
     }
 
-    private Supplier<List<Cafe>> mapSearchMethod(final CafeSearchRequest cafeSearchRequest) {
-        if (StringUtils.isBlank(cafeSearchRequest.menu())) {
-            return () -> cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.address());
+    private List<Cafe> searchWith(final CafeSearchRequest cafeSearchRequest) {
+        if (isBlank(cafeSearchRequest.menu())) {
+            return cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.address());
         }
-        return () -> cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.menu(), cafeSearchRequest.address());
+        return cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.menu(), cafeSearchRequest.address());
     }
 }
