@@ -45,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "babel-loader": "^9.1.2",
+    "babel-plugin-react-remove-properties": "^0.3.0",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "cypress": "^12.17.4",

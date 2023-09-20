@@ -77,4 +77,16 @@ export default {
       },
     },
   },
+  env: {
+    production: {
+      plugins: [
+        [
+          'react-remove-properties',
+          {
+            properties: ['data-testid'],
+          },
+        ],
+      ],
+    },
+  },
 };
