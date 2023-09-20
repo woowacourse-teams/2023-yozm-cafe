@@ -39,7 +39,10 @@ public class CafeService {
         final List<Cafe> foundCafes = cafeRepository.findSliceBy(pageable).getContent();
 
         return foundCafes.stream()
-                .map(CafeResponse::fromUnLoggedInUser)
+                .map(cafe -> {
+                    cafe.getImages().getUrls().size();
+                    return CafeResponse.fromUnLoggedInUser(cafe);
+                })
                 .toList();
     }
 

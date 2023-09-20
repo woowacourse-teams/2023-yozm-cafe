@@ -55,7 +55,10 @@ public class LikedCafeService {
 
         return likedCafes.stream()
                 .map(LikedCafe::getCafe)
-                .map(LikedCafeResponse::from)
+                .map(cafe -> {
+                    cafe.getImages().getUrls().size();
+                    return LikedCafeResponse.from(cafe);
+                })
                 .toList();
     }
 
