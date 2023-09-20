@@ -12,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
-@Entity(name = "cafe_coordinates")
+@Entity(name = "cafe_coordinate")
 public class CafeCoordinate {
 
     @Id

@@ -1,4 +1,4 @@
-CREATE TABLE cafe_coordinates
+CREATE TABLE cafe_coordinate
 (
     id         BIGINT NOT NULL AUTO_INCREMENT,
     coordinate POINT  NOT NULL SRID 4326,
