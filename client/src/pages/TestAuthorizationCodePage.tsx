@@ -1,9 +1,9 @@
 import { Navigate, useParams } from 'react-router-dom';
 
-const TestAuthorizationCode = () => {
+const TestAuthorizationCodePage = () => {
   const { provider } = useParams();
 
   return <Navigate to={`/auth/${provider}?code=test-authorization-code`} />;
 };
 
-export default TestAuthorizationCode;
+export default TestAuthorizationCodePage;
