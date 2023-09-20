@@ -13,14 +13,14 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 @Configuration
-@Profile({"prod","dev"})
+@Profile({"!test"})
 public class DataSourceConfig {
 
     public static final String MASTER_DATA_SOURCE = "master";
-    public static final String SLAVE_DATA_SOURCE = "slave";
-    private static final String ROUTING_DATA_SOURCE = "routingDataSource";
     private static final String MASTER_DATA_SOURCE_LOCATION = "spring.datasource.master";
+    public static final String SLAVE_DATA_SOURCE = "slave";
     private static final String SLAVE_DATA_SOURCE_LOCATION = "spring.datasource.slave";
+    private static final String ROUTING_DATA_SOURCE = "routingDataSource";
 
     @Bean
     @Qualifier(MASTER_DATA_SOURCE)
