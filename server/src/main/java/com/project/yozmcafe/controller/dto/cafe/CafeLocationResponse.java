@@ -8,7 +8,7 @@ public record CafeLocationResponse(Long id, String name, String address, double 
         return new CafeLocationResponse(
                 cafePinDto.getId(),
                 cafePinDto.getName(),
-                cafePinDto.getName(),
+                cafePinDto.getAddress(),
                 cafePinDto.getLatitude(),
                 cafePinDto.getLongitude()
         );
