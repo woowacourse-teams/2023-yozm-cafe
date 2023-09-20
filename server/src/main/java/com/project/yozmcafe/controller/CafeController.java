@@ -32,7 +32,7 @@ public class CafeController {
         return ResponseEntity.ok(cafeResponses);
     }
 
-    @GetMapping(value = "/guest")
+    @GetMapping("/guest")
     public ResponseEntity<List<CafeResponse>> getCafesForUnLoggedInMember(@PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
         List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);

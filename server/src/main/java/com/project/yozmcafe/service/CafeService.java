@@ -56,11 +56,15 @@ public class CafeService {
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
-        return cafes.stream().map(UnViewedCafe::getCafe).map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe))).toList();
+        return cafes.stream()
+                .map(UnViewedCafe::getCafe)
+                .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))
+                .toList();
     }
 
     public CafeResponse getCafeById(final long cafeId) {
-        final Cafe foundCafe = cafeRepository.findById(cafeId).orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
+        final Cafe foundCafe = cafeRepository.findById(cafeId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
         return CafeResponse.fromUnLoggedInUser(foundCafe);
     }

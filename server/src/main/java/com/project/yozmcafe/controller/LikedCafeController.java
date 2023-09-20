@@ -39,7 +39,7 @@ public class LikedCafeController {
         return ResponseEntity.ok(likedCafes);
     }
 
-    @PostMapping(value = "/cafes/{cafeId}/likes")
+    @PostMapping("/cafes/{cafeId}/likes")
     public ResponseEntity<Void> updateLikes(@LoginUser final String memberId,
                                             @PathVariable("cafeId") final long cafeId,
                                             @RequestParam("isLiked") final boolean isLiked) {
