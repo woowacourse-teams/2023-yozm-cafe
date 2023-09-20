@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 @Configuration
-@Profile({"!test"})
+@Profile({"prod"})
 public class DataSourceConfig {
 
     public static final String MASTER_DATA_SOURCE = "master";

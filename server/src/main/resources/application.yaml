@@ -1,15 +1,9 @@
 spring:
   datasource:
-    master:
-      jdbc-url: jdbc:mysql://localhost:20000/yozm-cafe?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
-      username: root
-      password: root
-      driver-class-name: com.mysql.cj.jdbc.Driver
-    slave:
-      jdbc-url: jdbc:mysql://localhost:20001/yozm-cafe?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
-      username: root
-      password: root
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:20000/yozm-cafe?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   auth:
     key: testtesttesttesttesttesttesttesttesttesttesttesttesttesttest
