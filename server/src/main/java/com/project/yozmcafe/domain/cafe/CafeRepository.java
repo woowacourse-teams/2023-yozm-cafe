@@ -15,24 +15,24 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
 
     @Override
     @Query("""
-            select c 
-            from Cafe c 
-            left join fetch c.images.urls 
-            where c.id = :cafeId
+            SELECT c
+            FROM Cafe c
+            JOIN FETCH c.images.urls
+            WHERE c.id = :cafeId
             """)
     Optional<Cafe> findById(@Param("cafeId") Long cafeId);
 
     @Override
     @Query("""
-            select c 
-            from Cafe c 
-            left join fetch c.images.urls
+            SELECT c
+            FROM Cafe c
+            JOIN FETCH c.images.urls
             """)
     List<Cafe> findAll();
 
     @Query("""
-            SELECT c.id 
-            FROM Cafe c 
+            SELECT c.id
+            FROM Cafe c
             ORDER BY c.likeCount DESC
             """)
     List<Long> findCafeIdsOrderByLikeCount(Pageable pageable);

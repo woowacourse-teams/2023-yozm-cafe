@@ -13,20 +13,20 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     @Override
     @Query("""
-            select m
-            from Member m
-            left join fetch m.unViewedCafes uvc
-            left join fetch uvc.cafe
-            where m.id = :id
+            SELECT m
+            FROM Member m
+            LEFT JOIN FETCH m.unViewedCafes uvc
+            LEFT JOIN FETCH uvc.cafe
+            WHERE m.id = :id
             """)
     Optional<Member> findById(@Param("id") String id);
 
     @Override
     @Query("""
-            select m
-            from Member m
-            left join fetch m.unViewedCafes uvc
-            left join fetch uvc.cafe
+            SELECT m
+            FROM Member m
+            LEFT JOIN FETCH m.unViewedCafes uvc
+            LEFT JOIN FETCH uvc.cafe
             """)
     List<Member> findAll();
 }
