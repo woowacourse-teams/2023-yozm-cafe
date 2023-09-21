@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { styled } from 'styled-components';
+import { keyframes, styled } from 'styled-components';
 import CafeCard from '../components/CafeCard';
 import useCafes from '../hooks/useCafes';
 import useUser from '../hooks/useUser';
@@ -39,10 +39,25 @@ const HomePage = () => {
 
 export default HomePage;
 
+const Bounce = keyframes`
+  from {
+      transform: translateY(0);
+  }
+  to {
+      transform: translateY(-10px);
+  }
+`;
+
 const CardList = styled.ul`
   scroll-snap-type: y mandatory;
+
   overflow-y: scroll;
+
   height: 100%;
+
+  animation: ${Bounce} 0.8s ease-out;
+  animation-iteration-count: 6;
+  animation-direction: alternate;
 
   & > * {
     scroll-snap-align: start;

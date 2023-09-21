@@ -23,7 +23,7 @@ const LikeButton = (props: LikeButtonProps) => {
   };
 
   return (
-    <Container aria-label="좋아요 버튼" tabIndex={0} role="button">
+    <Container data-testid="likeButton" aria-label="좋아요 버튼" tabIndex={0} role="button">
       <HeartIcon $active={active} onClick={handleLikeClick} />
       <LikeCount>{likeCount}</LikeCount>
       <Announcement aria-live="assertive" aria-atomic="true" aria-relevant="text">
