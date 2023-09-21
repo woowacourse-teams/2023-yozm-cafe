@@ -62,7 +62,7 @@ class LocationControllerTest extends BaseControllerTest {
         saveLocation(cafeId4, 20.004, 10);
         saveLocation(cafeId5, 20.005, 10);
         saveLocation(cafeId6, 20.006, 10);
-        saveLocation(cafeId7, 20.007, 10);
+        saveLocation(cafeId7, 30.007, 10);
 
         //when
         final Response response = given(spec)
@@ -90,7 +90,7 @@ class LocationControllerTest extends BaseControllerTest {
         //then
         assertSoftly(softAssertions -> {
             assertThat(response.statusCode()).isEqualTo(200);
-            assertThat(results).hasSize(4);
+            assertThat(results).hasSize(6);
         });
     }
 

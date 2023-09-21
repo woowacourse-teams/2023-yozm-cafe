@@ -53,7 +53,6 @@ class LocationServiceTest extends BaseTest {
         );
 
         //when
-
         final List<CafeLocationResponse> results = locationService.findCafesFromLocations(
                 cafeLocationRequest
         );
