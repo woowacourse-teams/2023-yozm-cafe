@@ -16,7 +16,7 @@ public class GeometryGenerator {
      */
     private static final int SRID = 4326;
     private static final String STRING_POINT_FORMAT = "POINT(%s)";
-    private static final String STRING_POLYGON_FORMAT = "POLYGON(%s)";
+    private static final String STRING_POLYGON_FORMAT = "POLYGON((%s))";
     private static final String STRING_GEOMETRY_DELIMITER = " ";
     private static final String POINT_DELIMITER = ", ";
 
@@ -54,7 +54,8 @@ public class GeometryGenerator {
         final String thirdVertex = String.join(STRING_GEOMETRY_DELIMITER, maxLatitude, minLongitude);
         final String fourthVertex = String.join(STRING_GEOMETRY_DELIMITER, minLatitude, minLongitude);
 
-        final String vertexes = String.join(POINT_DELIMITER, firstVertex, secondVertex, thirdVertex, fourthVertex);
+        final String vertexes = String.join(POINT_DELIMITER, firstVertex, secondVertex, thirdVertex, fourthVertex,
+                firstVertex);
         return String.format(STRING_POLYGON_FORMAT, vertexes);
     }
 }

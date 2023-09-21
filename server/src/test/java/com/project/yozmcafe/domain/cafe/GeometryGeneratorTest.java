@@ -51,7 +51,7 @@ class GeometryGeneratorTest {
     void generateStringPolygonTest() {
         //given
         final CafeLocationRequest cafeLocationRequest = new CafeLocationRequest(20, 10, 3, 1);
-        final String expected = "POLYGON(17.0 11.0, 23.0 11.0, 23.0 9.0, 17.0 9.0)";
+        final String expected = "POLYGON((17.0 11.0, 23.0 11.0, 23.0 9.0, 17.0 9.0, 17.0 11.0))";
 
         //when
         final String result = GeometryGenerator.generateStringPolygon(cafeLocationRequest);
