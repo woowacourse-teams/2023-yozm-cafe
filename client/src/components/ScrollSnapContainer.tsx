@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { HTMLAttributes, MouseEventHandler, TouchEventHandler, WheelEventHandler } from 'react';
+import type { HTMLAttributes, MouseEventHandler, PropsWithChildren, TouchEventHandler, WheelEventHandler } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -66,6 +66,29 @@ const SWIPE_FAST_SCROLL_DISTANCE_RATIO = 0.03;
 //   0 = 다음 아이템으로 완전히 넘어가야 스와이프 판정 가능
 const SWIPE_WHEEL_SCROLL_VALID_RATIO = 0.1;
 
+type ScrollSnapVirtualItemProps = PropsWithChildren<{
+  // 이전 아이템인지, 현재 아이템인지, 이후 아이템인지 여부를 나타내는 숫자
+  offset: -1 | 0 | 1;
+  // 0.0 ~ 1.0
+  position: number;
+}>;
+
+const ScrollSnapVirtualItem = (props: ScrollSnapVirtualItemProps) => {
+  const { offset, position, children } = props;
+
+  return (
+    <div
+      style={{
+        height: '100%',
+        gridArea: '1 / 1 / 1 / 1',
+        transform: `translateY(${(offset + -position) * 100}%)`,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 type ScrollSnapVirtualItemsProps<Item> = {
   scrollPosition: number;
   items: Item[];
@@ -95,10 +118,16 @@ const ScrollSnapVirtualItems = <Item,>(props: ScrollSnapVirtualItemsProps<Item>)
       style={{
         width: '100%',
         height: '100%',
-        transform: `translateY(${-100 + -visiblePosition * 100}%)`,
+        display: 'grid',
       }}
     >
-      {visibleItems.map(({ item, index }) => itemRenderer(item, index))}
+      {([0, 1, -1] as const)
+        .map((visibleIndex) => ({ ...visibleItems[1 + visibleIndex], visibleIndex }))
+        .map(({ item, index, visibleIndex }) => (
+          <ScrollSnapVirtualItem key={index} offset={visibleIndex} position={visiblePosition}>
+            {itemRenderer(item, index)}
+          </ScrollSnapVirtualItem>
+        ))}
     </div>
   );
 };
