@@ -25,7 +25,8 @@ public class CafeService {
     private final UnViewedCafeService unViewedCafeService;
     private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final MemberService memberService, final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+    public CafeService(final CafeRepository cafeRepository, final MemberService memberService,
+                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
         this.memberService = memberService;
         this.unViewedCafeService = unViewedCafeService;
@@ -46,7 +47,9 @@ public class CafeService {
         final List<Long> ids = cafeRepository.findCafeIdsOrderByLikeCount(pageable);
         final List<Cafe> foundCafes = cafeRepository.findCafesByIdsOrderByLikeCount(ids);
 
-        return foundCafes.stream().map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe)).toList();
+        return foundCafes.stream()
+                .map(cafe -> CafeRankResponse.of(cafeRankGenerator.makeRank(foundCafes.indexOf(cafe), pageable), cafe))
+                .toList();
     }
 
     @Transactional
