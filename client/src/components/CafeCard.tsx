@@ -34,7 +34,12 @@ const CafeCard = (props: CardProps) => {
       </CardQuantityContainer>
       <CarouselImageList onScroll={handleScroll}>
         {cafe.images.map((image, index) => (
-          <CarouselImage key={index} src={Image.getUrl({ size: '500', filename: image })} alt={`${cafe}의 이미지`} />
+          <CarouselImage
+            key={index}
+            src={Image.getUrl({ size: '500', filename: image })}
+            alt={`${cafe}의 이미지`}
+            loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
+          />
         ))}
       </CarouselImageList>
       <DotsContainer>
