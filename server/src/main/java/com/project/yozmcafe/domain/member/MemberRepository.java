@@ -16,7 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             SELECT m
             FROM Member m
             LEFT JOIN FETCH m.unViewedCafes uvc
-            LEFT JOIN FETCH uvc.cafe
+            JOIN FETCH uvc.cafe
             WHERE m.id = :id
             """)
     Optional<Member> findById(@Param("id") String id);
@@ -26,7 +26,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             SELECT m
             FROM Member m
             LEFT JOIN FETCH m.unViewedCafes uvc
-            LEFT JOIN FETCH uvc.cafe
+            JOIN FETCH uvc.cafe
             """)
     List<Member> findAll();
 }
