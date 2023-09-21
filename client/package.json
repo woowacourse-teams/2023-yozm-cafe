@@ -10,8 +10,8 @@
     "solo5star <solo_5@naver.com>"
   ],
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve",
-    "build": "cross-env NODE_ENV=production webpack",
+    "start": "cross-env NODE_ENV=development webpack serve --config webpack.development.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.production.js",
     "storybook": "cross-env NODE_ENV=development storybook dev -p 6006",
     "build:storybook": "cross-env NODE_ENV=production storybook build",
     "cypress:open": "cypress open --e2e --browser chrome",
@@ -23,7 +23,7 @@
     "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.10.1",
+    "react-icons": "^4.11.0",
     "react-router-dom": "^6.14.1",
     "styled-components": "^6.0.2"
   },
@@ -75,6 +75,7 @@
     "stylelint-order": "^6.0.3",
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
+    "webpack-bundle-analyzer": "^4.9.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "webpack-merge": "^5.9.0"

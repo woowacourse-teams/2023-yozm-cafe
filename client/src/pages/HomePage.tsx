@@ -6,7 +6,7 @@ import useUser from '../hooks/useUser';
 
 const PREFETCH_OFFSET = 2;
 
-const Home = () => {
+const HomePage = () => {
   const { data: user } = useUser();
   const { cafes, fetchNextPage, isFetching, hasNextPage } = useCafes();
   const [activeCafe, setActiveCafe] = useState(cafes[0]);
@@ -37,7 +37,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
 
 const CardList = styled.ul`
   scroll-snap-type: y mandatory;
