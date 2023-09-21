@@ -18,7 +18,7 @@ class CafeCoordinateTest {
         //given
         final double latitude = 20.0;
         final double longitude = 10.0;
-        final Point point = PointGenerator.generateWithCoordinate(latitude, longitude);
+        final Point point = GeometryGenerator.generatePointWithCoordinate(latitude, longitude);
         final Cafe cafe = Fixture.getCafe("카페", "성수동", 0);
         final CafeCoordinate cafeCoordinate = new CafeCoordinate(point, cafe);
 

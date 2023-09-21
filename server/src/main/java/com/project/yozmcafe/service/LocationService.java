@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
-import com.project.yozmcafe.domain.cafe.PointGenerator;
+import com.project.yozmcafe.domain.cafe.GeometryGenerator;
 import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.domain.cafe.coordinate.RadiusCalculator;
 import com.project.yozmcafe.domain.cafe.coordinate.dto.CafePinDto;
@@ -28,7 +28,7 @@ public class LocationService {
         final double latitudeDelta = cafeLocationRequest.latitudeDelta();
         final double longitudeDelta = cafeLocationRequest.longitudeDelta();
 
-        final String point = PointGenerator.generateStringPoint(latitude, longitude);
+        final String point = GeometryGenerator.generateStringPoint(latitude, longitude);
         final double radius = RadiusCalculator.calculate(latitude, latitudeDelta, longitudeDelta);
         final List<CafePinDto> cafeLocationDtos = cafeCoordinateRepository.findCafePinsFromCoordinate(point, radius);
 

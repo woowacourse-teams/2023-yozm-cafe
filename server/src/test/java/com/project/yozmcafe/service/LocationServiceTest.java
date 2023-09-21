@@ -14,7 +14,7 @@ import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.cafe.PointGenerator;
+import com.project.yozmcafe.domain.cafe.GeometryGenerator;
 import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
 import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.fixture.Fixture;
@@ -37,10 +37,12 @@ class LocationServiceTest extends BaseTest {
         final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("cafe1", "주소1", 0));
         final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("cafe2", "주소2", 0));
 
-        final CafeCoordinate coordinate1 = new CafeCoordinate(PointGenerator.generateWithCoordinate(20, 10), cafe1);
+        final CafeCoordinate coordinate1 = new CafeCoordinate(GeometryGenerator.generatePointWithCoordinate(20, 10),
+                cafe1);
         cafeCoordinateRepository.save(coordinate1);
 
-        final CafeCoordinate coordinate2 = new CafeCoordinate(PointGenerator.generateWithCoordinate(60, 50), cafe2);
+        final CafeCoordinate coordinate2 = new CafeCoordinate(GeometryGenerator.generatePointWithCoordinate(60, 50),
+                cafe2);
         cafeCoordinateRepository.save(coordinate2);
 
         final CafeLocationRequest cafeLocationRequest = new CafeLocationRequest(
