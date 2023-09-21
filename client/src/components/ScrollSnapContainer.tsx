@@ -302,7 +302,6 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
   };
 
   if (machineState.label === 'snap') onSnap();
-  console.log(machineState.label);
 
   const handleTouchStart: TouchEventHandler = (event) => {
     const touch = event.touches[0];
