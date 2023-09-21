@@ -33,20 +33,6 @@ class GeometryGeneratorTest {
     }
 
     @Test
-    @DisplayName("스트링 포인트 생성")
-    void generateStringPoint() {
-        //given
-        final double latitude = 20;
-        final double longitude = 10;
-
-        //when
-        final String point = GeometryGenerator.generateStringPoint(latitude, longitude);
-
-        //then
-        assertThat(point).isEqualTo("POINT(20.0 10.0)");
-    }
-
-    @Test
     @DisplayName("스트링 폴리곤 생성")
     void generateStringPolygonTest() {
         //given

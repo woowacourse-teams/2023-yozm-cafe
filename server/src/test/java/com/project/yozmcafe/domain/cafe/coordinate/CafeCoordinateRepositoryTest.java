@@ -25,29 +25,6 @@ class CafeCoordinateRepositoryTest extends BaseTest {
     private CafeRepository cafeRepository;
 
     @Test
-    @DisplayName("반경내의 카페 정보를 모두 반환한다.")
-    void findCafePinsFromCoordinate() {
-        //given
-        final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("cafe1", "주소1", 0));
-        final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("cafe2", "주소2", 0));
-
-        final CafeCoordinate coordinate1 = new CafeCoordinate(GeometryGenerator.generatePointWithCoordinate(20, 10),
-                cafe1);
-        cafeCoordinateRepository.save(coordinate1);
-
-        final CafeCoordinate coordinate2 = new CafeCoordinate(GeometryGenerator.generatePointWithCoordinate(60, 50),
-                cafe2);
-        cafeCoordinateRepository.save(coordinate2);
-
-        //when
-        final List<CafePinDto> cafePins = cafeCoordinateRepository.findCafePinsFromCoordinate(
-                "POINT(20.00001 10.00001)", 500);
-
-        //then
-        assertThat(cafePins).hasSize(1);
-    }
-
-    @Test
     @DisplayName("영역 내의 모든 카페 정보를 반환한다.")
     void findCafePinsFromCoordinateWithAreaTest() {
         //given
