@@ -41,6 +41,18 @@ export default {
               '@babel/preset-typescript',
             ],
             plugins: [IS_DEV && ReactFreshBabelPlugin].filter(Boolean),
+            env: {
+              production: {
+                plugins: [
+                  [
+                    'react-remove-properties',
+                    {
+                      properties: ['data-testid'],
+                    },
+                  ],
+                ],
+              },
+            },
           },
         },
       },
