@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.yozmcafe.BaseTest;
+import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.GeometryGenerator;
@@ -41,6 +42,30 @@ class CafeCoordinateRepositoryTest extends BaseTest {
         //when
         final List<CafePinDto> cafePins = cafeCoordinateRepository.findCafePinsFromCoordinate(
                 "POINT(20.00001 10.00001)", 500);
+
+        //then
+        assertThat(cafePins).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("영역 내의 모든 카페 정보를 반환한다.")
+    void findCafePinsFromCoordinateWithAreaTest() {
+        //given
+        final Cafe cafe1 = cafeRepository.save(Fixture.getCafe("cafe1", "주소1", 0));
+        final Cafe cafe2 = cafeRepository.save(Fixture.getCafe("cafe2", "주소2", 0));
+
+        final CafeCoordinate coordinate1 = new CafeCoordinate(GeometryGenerator.generatePointWithCoordinate(20, 10),
+                cafe1);
+        cafeCoordinateRepository.save(coordinate1);
+
+        final CafeCoordinate coordinate2 = new CafeCoordinate(GeometryGenerator.generatePointWithCoordinate(60, 50),
+                cafe2);
+        cafeCoordinateRepository.save(coordinate2);
+        final CafeLocationRequest cafeLocationRequest = new CafeLocationRequest(20, 10, 3, 1);
+        final String area = GeometryGenerator.generateStringPolygon(cafeLocationRequest);
+
+        //when
+        final List<CafePinDto> cafePins = cafeCoordinateRepository.findCafePinsFromCoordinate(area);
 
         //then
         assertThat(cafePins).hasSize(1);
