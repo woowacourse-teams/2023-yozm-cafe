@@ -1,24 +1,5 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.auth.OAuthProvider;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberInfo;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
-import io.restassured.http.Cookie;
-import io.restassured.matcher.DetailedCookieMatcher;
-import io.restassured.matcher.RestAssuredMatchers;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.http.HttpStatus;
-
-import java.util.Optional;
-
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +17,27 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
+
+import com.project.yozmcafe.controller.auth.OAuthProvider;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.auth.GoogleOAuthClient;
+import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
+
+import io.restassured.http.Cookie;
+import io.restassured.matcher.DetailedCookieMatcher;
+import io.restassured.matcher.RestAssuredMatchers;
+import io.restassured.response.Response;
 
 class AuthControllerTest extends BaseControllerTest {
 
@@ -173,5 +175,29 @@ class AuthControllerTest extends BaseControllerTest {
         response.then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .cookie("refreshToken", expectedDetail);
+    }
+
+    @Test
+    @DisplayName("새로운 유저 로그인 시 발생하는 쿼리 테스트")
+    void register() {
+        //given
+        doReturn(new MemberInfo("openId", "오션", "바다.img"))
+                .when(googleOAuthClient).getUserInfo(anyString());
+
+        given(memberRepository.findById(anyString()))
+                .willReturn(Optional.empty());
+
+        //when
+        final Response response = given()
+                .log().all()
+                .when()
+                .post("/auth/{providerName}?code=googleCode", "google");
+
+        //then
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.jsonPath().getString("token")).isNotNull(),
+                () -> assertThat(response.cookie("refreshToken")).isNotNull()
+        );
     }
 }
