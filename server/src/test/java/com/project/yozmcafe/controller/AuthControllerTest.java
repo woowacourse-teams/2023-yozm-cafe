@@ -178,7 +178,7 @@ class AuthControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("새로운 유저 로그인 시 발생하는 쿼리 테스트")
+    @DisplayName("새로운 유저가 로그인한다.")
     void register() {
         //given
         doReturn(new MemberInfo("openId", "오션", "바다.img"))
