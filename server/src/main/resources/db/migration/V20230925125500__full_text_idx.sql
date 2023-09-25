@@ -1,5 +1,5 @@
-alter table cafe add fulltext index cafe_name_idx (name) with parser ngram;
+ALTER TABLE cafe ADD FULLTEXT INDEX cafe_name_idx (name) WITH PARSER NGRAM;
 
-alter table cafe add fulltext index address_idx (address) with parser ngram;
+ALTER TABLE cafe ADD FULLTEXT INDEX address_idx (address) WITH PARSER NGRAM;
 
-alter table menu add fulltext index menu_name_idx (name) with parser ngram;
+ALTER TABLE menu ADD FULLTEXT INDEX menu_name_idx (name) WITH PARSER NGRAM;
