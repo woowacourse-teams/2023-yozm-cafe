@@ -21,29 +21,41 @@ paths:
                 $ref: '#/components/schemas/admin-cafes-2033645187'
               examples:
                 어드민 API/카페 전체 조회하기:
-                  value: "[{\"id\":2,\"name\":\"????\",\"address\":\"???\",\"images\"\
-                    :[\"20230916105647894374.png\"],\"isLiked\":false,\"likeCount\"\
+                  value: "[{\"id\":1,\"name\":\"????\",\"address\":\"???\",\"images\"\
+                    :[\"20230925060530922323.png\"],\"isLiked\":false,\"likeCount\"\
                     :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
                     }},{\"id\":3,\"name\":\"????\",\"address\":\"???\",\"images\"\
-                    :[\"20230916105648198234.png\"],\"isLiked\":false,\"likeCount\"\
+                    :[\"20230925060533220156.png\"],\"isLiked\":false,\"likeCount\"\
                     :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
+                    :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
+                    }},{\"id\":4,\"name\":\"????\",\"address\":\"???\",\"images\"\
+                    :[\"20230925060533463969.png\"],\"isLiked\":false,\"likeCount\"\
+                    :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
                     }}]"
     post:
@@ -79,17 +91,17 @@ paths:
                 $ref: '#/components/schemas/admin-cafes-cafeId-1978468758'
               examples:
                 어드민 API/카페 단건 조회하기:
-                  value: "{\"id\":5,\"name\":\"????\",\"address\":\"???\",\"images\"\
-                    :[\"20230916105649564394.png\"],\"isLiked\":false,\"likeCount\"\
+                  value: "{\"id\":6,\"name\":\"????\",\"address\":\"???\",\"images\"\
+                    :[\"20230925060534703429.png\"],\"isLiked\":false,\"likeCount\"\
                     :0,\"detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"?? url\",\"description\":\"?????\",\"phone\":\"01032472601\"\
                     }}"
     put:
@@ -120,6 +132,34 @@ paths:
       responses:
         "204":
           description: "204"
+  /admin/cafes/{cafeId}/coordinate:
+    post:
+      tags:
+      - admin
+      operationId: 어드민 API/좌표 정보 저장
+      parameters:
+      - name: cafeId
+        in: path
+        description: 죄표를 추가할 카페 ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/admin-cafes-cafeId-coordinate-1759348859'
+            examples:
+              어드민 API/좌표 정보 저장:
+                value: "{\"latitude\":20.0,\"longitude\":10.0}"
+      responses:
+        "201":
+          description: "201"
+          headers:
+            Location:
+              description: 카페 저장 위치
+              schema:
+                type: string
   /auth:
     get:
       tags:
@@ -132,17 +172,17 @@ paths:
         required: true
         schema:
           type: string
-        example: eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTQ4NjE4MDMsImV4cCI6MTY5NDg2MjE2Mywic3ViIjoiMUwifQ.crfABABoA0ck3ECgUqbKNy6Dic0du_7TMBauWiHSp0Q
+        example: eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTU2MjE5MjcsImV4cCI6MTY5NTYyMjI4Nywic3ViIjoiMUwifQ.wmPFthdOmdWVa7e8qY7PTtvOPLWjNDhHqn8EYdEJpL4
       responses:
         "200":
           description: "200"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/auth1498709238'
+                $ref: '#/components/schemas/auth-providerName1498709238'
               examples:
                 OAuth/토큰 갱신:
-                  value: "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTQ4NjE4MDQsImV4cCI6MTY5NDg2MjE2NCwic3ViIjoiMUwifQ.gTypY_MricZnxdwiQJhSFA1j7ZvDhPcVgApSzQIoUKs\"\
+                  value: "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTU2MjE5MjcsImV4cCI6MTY5NTYyMjI4Nywic3ViIjoiMUwifQ.wmPFthdOmdWVa7e8qY7PTtvOPLWjNDhHqn8EYdEJpL4\"\
                     }"
     delete:
       tags:
@@ -192,10 +232,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/auth1498709238'
+                $ref: '#/components/schemas/auth-providerName1498709238'
               examples:
                 OAuth/OAuth 로그인:
-                  value: "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTQ4NjE4MDMsImV4cCI6MTY5NDg2MjE2Mywic3ViIjoib3BlbklkIn0.zn4VD2_7v_mcGS_4NRfbMgp2DuaCwC9qz5D4auKNd28\"\
+                  value: "{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTU2MjE5MjcsImV4cCI6MTY5NTYyMjI4Nywic3ViIjoib3BlbklkIn0.gvrtqhof8LEepl-bk-QPPP_7qQOdsKQ1OsEjtu7VyIY\"\
                     }"
   /cafes:
     get:
@@ -208,118 +248,118 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/members-memberId-liked-cafes-details-237648523'
+                $ref: '#/components/schemas/cafes-237648523'
               examples:
                 cafeApi/로그인 한 사용자 카페 조회:
                   value: "[{\"id\":1,\"name\":\"n1\",\"address\":\"address1\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":2,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":4,\"name\":\"n4\",\"address\":\"address4\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":4,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":5,\"name\":\"n5\",\"address\":\"address5\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }}]"
                 cafeApi/로그인 한 사용자 카페 조회 시 남은 카페가 5개 미만인 경우:
                   value: "[{\"id\":1,\"name\":\"n1\",\"address\":\"address1\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":2,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":4,\"name\":\"n4\",\"address\":\"address4\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":4,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }}]"
   /cafes/guest:
@@ -347,65 +387,113 @@ paths:
                 cafeApi/비회원 사용자 카페 조회:
                   value: "[{\"id\":1,\"name\":\"n1\",\"address\":\"address1\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":2,\"name\":\"n2\",\"address\":\"address2\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":2,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":4,\"name\":\"n4\",\"address\":\"address4\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":4,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":5,\"name\":\"n5\",\"address\":\"address5\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":1,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }}]"
+  /cafes/location:
+    get:
+      tags:
+      - cafes
+      operationId: Location/지도 범위 내 모든 카페 조회
+      parameters:
+      - name: latitude
+        in: query
+        description: 기준 위도
+        required: true
+        schema:
+          type: string
+      - name: longitude
+        in: query
+        description: 기준 경도
+        required: true
+        schema:
+          type: string
+      - name: latitudeDelta
+        in: query
+        description: 기준 위도로부터 지도 내 최고 위도까지의 차
+        required: true
+        schema:
+          type: string
+      - name: longitudeDelta
+        in: query
+        description: 기준 경도로부터 지도 내 최고 경도까지의 차
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cafes-location1570797726'
+              examples:
+                Location/지도 범위 내 모든 카페 조회:
+                  value: "[{\"id\":1,\"name\":\"????\",\"address\":\"??\",\"latitude\"\
+                    :20.001,\"longitude\":10.0},{\"id\":2,\"name\":\"????\",\"address\"\
+                    :\"??\",\"latitude\":20.002,\"longitude\":10.0},{\"id\":3,\"name\"\
+                    :\"????\",\"address\":\"??\",\"latitude\":20.003,\"longitude\"\
+                    :10.0},{\"id\":4,\"name\":\"????\",\"address\":\"???\",\"latitude\"\
+                    :20.004,\"longitude\":10.0},{\"id\":5,\"name\":\"????\",\"address\"\
+                    :\"??\",\"latitude\":20.005,\"longitude\":10.0},{\"id\":6,\"name\"\
+                    :\"????\",\"address\":\"??\",\"latitude\":20.006,\"longitude\"\
+                    :10.0}]"
   /cafes/ranks:
     get:
       tags:
@@ -479,15 +567,15 @@ paths:
                 cafeApi/카페 id로 단 건 조회:
                   value: "{\"id\":3,\"name\":\"n3\",\"address\":\"address3\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":false,\"likeCount\":3,\"\
-                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\"\
-                    ,\"close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
-                    open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"WEDNESDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\"\
-                    :\"10:56\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
-                    10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\"\
+                    detail\":{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\"\
+                    ,\"close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"\
+                    open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"WEDNESDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\"\
+                    :\"06:05\",\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"\
+                    06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\"\
                     :\"mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }}"
         "400":
@@ -615,37 +703,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/members-memberId-liked-cafes-details-237648523'
+                $ref: '#/components/schemas/cafes-237648523'
               examples:
                 likedCafe/좋아요 목록의 카페 조회:
                   value: "[{\"id\":2,\"name\":\"카페2\",\"address\":\"2동\",\"images\"\
                     :[\"image1\",\"image2\"],\"isLiked\":true,\"likeCount\":5,\"detail\"\
-                    :{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\",\"\
-                    close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"WEDNESDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"10:56\",\"\
-                    close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\":\"\
+                    :{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\",\"\
+                    close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"open\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"WEDNESDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"06:05\",\"\
+                    close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\",\"open\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\":\"\
                     mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }},{\"id\":1,\"name\":\"카페1\",\"address\":\"1동\",\"images\":[\"\
                     image1\",\"image2\"],\"isLiked\":true,\"likeCount\":5,\"detail\"\
-                    :{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"10:56\",\"\
-                    close\":\"10:56\",\"opened\":true},{\"day\":\"TUESDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\":\"WEDNESDAY\"\
-                    ,\"open\":\"10:56\",\"close\":\"10:56\",\"opened\":true},{\"day\"\
-                    :\"THURSDAY\",\"open\":\"10:56\",\"close\":\"10:56\",\"opened\"\
-                    :true},{\"day\":\"FRIDAY\",\"open\":\"10:56\",\"close\":\"10:56\"\
-                    ,\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"10:56\",\"\
-                    close\":\"10:56\",\"opened\":true},{\"day\":\"SUNDAY\",\"open\"\
-                    :\"10:56\",\"close\":\"10:56\",\"opened\":true}],\"mapUrl\":\"\
+                    :{\"openingHours\":[{\"day\":\"MONDAY\",\"open\":\"06:05\",\"\
+                    close\":\"06:05\",\"opened\":true},{\"day\":\"TUESDAY\",\"open\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\":\"WEDNESDAY\"\
+                    ,\"open\":\"06:05\",\"close\":\"06:05\",\"opened\":true},{\"day\"\
+                    :\"THURSDAY\",\"open\":\"06:05\",\"close\":\"06:05\",\"opened\"\
+                    :true},{\"day\":\"FRIDAY\",\"open\":\"06:05\",\"close\":\"06:05\"\
+                    ,\"opened\":true},{\"day\":\"SATURDAY\",\"open\":\"06:05\",\"\
+                    close\":\"06:05\",\"opened\":true},{\"day\":\"SUNDAY\",\"open\"\
+                    :\"06:05\",\"close\":\"06:05\",\"opened\":true}],\"mapUrl\":\"\
                     mapUrl\",\"description\":\"desc\",\"phone\":\"010-1234-5678\"\
                     }}]"
 components:
   schemas:
-    members-memberId-liked-cafes-details-237648523:
+    cafes-237648523:
       type: array
       items:
         type: object
@@ -703,6 +791,93 @@ components:
           id:
             type: number
             description: 카페 아이디
+    auth-providerName1498709238:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Access Token
+    cafes-guest127288789:
+      type: array
+      description: page가 초과하여 빈배열 반환
+      items:
+        type: object
+        properties:
+          images:
+            type: array
+            description: 카페 이미지 url
+            items:
+              oneOf:
+              - type: object
+              - type: boolean
+              - type: string
+              - type: number
+          address:
+            type: string
+            description: 카페 주소
+          isLiked:
+            type: boolean
+            description: 해당 카페의 좋아요 여부(비회원은 default = false)
+          name:
+            type: string
+            description: 카페 이름
+          likeCount:
+            type: number
+            description: 카페의 좋아요 갯수
+          detail:
+            type: object
+            properties:
+              phone:
+                type: string
+                description: 카페의 전화번호
+              mapUrl:
+                type: string
+                description: 카페의 네이버 지도 url
+              description:
+                type: string
+                description: 카페의 상세정보
+              openingHours:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    opened:
+                      type: boolean
+                      description: 카페 해당요일 영업여부
+                    close:
+                      type: string
+                      description: 카페 종료시간
+                    day:
+                      type: string
+                      description: 요일
+                    open:
+                      type: string
+                      description: 카페 오픈시간
+          id:
+            type: number
+            description: 카페 아이디
+        description: page가 초과하여 빈배열 반환
+    members-memberId-1619908362:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          description: 멤버 사진
+        name:
+          type: string
+          description: 멤버 이름
+        id:
+          type: string
+          description: 멤버 아이디
+    admin-cafes-cafeId-coordinate-1759348859:
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: 위도
+        longitude:
+          type: number
+          description: 경도
     cafes-cafeId2097339250:
       type: object
       properties:
@@ -782,84 +957,6 @@ components:
           id:
             type: number
             description: 카페 아이디
-    auth1498709238:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Access Token
-    cafes-guest127288789:
-      type: array
-      description: page가 초과하여 빈배열 반환
-      items:
-        type: object
-        properties:
-          images:
-            type: array
-            description: 카페 이미지 url
-            items:
-              oneOf:
-              - type: object
-              - type: boolean
-              - type: string
-              - type: number
-          address:
-            type: string
-            description: 카페 주소
-          isLiked:
-            type: boolean
-            description: 해당 카페의 좋아요 여부(비회원은 default = false)
-          name:
-            type: string
-            description: 카페 이름
-          likeCount:
-            type: number
-            description: 카페의 좋아요 갯수
-          detail:
-            type: object
-            properties:
-              phone:
-                type: string
-                description: 카페의 전화번호
-              mapUrl:
-                type: string
-                description: 카페의 네이버 지도 url
-              description:
-                type: string
-                description: 카페의 상세정보
-              openingHours:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    opened:
-                      type: boolean
-                      description: 카페 해당요일 영업여부
-                    close:
-                      type: string
-                      description: 카페 종료시간
-                    day:
-                      type: string
-                      description: 요일
-                    open:
-                      type: string
-                      description: 카페 오픈시간
-          id:
-            type: number
-            description: 카페 아이디
-        description: page가 초과하여 빈배열 반환
-    members-memberId-1619908362:
-      type: object
-      properties:
-        imageUrl:
-          type: string
-          description: 멤버 사진
-        name:
-          type: string
-          description: 멤버 이름
-        id:
-          type: string
-          description: 멤버 아이디
     admin-cafes-2033645187:
       type: array
       items:
@@ -1042,5 +1139,25 @@ components:
           provider:
             type: string
             description: OAuth Provider 이름
+    cafes-location1570797726:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+            description: 카페 주소
+          latitude:
+            type: number
+            description: 카페의 위도
+          name:
+            type: string
+            description: 카페 이름
+          id:
+            type: number
+            description: 카페 Id
+          longitude:
+            type: number
+            description: 카페의 경도
     cafes-cafeId486549215:
       type: object
