@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import useIntersection from '../hooks/useIntersection';
 import type { Cafe } from '../types';
 import Image from '../utils/Image';
 import CafeActionBar from './CafeActionBar';
@@ -9,23 +8,15 @@ import CafeSummary from './CafeSummary';
 
 type CardProps = {
   cafe: Cafe;
-  onIntersect?: (intersection: IntersectionObserverEntry) => void;
 };
 
 const CafeCard = (props: CardProps) => {
-  const { cafe, onIntersect } = props;
+  const { cafe } = props;
 
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const ref = useRef<HTMLDivElement>(null);
-  const intersection = useIntersection(ref, { threshold: 0.7 });
-
-  useEffect(() => {
-    if (intersection) {
-      onIntersect?.(intersection);
-    }
-  }, [intersection?.isIntersecting]);
 
   useEffect(() => {
     const handleScroll = () => {

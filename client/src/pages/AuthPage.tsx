@@ -7,7 +7,7 @@ const isAuthProvider = (provider: string | undefined): provider is AuthProvider 
   return (['kakao', 'google'] satisfies AuthProvider[]).some((it) => it === provider);
 };
 
-const Auth = () => {
+const AuthPage = () => {
   const { provider } = useParams();
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
@@ -41,4 +41,4 @@ const Auth = () => {
   return <Navigate to="/" />;
 };
 
-export default Auth;
+export default AuthPage;

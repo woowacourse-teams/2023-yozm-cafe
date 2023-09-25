@@ -4,7 +4,7 @@ import RankCard from '../components/RankCard';
 import useIntersection from '../hooks/useIntersection';
 import useRank from '../hooks/useRank';
 
-const Rank = () => {
+const RankPage = () => {
   const { rankedCafes, fetchNextPage, isFetching, hasNextPage } = useRank();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ const Rank = () => {
   );
 };
 
-export default Rank;
+export default RankPage;
 
 const Container = styled.section`
   padding-bottom: ${({ theme }) => theme.space[4]};
