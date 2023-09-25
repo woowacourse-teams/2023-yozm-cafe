@@ -27,10 +27,10 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
 
   return (
     <Container onClick={handlePreventClickPropagation} role="dialog" aria-modal="true">
-      <CloseButton>
+      <CloseButton data-testid="close-button">
         <CloseIcon onClick={onClose} />
       </CloseButton>
-      <Title>{cafe.name}</Title>
+      <Title data-testid="cafe-name">{cafe.name}</Title>
       <Spacer $size={'4'} />
       <Suspense>
         <CafeMenu cafeId={cafe.id} />
@@ -39,12 +39,12 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
         <LocationDetail>
           <BsGeoAlt />
           <a href={cafe.detail.mapUrl} target="_blank" rel="noopener noreferrer">
-            <LocationName>
+            <LocationName data-testid="cafe-address">
               {cafe.address} <BsBoxArrowUpRight />
             </LocationName>
           </a>
         </LocationDetail>
-        <OpeningHoursDetails>
+        <OpeningHoursDetails data-testid="cafe-openingHours">
           <OpeningHoursDetail openingHours={cafe.detail.openingHours} />
         </OpeningHoursDetails>
         {/* <Info>
@@ -53,7 +53,7 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
         </Info> */}
       </InfoContainer>
       <Spacer $size={'6'} />
-      <Content>
+      <Content data-testid="cafe-description">
         {cafe.detail.description.split('\n').map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}

@@ -37,8 +37,8 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   return (
     <>
       {createPortal(
-        <Container onClick={handlePreventClickPropagation}>
-          <CloseButton>
+        <Container data-testid="menuBottomSheet" onClick={handlePreventClickPropagation}>
+          <CloseButton data-testid="close-button">
             <CloseIcon onClick={onClose} />
           </CloseButton>
 
@@ -61,7 +61,7 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
 
           {otherMenus.length > 0 && (
             <>
-              <CafeMenuListTitle>메뉴</CafeMenuListTitle>
+              <CafeMenuListTitle data-testid="menu">메뉴</CafeMenuListTitle>
               <CafeMenuList menus={otherMenus} />
               <Spacer $size={'8'} />
             </>

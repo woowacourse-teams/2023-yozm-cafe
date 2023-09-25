@@ -49,14 +49,19 @@ const CafeCard = (props: CardProps) => {
           {`${currentImageIndex + 1}`}/{cafe.images.length}
         </CardQuantityContents>
       </CardQuantityContainer>
-      <CarouselImageList ref={ref}>
+      <CarouselImageList data-testid="cafe-card" ref={ref}>
         {cafe.images.map((image, index) => (
-          <CarouselImage key={index} src={Image.getUrl({ size: '500', filename: image })} alt={`${cafe}의 이미지`} />
+          <CarouselImage
+            data-testid="carousel-image"
+            key={index}
+            src={Image.getUrl({ size: '500', filename: image })}
+            alt={`${cafe}의 이미지`}
+          />
         ))}
       </CarouselImageList>
-      <DotsContainer>
+      <DotsContainer data-testid="carousel-dots">
         {cafe.images.map((_, index) => (
-          <Dot key={index} $active={index === currentImageIndex} />
+          <Dot data-testid="dot" key={index} $active={index === currentImageIndex} />
         ))}
       </DotsContainer>
       <CafeSummary

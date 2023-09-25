@@ -20,7 +20,7 @@ const ShareButton = (props: ShareButtonProps) => {
 
   return (
     <Container>
-      <Button onClick={copyToClipboard} />
+      <Button data-testid="shareButton" onClick={copyToClipboard} />
       <Text>공유</Text>
     </Container>
   );

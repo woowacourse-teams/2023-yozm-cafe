@@ -6,7 +6,7 @@ import ProfileInfo from '../components/ProfileInfo';
 import useAuth from '../hooks/useAuth';
 import useUser from '../hooks/useUser';
 
-const MyProfile = () => {
+const MyProfilePage = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
   const { clearAuthorization } = useAuth();
@@ -57,4 +57,4 @@ const LikedCafeListContainer = styled.div`
   flex: 1;
 `;
 
-export default MyProfile;
+export default MyProfilePage;

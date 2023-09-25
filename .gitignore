@@ -41,3 +41,6 @@ server/.nb-gradle/
 server/.vscode/
 
 .env
+
+### Mac OS ###
+.DS_Store

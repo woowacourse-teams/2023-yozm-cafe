@@ -14,7 +14,7 @@ const CafeMenuList = (props: CafeMenuListProps) => {
   const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
 
   return (
-    <MenuList>
+    <MenuList data-testid="menuItem">
       {recommendedMenus.map((menuItem) => (
         <MenuListItem key={menuItem.id} menuItem={menuItem} />
       ))}
