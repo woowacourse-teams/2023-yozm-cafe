@@ -25,7 +25,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation "org.testcontainers:junit-jupiter:1.19.0"
     testImplementation 'org.testcontainers:mysql'
-    implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.2.5.Final'
+    implementation 'org.hibernate:hibernate-spatial:6.2.5.Final'
 
     //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
