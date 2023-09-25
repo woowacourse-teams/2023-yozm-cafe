@@ -1,23 +1,5 @@
 package com.project.yozmcafe.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
-import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
-import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
-import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
-import com.project.yozmcafe.domain.S3Client;
-import com.project.yozmcafe.domain.cafe.available.Days;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockMultipartFile;
-
-import java.io.File;
-import java.time.LocalTime;
-import java.util.List;
-
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -30,13 +12,33 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
-class CafeAdminControllerTest extends BaseControllerTest {
+import java.io.File;
+import java.time.LocalTime;
+import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockMultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
+import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
+import com.project.yozmcafe.domain.S3Client;
+import com.project.yozmcafe.domain.cafe.available.Days;
+
+class CafeAdminControllerTest extends BaseControllerTest {
 
     @Autowired
     private ObjectMapper mapper;
@@ -172,6 +174,31 @@ class CafeAdminControllerTest extends BaseControllerTest {
                 .get("/admin/cafes/{cafeId}", location)
                 .then()
                 .statusCode(is(HttpStatus.OK.value()));
+    }
+
+    @Test
+    @DisplayName("좌표 정보를 저장한다.")
+    void saveCoordinate() {
+        //given
+        final String location = saveCafe();
+
+        //when, then
+        given(spec).log().all()
+                .contentType(JSON)
+                .filter(document("어드민 API/좌표 정보 저장",
+                        pathParameters(parameterWithName("cafeId").description("죄표를 추가할 카페 ID")),
+                        requestFields(
+                                fieldWithPath("latitude").description("위도"),
+                                fieldWithPath("longitude").description("경도")
+                        ),
+                        responseHeaders(headerWithName("Location").description("카페 저장 위치"))
+                ))
+                .when()
+                .body(new CafeCoordinateRequest(20, 10))
+                .post("/admin/cafes/{cafeId}/coordinate", location)
+                .then()
+                .statusCode(is(HttpStatus.CREATED.value()))
+                .header("Location", notNullValue());
     }
 
     private String saveCafe() {
