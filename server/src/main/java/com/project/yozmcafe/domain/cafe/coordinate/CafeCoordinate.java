@@ -12,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
-@Entity(name = "cafe_coordinate")
+@Entity
 public class CafeCoordinate {
 
     @Id
@@ -24,7 +24,7 @@ public class CafeCoordinate {
     @OneToOne(fetch = FetchType.LAZY)
     private Cafe cafe;
 
-    public CafeCoordinate() {
+    protected CafeCoordinate() {
     }
 
     public CafeCoordinate(final Long id, final Point coordinate, final Cafe cafe) {
