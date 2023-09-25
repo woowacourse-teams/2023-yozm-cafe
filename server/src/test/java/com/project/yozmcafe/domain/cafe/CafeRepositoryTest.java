@@ -1,7 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
 import com.project.yozmcafe.BaseTest;
-import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +18,6 @@ class CafeRepositoryTest extends BaseTest {
 
     @Autowired
     private CafeRepository cafeRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     private Cafe cafe1;
     private Cafe cafe2;

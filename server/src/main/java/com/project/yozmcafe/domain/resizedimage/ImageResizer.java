@@ -1,20 +1,23 @@
 package com.project.yozmcafe.domain.resizedimage;
 
-import com.project.yozmcafe.exception.BadRequestException;
-import org.springframework.web.multipart.MultipartFile;
+import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-import static com.project.yozmcafe.exception.ErrorCode.INVALID_IMAGE_SIZE;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_IMAGE;
-import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
+import javax.imageio.ImageIO;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.project.yozmcafe.exception.BadRequestException;
 
 public class ImageResizer {
 
@@ -46,13 +49,13 @@ public class ImageResizer {
         return !requireNonNull(contentType).startsWith(IMAGE_FORMAT_PREFIX);
     }
 
-    public List<MultipartFile> getResizedImages(final List<Size> sizes) {
-        return sizes.stream()
-                .map(this::getResizedImage)
+    public List<MultipartFile> resizeImageToAllSizes() {
+        return Arrays.stream(Size.values())
+                .map(this::resizeToFixedSize)
                 .toList();
     }
 
-    public MultipartFile getResizedImage(final Size size) {
+    public MultipartFile resizeToFixedSize(final Size size) {
         final BufferedImage bufferedImage = getBufferedImage();
 
         final int width = size.getWidth();

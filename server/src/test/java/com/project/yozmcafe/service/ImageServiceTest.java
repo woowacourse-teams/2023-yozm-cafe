@@ -1,9 +1,18 @@
 package com.project.yozmcafe.service;
 
 
-import com.project.yozmcafe.BaseTest;
-import com.project.yozmcafe.domain.S3Client;
-import com.project.yozmcafe.domain.resizedimage.Size;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +20,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
+import com.project.yozmcafe.BaseTest;
+import com.project.yozmcafe.domain.S3Client;
+import com.project.yozmcafe.domain.resizedimage.Size;
 
 class ImageServiceTest extends BaseTest {
 
@@ -32,14 +33,14 @@ class ImageServiceTest extends BaseTest {
     private S3Client s3Client;
 
     @Test
-    @DisplayName("리사이즈 이후 업로드 한다")
+    @DisplayName("모든 사이즈로 리사이즈 이후 업로드 한다")
     void resizeAndUpload1() {
         //given
         final MockMultipartFile image = makeMultipartFile();
         final List<MultipartFile> images = List.of(image, image, image);
 
         //when
-        final List<String> names = imageService.resizeAndUpload(images, List.of(Size.values()));
+        final List<String> names = imageService.resizeToAllSizesAndUpload(images);
 
         //then
         final int expectedUploadCount = images.size() * Size.values().length;
@@ -50,17 +51,16 @@ class ImageServiceTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("리사이즈 이후 업로드한다")
+    @DisplayName("모바일 사이즈로 리사이즈 이후 업로드한다")
     void resizeAndUpload2() {
         //given
         final MockMultipartFile file = makeMultipartFile();
 
         //when
-        imageService.resizeAndUpload(file, Size.MOBILE);
+        imageService.resizeToMobileSizeAndUpload(file);
 
         //then
         verify(s3Client, times(1)).upload(any());
-
     }
 
     @Test
