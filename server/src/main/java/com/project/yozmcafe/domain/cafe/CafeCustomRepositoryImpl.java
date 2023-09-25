@@ -9,10 +9,14 @@ import java.util.List;
 
 import static com.project.yozmcafe.domain.cafe.QCafe.cafe;
 import static com.project.yozmcafe.domain.menu.QMenu.menu;
+import static com.querydsl.core.types.dsl.Expressions.numberTemplate;
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Repository
 public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implements CafeCustomRepository {
+
+    private static final double MATCH_THRESHOLD = 0.0;
+    private static final String MATCH_LITERALLY_OPERATOR = "\"";
 
     public CafeCustomRepositoryImpl() {
         super(Cafe.class);
@@ -22,8 +26,8 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
         return from(cafe)
                 .innerJoin(menu).on(menu.cafe.eq(cafe))
                 .where(
-                        contains(menu.name, menuWord),
                         contains(cafe.name, cafeNameWord),
+                        contains(menu.name, menuWord),
                         contains(cafe.address, addressWord))
                 .fetch();
     }
@@ -36,11 +40,14 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .fetch();
     }
 
-    private BooleanExpression contains(final StringPath target, final String string) {
-        if (isBlank(string)) {
+    private BooleanExpression contains(final StringPath target, final String searchWord) {
+        if (isBlank(searchWord)) {
             return null;
         }
 
-        return target.containsIgnoreCase(string);
+        final String literalSearchWord = MATCH_LITERALLY_OPERATOR + searchWord + MATCH_LITERALLY_OPERATOR;
+
+        return numberTemplate(Double.class, "function('match_against', {0}, {1})",
+                target, literalSearchWord).gt(MATCH_THRESHOLD);
     }
 }

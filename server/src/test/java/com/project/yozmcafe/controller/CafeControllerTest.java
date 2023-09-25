@@ -366,7 +366,7 @@ class CafeControllerTest extends BaseControllerTest {
         //given, when
         final Response response = given().log().all()
                 .when()
-                .get("/cafes/search?cafeName=n2&address=2");
+                .get("/cafes/search?cafeName=n2&address=addr");
 
         //then
         final List<CafeSearchResponse> cafeSearchResponses = getCafeSearchResponses(response);
