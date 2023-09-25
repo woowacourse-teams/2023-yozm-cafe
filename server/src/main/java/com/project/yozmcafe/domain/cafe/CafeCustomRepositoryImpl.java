@@ -16,7 +16,6 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implements CafeCustomRepository {
 
     private static final double MATCH_THRESHOLD = 0.0;
-    private static final String MATCH_LITERALLY_OPERATOR = "\"";
 
     public CafeCustomRepositoryImpl() {
         super(Cafe.class);
@@ -45,9 +44,9 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
             return null;
         }
 
-        final String literalSearchWord = MATCH_LITERALLY_OPERATOR + searchWord + MATCH_LITERALLY_OPERATOR;
-
+        final String formattedSearchWord = "\"" + searchWord + "\"";
         return numberTemplate(Double.class, "function('match_against', {0}, {1})",
-                target, literalSearchWord).gt(MATCH_THRESHOLD);
+                target, formattedSearchWord)
+                .gt(MATCH_THRESHOLD);
     }
 }
