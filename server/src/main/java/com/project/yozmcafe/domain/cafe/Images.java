@@ -1,11 +1,14 @@
 package com.project.yozmcafe.domain.cafe;
 
+import java.util.List;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Embeddable
 public class Images {
