@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { RankCafes, cafeMenus, cafes } from '../data/mockData';
-import type { Identity, User } from '../types';
+import type { Identity, SearchedCafe, User } from '../types';
 
 let pageState = 1;
 
@@ -78,6 +78,37 @@ export const handlers = [
     const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
 
     return res(ctx.status(200), ctx.json(RankCafes.slice(start, end)));
+  }),
+
+  rest.get('/api/cafes/search', (req, res, ctx) => {
+    const {
+      cafeName: searchName,
+      menu: searchMenu,
+      address: searchAddress,
+    } = Object.fromEntries(req.url.searchParams.entries());
+
+    let searchedCafes: SearchedCafe[] = cafes.map((cafe) => ({
+      id: cafe.id,
+      name: cafe.name,
+      address: cafe.address,
+      likeCount: cafe.likeCount,
+      image: cafe.images[0],
+    }));
+
+    if (searchName?.length >= 2) {
+      searchedCafes = searchedCafes.filter((cafe) => cafe.name.includes(searchName));
+    }
+
+    if (searchMenu?.length >= 2) {
+      searchedCafes = searchedCafes.filter((cafe) =>
+        cafeMenus.find((cafeMenu) => cafeMenu.cafeId === cafe.id)?.menus.some((menu) => menu.name.includes(searchMenu)),
+      );
+    }
+    if (searchAddress?.length >= 2) {
+      searchedCafes = searchedCafes.filter((cafe) => cafe.address.includes(searchAddress));
+    }
+
+    return res(ctx.status(200), ctx.json(searchedCafes));
   }),
 
   // 좋아요 한 목록 조회
