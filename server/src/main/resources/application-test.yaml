@@ -1,0 +1,40 @@
+spring:
+  auth:
+    key: testtesttesttesttesttesttesttesttesttesttesttesttesttesttest
+    accessTokenExpired: 360000
+    refreshTokenExpired: 36000000
+    google:
+      tokenUri: testtesttesttesttesttest
+      authUri: testtesttesttesttesttest
+      clientId: testtesttesttesttesttest
+      clientSecret: testtesttesttesttesttest
+      redirectUri: testtesttesttesttesttest
+      scope: testtesttesttesttesttest
+    kakao:
+      tokenUri: testtesttesttesttesttest
+      authUri: testtesttesttesttesttest
+      clientId: testtesttesttesttesttest
+      clientSecret: testtesttesttesttesttest
+      redirectUri: testtesttesttesttesttest
+      scope: testtesttesttesttesttest
+
+  servlet:
+    multipart:
+      max-file-size: 11MB
+      max-request-size: 110MB
+
+  flyway:
+    enabled: true
+    baseline-version: 20230901153300
+    baseline-on-migrate: true
+    out-of-order: true
+
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        format_sql: true
+    show-sql: true
+
+s3:
+  bucket: 2023-team-project/2023-yozm-cafe/test/images
