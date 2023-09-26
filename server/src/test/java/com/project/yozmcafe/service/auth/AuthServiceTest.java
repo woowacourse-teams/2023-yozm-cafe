@@ -27,10 +27,6 @@ class AuthServiceTest extends BaseTest {
 
     @SpyBean
     private GoogleOAuthClient googleOAuthClient;
-    @SpyBean
-    private KakaoOAuthClient kakaoOAuthClient;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private MemberRepository memberRepository;
