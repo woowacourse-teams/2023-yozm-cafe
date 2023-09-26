@@ -13,7 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query("""
             SELECT m
             FROM Member m
-            LEFT JOIN FETCH m.unViewedCafes uvc
+            JOIN FETCH m.unViewedCafes uvc
             JOIN FETCH uvc.cafe
             WHERE m.id = :id
             """)
