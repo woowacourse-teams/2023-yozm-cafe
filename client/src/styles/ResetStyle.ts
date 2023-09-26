@@ -89,6 +89,10 @@ const ResetStyle = createGlobalStyle`
   th {
     padding: 0;
   }
+
+  fieldset {
+    border: 0;
+  }
 `;
 
 export default ResetStyle;

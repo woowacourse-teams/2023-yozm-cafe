@@ -84,3 +84,11 @@ export type Rank = {
   image: string;
   likeCount: number;
 };
+
+export type SearchedCafe = {
+  id: Cafe['id'];
+  name: Cafe['name'];
+  address: Cafe['address'];
+  image: string;
+  likeCount: Cafe['likeCount'];
+};
