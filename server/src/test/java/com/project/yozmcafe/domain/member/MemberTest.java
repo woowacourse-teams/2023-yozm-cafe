@@ -1,7 +1,6 @@
 package com.project.yozmcafe.domain.member;
 
 import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -108,7 +107,7 @@ class MemberTest {
 
         //then
         assertAll(
-                () -> assertThat(member.getLikedCafes()).hasSize(0),
+                () -> assertThat(member.getLikedCafes()).isEmpty(),
                 () -> assertThat(member.isLike(cafe)).isFalse(),
                 () -> assertThat(cafe.getLikeCount()).isEqualTo(10));
     }
@@ -208,9 +207,9 @@ class MemberTest {
         member.updateLikedCafesBy(cafe4, true);
 
         //when
-        final List<LikedCafe> likedCafes = member.getLikedCafesSection(0, 2);
+        final List<Cafe> likedCafes = member.getLikedCafes(0, 2);
 
         //then
-        assertThat(likedCafes).map(LikedCafe::getCafe).containsExactly(cafe1, cafe2);
+        assertThat(likedCafes).containsExactly(cafe1, cafe2);
     }
 }

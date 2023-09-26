@@ -2,6 +2,8 @@ package com.project.yozmcafe.controller;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.service.CafeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -27,14 +29,14 @@ public class CafeController {
 
     @GetMapping
     public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(@LoginUser final String memberId) {
-        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(memberId, CAFE_PAGE_SIZE);
+        final List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(memberId, CAFE_PAGE_SIZE);
         return ResponseEntity.ok(cafeResponses);
     }
 
     @GetMapping("/guest")
     public ResponseEntity<List<CafeResponse>> getCafesForUnLoggedInMember(
             @PageableDefault(size = CAFE_PAGE_SIZE) final Pageable pageable) {
-        List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
+        final List<CafeResponse> cafeResponses = cafeService.getCafesForUnLoginMember(pageable);
         return ResponseEntity.ok(cafeResponses);
     }
 
@@ -46,8 +48,14 @@ public class CafeController {
 
     @GetMapping("/{cafeId}")
     public ResponseEntity<CafeResponse> getCafeById(@PathVariable("cafeId") final long cafeId) {
-        CafeResponse cafeResponse = cafeService.getCafeByIdOrThrow(cafeId);
+        final CafeResponse cafeResponse = cafeService.getCafeByIdOrThrow(cafeId);
         return ResponseEntity.ok(cafeResponse);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CafeSearchResponse>> getCafeBySearch(final CafeSearchRequest cafeSearchRequest) {
+        final List<CafeSearchResponse> cafeSearchResponses = cafeService.getCafesBySearch(cafeSearchRequest);
+        return ResponseEntity.ok(cafeSearchResponses);
     }
 }
 

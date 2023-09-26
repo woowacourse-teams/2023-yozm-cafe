@@ -1,8 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
 import com.project.yozmcafe.exception.BadRequestException;
-import java.util.List;
-
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
