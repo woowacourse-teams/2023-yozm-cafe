@@ -4,6 +4,7 @@ import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,10 @@ public class Images {
     }
 
     public String getRepresentativeImage() {
+        if (urls.isEmpty()) {
+            return Strings.EMPTY;
+        }
+
         return urls.get(REPRESENTATIVE_INDEX);
     }
 }

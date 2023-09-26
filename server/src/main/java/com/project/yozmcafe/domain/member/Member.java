@@ -17,6 +17,7 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static java.lang.Math.min;
+import static java.util.Collections.emptyList;
 
 @Entity
 public class Member {
@@ -99,12 +100,17 @@ public class Member {
         return result;
     }
 
-    public List<Cafe> getLikedCafes(final int startIndex, final int endIndex) {
+    public List<Cafe> getLikedCafes(final int startIndex, final int amount) {
+        if (startIndex >= likedCafes.size()) {
+            return emptyList();
+        }
+
         final List<Cafe> cafes = likedCafes.stream()
                 .map(LikedCafe::getCafe)
                 .toList();
 
-        return cafes.subList(startIndex, min(endIndex, this.likedCafes.size()));
+        final int endIndex = startIndex + amount;
+        return cafes.subList(startIndex, min(endIndex, cafes.size()));
     }
 
     public String getId() {

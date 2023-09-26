@@ -194,7 +194,7 @@ class MemberTest {
 
     @Test
     @DisplayName("좋아요한 카페 목록을 페이지 처리한다")
-    void getLikedCafesSection() {
+    void getLikedCafes() {
         //given
         final Member member = new Member("1234", "오션", "오션사진");
         final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
@@ -211,5 +211,35 @@ class MemberTest {
 
         //then
         assertThat(likedCafes).containsExactly(cafe1, cafe2);
+    }
+
+    @Test
+    @DisplayName("좋아요한 카페 목록을 조회할 때 없는 페이지를 요청하면 빈 리스트를 반환한다")
+    void getLikedCafes_empty() {
+        //given
+        final Member member = new Member("1234", "연어", "딱새우회_먹고싶다");
+
+        //when
+        final List<Cafe> likedCafes = member.getLikedCafes(0, 5);
+
+        //then
+        assertThat(likedCafes).isEmpty();
+    }
+
+    @Test
+    @DisplayName("좋아요한 카페 목록을 조회할 때 요청한 사이즈보다 적으면 있는 만큼만 반환한다")
+    void getLikedCafes_amount() {
+        //given
+        final Member member = new Member("1234", "연어", "딱새우회_먹고싶다");
+        final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
+        final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
+        member.updateLikedCafesBy(cafe1, true);
+        member.updateLikedCafesBy(cafe2, true);
+
+        //when
+        final List<Cafe> likedCafes = member.getLikedCafes(0, 5);
+
+        //then
+        assertThat(likedCafes).hasSize(2);
     }
 }
