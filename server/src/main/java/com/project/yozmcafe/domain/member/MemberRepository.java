@@ -5,13 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    @Override
     @Query("""
             SELECT m
             FROM Member m
@@ -19,14 +17,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
             JOIN FETCH uvc.cafe
             WHERE m.id = :id
             """)
-    Optional<Member> findById(@Param("id") String id);
-
-    @Override
-    @Query("""
-            SELECT m
-            FROM Member m
-            LEFT JOIN FETCH m.unViewedCafes uvc
-            JOIN FETCH uvc.cafe
-            """)
-    List<Member> findAll();
+    Optional<Member> findWithUnViewedCafesById(@Param("id") String id);
 }

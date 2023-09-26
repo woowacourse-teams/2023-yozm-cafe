@@ -26,8 +26,8 @@ public class CafeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(final Member member) {
-        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(member, CAFE_PAGE_SIZE);
+    public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(@LoginUser final String memberId) {
+        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(memberId, CAFE_PAGE_SIZE);
         return ResponseEntity.ok(cafeResponses);
     }
 

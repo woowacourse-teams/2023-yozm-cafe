@@ -6,6 +6,7 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,19 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
 
 @Service
 @Transactional(readOnly = true)
 public class CafeService {
 
     private final CafeRepository cafeRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final UnViewedCafeService unViewedCafeService;
 
-    public CafeService(final CafeRepository cafeRepository, final MemberService memberService,
+    public CafeService(final CafeRepository cafeRepository, final MemberRepository memberRepository,
                        final UnViewedCafeService unViewedCafeService) {
         this.cafeRepository = cafeRepository;
-        this.memberService = memberService;
+        this.memberRepository = memberRepository;
         this.unViewedCafeService = unViewedCafeService;
     }
 
@@ -55,7 +57,7 @@ public class CafeService {
 
     @Transactional
     public List<CafeResponse> getCafesForLoginMember(final String memberId, final int size) {
-        final Member member = memberService.findMemberByIdOrElseThrow(memberId);
+        final Member member = getMemberByIdOrThrow(memberId);
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
@@ -63,6 +65,11 @@ public class CafeService {
                 .map(UnViewedCafe::getCafe)
                 .map(cafe -> CafeResponse.fromLoggedInUser(cafe, member.isLike(cafe)))
                 .toList();
+    }
+
+    private Member getMemberByIdOrThrow(final String memberId) {
+        return memberRepository.findWithUnViewedCafesById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTED_MEMBER));
     }
 
     public CafeResponse getCafeByIdOrThrow(final long cafeId) {
