@@ -127,7 +127,7 @@ class LikedCafeServiceTest extends BaseTest {
         final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페", "카페주소", 10));
 
         //when
-        likedCafeService.updateLike(member, cafe.getId(), true);
+        likedCafeService.updateLike(member.getId(), cafe.getId(), true);
         final Member updatedMember = memberRepository.findById(member.getId()).get();
 
         //then
@@ -148,7 +148,7 @@ class LikedCafeServiceTest extends BaseTest {
         member.updateLikedCafesBy(cafe, true);
 
         //when
-        likedCafeService.updateLike(member, cafe.getId(), false);
+        likedCafeService.updateLike(member.getId(), cafe.getId(), false);
         final Member updatedMember = memberRepository.findById(member.getId()).get();
 
         //then
@@ -169,7 +169,7 @@ class LikedCafeServiceTest extends BaseTest {
         member.updateLikedCafesBy(cafe, true);
 
         //when
-        likedCafeService.updateLike(member, cafe.getId(), true);
+        likedCafeService.updateLike(member.getId(), cafe.getId(), true);
         final Member updatedMember = memberRepository.findById(member.getId()).get();
 
         //then
@@ -189,8 +189,8 @@ class LikedCafeServiceTest extends BaseTest {
 
         //when & then
         final long cafeId = cafe.getId();
-        assertThatThrownBy(() -> likedCafeService.updateLike(member, cafeId, true))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당하는 카페가 존재하지 않습니다.");
+        assertThatThrownBy(() -> likedCafeService.updateLike(member.getId(), cafeId, true))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("카페가 존재하지 않습니다.");
     }
 }
