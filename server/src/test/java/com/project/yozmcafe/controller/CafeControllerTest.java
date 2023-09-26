@@ -2,10 +2,12 @@ package com.project.yozmcafe.controller;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.domain.menu.MenuRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
 import io.restassured.response.Response;
@@ -43,6 +45,8 @@ class CafeControllerTest extends BaseControllerTest {
     private MemberRepository memberRepository;
     @Autowired
     private CafeRepository cafeRepository;
+    @Autowired
+    private MenuRepository menuRepository;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
     private Cafe cafe1, cafe2, cafe3, cafe4, cafe5;
@@ -115,7 +119,7 @@ class CafeControllerTest extends BaseControllerTest {
         assertAll(
                 () -> assertThat(likeResponse.getStatusCode()).isEqualTo(200),
                 () -> assertThat(cafeResponses).hasSize(4),
-                () -> assertThat(cafeResponse.likeCount()).isEqualTo(0),
+                () -> assertThat(cafeResponse.likeCount()).isZero(),
                 () -> assertThat(cafeResponse.isLiked()).isFalse()
         );
     }
@@ -321,16 +325,43 @@ class CafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("/cafes/rank?page=? 요청을 보낼 때, 순위 범위를 초과하는 요청이면 statusCode 400을 응답한다")
-    void getCafesOrderByLikeCountWhenRankOutBoundFail() {
+    @DisplayName("사용자가 검색 요청을 보내면, 검색어와 기준에 맞는 카페를 응답한다.")
+    void getCafesBySearch() {
+        //given
+        menuRepository.save(Fixture.getMenu(cafe1, 1, "요즘커피"));
+
         //when
         final Response response = given(spec).log().all()
-                .filter(document(CAFE_API + "좋아요 개수 순위에 따라 카페정보 조회 - 범위 초과 예외", getPageRequestParam()))
+                .filter(document(CAFE_API + "카페 검색",
+                        getSearchRequestParam(),
+                        getCafeSearchResponseFields()))
                 .when()
-                .get("/cafes/ranks?page=4");
+                .get("/cafes/search?cafeName=n1&menu=요즘커피&address=address");
 
         //then
-        assertThat(response.statusCode()).isEqualTo(400);
+        final List<CafeSearchResponse> cafeSearchResponses = getCafeSearchResponses(response);
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(cafeSearchResponses).extracting("id", "name")
+                        .containsOnly(tuple(cafe1.getId(), "n1"))
+        );
+    }
+
+    @Test
+    @DisplayName("사용자가 검색 요청을 보내면, 검색어와 기준에 맞는 카페를 응답한다. - 메뉴 검색하지 않을 경우")
+    void getCafesBySearchWhenNotSearchMenu() {
+        //given, when
+        final Response response = given().log().all()
+                .when()
+                .get("/cafes/search?cafeName=n2&address=addr");
+
+        //then
+        final List<CafeSearchResponse> cafeSearchResponses = getCafeSearchResponses(response);
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(200),
+                () -> assertThat(cafeSearchResponses).extracting("id", "name")
+                        .containsOnly(tuple(cafe2.getId(), "n2"))
+        );
     }
 
     private Member saveMemberAndUnViewedCafes() {
@@ -401,6 +432,11 @@ class CafeControllerTest extends BaseControllerTest {
                 .extract().jsonPath().getList(".", CafeResponse.class);
     }
 
+    private List<CafeSearchResponse> getCafeSearchResponses(final Response response) {
+        return response.then().log().all()
+                .extract().jsonPath().getList(".", CafeSearchResponse.class);
+    }
+
     private List<CafeRankResponse> getCafeRankResponses(final Response response) {
         return response.then().log().all()
                 .extract().jsonPath().getList(".", CafeRankResponse.class);
@@ -408,5 +444,23 @@ class CafeControllerTest extends BaseControllerTest {
 
     private QueryParametersSnippet getPageRequestParam() {
         return queryParameters(parameterWithName("page").description("페이지 번호"));
+    }
+
+    private QueryParametersSnippet getSearchRequestParam() {
+        return queryParameters(
+                parameterWithName("cafeName").description("카페명 검색어"),
+                parameterWithName("menu").description("카페의 메뉴 검색어"),
+                parameterWithName("address").description("카페의 주소 검색어")
+        );
+    }
+
+    private ResponseFieldsSnippet getCafeSearchResponseFields() {
+        return responseFields(
+                fieldWithPath("[].id").description("카페 아이디"),
+                fieldWithPath("[].name").description("카페 이름"),
+                fieldWithPath("[].address").description("카페 주소"),
+                fieldWithPath("[].image").description("카페 대표 이미지 url"),
+                fieldWithPath("[].likeCount").description("카페의 좋아요 갯수")
+        );
     }
 }
