@@ -411,7 +411,6 @@ class CafeControllerTest extends BaseControllerTest {
         );
     }
 
-
     private ResponseFieldsSnippet getCafeRankResponseFields() {
         return responseFields(
                 fieldWithPath("[].rank").description("카페 순위"),

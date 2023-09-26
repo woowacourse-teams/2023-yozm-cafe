@@ -6,6 +6,8 @@ import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.exception.BadRequestException;
+import com.project.yozmcafe.exception.ErrorCode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +21,7 @@ public class LikedCafeService {
     private final CafeRepository cafeRepository;
     private final MemberService memberService;
 
-    public LikedCafeService(final CafeRepository cafeRepository,
-                            final MemberService memberService) {
+    public LikedCafeService(final CafeRepository cafeRepository, final MemberService memberService) {
         this.cafeRepository = cafeRepository;
         this.memberService = memberService;
     }
@@ -47,9 +48,11 @@ public class LikedCafeService {
     }
 
     @Transactional
-    public void updateLike(final Member member, final long cafeId, final boolean isLiked) {
+    public void updateLike(final String memberId, final long cafeId, final boolean isLiked) {
+        final Member member = memberService.findMemberByIdOrElseThrow(memberId);
+
         final Cafe cafe = cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 카페가 존재하지 않습니다."));
+                .orElseThrow(() -> new BadRequestException(ErrorCode.NOT_EXISTED_CAFE));
 
         member.updateLikedCafesBy(cafe, isLiked);
     }
