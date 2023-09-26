@@ -1,7 +1,7 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeThumbnailResponse;
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
 import com.project.yozmcafe.service.LikedCafeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

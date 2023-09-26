@@ -65,7 +65,7 @@ sourceSets {
     main.java.srcDirs += [generatedQueryDsl]
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.getGeneratedSourceOutputDirectory().set(file(generatedQueryDsl))
 }
 

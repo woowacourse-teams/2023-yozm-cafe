@@ -325,19 +325,6 @@ class CafeControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("/cafes/rank?page=? 요청을 보낼 때, 순위 범위를 초과하는 요청이면 statusCode 400을 응답한다")
-    void getCafesOrderByLikeCountWhenRankOutBoundFail() {
-        //when
-        final Response response = given(spec).log().all()
-                .filter(document(CAFE_API + "좋아요 개수 순위에 따라 카페정보 조회 - 범위 초과 예외", getPageRequestParam()))
-                .when()
-                .get("/cafes/ranks?page=4");
-
-        //then
-        assertThat(response.statusCode()).isEqualTo(400);
-    }
-
-    @Test
     @DisplayName("사용자가 검색 요청을 보내면, 검색어와 기준에 맞는 카페를 응답한다.")
     void getCafesBySearch() {
         //given

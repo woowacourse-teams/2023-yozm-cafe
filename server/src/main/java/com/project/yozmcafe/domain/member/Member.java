@@ -100,7 +100,6 @@ public class Member {
     }
 
     public List<Cafe> getLikedCafes(final int startIndex, final int endIndex) {
-        final List<LikedCafe> likedCafes = new ArrayList<>(this.likedCafes);
         final List<Cafe> cafes = likedCafes.stream()
                 .map(LikedCafe::getCafe)
                 .toList();

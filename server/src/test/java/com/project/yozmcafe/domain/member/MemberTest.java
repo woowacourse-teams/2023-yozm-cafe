@@ -107,7 +107,7 @@ class MemberTest {
 
         //then
         assertAll(
-                () -> assertThat(member.getLikedCafes()).hasSize(0),
+                () -> assertThat(member.getLikedCafes()).isEmpty(),
                 () -> assertThat(member.isLike(cafe)).isFalse(),
                 () -> assertThat(cafe.getLikeCount()).isEqualTo(10));
     }
