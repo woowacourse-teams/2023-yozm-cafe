@@ -18,7 +18,7 @@ const SearchPage = () => {
   const [isDetailEnabled, setIsDetailEnabled] = useState(false);
 
   const query = useDeferredValue(isDetailEnabled ? { searchName, searchAddress, searchMenu } : { searchName });
-  const isQueryFilled = searchName && searchAddress && searchMenu;
+  const isQueryFilled = searchName || searchAddress || searchMenu;
   const { data: searchedCafes } = useSearchCafes(query);
 
   const handleSearch: FormEventHandler = (event) => {
