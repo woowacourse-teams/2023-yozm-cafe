@@ -21,11 +21,14 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 public class CafeService {
 
     private final CafeRepository cafeRepository;
+    private final MemberService memberService;
     private final UnViewedCafeService unViewedCafeService;
     private final CafeRankGenerator cafeRankGenerator;
 
-    public CafeService(final CafeRepository cafeRepository, final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
+    public CafeService(final CafeRepository cafeRepository, final MemberService memberService,
+                       final UnViewedCafeService unViewedCafeService, final CafeRankGenerator cafeRankGenerator) {
         this.cafeRepository = cafeRepository;
+        this.memberService = memberService;
         this.unViewedCafeService = unViewedCafeService;
         this.cafeRankGenerator = cafeRankGenerator;
     }
@@ -50,7 +53,8 @@ public class CafeService {
     }
 
     @Transactional
-    public List<CafeResponse> getCafesForLoginMember(final Member member, final int size) {
+    public List<CafeResponse> getCafesForLoginMember(final String memberId, final int size) {
+        final Member member = memberService.findMemberByIdOrElseThrow(memberId);
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 

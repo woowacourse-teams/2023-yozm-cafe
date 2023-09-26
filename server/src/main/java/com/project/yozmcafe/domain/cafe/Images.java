@@ -6,6 +6,9 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Embeddable
 public class Images {
 
@@ -23,7 +26,7 @@ public class Images {
     }
 
     public List<String> getUrls() {
-        return urls;
+        return new ArrayList<>(urls);
     }
 
     public String getRepresentativeImage() {

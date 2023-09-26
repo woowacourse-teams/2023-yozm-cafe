@@ -2,7 +2,6 @@ package com.project.yozmcafe.controller;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
-import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.service.CafeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -28,8 +27,8 @@ public class CafeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(final Member member) {
-        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(member, PAGE_SIZE);
+    public ResponseEntity<List<CafeResponse>> getCafesForLoggedInMember(@LoginUser final String memberId) {
+        List<CafeResponse> cafeResponses = cafeService.getCafesForLoginMember(memberId, PAGE_SIZE);
         return ResponseEntity.ok(cafeResponses);
     }
 
