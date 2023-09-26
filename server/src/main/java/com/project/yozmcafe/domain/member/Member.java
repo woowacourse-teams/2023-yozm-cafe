@@ -11,7 +11,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
@@ -100,14 +99,13 @@ public class Member {
         return result;
     }
 
-    public List<LikedCafe> getLikedCafesSection(final int startIndex, final int endIndex) {
-        if (startIndex >= likedCafes.size()) {
-            return Collections.emptyList();
-        }
+    public List<Cafe> getLikedCafes(final int startIndex, final int endIndex) {
+        final List<LikedCafe> likedCafes = new ArrayList<>(this.likedCafes);
+        final List<Cafe> cafes = likedCafes.stream()
+                .map(LikedCafe::getCafe)
+                .toList();
 
-        final List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
-
-        return reverseLikedCafes.subList(startIndex, min(endIndex, likedCafes.size()));
+        return cafes.subList(startIndex, min(endIndex, this.likedCafes.size()));
     }
 
     public String getId() {

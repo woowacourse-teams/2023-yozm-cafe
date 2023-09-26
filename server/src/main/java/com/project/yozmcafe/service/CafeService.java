@@ -2,6 +2,8 @@ package com.project.yozmcafe.service;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
 import com.project.yozmcafe.domain.CafeRankGenerator;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Service
 @Transactional(readOnly = true)
@@ -69,5 +72,20 @@ public class CafeService {
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
 
         return CafeResponse.fromUnLoggedInUser(foundCafe);
+    }
+
+    public List<CafeSearchResponse> getCafesBySearch(final CafeSearchRequest searchRequest) {
+        final List<Cafe> cafes = searchWith(searchRequest);
+
+        return cafes.stream()
+                .map(CafeSearchResponse::from)
+                .toList();
+    }
+
+    private List<Cafe> searchWith(final CafeSearchRequest cafeSearchRequest) {
+        if (isBlank(cafeSearchRequest.menu())) {
+            return cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.address());
+        }
+        return cafeRepository.findAllBy(cafeSearchRequest.cafeName(), cafeSearchRequest.menu(), cafeSearchRequest.address());
     }
 }

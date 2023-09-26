@@ -1,7 +1,7 @@
 package com.project.yozmcafe.controller;
 
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
+import com.project.yozmcafe.controller.dto.cafe.CafeThumbnailResponse;
 import com.project.yozmcafe.service.LikedCafeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,9 +26,9 @@ public class LikedCafeController {
     }
 
     @GetMapping("/members/{memberId}/liked-cafes")
-    public ResponseEntity<List<LikedCafeThumbnailResponse>> getLikedCafeThumbnails(@PathVariable("memberId") final String memberId,
-                                                                                   @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
-        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(memberId, pageable);
+    public ResponseEntity<List<CafeThumbnailResponse>> getLikedCafeThumbnails(@PathVariable("memberId") final String memberId,
+                                                                              @PageableDefault(size = PAGE_SIZE) final Pageable pageable) {
+        final List<CafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(memberId, pageable);
 
         return ResponseEntity.ok(likedCafes);
     }
