@@ -6,7 +6,6 @@ import com.project.yozmcafe.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class Detail {
     public static final int MAP_URL_MAX_LENGTH = 512;
     public static final int PHONE_MAX_LENGTH = 20;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection
     private List<AvailableTime> availableTimes = new ArrayList<>();
     @Column(nullable = false)
     private String mapUrl;
