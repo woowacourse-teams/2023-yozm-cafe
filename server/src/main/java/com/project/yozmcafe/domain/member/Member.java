@@ -4,10 +4,10 @@ import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static java.lang.Math.min;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Persistable;
