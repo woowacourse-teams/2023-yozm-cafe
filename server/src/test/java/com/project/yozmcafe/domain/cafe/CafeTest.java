@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -66,9 +67,9 @@ class CafeTest {
     }
 
     @Test
-    @DisplayName("카페의 이미지 정보가 없으면 예외가 발생한다")
+    @DisplayName("이미지 정보가 하나도 없으면 예외가 발생한다")
     void invalidImages() {
-        assertThatThrownBy(() -> new Cafe("연어카페", "광안리", null, detail()))
+        assertThatThrownBy(() -> new Images(Collections.emptyList()))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_CAFE_IMAGE.getMessage());
     }
@@ -117,7 +118,7 @@ class CafeTest {
         cafe.subtractLikeCount();
 
         //then
-        assertThat(cafe.getLikeCount()).isEqualTo(0);
+        assertThat(cafe.getLikeCount()).isZero();
     }
 
     @Nested
