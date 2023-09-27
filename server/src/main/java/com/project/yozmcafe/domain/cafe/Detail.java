@@ -6,8 +6,8 @@ import com.project.yozmcafe.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.DUPLICATED_CAFE_AVAILABLE_TIMES;
@@ -21,8 +21,8 @@ public class Detail {
     public static final int MAP_URL_MAX_LENGTH = 512;
     public static final int PHONE_MAX_LENGTH = 20;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<AvailableTime> availableTimes;
+    @ElementCollection
+    private List<AvailableTime> availableTimes = new ArrayList<>();
     @Column(nullable = false)
     private String mapUrl;
     @Column(columnDefinition = "text")
