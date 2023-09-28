@@ -1,7 +1,9 @@
 import type { Preview } from '@storybook/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import { AuthProvider } from '../src/context/AuthContext';
 import GlobalStyle from '../src/styles/GlobalStyle';
 import ResetStyle from '../src/styles/ResetStyle';
 import theme from '../src/styles/theme';
@@ -15,6 +17,14 @@ const customViewports = {
     },
   },
 };
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 const preview: Preview = {
   parameters: {
@@ -33,13 +43,17 @@ const preview: Preview = {
 
   decorators: [
     (Story) => (
-      <MemoryRouter initialEntries={['/']}>
+      <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <ResetStyle />
           <GlobalStyle />
-          <Story />
+          <AuthProvider>
+            <MemoryRouter initialEntries={['/']}>
+              <Story />
+            </MemoryRouter>
+          </AuthProvider>
         </ThemeProvider>
-      </MemoryRouter>
+      </QueryClientProvider>
     ),
   ],
 };
