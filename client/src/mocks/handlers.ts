@@ -4,7 +4,7 @@ import type { Identity, User } from '../types';
 
 let pageState = 1;
 
-export const handlers = [
+const handlers = [
   // 카페 조회
   rest.get('/api/cafes', (req, res, ctx) => {
     const PAGINATE_UNIT = 5;
@@ -245,3 +245,5 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 ];
+
+export default handlers;
