@@ -1,6 +1,6 @@
 type Subscriber = () => void;
 
-class Observer<T> {
+class Observable<T> {
   protected subscribers: Subscriber[] = [];
 
   protected state: T;
@@ -33,4 +33,4 @@ class Observer<T> {
   }
 }
 
-export default Observer;
+export default Observable;

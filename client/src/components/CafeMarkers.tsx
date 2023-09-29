@@ -4,9 +4,9 @@ import { createRoot } from 'react-dom/client';
 import { TfiClose } from 'react-icons/tfi';
 import { styled } from 'styled-components';
 import type { CafeMapLocationData } from '../types';
-import Observer from '../utils/Observer';
+import Observable from '../utils/Observable';
 
-const openedCafeIdObserver = new Observer<number | null>(null);
+const openedCafeIdObserver = new Observable<number | null>(null);
 
 type CafeMarkerProps = {
   cafe: CafeMapLocationData;
@@ -14,16 +14,16 @@ type CafeMarkerProps = {
   onCloseModal: () => void;
 };
 
-const useObserver = <T,>(observer: Observer<T>): [T, (state: T) => void] => {
+const useObserver = <T,>(Observable: Observable<T>): [T, (state: T) => void] => {
   const state = useSyncExternalStore(
     (callback) => {
-      observer.subscribe(callback);
+      Observable.subscribe(callback);
 
-      return () => observer.unsubscribe(callback);
+      return () => Observable.unsubscribe(callback);
     },
-    () => observer.getState(),
+    () => Observable.getState(),
   );
-  const dispatch = (state: T) => observer.setState(state);
+  const dispatch = (state: T) => Observable.setState(state);
   return [state, dispatch];
 };
 
