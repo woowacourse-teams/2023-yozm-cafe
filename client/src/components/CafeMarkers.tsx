@@ -1,8 +1,9 @@
 import type { MouseEventHandler } from 'react';
-import { useCallback, useEffect, useSyncExternalStore } from 'react';
+import { useCallback, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { TfiClose } from 'react-icons/tfi';
 import { styled } from 'styled-components';
+import useObservable from '../hooks/useObservable';
 import type { CafeMapLocationData } from '../types';
 import Observable from '../utils/Observable';
 
@@ -14,23 +15,10 @@ type CafeMarkerProps = {
   onCloseModal: () => void;
 };
 
-const useObserver = <T,>(Observable: Observable<T>): [T, (state: T) => void] => {
-  const state = useSyncExternalStore(
-    (callback) => {
-      Observable.subscribe(callback);
-
-      return () => Observable.unsubscribe(callback);
-    },
-    () => Observable.getState(),
-  );
-  const dispatch = (state: T) => Observable.setState(state);
-  return [state, dispatch];
-};
-
 const CafeMarker = (props: CafeMarkerProps) => {
   const { cafe, onOpenModal, onCloseModal } = props;
 
-  const [openedCafeId, setOpenedCafeId] = useObserver(openedCafeIdObserver);
+  const [openedCafeId, setOpenedCafeId] = useObservable(openedCafeIdObserver);
 
   const handleCloseModal = useCallback(() => {
     setOpenedCafeId(null);
