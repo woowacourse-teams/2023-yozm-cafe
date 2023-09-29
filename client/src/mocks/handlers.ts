@@ -44,8 +44,6 @@ export const handlers = [
       (cafe) => isCafeLatitudeWithinBounds(cafe) && isCafeLongitudeWithinBounds(cafe),
     );
 
-    console.log('찾은 카페 갯수: ' + foundCafes.length);
-
     return res(ctx.status(200), ctx.json(foundCafes));
   }),
   // 카페 조회
