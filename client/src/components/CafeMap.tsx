@@ -125,8 +125,6 @@ const MapLocationButtonContainer = styled.div`
 `;
 
 const MapLocationButton = styled.button`
-  cursor: pointer;
-
   padding: 10px;
 
   color: ${({ theme }) => theme.color.black};

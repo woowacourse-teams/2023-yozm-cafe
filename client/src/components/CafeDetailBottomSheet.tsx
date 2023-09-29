@@ -145,7 +145,6 @@ const CloseButton = styled.button`
 `;
 
 const CloseIcon = styled(BsX)`
-  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['2xl']};
 `;
 

@@ -170,8 +170,6 @@ const StyledLink = styled.a`
 const ModalCloseButton = styled.button``;
 
 const ModalDetailButton = styled.button`
-  cursor: pointer;
-
   width: 100%;
   padding: 8px 16px;
 

@@ -20,8 +20,6 @@ const LoginButton = (props: ButtonProps) => {
 export default LoginButton;
 
 const Container = styled.button<ButtonProps>`
-  cursor: pointer;
-
   width: 44px;
   height: 44px;
 
