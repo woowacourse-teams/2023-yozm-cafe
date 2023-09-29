@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { INITIAL_CENTER, INITIAL_ZOOM_SIZE } from '../constants';
+import { SUNGSU_CAFE_STREET_LOCATION, SUNGSU_MAP_INITIAL_ZOOM_SIZE } from '../constants';
 import { useCurrentPosition } from '../hooks/useCurrentPosition';
 import CafeMarkersContainer from './CafeMarkersContainer';
 import UserMarker from './UserMarker';
@@ -35,7 +35,7 @@ const CafeMapListener = (props: CafeMapProps) => {
 const CafeMap = () => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [googleMap, setGoogleMap] = useState<google.maps.Map>();
-  const [position, setPosition] = useState(INITIAL_CENTER);
+  const [position, setPosition] = useState(SUNGSU_CAFE_STREET_LOCATION);
   const currentPosition = useCurrentPosition();
 
   const isClientReady = currentPosition !== undefined && googleMap !== undefined;
@@ -55,16 +55,16 @@ const CafeMap = () => {
       } else {
         // 경고 메시지를 표시합니다.
         alert('서비스는 현재 성수 지역에서만 이용 가능합니다.');
-        googleMap.panTo(INITIAL_CENTER);
-        setPosition(INITIAL_CENTER);
+        googleMap.panTo(SUNGSU_CAFE_STREET_LOCATION);
+        setPosition(SUNGSU_CAFE_STREET_LOCATION);
       }
     }
   };
 
   const moveToSungsuCafeRoadLocation = () => {
     if (googleMap) {
-      googleMap.panTo(INITIAL_CENTER);
-      setPosition(INITIAL_CENTER);
+      googleMap.panTo(SUNGSU_CAFE_STREET_LOCATION);
+      setPosition(SUNGSU_CAFE_STREET_LOCATION);
     }
   };
 
@@ -72,7 +72,7 @@ const CafeMap = () => {
     if (ref.current) {
       const initialMap = new window.google.maps.Map(ref.current, {
         center: position,
-        zoom: INITIAL_ZOOM_SIZE,
+        zoom: SUNGSU_MAP_INITIAL_ZOOM_SIZE,
         disableDefaultUI: true,
         clickableIcons: false,
         mapId: '32c9cce63f7772a8',
