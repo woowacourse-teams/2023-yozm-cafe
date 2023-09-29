@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
+import Resource from '../utils/Resource';
 import Button from './Button';
 import LoginModal from './LoginModal';
 
@@ -72,7 +73,7 @@ const LogoContainer = styled.div`
   flex: 6;
 `;
 
-const Logo = styled.img.attrs({ src: '/assets/logo.svg' })`
+const Logo = styled.img.attrs({ src: Resource.getAssetUrl({ filename: 'logo.svg' }) })`
   height: ${({ theme }) => theme.fontSize['4xl']};
 `;
 
