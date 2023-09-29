@@ -1,24 +1,25 @@
 import { useEffect } from 'react';
-import type { Position } from '../types';
 
 type UserMarkerProps = {
   map: google.maps.Map;
-  position: Position;
+  currentPosition: google.maps.LatLngLiteral;
 };
 
 const UserMarker = (props: UserMarkerProps) => {
-  const { map, position } = props;
+  const { map, currentPosition } = props;
+  const { lat, lng } = currentPosition;
 
   useEffect(() => {
     const newMarker = new google.maps.Marker({
-      position: { lat: position.lat, lng: position.lng },
+      position: { lat, lng },
       map,
+      icon: '/images/current-position-icon.png',
     });
 
     return () => {
       newMarker.setMap(null);
     };
-  }, [map, position.lat, position.lng]);
+  }, [lat, lng, map]);
 
   return <></>;
 };
