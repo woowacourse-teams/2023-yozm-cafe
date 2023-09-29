@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { RankCafes, cafeMarker, cafeMenus, cafes } from '../data/mockData';
-import type { Identity, LocationData, User } from '../types';
+import type { CafeMapLocationData, Identity, User } from '../types';
 
 let pageState = 1;
 
@@ -32,15 +32,15 @@ export const handlers = [
       longitude: parseFloat(myLocationLongitude) - parseFloat(longitudeDelta),
     };
 
-    const isCafeLatitudeWithinBounds = (cafe: LocationData) => {
+    const isCafeLatitudeWithinBounds = (cafe: CafeMapLocationData) => {
       return cafe.latitude > southWestBoundary.latitude && cafe.latitude < northEastBoundary.latitude;
     };
 
-    const isCafeLongitudeWithinBounds = (cafe: LocationData) => {
+    const isCafeLongitudeWithinBounds = (cafe: CafeMapLocationData) => {
       return cafe.longitude > southWestBoundary.longitude && cafe.longitude < northEastBoundary.longitude;
     };
 
-    const foundCafes: LocationData[] = cafeMarker.filter(
+    const foundCafes: CafeMapLocationData[] = cafeMarker.filter(
       (cafe) => isCafeLatitudeWithinBounds(cafe) && isCafeLongitudeWithinBounds(cafe),
     );
 

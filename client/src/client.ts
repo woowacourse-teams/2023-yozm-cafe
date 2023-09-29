@@ -2,10 +2,10 @@ import type {
   AuthProvider,
   AuthUrl,
   Cafe,
+  CafeMapLocationData,
   CafeMenu,
   DisplayPosition,
   LikedCafe,
-  LocationData,
   Rank,
   User,
 } from './types';
@@ -120,7 +120,7 @@ class Client {
     longitudeDelta: DisplayPosition['longitudeDelta'],
     latitudeDelta: DisplayPosition['latitudeDelta'],
   ) {
-    return this.fetchJson<LocationData[]>(
+    return this.fetchJson<CafeMapLocationData[]>(
       `/cafes/location?longitude=${longitude}&latitude=${latitude}&longitudeDelta=${longitudeDelta}&latitudeDelta=${latitudeDelta}`,
     );
   }

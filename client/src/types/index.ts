@@ -85,7 +85,7 @@ export type Rank = {
   likeCount: number;
 };
 
-export type LocationData = {
+export type CafeMapLocationData = {
   id: number;
   name: string;
   address: string;
