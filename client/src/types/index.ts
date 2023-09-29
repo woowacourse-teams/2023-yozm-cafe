@@ -85,12 +85,17 @@ export type Rank = {
   likeCount: number;
 };
 
-export type Position = {
-  lat: number;
-  lng: number;
+export type CafeMapMarker = {
+  id: number;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
 };
 
-export type Marker = Position & {
-  id: number;
-  title: string;
+export type DisplayPosition = {
+  longitude: number;
+  latitude: number;
+  longitudeDelta: number;
+  latitudeDelta: number;
 };
