@@ -1,5 +1,14 @@
-import type { AuthProvider, AuthUrl, Cafe, CafeMapMarker, CafeMenu, LikedCafe, Rank, User } from './types';
-import { getDisplayPosition } from './utils/mapUtils';
+import type {
+  AuthProvider,
+  AuthUrl,
+  Cafe,
+  CafeMapMarker,
+  CafeMenu,
+  DisplayPosition,
+  LikedCafe,
+  Rank,
+  User,
+} from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -105,9 +114,12 @@ class Client {
     return this.fetchJson<CafeMenu>(`/cafes/${cafeId}/menus`);
   }
 
-  getCafesNearLocation(map: google.maps.Map) {
-    const { longitude, latitude, longitudeDelta, latitudeDelta } = getDisplayPosition(map);
-
+  getCafesNearLocation(
+    longitude: DisplayPosition['longitude'],
+    latitude: DisplayPosition['latitude'],
+    longitudeDelta: DisplayPosition['longitudeDelta'],
+    latitudeDelta: DisplayPosition['latitudeDelta'],
+  ) {
     return this.fetchJson<CafeMapMarker[]>(
       `/cafes/location?longitude=${longitude}&latitude=${latitude}&longitudeDelta=${longitudeDelta}&latitudeDelta=${latitudeDelta}`,
     );
