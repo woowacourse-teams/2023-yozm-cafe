@@ -3,13 +3,13 @@ import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import { createRoot } from 'react-dom/client';
 import { TfiClose } from 'react-icons/tfi';
 import { styled } from 'styled-components';
-import type { CafeMapMarker } from '../types';
+import type { LocationData } from '../types';
 import Observer from '../utils/Observer';
 
 const openedCafeIdObserver = new Observer<number | null>(null);
 
 type CafeMarkerProps = {
-  cafe: CafeMapMarker;
+  cafe: LocationData;
   onOpenModal: () => void;
   onCloseModal: () => void;
 };
@@ -74,7 +74,7 @@ const CafeMarker = (props: CafeMarkerProps) => {
 
 type CafeMarkersProps = {
   map: google.maps.Map;
-  cafe: CafeMapMarker;
+  cafe: LocationData;
 };
 
 const CafeMarkers = (props: CafeMarkersProps) => {
