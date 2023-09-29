@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import type { UIEventHandler } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import type { Cafe } from '../types';
 import Resource from '../utils/Resource';
@@ -16,21 +17,12 @@ const CafeCard = (props: CardProps) => {
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const handleScroll: UIEventHandler = useCallback((event) => {
+    if (!(event.target instanceof HTMLDivElement)) return;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (ref.current) {
-        const { scrollLeft, clientWidth } = ref.current;
-        const index = Math.round(scrollLeft / clientWidth);
-        setCurrentImageIndex(index);
-      }
-    };
-
-    ref.current?.addEventListener('scroll', handleScroll);
-    return () => {
-      ref.current?.removeEventListener('scroll', handleScroll);
-    };
+    const { scrollLeft, clientWidth } = event.target;
+    const index = Math.round(scrollLeft / clientWidth);
+    setCurrentImageIndex(index);
   }, []);
 
   return (
@@ -40,12 +32,13 @@ const CafeCard = (props: CardProps) => {
           {`${currentImageIndex + 1}`}/{cafe.images.length}
         </CardQuantityContents>
       </CardQuantityContainer>
-      <CarouselImageList ref={ref}>
+      <CarouselImageList onScroll={handleScroll}>
         {cafe.images.map((image, index) => (
           <CarouselImage
             key={index}
             src={Resource.getImageUrl({ size: '500', filename: image })}
             alt={`${cafe}의 이미지`}
+            loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
           />
         ))}
       </CarouselImageList>
