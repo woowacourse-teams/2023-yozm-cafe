@@ -1,4 +1,28 @@
-import type { Cafe, CafeMenu, Rank } from '../types';
+import type { Cafe, CafeMapMarker, CafeMenu, Rank } from '../types';
+
+export const cafeMarker: CafeMapMarker[] = [
+  {
+    id: 1,
+    name: '텅 성수 스페이스',
+    address: '서울특별시 성동구 성수이로 82 2층',
+    latitude: 37.514933,
+    longitude: 127.102604,
+  },
+  {
+    id: 2,
+    name: '텅 성수 스페이스',
+    address: '서울특별시 성동구 성수이로 82 2층',
+    latitude: 37.5144,
+    longitude: 127.1028,
+  },
+  {
+    id: 3,
+    name: '텅 성수 스페이스',
+    address: '서울특별시 성동구 성수이로 82 2층',
+    latitude: 37.5077,
+    longitude: 127.1067,
+  },
+];
 
 export const RankCafes: Rank[] = [
   { id: 1, rank: 1, name: '참치카페', address: '서울 성수', image: '/images/cafe-image-1.png', likeCount: 50 },
