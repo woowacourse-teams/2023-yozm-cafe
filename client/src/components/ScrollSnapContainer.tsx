@@ -420,7 +420,12 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
       onMouseLeave={handleMouseLeave}
       onWheel={handleWheel}
     >
-      <ScrollSnapVirtualItems scrollPosition={scrollPosition} items={items} itemRenderer={itemRenderer} enableRolling />
+      <ScrollSnapVirtualItems
+        scrollPosition={scrollPosition}
+        items={items}
+        itemRenderer={itemRenderer}
+        enableRolling={enableRolling}
+      />
     </Container>
   );
 };
