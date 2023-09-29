@@ -9,7 +9,7 @@ const render = (status: Status): ReactElement => {
 
 const CafeMapPage = () => {
   return (
-    <Wrapper apiKey={`${process.env.GOOGLE_MAPS_API_KEY}`} render={render}>
+    <Wrapper apiKey={`${process.env.GOOGLE_MAPS_API_KEY}`} render={render} libraries={['marker']}>
       <CafeMap />
     </Wrapper>
   );
