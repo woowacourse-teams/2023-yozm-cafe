@@ -33,6 +33,10 @@ const GlobalStyle = createGlobalStyle`
     height: 100svh;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   #root {
     position: relative;
 
