@@ -54,7 +54,7 @@ const CafeMap = () => {
         setPosition({ lat, lng });
       } else {
         // 경고 메시지를 표시합니다.
-        alert('원하는 위치가 범위를 벗어났습니다. 다시 INITIAL_CENTER로 이동합니다.');
+        alert('서비스는 현재 성수 지역에서만 이용 가능합니다.');
         googleMap.panTo(INITIAL_CENTER);
         setPosition(INITIAL_CENTER);
       }
