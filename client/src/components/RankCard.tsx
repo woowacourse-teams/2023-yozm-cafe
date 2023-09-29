@@ -2,7 +2,7 @@ import { PiHeartFill } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import type { Rank } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 
 const RankCard = (props: Rank) => {
   const { id, rank, name, address, image, likeCount } = props;
@@ -19,7 +19,7 @@ const RankCard = (props: Rank) => {
       </CafeRankContainer>
       <CafeDetailContainer>
         <CafeDetailSummaryContainer>
-          <CafeImage src={Image.getUrl({ size: '100', filename: image })} alt={`${image}}의 이미지`} />
+          <CafeImage src={Resource.getImageUrl({ size: '100', filename: image })} alt={`${image}}의 이미지`} />
           <TitleAndAddressContainer>
             <Title>{name}</Title>
             <Address>{address}</Address>

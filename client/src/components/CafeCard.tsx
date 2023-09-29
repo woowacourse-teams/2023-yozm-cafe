@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import type { Cafe } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 import CafeActionBar from './CafeActionBar';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
 import CafeSummary from './CafeSummary';
@@ -42,7 +42,11 @@ const CafeCard = (props: CardProps) => {
       </CardQuantityContainer>
       <CarouselImageList ref={ref}>
         {cafe.images.map((image, index) => (
-          <CarouselImage key={index} src={Image.getUrl({ size: '500', filename: image })} alt={`${cafe}의 이미지`} />
+          <CarouselImage
+            key={index}
+            src={Resource.getImageUrl({ size: '500', filename: image })}
+            alt={`${cafe}의 이미지`}
+          />
         ))}
       </CarouselImageList>
       <DotsContainer>
