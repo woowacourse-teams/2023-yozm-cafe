@@ -66,6 +66,12 @@ const SWIPE_FAST_SCROLL_DISTANCE_RATIO = 0.03;
 //   0 = 다음 아이템으로 완전히 넘어가야 스와이프 판정 가능
 const SWIPE_WHEEL_SCROLL_VALID_RATIO = 0.1;
 
+// 스크롤로 스와이프 시:
+//   터치패드로 스와이프 시 너무 많은 스와이프가 되기 때문에
+//   일정 스피드 이하에서는 스와이프가 되지 않도록 한다
+//   Windows 11 기준으로 마우스 스크롤의 delta 스피드는 200이다
+const SWIPE_WHEEL_SCROLL_MIN_DELTA_SPEED = 80;
+
 type ScrollSnapVirtualItemProps = PropsWithChildren<{
   // 이전 아이템인지, 현재 아이템인지, 이후 아이템인지 여부를 나타내는 숫자
   offset: -1 | 0 | 1;
@@ -164,10 +170,10 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
     onActiveIndexChange,
     scrollPosition,
     onScrollPositionChange,
+    timingFn,
     items,
     itemRenderer,
     enableRolling,
-    timingFn,
     ...divProps
   } = props;
 
@@ -386,6 +392,7 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
 
   const handleWheel: WheelEventHandler = (event) => {
     if (event.shiftKey) return;
+    if (Math.abs(event.deltaY) < SWIPE_WHEEL_SCROLL_MIN_DELTA_SPEED) return;
 
     event.stopPropagation();
 
