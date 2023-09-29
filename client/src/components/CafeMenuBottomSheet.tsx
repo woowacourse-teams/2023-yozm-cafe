@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
+import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import Resource from '../utils/Resource';
@@ -20,6 +21,7 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
     data: { menus, menuBoards },
   } = useCafeMenus(cafe.id);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   useEffect(() => {
     document.addEventListener('click', onClose);
@@ -37,7 +39,7 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   return (
     <>
       {createPortal(
-        <Container onClick={handlePreventClickPropagation}>
+        <Container onClick={handlePreventClickPropagation} {...scrollSnapGuardHandlers}>
           <CloseButton>
             <CloseIcon onClick={onClose} />
           </CloseButton>
