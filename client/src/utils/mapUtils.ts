@@ -1,6 +1,6 @@
 import type { MapBounds } from '../types';
 
-export const getDisplayPosition = (map: google.maps.Map) => {
+export const getMapBounds = (map: google.maps.Map) => {
   const center = map.getCenter() as google.maps.LatLng;
   const bounds = map.getBounds() as google.maps.LatLngBounds;
   const longitudeDelta = bounds ? (bounds.getNorthEast().lng() - bounds.getSouthWest().lng()) / 2 : 0;
