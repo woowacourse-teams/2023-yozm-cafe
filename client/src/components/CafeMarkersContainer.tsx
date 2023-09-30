@@ -15,7 +15,7 @@ const CafeMarkersContainer = (props: CafeMarkersContainerProps) => {
   return (
     <>
       {cafes.map((cafe) => (
-        <CafeMarkers key={cafe.id} map={map} cafe={cafe} />
+        <CafeMarkers key={cafe.id} map={map} cafeLocation={cafe} />
       ))}
     </>
   );
