@@ -85,7 +85,7 @@ export type Rank = {
   likeCount: number;
 };
 
-export type CafeMapLocationData = {
+export type CafeMapLocation = {
   id: number;
   name: string;
   address: string;
@@ -93,7 +93,7 @@ export type CafeMapLocationData = {
   longitude: number;
 };
 
-export type DisplayPosition = {
+export type MapBounds = {
   longitude: number;
   latitude: number;
   longitudeDelta: number;
