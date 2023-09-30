@@ -10,7 +10,7 @@
     "solo5star <solo_5@naver.com>"
   ],
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve --config webpack.development.js",
+    "start": "node scripts/start.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.production.js",
     "storybook": "cross-env NODE_ENV=development storybook dev -p 6006",
     "build:storybook": "cross-env NODE_ENV=production storybook build",
@@ -45,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "babel-loader": "^9.1.2",
+    "commander": "^11.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "cypress": "^12.17.4",
