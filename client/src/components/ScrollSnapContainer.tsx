@@ -2,6 +2,7 @@ import type React from 'react';
 import type { HTMLAttributes, MouseEventHandler, PropsWithChildren, TouchEventHandler, WheelEventHandler } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import useEffectEvent from '../shims/useEffectEvent';
 
 type TimingFn = (x: number) => number;
 
@@ -406,6 +407,25 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
     setActiveIndex(activeIndex + (event.deltaY > 0 ? 1 : -1));
     onSnapStart();
   };
+
+  const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowUp':
+        setActiveIndex(activeIndex - 1);
+        onSnapStart();
+        break;
+      case 'ArrowDown':
+        setActiveIndex(activeIndex + 1);
+        onSnapStart();
+        break;
+    }
+  });
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <Container
