@@ -11,27 +11,18 @@ const openedCafeIdObserver = new Observable<number | null>(null);
 
 type CafeMarkerProps = {
   cafe: CafeMapLocationData;
-  onOpenModal: () => void;
-  onCloseModal: () => void;
 };
 
 const CafeMarker = (props: CafeMarkerProps) => {
-  const { cafe, onOpenModal, onCloseModal } = props;
-
+  const { cafe } = props;
   const [openedCafeId, setOpenedCafeId] = useObservable(openedCafeIdObserver);
 
   const handleCloseModal = useCallback(() => {
     setOpenedCafeId(null);
-    onCloseModal();
   }, []);
 
   const handleOpenModal: MouseEventHandler = useCallback(() => {
     setOpenedCafeId(cafe.id);
-    onOpenModal();
-  }, []);
-
-  useEffect(() => {
-    return () => window.removeEventListener('click', handleCloseModal);
   }, []);
 
   return (
@@ -80,17 +71,12 @@ const CafeMarkers = (props: CafeMarkersProps) => {
       content: container,
     });
 
-    markerRoot.render(
-      <CafeMarker
-        cafe={cafe}
-        onOpenModal={() => {
-          newMarker.zIndex = 1;
-        }}
-        onCloseModal={() => {
-          newMarker.zIndex = 0;
-        }}
-      />,
-    );
+    openedCafeIdObserver.subscribe(() => {
+      const isOpened = openedCafeIdObserver.getState() === cafe.id;
+      newMarker.zIndex = isOpened ? 1 : 0;
+    });
+
+    markerRoot.render(<CafeMarker cafe={cafe} />);
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const noop = () => {};
