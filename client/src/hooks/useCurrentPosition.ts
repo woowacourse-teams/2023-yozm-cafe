@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { INITIAL_CENTER } from '../constants';
 
-export const useCurrentPosition = () => {
-  const [position, setPosition] = useState<google.maps.LatLngLiteral>();
+const useCurrentPosition = () => {
+  const [position, setPosition] = useState<google.maps.LatLngLiteral | null>(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -13,8 +12,7 @@ export const useCurrentPosition = () => {
         });
       },
       () => {
-        // 현재 위치를 불러올 수 없는 경우 기본 위치로 이동
-        setPosition(INITIAL_CENTER);
+        alert('위치 권한을 허용해주세요.');
       },
       {
         enableHighAccuracy: true,
@@ -24,3 +22,5 @@ export const useCurrentPosition = () => {
 
   return position;
 };
+
+export default useCurrentPosition;
