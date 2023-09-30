@@ -87,7 +87,6 @@ const CafeMarkers = (props: CafeMarkersProps) => {
 
     return () => {
       openedCafeIdObserverable.unsubscribe(handleOpenedCafeIdChange);
-      newMarker.removeEventListener('click', noop);
     };
   }, []);
 
