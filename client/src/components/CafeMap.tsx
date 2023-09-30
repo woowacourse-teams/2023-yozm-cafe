@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { SEONGSU_CAFE_STREET_LOCATION, SEONGSU_MAP_INITIAL_ZOOM_SIZE } from '../constants';
+import { SEONGSU_BOUNDS_LOCATION, SEONGSU_CAFE_STREET_LOCATION, SEONGSU_MAP_INITIAL_ZOOM_SIZE } from '../constants';
 import useCafesNearLocation from '../hooks/useCafesNearLocation';
 import useCurrentPosition from '../hooks/useCurrentPosition';
 import CafeMarkersContainer from './CafeMarkersContainer';
@@ -22,12 +22,7 @@ const CafeMap = () => {
       maxZoom: 20,
       minZoom: 14,
       restriction: {
-        latLngBounds: {
-          north: 37.5543,
-          south: 37.5353,
-          east: 127.0637,
-          west: 127.0299,
-        },
+        latLngBounds: SEONGSU_BOUNDS_LOCATION,
       },
     });
 
@@ -52,23 +47,19 @@ const CafeMapContent = (props: CafeMapContentProps) => {
   const currentPosition = useCurrentPosition();
   const { refetch } = useCafesNearLocation(map);
 
-  const setPosition = (position: { lat: number; lng: number }) => {
+  const setPosition = (position: google.maps.LatLngLiteral) => {
     map.setCenter(position);
   };
 
   const moveToCurrentUserLocation = () => {
     if (!currentPosition) return;
 
-    const { lat, lng } = currentPosition;
-    const bounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(37.5353, 127.0299),
-      new google.maps.LatLng(37.5543, 127.0637),
-    );
+    const bounds = new google.maps.LatLngBounds(SEONGSU_BOUNDS_LOCATION);
 
     // 원하는 위치가 범위 내에 있는지 확인합니다.
-    if (bounds.contains(new google.maps.LatLng(lat, lng))) {
-      map.panTo({ lat, lng });
-      setPosition({ lat, lng });
+    if (bounds.contains(currentPosition)) {
+      map.panTo(currentPosition);
+      setPosition(currentPosition);
     } else {
       // 경고 메시지를 표시합니다.
       alert('서비스는 성수 지역에서만 이용 가능합니다.');
@@ -98,7 +89,7 @@ const CafeMapContent = (props: CafeMapContentProps) => {
       </MapLocationButtonContainer>
 
       <CafeMarkersContainer map={map} />
-      {currentPosition && <UserMarker map={map} currentPosition={currentPosition} />}
+      {currentPosition && <UserMarker map={map} position={currentPosition} />}
     </>
   );
 };
