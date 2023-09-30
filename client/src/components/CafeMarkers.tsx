@@ -4,41 +4,41 @@ import { createRoot } from 'react-dom/client';
 import { TfiClose } from 'react-icons/tfi';
 import { styled } from 'styled-components';
 import useObservable from '../hooks/useObservable';
-import type { CafeMapLocationData } from '../types';
+import type { CafeMapLocation } from '../types';
 import Observable from '../utils/Observable';
 
-const openedCafeIdObserver = new Observable<number | null>(null);
+const openedCafeIdObserverable = new Observable<number | null>(null);
 
 type CafeMarkerProps = {
-  cafe: CafeMapLocationData;
+  cafeLocation: CafeMapLocation;
 };
 
 const CafeMarker = (props: CafeMarkerProps) => {
-  const { cafe } = props;
-  const [openedCafeId, setOpenedCafeId] = useObservable(openedCafeIdObserver);
+  const { cafeLocation } = props;
+  const [openedCafeId, setOpenedCafeId] = useObservable(openedCafeIdObserverable);
 
   const handleCloseModal = useCallback(() => {
     setOpenedCafeId(null);
   }, []);
 
   const handleOpenModal: MouseEventHandler = useCallback(() => {
-    setOpenedCafeId(cafe.id);
+    setOpenedCafeId(cafeLocation.id);
   }, []);
 
   return (
     <div onClick={(event) => event.stopPropagation()}>
-      {openedCafeId === cafe.id && (
+      {openedCafeId === cafeLocation.id && (
         <ModalContainer>
           <ModalCloseButtonContainer>
             <ModalCloseButton onClick={handleCloseModal}>
               <TfiClose />
             </ModalCloseButton>
           </ModalCloseButtonContainer>
-          <ModalTitle>{cafe.name}</ModalTitle>
-          <ModalSubtitle>{cafe.address}</ModalSubtitle>
+          <ModalTitle>{cafeLocation.name}</ModalTitle>
+          <ModalSubtitle>{cafeLocation.address}</ModalSubtitle>
           <ModalContent></ModalContent>
           <ModalButtonContainer>
-            <StyledLink href={`https://yozm.cafe/cafes/${cafe.id}`} target="_blank" rel="noreferrer">
+            <StyledLink href={`https://yozm.cafe/cafes/${cafeLocation.id}`} target="_blank" rel="noreferrer">
               <ModalDetailButton onClick={handleCloseModal}>상세보기</ModalDetailButton>
             </StyledLink>
           </ModalButtonContainer>
@@ -53,12 +53,12 @@ const CafeMarker = (props: CafeMarkerProps) => {
 
 type CafeMarkersProps = {
   map: google.maps.Map;
-  cafe: CafeMapLocationData;
+  cafeLocation: CafeMapLocation;
 };
 
 const CafeMarkers = (props: CafeMarkersProps) => {
-  const { map, cafe } = props;
-  const { latitude, longitude, name } = cafe;
+  const { map, cafeLocation } = props;
+  const { latitude, longitude, name } = cafeLocation;
 
   useEffect(() => {
     const container = document.createElement('div');
@@ -71,19 +71,24 @@ const CafeMarkers = (props: CafeMarkersProps) => {
       content: container,
     });
 
-    openedCafeIdObserver.subscribe(() => {
-      const isOpened = openedCafeIdObserver.getState() === cafe.id;
+    const handleOpenedCafeIdChange = () => {
+      const isOpened = openedCafeIdObserverable.getState() === cafeLocation.id;
       newMarker.zIndex = isOpened ? 1 : 0;
-    });
+    };
 
-    markerRoot.render(<CafeMarker cafe={cafe} />);
+    openedCafeIdObserverable.subscribe(handleOpenedCafeIdChange);
+
+    markerRoot.render(<CafeMarker cafeLocation={cafeLocation} />);
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const noop = () => {};
 
     newMarker.addListener('click', noop);
 
-    return () => newMarker.removeEventListener('click', noop);
+    return () => {
+      openedCafeIdObserverable.unsubscribe(handleOpenedCafeIdChange);
+      newMarker.removeEventListener('click', noop);
+    };
   }, []);
 
   return <></>;
@@ -96,7 +101,7 @@ const Marker = styled.button`
   transform: translate(-50%, -50%);
 `;
 
-const MarkerIcon = styled.img.attrs({ src: '/images/coffee-icon.png', alt: '카페마커' })``;
+const MarkerIcon = styled.img.attrs({ src: '/assets/coffee-icon.png', alt: '카페마커' })``;
 
 const ModalContainer = styled.div`
   position: absolute;
