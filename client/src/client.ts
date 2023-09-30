@@ -1,14 +1,4 @@
-import type {
-  AuthProvider,
-  AuthUrl,
-  Cafe,
-  CafeMapLocationData,
-  CafeMenu,
-  DisplayPosition,
-  LikedCafe,
-  Rank,
-  User,
-} from './types';
+import type { AuthProvider, AuthUrl, Cafe, CafeMapLocation, CafeMenu, LikedCafe, MapBounds, Rank, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -115,12 +105,12 @@ class Client {
   }
 
   getCafesNearLocation(
-    longitude: DisplayPosition['longitude'],
-    latitude: DisplayPosition['latitude'],
-    longitudeDelta: DisplayPosition['longitudeDelta'],
-    latitudeDelta: DisplayPosition['latitudeDelta'],
+    longitude: MapBounds['longitude'],
+    latitude: MapBounds['latitude'],
+    longitudeDelta: MapBounds['longitudeDelta'],
+    latitudeDelta: MapBounds['latitudeDelta'],
   ) {
-    return this.fetchJson<CafeMapLocationData[]>(
+    return this.fetchJson<CafeMapLocation[]>(
       `/cafes/location?longitude=${longitude}&latitude=${latitude}&longitudeDelta=${longitudeDelta}&latitudeDelta=${latitudeDelta}`,
     );
   }
