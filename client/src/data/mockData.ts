@@ -1,6 +1,6 @@
-import type { Cafe, CafeMapLocationData, CafeMenu, Rank } from '../types';
+import type { Cafe, CafeMapLocation, CafeMenu, Rank } from '../types';
 
-export const cafeMarker: CafeMapLocationData[] = [
+export const cafeMarker: CafeMapLocation[] = [
   {
     id: 1,
     name: '텅 성수 스페이스',

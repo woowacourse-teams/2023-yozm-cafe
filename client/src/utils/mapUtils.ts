@@ -1,4 +1,4 @@
-import type { DisplayPosition } from '../types';
+import type { MapBounds } from '../types';
 
 export const getDisplayPosition = (map: google.maps.Map) => {
   const center = map.getCenter() as google.maps.LatLng;
@@ -13,5 +13,5 @@ export const getDisplayPosition = (map: google.maps.Map) => {
     latitude,
     longitudeDelta,
     latitudeDelta,
-  } as DisplayPosition;
+  } as MapBounds;
 };
