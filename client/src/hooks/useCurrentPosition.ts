@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SEONGSU_CAFE_STREET_LOCATION } from '../constants';
 
 const useCurrentPosition = () => {
   const [position, setPosition] = useState<google.maps.LatLngLiteral | null>(null);
@@ -12,7 +13,7 @@ const useCurrentPosition = () => {
         });
       },
       () => {
-        alert('위치 권한을 허용해주세요.');
+        setPosition(SEONGSU_CAFE_STREET_LOCATION);
       },
       {
         enableHighAccuracy: true,
