@@ -1,25 +1,31 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 type UserMarkerProps = {
   map: google.maps.Map;
-  currentPosition: google.maps.LatLngLiteral;
+  position: google.maps.LatLngLiteral;
 };
 
 const UserMarker = (props: UserMarkerProps) => {
-  const { map, currentPosition } = props;
-  const { lat, lng } = currentPosition;
+  const { map, position } = props;
+  const markerRef = useRef<google.maps.Marker | null>(null);
 
   useEffect(() => {
-    const newMarker = new google.maps.Marker({
-      position: { lat, lng },
+    const marker = new google.maps.Marker({
+      position,
       map,
-      icon: '/images/current-position-icon.png',
+      icon: '/assets/current-position-icon.png',
     });
+    markerRef.current = marker;
 
     return () => {
-      newMarker.setMap(null);
+      marker.setMap(null);
+      markerRef.current = null;
     };
-  }, [lat, lng, map]);
+  }, [map]);
+
+  useEffect(() => {
+    markerRef.current?.setPosition(position);
+  }, [markerRef.current, position.lat, position.lng]);
 
   return <></>;
 };
