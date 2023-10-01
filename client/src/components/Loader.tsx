@@ -1,11 +1,21 @@
 import { css, keyframes, styled } from 'styled-components';
 
+const Loader = () => {
+  return (
+    <LoaderContainer>
+      {[1, 2, 3, 4, 5].map((index) => (
+        <Dot key={index} delay={index * 0.1} />
+      ))}
+    </LoaderContainer>
+  );
+};
+
+export default Loader;
+
 const LoaderContainer = styled.div`
   position: absolute;
-  top: 50%;
-  left: 40%;
-  margin-left: 10%;
-  transform: translate3d(-50%, -50%, 0);
+  display: flex;
+  padding: 12px;
 `;
 
 const Slide = keyframes`
@@ -26,22 +36,9 @@ const Dot = styled.div<{ delay: number }>`
   height: 24px;
   background: ${({ theme }) => theme.color.primary};
   border-radius: 100%;
-  display: inline-block;
 
   animation: ${({ delay }) =>
     css`
       ${Slide} 1s infinite ${delay}s
     `};
 `;
-
-const Loader = () => {
-  return (
-    <LoaderContainer>
-      {[1, 2, 3, 4, 5].map((index) => (
-        <Dot key={index} delay={index * 0.1} />
-      ))}
-    </LoaderContainer>
-  );
-};
-
-export default Loader;
