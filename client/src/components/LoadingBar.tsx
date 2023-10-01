@@ -1,18 +1,18 @@
 import { css, keyframes, styled } from 'styled-components';
 
-const Loader = () => {
+const LoadingBar = () => {
   return (
-    <LoaderContainer>
+    <LoadingBarContainer>
       {[1, 2, 3, 4, 5].map((index) => (
         <Dot key={index} delay={index * 0.1} />
       ))}
-    </LoaderContainer>
+    </LoadingBarContainer>
   );
 };
 
-export default Loader;
+export default LoadingBar;
 
-const LoaderContainer = styled.div`
+const LoadingBarContainer = styled.div`
   position: absolute;
   display: flex;
   padding: 12px;
