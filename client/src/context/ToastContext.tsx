@@ -53,7 +53,7 @@ export const useToast = () => {
   const context = useContext(ToastContext);
 
   if (!context) {
-    throw new Error('useToast를 올바르게 사용하지 않았습니다.');
+    throw new Error('부모 트리에서 ToastProvider를 사용해주세요');
   }
 
   const showToast = (variant: ToastVariant, message: string) => {
