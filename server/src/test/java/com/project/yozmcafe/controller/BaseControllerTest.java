@@ -13,10 +13,7 @@ import org.springframework.restdocs.RestDocumentationExtension;
 
 import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.domain.S3Client;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -28,16 +25,12 @@ public abstract class BaseControllerTest extends BaseTest {
 
     @LocalServerPort
     private int port;
-    @SpyBean
-    protected GoogleOAuthClient googleOAuthClient;
-    @SpyBean
-    protected KakaoOAuthClient kakaoOAuthClient;
-    @SpyBean
-    protected MemberRepository memberRepository;
+
     @SpyBean
     protected S3Client s3Client;
     @SpyBean
     protected JwtTokenProvider jwtTokenProvider;
+
 
     protected RequestSpecification spec;
 

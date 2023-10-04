@@ -23,12 +23,16 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import com.project.yozmcafe.service.auth.JwtTokenProvider;
+import com.project.yozmcafe.service.auth.KakaoOAuthClient;
 
 import io.restassured.http.Cookie;
 import io.restassured.matcher.DetailedCookieMatcher;
@@ -37,6 +41,12 @@ import io.restassured.response.Response;
 
 class AuthControllerTest extends BaseControllerTest {
 
+    @SpyBean
+    protected GoogleOAuthClient googleOAuthClient;
+    @SpyBean
+    protected KakaoOAuthClient kakaoOAuthClient;
+    @SpyBean
+    protected MemberRepository memberRepository;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 

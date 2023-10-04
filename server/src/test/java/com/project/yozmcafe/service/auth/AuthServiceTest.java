@@ -1,6 +1,16 @@
 package com.project.yozmcafe.service.auth;
 
-import com.project.yozmcafe.BaseTest;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.Mockito.doReturn;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -10,23 +20,10 @@ import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.Mockito.doReturn;
+import com.project.yozmcafe.service.BaseServiceTest;
 
 @Transactional
-class AuthServiceTest extends BaseTest {
-
-    @SpyBean
-    private GoogleOAuthClient googleOAuthClient;
+class AuthServiceTest extends BaseServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;

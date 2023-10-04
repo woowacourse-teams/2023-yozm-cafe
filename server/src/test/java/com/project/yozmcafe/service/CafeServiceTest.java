@@ -1,6 +1,19 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.BaseTest;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeSearchRequest;
@@ -12,21 +25,8 @@ import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.domain.menu.MenuRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-class CafeServiceTest extends BaseTest {
+class CafeServiceTest extends BaseServiceTest {
 
     @Autowired
     private CafeService cafeService;
