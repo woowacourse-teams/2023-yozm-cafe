@@ -25,9 +25,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
@@ -35,15 +34,12 @@ import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
-import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.cafe.available.Days;
 
 class CafeAdminControllerTest extends BaseControllerTest {
 
     @Autowired
     private ObjectMapper mapper;
-    @MockBean
-    private S3Client s3Client;
 
     private File image = new File("src/test/resources/image.png");
 
@@ -51,7 +47,7 @@ class CafeAdminControllerTest extends BaseControllerTest {
     @DisplayName("카페 저장하기")
     void save() {
         //given
-        doNothing().when(s3Client).upload(any(MockMultipartFile.class));
+        doNothing().when(s3Client).upload(any(MultipartFile.class));
         final String cafeRequestJson = makeCafeRequest();
 
         //when, then
@@ -74,7 +70,7 @@ class CafeAdminControllerTest extends BaseControllerTest {
     @DisplayName("카페 업데이트")
     void update() {
         //given
-        doNothing().when(s3Client).upload(any(MockMultipartFile.class));
+        doNothing().when(s3Client).upload(any(MultipartFile.class));
         doNothing().when(s3Client).delete(anyString());
         String location = saveCafe();
         String updateRequest = makeCafeUpdateRequest();
@@ -202,7 +198,7 @@ class CafeAdminControllerTest extends BaseControllerTest {
     }
 
     private String saveCafe() {
-        doNothing().when(s3Client).upload(any(MockMultipartFile.class));
+        doNothing().when(s3Client).upload(any(MultipartFile.class));
         final String cafeRequest = makeCafeRequest();
 
         final String location = given().log().all()

@@ -1,33 +1,20 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.BaseTest;
-import com.project.yozmcafe.util.AcceptanceContext;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-
 import static com.project.yozmcafe.exception.ErrorCode.TOKEN_IS_EXPIRED;
 import static com.project.yozmcafe.exception.ErrorCode.TOKEN_NOT_EXIST;
 import static org.hamcrest.Matchers.is;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class LoginArgumentResolverTest extends BaseTest {
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
-    @LocalServerPort
-    private int port;
+import com.project.yozmcafe.util.AcceptanceContext;
+
+class LoginArgumentResolverTest extends BaseControllerTest {
+
     @Autowired
     private AcceptanceContext context;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
 
     @Test
     @DisplayName("만료된 토큰으로 요청을 보내면, 401을 응답한다.")

@@ -1,5 +1,30 @@
 package com.project.yozmcafe.controller;
 
+import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+
+import java.util.List;
+import java.util.Objects;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.QueryParametersSnippet;
+
 import com.project.yozmcafe.controller.dto.cafe.CafeRankResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeSearchResponse;
@@ -9,32 +34,8 @@ import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.domain.menu.MenuRepository;
 import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
+
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-import org.springframework.restdocs.request.QueryParametersSnippet;
-
-import java.util.List;
-import java.util.Objects;
-
-import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 class CafeControllerTest extends BaseControllerTest {
 
@@ -47,8 +48,6 @@ class CafeControllerTest extends BaseControllerTest {
     private CafeRepository cafeRepository;
     @Autowired
     private MenuRepository menuRepository;
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
     private Cafe cafe1, cafe2, cafe3, cafe4, cafe5;
 
     @BeforeEach
@@ -63,7 +62,8 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("카페에 좋아요를 추가하고, 해당 카페를 조회하는 경우 isLike가 true로 매핑되어 응답한다.")
     void updateLikesAdd() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
+        doReturn(MEMBER_ID).when(jwtTokenProvider).getMemberId(anyString());
+        doNothing().when(jwtTokenProvider).validate(anyString());
         saveMemberAndUnViewedCafes();
 
         final Response likeResponse = given()
@@ -99,7 +99,8 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("카페에 좋아요를 취소하고, 해당 카페를 조회하는 경우 isLike가 false로 매핑되어 응답한다.")
     void updateLikes() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
+        doReturn(MEMBER_ID).when(jwtTokenProvider).getMemberId(anyString());
+        doNothing().when(jwtTokenProvider).validate(anyString());
         saveMemberAndUnViewedCafesAndLikedCafes();
 
         //when
@@ -211,7 +212,8 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("로그인한 사용자가 /cafes 에 GET 요청을 보내면 아직 보지 않은 랜덤한, 서로 다른 카페정보를 5개씩 응답한다.")
     void getCafesWithMember() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
+        doReturn(MEMBER_ID).when(jwtTokenProvider).getMemberId(anyString());
+        doNothing().when(jwtTokenProvider).validate(anyString());
 
         final Member member = saveMemberAndUnViewedCafes();
         cafe5 = cafeRepository.save(Fixture.getCafe("n5", "address5", 1));
@@ -242,7 +244,8 @@ class CafeControllerTest extends BaseControllerTest {
     @DisplayName("로그인한 사용자가 /cafes 에 GET 요청을 보낼 때, 아직보지 않은 카페가 5개 미만이면 남은 수만큼의 서로 다른 카페를 응답한다.")
     void getCafesWithMemberWhenCafeLessThan() {
         //given
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn(MEMBER_ID);
+        doReturn(MEMBER_ID).when(jwtTokenProvider).getMemberId(anyString());
+        doNothing().when(jwtTokenProvider).validate(anyString());
         saveMemberAndUnViewedCafes();
 
         //when
@@ -278,7 +281,8 @@ class CafeControllerTest extends BaseControllerTest {
 
         //when
         final Response response = given(spec).log().all()
-                .filter(document(CAFE_API + "좋아요 개수 순위에 따라 카페정보 조회", getPageRequestParam(), getCafeRankResponseFields()))
+                .filter(document(CAFE_API + "좋아요 개수 순위에 따라 카페정보 조회", getPageRequestParam(),
+                        getCafeRankResponseFields()))
                 .when()
                 .get("/cafes/ranks?page=1");
 

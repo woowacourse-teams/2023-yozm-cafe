@@ -1,34 +1,35 @@
 package com.project.yozmcafe.controller;
 
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.CafeRepository;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
-import com.project.yozmcafe.fixture.Fixture;
-import com.project.yozmcafe.service.auth.JwtTokenProvider;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-
-import java.util.List;
-
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+
+import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.member.Member;
+import com.project.yozmcafe.domain.member.MemberRepository;
+import com.project.yozmcafe.fixture.Fixture;
+
+import io.restassured.response.Response;
 
 class LikedCafeControllerTest extends BaseControllerTest {
 
@@ -36,8 +37,6 @@ class LikedCafeControllerTest extends BaseControllerTest {
     private MemberRepository memberRepository;
     @Autowired
     private CafeRepository cafeRepository;
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
 
     @Test
     @DisplayName("사용자가 좋아요 한 카페들의 대표 이미지들을 조회한다.")
@@ -90,12 +89,14 @@ class LikedCafeControllerTest extends BaseControllerTest {
         final Member member = memberRepository.save(
                 new Member("123", "오션", "오션사진"));
         final Cafe cafe = cafeRepository.save(Fixture.getCafe(1L, "카페1", "주소1", 10));
-        given(jwtTokenProvider.getMemberId(anyString())).willReturn(member.getId());
+        doReturn(member.getId()).when(jwtTokenProvider).getMemberId(anyString());
+        doNothing().when(jwtTokenProvider).validate(anyString());
 
         //when
         final Response response = given(spec).log().all()
                 .filter(document("likedCafe/좋아요",
-                        queryParameters(parameterWithName("isLiked").description("true 일 경우 좋아요 추가, false 일 경우 좋아요 취소")),
+                        queryParameters(
+                                parameterWithName("isLiked").description("true 일 경우 좋아요 추가, false 일 경우 좋아요 취소")),
                         pathParameters(parameterWithName("cafeId").description("카페 ID"))))
                 .auth().oauth2("accessToken")
                 .post("/cafes/{cafeId}/likes?isLiked=true", cafe.getId());

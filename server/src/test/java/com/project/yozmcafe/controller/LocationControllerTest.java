@@ -19,7 +19,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
@@ -27,7 +26,6 @@ import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.DetailRequest;
-import com.project.yozmcafe.domain.S3Client;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.available.Days;
 
@@ -37,8 +35,6 @@ class LocationControllerTest extends BaseControllerTest {
 
     @Autowired
     private ObjectMapper mapper;
-    @SpyBean
-    private S3Client s3Client;
     @Autowired
     CafeRepository cafeRepository;
 
