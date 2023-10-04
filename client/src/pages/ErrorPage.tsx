@@ -10,7 +10,7 @@ const ErrorPage = () => {
         <MainSentence>다시 확인해주세요</MainSentence>
         <Sentence>요청하신 내용을 찾을 수 없어요</Sentence>
         <ButtonContainer to="/">
-          <Button $fullWidth={true}>홈으로 돌아가기</Button>
+          <Button $fullWidth>홈으로 돌아가기</Button>
         </ButtonContainer>
       </SentenceContainer>
       <Icon />
