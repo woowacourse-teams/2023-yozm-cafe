@@ -56,15 +56,7 @@ export const useToast = () => {
     throw new Error('부모 트리에서 ToastProvider를 사용해주세요');
   }
 
-  const showToast = (variant: ToastVariant, message: string) => {
-    context.showToast(variant, message);
-
-    setTimeout(() => {
-      context.showToast('default', '');
-    }, 5000);
-  };
-
-  return showToast;
+  return context.showToast;
 };
 
 const Container = styled.div`
