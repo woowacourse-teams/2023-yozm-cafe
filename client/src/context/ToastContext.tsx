@@ -115,5 +115,5 @@ const ToastMessage = styled.div<{ $variant: ToastVariant }>`
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
   animation: 0.3s ${ToastAnimation}, 0.3s 3s reverse forwards ${ToastAnimation};
-  ${({ $variant }) => ToastColorVariants[$variant || 'default']}
+  ${({ $variant }) => ToastColorVariants[$variant]}
 `;
