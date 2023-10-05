@@ -3,9 +3,10 @@ import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
+import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
 
@@ -20,6 +21,7 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
     data: { menus, menuBoards },
   } = useCafeMenus(cafe.id);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   useEffect(() => {
     document.addEventListener('click', onClose);
@@ -37,7 +39,7 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   return (
     <>
       {createPortal(
-        <Container onClick={handlePreventClickPropagation}>
+        <Container onClick={handlePreventClickPropagation} {...scrollSnapGuardHandlers}>
           <CloseButton>
             <CloseIcon onClick={onClose} />
           </CloseButton>
@@ -123,7 +125,6 @@ const CloseButton = styled.button`
 `;
 
 const CloseIcon = styled(BsX)`
-  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['2xl']};
 `;
 
@@ -142,15 +143,13 @@ const Placeholder = styled.div`
 `;
 
 const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
-  cursor: pointer;
-
   padding: ${({ theme }) => theme.space[5]} ${({ theme }) => theme.space[10]};
 
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.color.white};
 
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${({ $imageUrl }) => Image.getUrl({ size: 'original', filename: $imageUrl })});
+    url(${({ $imageUrl }) => Resource.getImageUrl({ size: 'original', filename: $imageUrl })});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;

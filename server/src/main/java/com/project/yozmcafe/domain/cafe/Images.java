@@ -1,13 +1,15 @@
 package com.project.yozmcafe.domain.cafe;
 
-import java.util.List;
-
+import com.project.yozmcafe.exception.BadRequestException;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE_IMAGE;
 
 @Embeddable
 public class Images {
@@ -16,12 +18,16 @@ public class Images {
 
     @ElementCollection
     @CollectionTable(name = "image")
-    private List<String> urls;
+    private List<String> urls = new ArrayList<>();
 
     protected Images() {
     }
 
-    public Images(List<String> urls) {
+    public Images(final List<String> urls) {
+        if (urls.isEmpty()) {
+            throw new BadRequestException(NOT_EXISTED_CAFE_IMAGE);
+        }
+
         this.urls = urls;
     }
 
@@ -30,6 +36,10 @@ public class Images {
     }
 
     public String getRepresentativeImage() {
+        if (urls.isEmpty()) {
+            return Strings.EMPTY;
+        }
+
         return urls.get(REPRESENTATIVE_INDEX);
     }
 }

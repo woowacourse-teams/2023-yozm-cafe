@@ -38,13 +38,9 @@ const ButtonVariants = {
 };
 
 const Container = styled.button<ButtonProps>`
-  cursor: pointer;
-
   padding: ${({ theme }) => theme.space['1.5']} ${({ theme }) => theme.space[2]};
-
   font-size: 16px;
   font-weight: 500;
-
   border-radius: 40px;
   ${(props) => ButtonVariants[props.$variant || 'default']}
   ${(props) => props.$fullWidth && 'width: 100%;'}

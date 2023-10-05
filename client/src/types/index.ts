@@ -91,4 +91,19 @@ export type SearchedCafe = {
   address: Cafe['address'];
   image: string;
   likeCount: Cafe['likeCount'];
+}
+
+export type CafeMapLocation = {
+  id: number;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+};
+
+export type MapBounds = {
+  longitude: number;
+  latitude: number;
+  longitudeDelta: number;
+  latitudeDelta: number;
 };

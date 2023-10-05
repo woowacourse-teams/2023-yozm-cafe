@@ -1,26 +1,31 @@
 package com.project.yozmcafe.domain.member;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
+import static java.lang.Math.min;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Persistable;
+
+import com.project.yozmcafe.domain.BaseEntity;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.LikedCafe;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.exception.BadRequestException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
-import static jakarta.persistence.CascadeType.MERGE;
-import static jakarta.persistence.CascadeType.PERSIST;
-import static java.lang.Math.min;
-
 @Entity
-public class Member {
+public class Member extends BaseEntity implements Persistable<String> {
 
     @Id
     private String id;
@@ -100,16 +105,25 @@ public class Member {
         return result;
     }
 
-    public List<LikedCafe> getLikedCafesSection(final int startIndex, final int endIndex) {
+    public List<Cafe> getLikedCafes(final int startIndex, final int amount) {
         if (startIndex >= likedCafes.size()) {
-            return Collections.emptyList();
+            return emptyList();
         }
 
-        final List<LikedCafe> reverseLikedCafes = new ArrayList<>(likedCafes);
+        final List<Cafe> cafes = likedCafes.stream()
+                .map(LikedCafe::getCafe)
+                .toList();
 
-        return reverseLikedCafes.subList(startIndex, min(endIndex, likedCafes.size()));
+        final int endIndex = startIndex + amount;
+        return cafes.subList(startIndex, min(endIndex, cafes.size()));
     }
 
+    @Override
+    public boolean isNew() {
+        return isNull(createdAt);
+    }
+
+    @Override
     public String getId() {
         return id;
     }

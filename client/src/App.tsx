@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import router from './router';
 import GlobalStyle from './styles/GlobalStyle';
 import ResetStyle from './styles/ResetStyle';
@@ -23,9 +24,11 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <ResetStyle />
         <GlobalStyle />
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </ToastProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

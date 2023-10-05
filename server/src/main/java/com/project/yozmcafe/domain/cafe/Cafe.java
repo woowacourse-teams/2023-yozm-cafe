@@ -1,7 +1,12 @@
 package com.project.yozmcafe.domain.cafe;
 
 import com.project.yozmcafe.exception.BadRequestException;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.util.Objects;
 
@@ -71,7 +76,7 @@ public class Cafe {
         }
     }
 
-    public Cafe(String name, String address, Images images, Detail detail) {
+    public Cafe(final String name, final String address, final Images images, final Detail detail) {
         this(null, name, address, images, detail, 0);
     }
 
