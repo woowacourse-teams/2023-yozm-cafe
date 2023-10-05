@@ -1,16 +1,12 @@
-package com.project.yozmcafe.controller;
+package com.project.yozmcafe.controller.location;
 
-import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static com.project.yozmcafe.controller.location.LocationDocuments.findCafesInMapDocument;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 import java.io.File;
 import java.time.LocalTime;
@@ -21,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.yozmcafe.controller.BaseControllerTest;
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
@@ -38,13 +35,30 @@ class LocationControllerTest extends BaseControllerTest {
     @Autowired
     CafeRepository cafeRepository;
 
-    private File image = new File("src/test/resources/image.png");
-
     @Test
     @DisplayName("입력받은 좌표와 델타 좌표로 범위내에 있는 모든 카페를 반환한다.")
     void findCafesFromLocation() {
         //given
         doNothing().when(s3Client).upload(any());
+        saveCafesAndCoordinates();
+
+        //when
+        final Response response = customGivenWithDocs(findCafesInMapDocument())
+                .queryParam("latitude", 20)
+                .queryParam("longitude", 10)
+                .queryParam("latitudeDelta", 0.004504504505)
+                .queryParam("longitudeDelta", 1)
+                .get("/cafes/location");
+
+        //then
+        final List<CafeLocationResponse> results = response.jsonPath().getList(".", CafeLocationResponse.class);
+        assertSoftly(softAssertions -> {
+            assertThat(response.statusCode()).isEqualTo(200);
+            assertThat(results).hasSize(6);
+        });
+    }
+
+    private void saveCafesAndCoordinates() {
         final String cafeId1 = saveCafe("폴로카페", "영도");
         final String cafeId2 = saveCafe("솔스카페", "기장");
         final String cafeId3 = saveCafe("오션카페", "인천");
@@ -59,48 +73,12 @@ class LocationControllerTest extends BaseControllerTest {
         saveLocation(cafeId5, 20.005, 10);
         saveLocation(cafeId6, 20.006, 10);
         saveLocation(cafeId7, 30.007, 10);
-
-        //when
-        final Response response = given(spec)
-                .log().all()
-                .filter(document("Location/지도 범위 내 모든 카페 조회",
-                        queryParameters(
-                                parameterWithName("latitude").description("기준 위도"),
-                                parameterWithName("longitude").description("기준 경도"),
-                                parameterWithName("latitudeDelta").description("기준 위도로부터 지도 내 최고 위도까지의 차"),
-                                parameterWithName("longitudeDelta").description("기준 경도로부터 지도 내 최고 경도까지의 차")
-                        ),
-                        responseFields(
-                                fieldWithPath("[].id").description("카페 Id"),
-                                fieldWithPath("[].name").description("카페 이름"),
-                                fieldWithPath("[].address").description("카페 주소"),
-                                fieldWithPath("[].latitude").description("카페의 위도"),
-                                fieldWithPath("[].longitude").description("카페의 경도")
-                        )))
-                .when()
-                .get("/cafes/location?latitude=20&longitude=10&latitudeDelta=0.004504504505&longitudeDelta=1");
-
-        final List<CafeLocationResponse> results = response.then().log().all()
-                .extract().jsonPath().getList(".", CafeLocationResponse.class);
-
-        //then
-        assertSoftly(softAssertions -> {
-            assertThat(response.statusCode()).isEqualTo(200);
-            assertThat(results).hasSize(6);
-        });
-    }
-
-    private void saveLocation(final String cafeId, final double latitude, final double longitude) {
-        given()
-                .contentType(JSON)
-                .body(new CafeCoordinateRequest(latitude, longitude))
-                .when()
-                .post("/admin/cafes/{cafeId}/coordinate", cafeId);
     }
 
     private String saveCafe(final String name, final String address) {
+        final File image = new File("src/test/resources/image.png");
         final String cafeRequest = makeCafeRequest(name, address);
-        final String location = given().log().all()
+        final String location = customGiven()
                 .contentType("multipart/form-data;charset=UTF-8")
                 .multiPart("request", cafeRequest, "application/json")
                 .multiPart("images", image, "image/png")
@@ -140,5 +118,13 @@ class LocationControllerTest extends BaseControllerTest {
 
         return new DetailRequest(List.of(time1, time2, time3, time4, time5, time6, time7),
                 "지도 url", "존맛탱구리", "01032472601");
+    }
+
+    private void saveLocation(final String cafeId, final double latitude, final double longitude) {
+        given()
+                .contentType(JSON)
+                .body(new CafeCoordinateRequest(latitude, longitude))
+                .when()
+                .post("/admin/cafes/{cafeId}/coordinate", cafeId);
     }
 }

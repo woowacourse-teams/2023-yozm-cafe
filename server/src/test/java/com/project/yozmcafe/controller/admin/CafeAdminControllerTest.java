@@ -109,10 +109,11 @@ class CafeAdminControllerTest extends BaseControllerTest {
         saveCafe();
         saveCafe();
 
-        //when, then
+        //when
         final Response response = customGivenWithDocs(adminAllCafesFindDocument())
                 .get("/admin/cafes");
 
+        //then
         assertThat(response.statusCode()).isEqualTo(OK.value());
     }
 
