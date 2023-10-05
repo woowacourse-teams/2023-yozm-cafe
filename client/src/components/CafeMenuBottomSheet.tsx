@@ -123,7 +123,6 @@ const CloseButton = styled.button`
 `;
 
 const CloseIcon = styled(BsX)`
-  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['2xl']};
 `;
 
@@ -142,8 +141,6 @@ const Placeholder = styled.div`
 `;
 
 const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
-  cursor: pointer;
-
   padding: ${({ theme }) => theme.space[5]} ${({ theme }) => theme.space[10]};
 
   font-size: ${({ theme }) => theme.fontSize.lg};
