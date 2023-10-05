@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import SearchInput from '../components/SearchInput';
 import useSearchCafes from '../hooks/useSearchCafes';
 import type { Theme } from '../styles/theme';
+import Resource from '../utils/Resource';
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -82,7 +83,7 @@ const SearchPage = () => {
           {searchedCafes.map((cafe) => (
             <Link key={cafe.id} to={`/cafes/${cafe.id}`}>
               <CafeListItem>
-                <CafeImage src={cafe.image} />
+                <CafeImage src={Resource.getImageUrl({ size: '500', filename: cafe.image })} />
                 <CafeInfo>
                   <CafeName>{cafe.name}</CafeName>
                   <CafeAddress>{cafe.address}</CafeAddress>
