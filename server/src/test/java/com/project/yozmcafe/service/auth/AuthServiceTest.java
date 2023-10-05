@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.project.yozmcafe.controller.auth.OAuthProvider;
@@ -31,6 +32,8 @@ class AuthServiceTest extends BaseServiceTest {
     private CafeRepository cafeRepository;
     @Autowired
     private AuthService authService;
+    @SpyBean
+    protected GoogleOAuthClient googleOAuthClient;
 
     @Test
     @DisplayName("회원가입된 상태의 유저로 createAccessToken 호출하면 멤버를 새로 저장하지 않는다")

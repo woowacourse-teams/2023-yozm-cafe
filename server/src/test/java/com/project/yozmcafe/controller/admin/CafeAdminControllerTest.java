@@ -139,6 +139,7 @@ class CafeAdminControllerTest extends BaseControllerTest {
 
         //when
         final Response response = customGivenWithDocs(adminLocationSaveDocument())
+                .contentType(JSON)
                 .body(new CafeCoordinateRequest(20, 10))
                 .post("/admin/cafes/{cafeId}/coordinate", location);
 
