@@ -21,7 +21,6 @@
     "@googlemaps/react-wrapper": "^1.1.35",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.32.1",
-    "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
@@ -33,6 +32,7 @@
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@storybook/addon-actions": "^7.4.5",
     "@storybook/addon-essentials": "^7.4.5",
     "@storybook/addon-interactions": "^7.4.5",
     "@storybook/addon-links": "^7.4.5",
@@ -55,6 +55,7 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard": "^17.1.0",
+    "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-compat": "^4.1.4",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^16.0.1",
@@ -87,5 +88,9 @@
   },
   "msw": {
     "workerDirectory": "public"
+  },
+  "engines": {
+    "npm": ">=9.4.0",
+    "node": ">=18.0.0"
   }
 }
