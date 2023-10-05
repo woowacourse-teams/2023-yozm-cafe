@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Root from './pages/Root';
 const AuthPage = React.lazy(() => import('./pages/AuthPage'));
 const CafePage = React.lazy(() => import('./pages/CafePage'));
+const CafeMapPage = React.lazy(() => import('./pages/CafeMapPage'));
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const LikedCafeDetailPage = React.lazy(() => import('./pages/LikedCafeDetailPage'));
 const LoadingPage = React.lazy(() => import('./pages/LoadingPage'));
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: '/cafes/:cafeId', element: <CafePage /> },
       { path: 'rank', element: <RankPage /> },
       { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetailPage /> },
+      { path: 'map', element: <CafeMapPage /> },
     ],
   },
   {

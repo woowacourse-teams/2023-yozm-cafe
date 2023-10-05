@@ -1,7 +1,8 @@
 import type React from 'react';
-import type { HTMLAttributes, MouseEventHandler, TouchEventHandler, WheelEventHandler } from 'react';
+import type { HTMLAttributes, MouseEventHandler, PropsWithChildren, TouchEventHandler, WheelEventHandler } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import useEffectEvent from '../shims/useEffectEvent';
 
 type TimingFn = (x: number) => number;
 
@@ -66,14 +67,38 @@ const SWIPE_FAST_SCROLL_DISTANCE_RATIO = 0.03;
 //   0 = 다음 아이템으로 완전히 넘어가야 스와이프 판정 가능
 const SWIPE_WHEEL_SCROLL_VALID_RATIO = 0.1;
 
+type ScrollSnapVirtualItemProps = PropsWithChildren<{
+  // 이전 아이템인지, 현재 아이템인지, 이후 아이템인지 여부를 나타내는 숫자
+  offset: -1 | 0 | 1;
+  // 0.0 ~ 1.0
+  position: number;
+}>;
+
+const ScrollSnapVirtualItem = (props: ScrollSnapVirtualItemProps) => {
+  const { offset, position, children } = props;
+
+  return (
+    <div
+      style={{
+        height: '100%',
+        gridArea: '1 / 1 / 1 / 1',
+        transform: `translateY(${(offset + -position) * 100}%)`,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 type ScrollSnapVirtualItemsProps<Item> = {
   scrollPosition: number;
   items: Item[];
   itemRenderer: (item: Item, index: number) => React.ReactNode;
+  enableRolling?: boolean;
 };
 
 const ScrollSnapVirtualItems = <Item,>(props: ScrollSnapVirtualItemsProps<Item>) => {
-  const { scrollPosition, items, itemRenderer } = props;
+  const { scrollPosition, items, itemRenderer, enableRolling } = props;
 
   // position of item, which user sees
   // always positive integer
@@ -83,11 +108,17 @@ const ScrollSnapVirtualItems = <Item,>(props: ScrollSnapVirtualItemsProps<Item>)
   const indexedItems = items.map((item, index) => ({ index, item }));
 
   // 현재 화면의 아이템 및 위, 아래의 아이템을 표시한다
-  const visibleItems = [
-    indexedItems[focusedIndex - 1] ?? indexedItems[indexedItems.length - 1],
-    indexedItems[focusedIndex],
-    indexedItems[focusedIndex + 1] ?? indexedItems[0],
-  ];
+  const visibleItems = enableRolling
+    ? [
+        indexedItems.at(focusedIndex - 1), // 현재에서 상단 (혹은 끝) 아이템
+        indexedItems.at(focusedIndex), // 현재 아이템
+        indexedItems.at((focusedIndex + 1) % indexedItems.length), // 현재에서 하단 (혹은 첫) 아이템
+      ]
+    : [
+        indexedItems[focusedIndex - 1], // 현재에서 상단 아이템
+        indexedItems[focusedIndex], // 현재 아이템
+        indexedItems[focusedIndex + 1], // 현재에서 하단 아이템
+      ];
   const visiblePosition = mod(scrollPosition, 1);
 
   return (
@@ -95,10 +126,20 @@ const ScrollSnapVirtualItems = <Item,>(props: ScrollSnapVirtualItemsProps<Item>)
       style={{
         width: '100%',
         height: '100%',
-        transform: `translateY(${-100 + -visiblePosition * 100}%)`,
+        display: 'grid',
       }}
     >
-      {visibleItems.map(({ item, index }) => itemRenderer(item, index))}
+      {([0, 1, -1] as const)
+        .map((visibleIndex) => ({ ...visibleItems[1 + visibleIndex], visibleIndex }))
+        .map(({ item, index, visibleIndex }) =>
+          item && typeof index === 'number' ? (
+            <ScrollSnapVirtualItem key={index} offset={visibleIndex} position={visiblePosition}>
+              {itemRenderer(item, index)}
+            </ScrollSnapVirtualItem>
+          ) : (
+            <ScrollSnapVirtualItem key={index} offset={visibleIndex} position={visiblePosition} />
+          ),
+        )}
     </div>
   );
 };
@@ -367,6 +408,25 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
     onSnapStart();
   };
 
+  const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowUp':
+        setActiveIndex(activeIndex - 1);
+        onSnapStart();
+        break;
+      case 'ArrowDown':
+        setActiveIndex(activeIndex + 1);
+        onSnapStart();
+        break;
+    }
+  });
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <Container
       {...divProps}
@@ -380,7 +440,12 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
       onMouseLeave={handleMouseLeave}
       onWheel={handleWheel}
     >
-      <ScrollSnapVirtualItems scrollPosition={scrollPosition} items={items} itemRenderer={itemRenderer} />
+      <ScrollSnapVirtualItems
+        scrollPosition={scrollPosition}
+        items={items}
+        itemRenderer={itemRenderer}
+        enableRolling={enableRolling}
+      />
     </Container>
   );
 };
