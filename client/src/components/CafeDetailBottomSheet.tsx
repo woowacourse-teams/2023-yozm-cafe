@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
+import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import CafeMenuMiniList from './CafeMenuMiniList';
@@ -14,6 +15,7 @@ type CafeDetailBottomSheetProps = {
 
 const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
   const { cafe, onClose } = props;
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   useEffect(() => {
     document.addEventListener('click', onClose);
@@ -26,7 +28,7 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
   };
 
   return (
-    <Container onClick={handlePreventClickPropagation} role="dialog" aria-modal="true">
+    <Container onClick={handlePreventClickPropagation} role="dialog" aria-modal="true" {...scrollSnapGuardHandlers}>
       <CloseButton>
         <CloseIcon onClick={onClose} />
       </CloseButton>
