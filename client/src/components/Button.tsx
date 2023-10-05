@@ -38,7 +38,7 @@ const ButtonVariants = {
 };
 
 const Container = styled.button<ButtonProps>`
-  padding: ${({ theme }) => theme.space['1.5']} 0;
+  padding: ${({ theme }) => theme.space['1.5']} ${({ theme }) => theme.space[2]};
   font-size: 16px;
   font-weight: 500;
   border-radius: 40px;
