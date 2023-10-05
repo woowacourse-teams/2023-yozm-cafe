@@ -84,3 +84,18 @@ export type Rank = {
   image: string;
   likeCount: number;
 };
+
+export type CafeMapLocation = {
+  id: number;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+};
+
+export type MapBounds = {
+  longitude: number;
+  latitude: number;
+  longitudeDelta: number;
+  latitudeDelta: number;
+};

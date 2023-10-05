@@ -1,10 +1,51 @@
 import { rest } from 'msw';
-import { RankCafes, cafeMenus, cafes } from '../data/mockData';
-import type { Identity, User } from '../types';
+import { RankCafes, cafeMarker, cafeMenus, cafes } from '../data/mockData';
+import type { CafeMapLocation, Identity, User } from '../types';
 
 let pageState = 1;
 
 export const handlers = [
+  // 지도에 핀 꽂을 카페 정보
+  rest.get('/api/cafes/location', async (req, res, ctx) => {
+    const { searchParams } = new URL(req.url.toString());
+    const myLocationLongitude = searchParams.get('longitude');
+    const myLocationLatitude = searchParams.get('latitude');
+    const longitudeDelta = searchParams.get('longitudeDelta');
+    const latitudeDelta = searchParams.get('latitudeDelta');
+
+    if (!myLocationLongitude || !myLocationLatitude || !longitudeDelta || !latitudeDelta) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: '인자가 유효하지 않습니다. 다시 확인해주세요.',
+        }),
+      );
+    }
+
+    const northEastBoundary = {
+      latitude: parseFloat(myLocationLatitude) + parseFloat(latitudeDelta),
+      longitude: parseFloat(myLocationLongitude) + parseFloat(longitudeDelta),
+    };
+
+    const southWestBoundary = {
+      latitude: parseFloat(myLocationLatitude) - parseFloat(latitudeDelta),
+      longitude: parseFloat(myLocationLongitude) - parseFloat(longitudeDelta),
+    };
+
+    const isCafeLatitudeWithinBounds = (cafe: CafeMapLocation) => {
+      return cafe.latitude > southWestBoundary.latitude && cafe.latitude < northEastBoundary.latitude;
+    };
+
+    const isCafeLongitudeWithinBounds = (cafe: CafeMapLocation) => {
+      return cafe.longitude > southWestBoundary.longitude && cafe.longitude < northEastBoundary.longitude;
+    };
+
+    const foundCafes: CafeMapLocation[] = cafeMarker.filter(
+      (cafe) => isCafeLatitudeWithinBounds(cafe) && isCafeLongitudeWithinBounds(cafe),
+    );
+
+    return res(ctx.status(200), ctx.json(foundCafes));
+  }),
   // 카페 조회
   rest.get('/api/cafes', (req, res, ctx) => {
     const PAGINATE_UNIT = 5;
