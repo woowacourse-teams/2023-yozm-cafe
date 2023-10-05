@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
 
@@ -147,7 +147,7 @@ const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
   color: ${({ theme }) => theme.color.white};
 
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${({ $imageUrl }) => Image.getUrl({ size: 'original', filename: $imageUrl })});
+    url(${({ $imageUrl }) => Resource.getImageUrl({ size: 'original', filename: $imageUrl })});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;

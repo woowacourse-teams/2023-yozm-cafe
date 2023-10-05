@@ -1,42 +1,51 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import Auth from './pages/Auth';
-import Cafe from './pages/Cafe';
-import CafeMapPage from './pages/CafeMapPage';
-import Home from './pages/Home';
-import LikedCafeDetail from './pages/LikedCafeDetail';
-import Loading from './pages/Loading';
-import MyProfile from './pages/MyProfile';
-import NotFound from './pages/NotFound';
-import Rank from './pages/Rank';
 import Root from './pages/Root';
-import TestAuthorizationCode from './pages/TestAuthorizationCode';
+const AuthPage = React.lazy(() => import('./pages/AuthPage'));
+const CafePage = React.lazy(() => import('./pages/CafePage'));
+const CafeMapPage = React.lazy(() => import('./pages/CafeMapPage'));
+const HomePage = React.lazy(() => import('./pages/HomePage'));
+const LikedCafeDetailPage = React.lazy(() => import('./pages/LikedCafeDetailPage'));
+const LoadingPage = React.lazy(() => import('./pages/LoadingPage'));
+const MyProfilePage = React.lazy(() => import('./pages/MyProfilePage'));
+const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
+const RankPage = React.lazy(() => import('./pages/RankPage'));
+const TestAuthorizationCodePage = React.lazy(() => import('./pages/TestAuthorizationCodePage'));
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <NotFound />,
+    errorElement: <NotFoundPage />,
     children: [
-      { index: true, element: <Home /> },
-      { path: 'my-profile', element: <MyProfile /> },
-      { path: '/cafes/:cafeId', element: <Cafe /> },
-      { path: 'rank', element: <Rank /> },
-      { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetail /> },
+      { index: true, element: <HomePage /> },
+      { path: 'my-profile', element: <MyProfilePage /> },
+      { path: '/cafes/:cafeId', element: <CafePage /> },
+      { path: 'rank', element: <RankPage /> },
+      { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetailPage /> },
       { path: 'map', element: <CafeMapPage /> },
     ],
   },
   {
     path: '/auth/:provider',
     element: (
-      <Suspense fallback={<Loading />}>
-        <Auth />
+      <Suspense fallback={<LoadingPage />}>
+        <AuthPage />
       </Suspense>
     ),
   },
   {
     path: '/test',
-    children: [{ path: 'auth/:provider', element: <TestAuthorizationCode /> }],
+    children: [
+      {
+        path: 'auth/:provider',
+        element: (
+          <Suspense>
+            <TestAuthorizationCodePage />
+          </Suspense>
+        ),
+      },
+    ],
   },
 ]);
 

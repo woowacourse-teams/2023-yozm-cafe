@@ -1,7 +1,7 @@
 import type { MouseEventHandler } from 'react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 
 type ImageModalProps = {
   imageUrls: string[];
@@ -21,13 +21,13 @@ const ImageModal = (props: ImageModalProps) => {
   return (
     <Container>
       <ActiveImageContainer onClick={handleContainerClick}>
-        <ActiveImage src={Image.getUrl({ size: 'original', filename: activeImage })} />
+        <ActiveImage src={Resource.getImageUrl({ size: 'original', filename: activeImage })} />
       </ActiveImageContainer>
       <ImageList>
         {imageUrls.map((imageUrl, index) => (
           <ImageListItem key={index}>
             <ImageListItemButton onClick={() => setActiveImage(imageUrl)}>
-              <ImageListItemImage src={Image.getUrl({ size: 'original', filename: imageUrl })} />
+              <ImageListItemImage src={Resource.getImageUrl({ size: 'original', filename: imageUrl })} />
             </ImageListItemButton>
           </ImageListItem>
         ))}

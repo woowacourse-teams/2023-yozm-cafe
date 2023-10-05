@@ -1,14 +1,13 @@
 import { Suspense, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
+import Resource from '../utils/Resource';
 import Button from './Button';
 import LoginModal from './LoginModal';
-import Logo from './Logo';
 
 const Navbar = () => {
   const { data: user } = useUser();
-  const navigate = useNavigate();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const openLoginModal = () => {
@@ -19,34 +18,28 @@ const Navbar = () => {
     setIsLoginModalOpen(false);
   };
 
-  const handleLogoClick = () => {
-    navigate('/');
-  };
-
-  const handleRankClick = () => {
-    navigate('/rank');
-  };
-
-  const handleProfileClick = () => {
-    navigate('/my-profile');
-  };
-
   return (
     <Container>
       <LogoContainer>
-        <Logo onClick={handleLogoClick} fontSize="4xl" />
+        <Link to="/">
+          <Logo />
+        </Link>
       </LogoContainer>
       <ButtonContainer>
         <RankButtonContainer>
-          <Button $fullWidth $fullHeight $variant="secondary" onClick={handleRankClick}>
-            랭킹
-          </Button>
+          <Link to="/rank">
+            <Button $fullWidth $fullHeight $variant="secondary">
+              랭킹
+            </Button>
+          </Link>
         </RankButtonContainer>
         <LoginAndProfileButtonContainer>
           {user ? (
-            <Button $variant="outlined" $fullWidth $fullHeight onClick={handleProfileClick}>
-              프로필
-            </Button>
+            <Link to="/my-profile">
+              <Button $variant="outlined" $fullWidth $fullHeight>
+                프로필
+              </Button>
+            </Link>
           ) : (
             <Button $fullWidth $fullHeight onClick={openLoginModal} aria-haspopup="dialog">
               로그인
@@ -78,6 +71,10 @@ const ButtonContainer = styled.div`
 
 const LogoContainer = styled.div`
   flex: 6;
+`;
+
+const Logo = styled.img.attrs({ src: Resource.getAssetUrl({ filename: 'logo.svg' }) })`
+  height: ${({ theme }) => theme.fontSize['4xl']};
 `;
 
 const RankButtonContainer = styled.div`

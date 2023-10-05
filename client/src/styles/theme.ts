@@ -15,6 +15,7 @@ const theme = {
 
     text: {
       primary: '#212121',
+      secondary: '#454f5d',
     },
 
     line: {

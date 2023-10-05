@@ -1,45 +1,28 @@
-import { useEffect, useRef, useState } from 'react';
+import type { UIEventHandler } from 'react';
+import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
-import useIntersection from '../hooks/useIntersection';
 import type { Cafe } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 import CafeActionBar from './CafeActionBar';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
 import CafeSummary from './CafeSummary';
 
 type CardProps = {
   cafe: Cafe;
-  onIntersect?: (intersection: IntersectionObserverEntry) => void;
 };
 
 const CafeCard = (props: CardProps) => {
-  const { cafe, onIntersect } = props;
+  const { cafe } = props;
 
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const ref = useRef<HTMLDivElement>(null);
-  const intersection = useIntersection(ref, { threshold: 0.7 });
+  const handleScroll: UIEventHandler = useCallback((event) => {
+    if (!(event.target instanceof HTMLDivElement)) return;
 
-  useEffect(() => {
-    if (intersection) {
-      onIntersect?.(intersection);
-    }
-  }, [intersection?.isIntersecting]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (ref.current) {
-        const { scrollLeft, clientWidth } = ref.current;
-        const index = Math.round(scrollLeft / clientWidth);
-        setCurrentImageIndex(index);
-      }
-    };
-
-    ref.current?.addEventListener('scroll', handleScroll);
-    return () => {
-      ref.current?.removeEventListener('scroll', handleScroll);
-    };
+    const { scrollLeft, clientWidth } = event.target;
+    const index = Math.round(scrollLeft / clientWidth);
+    setCurrentImageIndex(index);
   }, []);
 
   return (
@@ -49,9 +32,14 @@ const CafeCard = (props: CardProps) => {
           {`${currentImageIndex + 1}`}/{cafe.images.length}
         </CardQuantityContents>
       </CardQuantityContainer>
-      <CarouselImageList ref={ref}>
+      <CarouselImageList onScroll={handleScroll}>
         {cafe.images.map((image, index) => (
-          <CarouselImage key={index} src={Image.getUrl({ size: '500', filename: image })} alt={`${cafe}의 이미지`} />
+          <CarouselImage
+            key={index}
+            src={Resource.getImageUrl({ size: '500', filename: image })}
+            alt={`${cafe}의 이미지`}
+            loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
+          />
         ))}
       </CarouselImageList>
       <DotsContainer>
