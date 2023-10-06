@@ -3,6 +3,7 @@ package com.project.yozmcafe.domain.cafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.StringPath;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,7 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implements CafeCustomRepository {
 
     private static final double MATCH_THRESHOLD = 0.0;
+    private static final int INSERT_BATCH_SIZE = 110;
     private final JdbcTemplate jdbcTemplate;
 
     public CafeCustomRepositoryImpl(final JdbcTemplate jdbcTemplate) {
@@ -58,41 +60,42 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
                 .gt(MATCH_THRESHOLD);
     }
 
+    @Transactional
     public void saveUnViewedCafes(final List<Cafe> cafes, final Member member) {
-        int batchSize = 100;
-        int batchCount = 0;
-        List<Cafe> subItems = new ArrayList<>();
-        for (int i = 0; i < cafes.size(); i++) {
-            subItems.add(cafes.get(i));
-            if ((i + 1) % batchSize == 0) {
-                batchCount = batchInsert(batchCount, subItems, member.getId());
+        final List<Cafe> insertCafes = new ArrayList<>();
+        for (int cafeIdx = 0; cafeIdx < cafes.size(); cafeIdx++) {
+            insertCafes.add(cafes.get(cafeIdx));
+
+            if (isReachBatchSize(cafeIdx)) {
+                batchInsert(insertCafes, member.getId());
+                insertCafes.clear();
             }
         }
-        if (!subItems.isEmpty()) {
-            batchCount = batchInsert(batchCount, subItems, member.getId());
+        if (!insertCafes.isEmpty()) {
+            batchInsert(insertCafes, member.getId());
         }
     }
 
-    private int batchInsert(int batchCount, List<Cafe> subItems, String memberId) {
-        String sql = "INSERT INTO un_viewed_cafe (cafe_id, member_id) VALUES (?, ?)";
+    private boolean isReachBatchSize(final int cafeIdx) {
+        return (cafeIdx + 1) % INSERT_BATCH_SIZE == 0;
+    }
+
+    private void batchInsert(final List<Cafe> cafes, final String memberId) {
+        final String sql = "INSERT INTO un_viewed_cafe (cafe_id, member_id) VALUES (?, ?)";
 
         jdbcTemplate.batchUpdate(sql,
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement pstmt, int i) throws SQLException {
-                        pstmt.setLong(1, subItems.get(i).getId());
+                        pstmt.setLong(1, cafes.get(i).getId());
                         pstmt.setString(2, memberId);
                     }
 
                     @Override
                     public int getBatchSize() {
-                        return subItems.size();
+                        return cafes.size();
                     }
                 }
         );
-
-        subItems.clear();
-        batchCount++;
-        return batchCount;
     }
 }
