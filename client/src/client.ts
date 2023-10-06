@@ -1,10 +1,16 @@
-import type { AuthProvider, AuthUrl, Cafe, CafeMapLocation, CafeMenu, LikedCafe, MapBounds, Rank, SearchedCafe, User } from './types';
-
-export class ClientNetworkError extends Error {
-  constructor() {
-    super('인터넷에 연결할 수 없습니다');
-  }
-}
+import NetworkError from './errors/NetworkError';
+import type {
+  AuthProvider,
+  AuthUrl,
+  Cafe,
+  CafeMapLocation,
+  CafeMenu,
+  LikedCafe,
+  MapBounds,
+  Rank,
+  SearchedCafe,
+  User,
+} from './types';
 
 class Client {
   isAccessTokenRefreshing = false;
@@ -52,7 +58,7 @@ class Client {
       }
       return response;
     } catch (error) {
-      throw new ClientNetworkError();
+      throw new NetworkError();
     }
   }
 
