@@ -45,7 +45,8 @@ class UnViewedCafeServiceTest extends BaseTest {
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
         //then
-        assertThat(member.getUnViewedCafes()).hasSize(3);
+        final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
+        assertThat(refilledMember.getUnViewedCafes()).hasSize(3);
     }
 
     @Test
@@ -59,12 +60,15 @@ class UnViewedCafeServiceTest extends BaseTest {
         for (int i = 0; i < initialUnViewedCafesSize; i++) {
             allCafes.add(Fixture.getCafe((long) i, "카페", "주소", 3));
         }
+        final List<Cafe> savedAllCafes = cafeRepository.saveAll(allCafes);
         member.addUnViewedCafes(allCafes);
+        cafeRepository.saveUnViewedCafes(savedAllCafes, member);
 
         //when
         unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
         //then
-        assertThat(member.getUnViewedCafes()).hasSize(initialUnViewedCafesSize);
+        final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
+        assertThat(refilledMember.getUnViewedCafes()).hasSize(initialUnViewedCafesSize);
     }
 }

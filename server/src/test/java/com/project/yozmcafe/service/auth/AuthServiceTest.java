@@ -14,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.Mockito.doReturn;
 
-@Transactional
 class AuthServiceTest extends BaseTest {
 
     @SpyBean
@@ -54,8 +52,8 @@ class AuthServiceTest extends BaseTest {
     @DisplayName("회원가입된 상태의 유저가 아닐 때 createAccessToken 호출하면 멤버를 새로 저장하고, 모든 카페를 해당 멤버의 unViewedCafe 로 같이 저장한다. ")
     void createAccessToken2() {
         //given
-        String memberId = "1234";
-        doReturn(new MemberInfo(memberId, "", ""))
+        final String memberId = "1234";
+        doReturn(new MemberInfo(memberId, "name", "image"))
                 .when(googleOAuthClient).getUserInfo(anyString());
         saveCafes();
 
@@ -63,7 +61,7 @@ class AuthServiceTest extends BaseTest {
         authService.createAccessToken("135", OAuthProvider.GOOGLE);
 
         //then
-        final Member member = memberRepository.findById(memberId).get();
+        final Member member = memberRepository.findWithUnViewedCafesById(memberId).get();
         final List<UnViewedCafe> memberUnViewedCafes = member.getUnViewedCafes();
         final List<Cafe> allCafes = cafeRepository.findAll();
 
