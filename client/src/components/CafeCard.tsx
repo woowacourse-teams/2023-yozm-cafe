@@ -88,7 +88,7 @@ const CarouselImageList = styled.div`
   height: 100%;
 `;
 
-const CarouselImage = styled.img`
+const CarouselImage = styled.img.attrs({ draggable: false })`
   scroll-snap-align: start;
   scroll-snap-stop: always;
 

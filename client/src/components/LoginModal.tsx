@@ -91,9 +91,7 @@ const CloseButtonContainer = styled.button`
   color: ${({ theme }) => theme.color.gray};
 `;
 
-const CloseIcon = styled(CgClose)`
-  cursor: pointer;
-`;
+const CloseIcon = styled(CgClose)``;
 
 const LoginTitle = styled.div`
   display: flex;

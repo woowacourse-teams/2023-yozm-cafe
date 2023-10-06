@@ -94,8 +94,6 @@ const ActionButton = (props: ActionButtonProps) => {
 };
 
 const ActionButtonContainer = styled.button`
-  cursor: pointer;
-
   display: flex;
   flex-direction: column;
   align-items: center;
