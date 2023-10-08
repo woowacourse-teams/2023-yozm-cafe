@@ -8,9 +8,48 @@ import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import Resource from '../utils/Resource';
 import CafeMenuList from './CafeMenuList';
-import ErrorRetryPrompt from './ErrorRetryPrompt';
 import ImageModal from './ImageModal';
 import QueryErrorBoundary from './QueryErrorBoundary';
+
+type CafeMenuBottomSheetProps = {
+  cafe: Cafe;
+  onClose: () => void;
+};
+
+const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
+  const { cafe, onClose } = props;
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
+
+  useEffect(() => {
+    document.addEventListener('click', onClose);
+
+    return () => document.removeEventListener('click', onClose);
+  }, [onClose]);
+
+  const handlePreventClickPropagation: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    event.stopPropagation();
+  };
+  return (
+    <>
+      {createPortal(
+        <Container onClick={handlePreventClickPropagation} {...scrollSnapGuardHandlers}>
+          <CloseButton>
+            <CloseIcon onClick={onClose} />
+          </CloseButton>
+
+          <QueryErrorBoundary>
+            <Suspense>
+              <CafeMenuBottomSheetContent cafe={cafe} />
+            </Suspense>
+          </QueryErrorBoundary>
+        </Container>,
+        document.bodyRoot,
+      )}
+    </>
+  );
+};
+
+export default CafeMenuBottomSheet;
 
 type CafeMenuBottomSheetContentProps = {
   cafe: Cafe;
@@ -71,52 +110,6 @@ const CafeMenuBottomSheetContent = (props: CafeMenuBottomSheetContentProps) => {
     </>
   );
 };
-
-type CafeMenuBottomSheetProps = {
-  cafe: Cafe;
-  onClose: () => void;
-};
-
-const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
-  const { cafe, onClose } = props;
-  const scrollSnapGuardHandlers = useScrollSnapGuard();
-
-  useEffect(() => {
-    document.addEventListener('click', onClose);
-
-    return () => document.removeEventListener('click', onClose);
-  }, [onClose]);
-
-  const handlePreventClickPropagation: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    event.stopPropagation();
-  };
-  return (
-    <>
-      {createPortal(
-        <Container onClick={handlePreventClickPropagation} {...scrollSnapGuardHandlers}>
-          <CloseButton>
-            <CloseIcon onClick={onClose} />
-          </CloseButton>
-
-          <QueryErrorBoundary
-            fallbackRender={({ resetErrorBoundary }) => (
-              <>
-                <ErrorRetryPrompt resetErrorBoundary={resetErrorBoundary} />
-              </>
-            )}
-          >
-            <Suspense>
-              <CafeMenuBottomSheetContent cafe={cafe} />
-            </Suspense>
-          </QueryErrorBoundary>
-        </Container>,
-        document.bodyRoot,
-      )}
-    </>
-  );
-};
-
-export default CafeMenuBottomSheet;
 
 const Container = styled.div`
   position: absolute;
