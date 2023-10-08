@@ -1,28 +1,26 @@
 package com.project.yozmcafe.domain.member;
 
+import com.project.yozmcafe.domain.BaseEntity;
+import com.project.yozmcafe.domain.cafe.Cafe;
+import com.project.yozmcafe.domain.cafe.LikedCafe;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.exception.BadRequestException;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import org.springframework.data.domain.Persistable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_LIKED_CAFE;
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static java.lang.Math.min;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.data.domain.Persistable;
-
-import com.project.yozmcafe.domain.BaseEntity;
-import com.project.yozmcafe.domain.cafe.Cafe;
-import com.project.yozmcafe.domain.cafe.LikedCafe;
-import com.project.yozmcafe.domain.cafe.UnViewedCafe;
-import com.project.yozmcafe.exception.BadRequestException;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 
 @Entity
 public class Member extends BaseEntity implements Persistable<String> {
@@ -57,6 +55,16 @@ public class Member extends BaseEntity implements Persistable<String> {
                 .toList();
 
         unViewedCafes.addAll(allUnViewedCafes);
+    }
+
+    public List<Cafe> filterAlreadyExist(List<Cafe> cafes) {
+        final List<Cafe> alreadyExist = unViewedCafes.stream()
+                .map(UnViewedCafe::getCafe)
+                .toList();
+
+        return cafes.stream()
+                .filter(cafe -> !alreadyExist.contains(cafe))
+                .toList();
     }
 
     public boolean isUnViewedCafesSizeUnder(final int sizeExclusive) {
@@ -143,4 +151,6 @@ public class Member extends BaseEntity implements Persistable<String> {
     public List<LikedCafe> getLikedCafes() {
         return likedCafes;
     }
+
+
 }

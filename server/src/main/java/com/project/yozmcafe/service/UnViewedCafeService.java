@@ -28,7 +28,8 @@ public class UnViewedCafeService {
     public void refillWhenUnViewedCafesSizeUnderTwenty(final Member member) {
         if (member.isUnViewedCafesSizeUnder(DEFAULT_SIZE_CONDITION)) {
             final List<Cafe> shuffledCafes = shuffleStrategy.shuffle(cafeRepository.findAll());
-            cafeRepository.saveUnViewedCafes(shuffledCafes, member);
+            final List<Cafe> unViewedCafes = member.filterAlreadyExist(shuffledCafes);
+            cafeRepository.saveUnViewedCafes(unViewedCafes, member);
         }
     }
 }

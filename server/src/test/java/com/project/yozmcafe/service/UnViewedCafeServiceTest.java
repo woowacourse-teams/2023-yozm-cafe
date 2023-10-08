@@ -4,6 +4,7 @@ import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.domain.RandomCafeShuffleStrategy;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
@@ -33,7 +34,7 @@ class UnViewedCafeServiceTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("사용자의 UnViewedCafe가 20개 미만일 때 모든 카페를 다시 채운다")
+    @DisplayName("사용자의 UnViewedCafe가 20개 미만일 때, 모든 카페를 다시 채운다")
     void refillWhenUnViewedCafesSizeUnderTwenty() {
         //given
         final Member member = memberRepository.save(new Member("id", "연어", "image"));
@@ -47,6 +48,29 @@ class UnViewedCafeServiceTest extends BaseTest {
         //then
         final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
         assertThat(refilledMember.getUnViewedCafes()).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("사용자의 UnViewedCafe가 20개 미만일 때, 모든 카페를 다시 채운다 - 이미 member에 존재하는 unViewedCafe는 제외하고 채운다.")
+    void refillNotDuplicatedUnViewedCafesWhenUnViewedCafesSizeUnderTwenty() {
+        //given
+        final Member member = memberRepository.save(new Member("id", "연어", "image"));
+        final Cafe saved1 = cafeRepository.save(Fixture.getCafe("cafe1", "address", 5));
+        cafeRepository.save(Fixture.getCafe("cafe2", "address", 5));
+        cafeRepository.save(Fixture.getCafe("cafe3", "address", 5));
+        member.addUnViewedCafes(List.of(saved1));
+        memberRepository.save(member);
+
+        //when
+        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
+
+        //then
+        final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
+        final List<Cafe> unViewedCafes = refilledMember.getUnViewedCafes().stream()
+                .map(UnViewedCafe::getCafe)
+                .toList();
+        assertThat(unViewedCafes).extracting("name")
+                .containsOnly("cafe1", "cafe2", "cafe3");
     }
 
     @Test
