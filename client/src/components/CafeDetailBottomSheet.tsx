@@ -7,6 +7,7 @@ import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import CafeMenuMiniList from './CafeMenuMiniList';
 import OpeningHoursDetail from './OpeningHoursDetail';
+import QueryErrorBoundary from './QueryErrorBoundary';
 
 type CafeDetailBottomSheetProps = {
   cafe: Cafe;
@@ -34,9 +35,11 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
       </CloseButton>
       <Title>{cafe.name}</Title>
       <Spacer $size={'4'} />
-      <Suspense>
-        <CafeMenu cafeId={cafe.id} />
-      </Suspense>
+      <QueryErrorBoundary>
+        <Suspense>
+          <CafeMenu cafeId={cafe.id} />
+        </Suspense>
+      </QueryErrorBoundary>
       <InfoContainer>
         <LocationDetail>
           <BsGeoAlt />
