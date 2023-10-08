@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.yozmcafe.domain.cafe.QCafe.cafe;
@@ -62,22 +61,10 @@ public class CafeCustomRepositoryImpl extends QuerydslRepositorySupport implemen
 
     @Transactional
     public void saveUnViewedCafes(final List<Cafe> cafes, final Member member) {
-        final List<Cafe> insertCafes = new ArrayList<>();
-        for (int cafeIdx = 0; cafeIdx < cafes.size(); cafeIdx++) {
-            insertCafes.add(cafes.get(cafeIdx));
-
-            if (isReachBatchSize(cafeIdx)) {
-                batchInsert(insertCafes, member.getId());
-                insertCafes.clear();
-            }
+        for (int i = 0; i < cafes.size(); i += INSERT_BATCH_SIZE) {
+            List<Cafe> subItems = cafes.subList(i, Math.min(i + INSERT_BATCH_SIZE, cafes.size()));
+            batchInsert(subItems, member.getId());
         }
-        if (!insertCafes.isEmpty()) {
-            batchInsert(insertCafes, member.getId());
-        }
-    }
-
-    private boolean isReachBatchSize(final int cafeIdx) {
-        return (cafeIdx + 1) % INSERT_BATCH_SIZE == 0;
     }
 
     private void batchInsert(final List<Cafe> cafes, final String memberId) {
