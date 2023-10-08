@@ -29,10 +29,11 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   width: 100%;
   height: 100%;
-  padding-top: 230px;
+  padding: ${({ theme }) => theme.space['5']};
 `;
 
 const SentenceContainer = styled.article`
