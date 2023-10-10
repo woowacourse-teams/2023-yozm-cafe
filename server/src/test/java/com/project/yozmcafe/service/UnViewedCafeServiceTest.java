@@ -5,6 +5,7 @@ import com.project.yozmcafe.domain.RandomCafeShuffleStrategy;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
@@ -23,13 +24,16 @@ class UnViewedCafeServiceTest extends BaseTest {
 
     @Autowired
     private CafeRepository cafeRepository;
+    @Autowired
+    UnViewedCafeRepository unViewedCafeRepository;
 
     @Autowired
     private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
-        unViewedCafeService = new UnViewedCafeService(cafeRepository, new RandomCafeShuffleStrategy());
+        unViewedCafeService = new UnViewedCafeService(cafeRepository, unViewedCafeRepository,
+                new RandomCafeShuffleStrategy());
     }
 
     @Test

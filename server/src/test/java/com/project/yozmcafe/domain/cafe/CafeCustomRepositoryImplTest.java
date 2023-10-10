@@ -1,8 +1,6 @@
 package com.project.yozmcafe.domain.cafe;
 
 import com.project.yozmcafe.BaseTest;
-import com.project.yozmcafe.domain.member.Member;
-import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.domain.menu.MenuRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,8 +21,6 @@ class CafeCustomRepositoryImplTest extends BaseTest {
     private MenuRepository menuRepository;
     @Autowired
     private CafeRepository cafeRepository;
-    @Autowired
-    private MemberRepository memberRepository;
 
     private Cafe cafe1, cafe2, cafe3, cafe4;
 
@@ -183,24 +178,5 @@ class CafeCustomRepositoryImplTest extends BaseTest {
         // then
         assertThat(cafes).extracting(Cafe::getName)
                 .containsOnly(cafe1.getName(), cafe2.getName(), cafe3.getName(), cafe4.getName());
-    }
-
-    @Test
-    @DisplayName("unViewedCafe를 batch insert한다.")
-    void batchInsertUnViewedCafes() {
-        // given
-        final List<Cafe> cafes = new ArrayList<>();
-        for (int i = 0; i < 200; i++) {
-            cafes.add(Fixture.getCafe("name", "address", 0));
-        }
-        final List<Cafe> savedCafes = cafeRepository.saveAll(cafes);
-        final Member member = memberRepository.save(new Member("id", "name", "image"));
-
-        //when
-        cafeCustomRepositoryImpl.saveUnViewedCafes(savedCafes, member);
-
-        // then
-        final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
-        assertThat(refilledMember.getUnViewedCafes()).hasSize(200);
     }
 }
