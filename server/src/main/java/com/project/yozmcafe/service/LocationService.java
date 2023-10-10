@@ -2,6 +2,7 @@ package com.project.yozmcafe.service;
 
 import java.util.List;
 
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ public class LocationService {
     }
 
     public List<CafeLocationResponse> findCafesFromLocations(final CafeLocationRequest cafeLocationRequest) {
-        final String area = GeometryGenerator.generateStringPolygon(cafeLocationRequest);
+        final Polygon area = GeometryGenerator.generatePolygon(cafeLocationRequest);
         final List<CafePinDto> cafeLocationDtos = cafeCoordinateRepository.findCafePinsFromCoordinate(area);
 
         return cafeLocationDtos.stream()

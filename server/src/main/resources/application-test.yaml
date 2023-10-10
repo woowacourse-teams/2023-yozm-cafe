@@ -1,3 +1,5 @@
+log: &log-option false
+
 spring:
   auth:
     key: testtesttesttesttesttesttesttesttesttesttesttesttesttesttest
@@ -33,8 +35,8 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 1000
-        format_sql: true
-    show-sql: true
+        format_sql: *log-option
+    show-sql: *log-option
 
 s3:
   bucket: 2023-team-project/2023-yozm-cafe/test/images

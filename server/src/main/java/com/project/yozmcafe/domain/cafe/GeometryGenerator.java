@@ -3,6 +3,7 @@ package com.project.yozmcafe.domain.cafe;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 
@@ -15,9 +16,6 @@ public class GeometryGenerator {
      * 그 중, 4326은 WGS84 경위도 좌표계를 의미합니다. GPS 기술에서도 사용되는 좌표계로 범용적으로 가장 널리 사용되는 좌표계입니다.
      */
     private static final int SRID = 4326;
-    private static final String STRING_POLYGON_FORMAT = "POLYGON((%s))";
-    private static final String STRING_GEOMETRY_DELIMITER = " ";
-    private static final String POINT_DELIMITER = ", ";
 
     private GeometryGenerator() {
     }
@@ -28,24 +26,27 @@ public class GeometryGenerator {
         return point;
     }
 
-    public static String generateStringPolygon(final CafeLocationRequest cafeLocationRequest) {
+    public static Polygon generatePolygon(final CafeLocationRequest cafeLocationRequest) {
         final double latitude = cafeLocationRequest.latitude();
         final double longitude = cafeLocationRequest.longitude();
         final double latitudeDelta = cafeLocationRequest.latitudeDelta();
         final double longitudeDelta = cafeLocationRequest.longitudeDelta();
 
-        final String minLatitude = String.valueOf(latitude - latitudeDelta);
-        final String maxLatitude = String.valueOf(latitude + latitudeDelta);
-        final String minLongitude = String.valueOf(longitude - longitudeDelta);
-        final String maxLongitude = String.valueOf(longitude + longitudeDelta);
+        final double minLatitude = latitude - latitudeDelta;
+        final double maxLatitude = latitude + latitudeDelta;
+        final double minLongitude = longitude - longitudeDelta;
+        final double maxLongitude = longitude + longitudeDelta;
 
-        final String firstVertex = String.join(STRING_GEOMETRY_DELIMITER, minLatitude, maxLongitude);
-        final String secondVertex = String.join(STRING_GEOMETRY_DELIMITER, maxLatitude, maxLongitude);
-        final String thirdVertex = String.join(STRING_GEOMETRY_DELIMITER, maxLatitude, minLongitude);
-        final String fourthVertex = String.join(STRING_GEOMETRY_DELIMITER, minLatitude, minLongitude);
+        final Coordinate[] vertexes = new Coordinate[]{
+                new Coordinate(maxLongitude, minLatitude),
+                new Coordinate(maxLongitude, maxLatitude),
+                new Coordinate(minLongitude, maxLatitude),
+                new Coordinate(minLongitude, minLatitude),
+                new Coordinate(maxLongitude, minLatitude)
+        };
 
-        final String vertexes = String.join(POINT_DELIMITER, firstVertex, secondVertex, thirdVertex, fourthVertex,
-                firstVertex);
-        return String.format(STRING_POLYGON_FORMAT, vertexes);
+        final Polygon polygon = GEOMETRY_FACTORY.createPolygon(vertexes);
+        polygon.setSRID(SRID);
+        return polygon;
     }
 }

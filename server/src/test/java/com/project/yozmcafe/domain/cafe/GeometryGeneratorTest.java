@@ -1,11 +1,13 @@
 package com.project.yozmcafe.domain.cafe;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 
@@ -25,7 +27,7 @@ class GeometryGeneratorTest {
         final double resultLongitude = point.getX();
 
         //then
-        SoftAssertions.assertSoftly(softAssertions -> {
+        assertSoftly(softAssertions -> {
             assertThat(srid).isEqualTo(4326);
             assertThat(resultLatitude).isEqualTo(latitude);
             assertThat(resultLongitude).isEqualTo(longitude);
@@ -33,16 +35,24 @@ class GeometryGeneratorTest {
     }
 
     @Test
-    @DisplayName("스트링 폴리곤 생성")
-    void generateStringPolygonTest() {
+    @DisplayName("폴리곤 생성 테스트")
+    void generatePolygonTest() {
         //given
         final CafeLocationRequest cafeLocationRequest = new CafeLocationRequest(20, 10, 3, 1);
-        final String expected = "POLYGON((17.0 11.0, 23.0 11.0, 23.0 9.0, 17.0 9.0, 17.0 11.0))";
 
         //when
-        final String result = GeometryGenerator.generateStringPolygon(cafeLocationRequest);
+        final Polygon polygon = GeometryGenerator.generatePolygon(cafeLocationRequest);
 
         //then
-        assertThat(result).isEqualTo(expected);
+        assertSoftly(softAssertions -> {
+            assertThat(polygon.getCoordinates()).hasSize(5);
+            assertThat(polygon.getCoordinates()).containsExactly(
+                    new Coordinate(11, 17),
+                    new Coordinate(11, 23),
+                    new Coordinate(9, 23),
+                    new Coordinate(9, 17),
+                    new Coordinate(11, 17)
+            );
+        });
     }
 }
