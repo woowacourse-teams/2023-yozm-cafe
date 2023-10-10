@@ -1,10 +1,52 @@
 import { rest } from 'msw';
-import { RankCafes, cafeMenus, cafes } from '../data/mockData';
-import type { Identity, User } from '../types';
+import { RankCafes, cafeMarker, cafeMenus, cafes } from '../data/mockData';
+import type { CafeMapLocation, Identity, SearchedCafe, User } from '../types';
 
 let pageState = 1;
 
-export const handlers = [
+const handlers = [
+  // 지도에 핀 꽂을 카페 정보
+  rest.get('/api/cafes/location', async (req, res, ctx) => {
+    const { searchParams } = new URL(req.url.toString());
+    const myLocationLongitude = searchParams.get('longitude');
+    const myLocationLatitude = searchParams.get('latitude');
+    const longitudeDelta = searchParams.get('longitudeDelta');
+    const latitudeDelta = searchParams.get('latitudeDelta');
+
+    if (!myLocationLongitude || !myLocationLatitude || !longitudeDelta || !latitudeDelta) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: '인자가 유효하지 않습니다. 다시 확인해주세요.',
+        }),
+      );
+    }
+
+    const northEastBoundary = {
+      latitude: parseFloat(myLocationLatitude) + parseFloat(latitudeDelta),
+      longitude: parseFloat(myLocationLongitude) + parseFloat(longitudeDelta),
+    };
+
+    const southWestBoundary = {
+      latitude: parseFloat(myLocationLatitude) - parseFloat(latitudeDelta),
+      longitude: parseFloat(myLocationLongitude) - parseFloat(longitudeDelta),
+    };
+
+    const isCafeLatitudeWithinBounds = (cafe: CafeMapLocation) => {
+      return cafe.latitude > southWestBoundary.latitude && cafe.latitude < northEastBoundary.latitude;
+    };
+
+    const isCafeLongitudeWithinBounds = (cafe: CafeMapLocation) => {
+      return cafe.longitude > southWestBoundary.longitude && cafe.longitude < northEastBoundary.longitude;
+    };
+
+    const foundCafes: CafeMapLocation[] = cafeMarker.filter(
+      (cafe) => isCafeLatitudeWithinBounds(cafe) && isCafeLongitudeWithinBounds(cafe),
+    );
+
+    return res(ctx.status(200), ctx.json(foundCafes));
+  }),
+
   // 카페 조회
   rest.get('/api/cafes', (req, res, ctx) => {
     const PAGINATE_UNIT = 5;
@@ -78,6 +120,37 @@ export const handlers = [
     const [start, end] = [PAGINATE_UNIT * (page - 1), PAGINATE_UNIT * page];
 
     return res(ctx.status(200), ctx.json(RankCafes.slice(start, end)));
+  }),
+
+  rest.get('/api/cafes/search', (req, res, ctx) => {
+    const {
+      cafeName: searchName,
+      menu: searchMenu,
+      address: searchAddress,
+    } = Object.fromEntries(req.url.searchParams.entries());
+
+    let searchedCafes: SearchedCafe[] = cafes.map((cafe) => ({
+      id: cafe.id,
+      name: cafe.name,
+      address: cafe.address,
+      likeCount: cafe.likeCount,
+      image: cafe.images[0],
+    }));
+
+    if (searchName?.length >= 2) {
+      searchedCafes = searchedCafes.filter((cafe) => cafe.name.includes(searchName));
+    }
+
+    if (searchMenu?.length >= 2) {
+      searchedCafes = searchedCafes.filter((cafe) =>
+        cafeMenus.find((cafeMenu) => cafeMenu.cafeId === cafe.id)?.menus.some((menu) => menu.name.includes(searchMenu)),
+      );
+    }
+    if (searchAddress?.length >= 2) {
+      searchedCafes = searchedCafes.filter((cafe) => cafe.address.includes(searchAddress));
+    }
+
+    return res(ctx.status(200), ctx.json(searchedCafes));
   }),
 
   // 좋아요 한 목록 조회
@@ -245,3 +318,5 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 ];
+
+export default handlers;

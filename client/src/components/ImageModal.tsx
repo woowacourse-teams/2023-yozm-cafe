@@ -1,6 +1,7 @@
 import type { MouseEventHandler } from 'react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import Resource from '../utils/Resource';
 
 type ImageModalProps = {
@@ -11,6 +12,7 @@ type ImageModalProps = {
 const ImageModal = (props: ImageModalProps) => {
   const { imageUrls, onClose } = props;
   const [activeImage, setActiveImage] = useState(imageUrls[0]);
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   const handleContainerClick: MouseEventHandler = (event) => {
     if (event.currentTarget !== event.target) return;
@@ -19,7 +21,7 @@ const ImageModal = (props: ImageModalProps) => {
   };
 
   return (
-    <Container>
+    <Container {...scrollSnapGuardHandlers}>
       <ActiveImageContainer onClick={handleContainerClick}>
         <ActiveImage src={Resource.getImageUrl({ size: 'original', filename: activeImage })} />
       </ActiveImageContainer>
@@ -78,7 +80,6 @@ const ImageListItem = styled.li`
 `;
 
 const ImageListItemButton = styled.button`
-  cursor: pointer;
   width: 100%;
   height: 100%;
 `;

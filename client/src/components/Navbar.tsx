@@ -1,8 +1,9 @@
 import { Suspense, useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { FaRankingStar } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
-import Resource from '../utils/Resource';
 import Button from './Button';
 import LoginModal from './LoginModal';
 
@@ -20,20 +21,21 @@ const Navbar = () => {
 
   return (
     <Container>
-      <LogoContainer>
-        <Link to="/">
-          <Logo />
-        </Link>
-      </LogoContainer>
+      <Link to="/">
+        <Logo />
+      </Link>
       <ButtonContainer>
-        <RankButtonContainer>
-          <Link to="/rank">
-            <Button $fullWidth $fullHeight $variant="secondary">
-              랭킹
-            </Button>
-          </Link>
-        </RankButtonContainer>
-        <LoginAndProfileButtonContainer>
+        <Link to="/rank">
+          <IconButton>
+            <FaRankingStar />
+          </IconButton>
+        </Link>
+        <Link to="/search">
+          <IconButton>
+            <FaSearch />
+          </IconButton>
+        </Link>
+        <UserButtonContainer>
           {user ? (
             <Link to="/my-profile">
               <Button $variant="outlined" $fullWidth $fullHeight>
@@ -45,7 +47,7 @@ const Navbar = () => {
               로그인
             </Button>
           )}
-        </LoginAndProfileButtonContainer>
+        </UserButtonContainer>
       </ButtonContainer>
       <Suspense>{isLoginModalOpen && <LoginModal onClose={closeLoginModal} />}</Suspense>
     </Container>
@@ -66,22 +68,27 @@ const Container = styled.nav`
 
 const ButtonContainer = styled.div`
   display: flex;
+  gap: ${({ theme }) => theme.space[2]};
   align-items: center;
+  margin-left: auto;
 `;
 
-const LogoContainer = styled.div`
-  flex: 6;
+const Logo = styled.img.attrs({ src: '/assets/logo.svg' })`
+  height: ${({ theme }) => theme.fontSize['3xl']};
 `;
 
-const Logo = styled.img.attrs({ src: Resource.getAssetUrl({ filename: 'logo.svg' }) })`
-  height: ${({ theme }) => theme.fontSize['4xl']};
+const UserButtonContainer = styled.div`
+  width: 100px;
 `;
 
-const RankButtonContainer = styled.div`
-  width: 44px;
-  margin-right: ${({ theme }) => theme.space[2]};
-`;
+const IconButton = styled.button`
+  cursor: pointer;
 
-const LoginAndProfileButtonContainer = styled.div`
-  width: 133px;
+  display: flex;
+  align-items: center;
+
+  padding: ${({ theme }) => theme.space[2]};
+
+  font-size: ${({ theme }) => theme.fontSize['2xl']};
+  color: ${({ theme }) => theme.color.primary};
 `;

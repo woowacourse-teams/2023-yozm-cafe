@@ -1,4 +1,4 @@
-import type { AuthProvider, AuthUrl, Cafe, CafeMenu, LikedCafe, Rank, User } from './types';
+import type { AuthProvider, AuthUrl, Cafe, CafeMapLocation, CafeMenu, LikedCafe, MapBounds, Rank, SearchedCafe, User } from './types';
 
 export class ClientNetworkError extends Error {
   constructor() {
@@ -102,6 +102,31 @@ class Client {
 
   getCafeMenu(cafeId: Cafe['id']) {
     return this.fetchJson<CafeMenu>(`/cafes/${cafeId}/menus`);
+  }
+
+  searchCafes(searchParams: { name: string; menu?: string; address?: string }) {
+    const sanitizedSearchParams = Object.fromEntries(
+      Object.entries({
+        cafeName: searchParams.name.trim(),
+        menu: searchParams.menu?.trim() ?? '',
+        address: searchParams.address?.trim() ?? '',
+      }).filter(([, value]) => (value?.length ?? 0) >= 2),
+    );
+    if (Object.keys(sanitizedSearchParams).length === 0) {
+      return Promise.resolve([]);
+    }
+    return this.fetchJson<SearchedCafe[]>(`/cafes/search?${new URLSearchParams(sanitizedSearchParams).toString()}`);
+  }
+
+  getCafesNearLocation(
+    longitude: MapBounds['longitude'],
+    latitude: MapBounds['latitude'],
+    longitudeDelta: MapBounds['longitudeDelta'],
+    latitudeDelta: MapBounds['latitudeDelta'],
+  ) {
+    return this.fetchJson<CafeMapLocation[]>(
+      `/cafes/location?longitude=${longitude}&latitude=${latitude}&longitudeDelta=${longitudeDelta}&latitudeDelta=${latitudeDelta}`,
+    );
   }
 
   /**
