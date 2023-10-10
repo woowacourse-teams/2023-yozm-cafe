@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { FaRankingStar } from 'react-icons/fa6';
+import { FaMapLocationDot, FaRankingStar } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import useUser from '../hooks/useUser';
@@ -33,6 +33,11 @@ const Navbar = () => {
         <Link to="/search">
           <IconButton>
             <FaSearch />
+          </IconButton>
+        </Link>
+        <Link to="/map">
+          <IconButton>
+            <FaMapLocationDot />
           </IconButton>
         </Link>
         <UserButtonContainer>
