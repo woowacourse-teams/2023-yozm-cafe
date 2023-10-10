@@ -1,17 +1,5 @@
 package com.project.yozmcafe.service.auth;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.Mockito.doReturn;
-
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.controller.dto.AuthorizationUrlDto;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -21,8 +9,16 @@ import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
-
 import com.project.yozmcafe.service.BaseServiceTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.Mockito.doReturn;
 
 class AuthServiceTest extends BaseServiceTest {
 
@@ -32,8 +28,6 @@ class AuthServiceTest extends BaseServiceTest {
     private CafeRepository cafeRepository;
     @Autowired
     private AuthService authService;
-    @SpyBean
-    protected GoogleOAuthClient googleOAuthClient;
 
     @Test
     @DisplayName("회원가입된 상태의 유저로 createAccessToken 호출하면 멤버를 새로 저장하지 않는다")

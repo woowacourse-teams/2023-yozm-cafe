@@ -1,6 +1,5 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.auth.OAuthProvider;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
@@ -10,11 +9,9 @@ import com.project.yozmcafe.domain.member.MemberInfo;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
 import com.project.yozmcafe.service.auth.AuthService;
-import com.project.yozmcafe.service.auth.GoogleOAuthClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
@@ -26,16 +23,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
 @RecordApplicationEvents
-class UnViewedCafeRefillListenerTest extends BaseTest {
+class UnViewedCafeRefillListenerTest extends BaseServiceTest {
 
     @Autowired
     AuthService authService;
 
     @Autowired
     CafeService cafeService;
-
-    @SpyBean
-    private GoogleOAuthClient googleOAuthClient;
 
     @Autowired
     private MemberRepository memberRepository;
