@@ -1,10 +1,29 @@
-import type React from 'react';
-import type { HTMLAttributes, MouseEventHandler, PropsWithChildren, TouchEventHandler, WheelEventHandler } from 'react';
+import type { MouseEventHandler, TouchEventHandler } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import useEffectEvent from '../shims/useEffectEvent';
+import useEffectEvent from '../../../../shims/useEffectEvent';
+import { easeOutExpo } from '../../../../utils/timingFunctions';
+import type { ScrollSnapProps } from '../../types';
+import ScrollSnapImplItemList from './ScrollSnapImplItemList';
 
-type TimingFn = (x: number) => number;
+// 터치 스와이프가 수직 혹은 수평 방향인지 판단할 때 샘플링하는 거리
+const SWIPE_TOUCH_DECISION_RADIUS = 4;
+
+// 스와이프 시 다음 아이템으로 이동하는 시간(ms)
+const SWIPE_SNAP_TRANSITION_DURATION = 300;
+
+// 빠르게 휙 스와이프 시:
+//   스와이프 판정을 위해 직전 {value}ms 터치 포인트와 비교
+const SWIPE_FAST_SCROLL_TIME_DURATION = 100;
+
+// 빠르게 휙 스와이프 시:
+//   직전 터치 포인트와 비교하여 {value}% 만큼 이동하였다면 스와이프 처리
+//   작을 수록 짧게 스와이프해도 판정됨
+//   클 수록 넓게 스와이프해야 판정됨
+const SWIPE_FAST_SCROLL_DISTANCE_RATIO = 0.03;
+
+// 음수 mod 시 양수 값을 얻기 위한 함수
+const mod = (n: number, m: number) => ((n % m) + m) % m;
 
 type BoxModel = {
   pageY: number;
@@ -40,126 +59,7 @@ type MachineState =
       startedPosition: number;
     };
 
-// 음수 mod 시 양수 값을 얻기 위한 함수
-const mod = (n: number, m: number) => ((n % m) + m) % m;
-
-// 터치 스와이프가 수직 혹은 수평 방향인지 판단할 때 샘플링하는 거리
-const SWIPE_TOUCH_DECISION_RADIUS = 4;
-
-// 스와이프 시 다음 아이템으로 이동하는 시간(ms)
-const SWIPE_SNAP_TRANSITION_DURATION = 300;
-
-// 빠르게 휙 스와이프 시:
-//   스와이프 판정을 위해 직전 {value}ms 터치 포인트와 비교
-const SWIPE_FAST_SCROLL_TIME_DURATION = 100;
-
-// 빠르게 휙 스와이프 시:
-//   직전 터치 포인트와 비교하여 {value}% 만큼 이동하였다면 스와이프 처리
-//   작을 수록 짧게 스와이프해도 판정됨
-//   클 수록 넓게 스와이프해야 판정됨
-const SWIPE_FAST_SCROLL_DISTANCE_RATIO = 0.03;
-
-// 스크롤로 스와이프 시:
-//   너무 빠른 스와이프를 방지하기 위해 현재 아이템의 {value}%만큼 보일 때
-//   스크롤 스와이프 유효화 처리
-//   값이 작을수록 빠른 스크롤 스와이프가 더 많이 차단된다
-//   1 = 스크롤 시 무조건 스와이프 판정
-//   0 = 다음 아이템으로 완전히 넘어가야 스와이프 판정 가능
-const SWIPE_WHEEL_SCROLL_VALID_RATIO = 0.1;
-
-type ScrollSnapVirtualItemProps = PropsWithChildren<{
-  // 이전 아이템인지, 현재 아이템인지, 이후 아이템인지 여부를 나타내는 숫자
-  offset: -1 | 0 | 1;
-  // 0.0 ~ 1.0
-  position: number;
-}>;
-
-const ScrollSnapVirtualItem = (props: ScrollSnapVirtualItemProps) => {
-  const { offset, position, children } = props;
-
-  return (
-    <div
-      style={{
-        height: '100%',
-        gridArea: '1 / 1 / 1 / 1',
-        transform: `translateY(${(offset + -position) * 100}%)`,
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-type ScrollSnapVirtualItemsProps<Item> = {
-  scrollPosition: number;
-  items: Item[];
-  itemRenderer: (item: Item, index: number) => React.ReactNode;
-  enableRolling?: boolean;
-};
-
-const ScrollSnapVirtualItems = <Item,>(props: ScrollSnapVirtualItemsProps<Item>) => {
-  const { scrollPosition, items, itemRenderer, enableRolling } = props;
-
-  // position of item, which user sees
-  // always positive integer
-  // 현재 화면에 표시되고 있는 아이템의 index
-  const focusedIndex = mod(Math.floor(scrollPosition), items.length);
-
-  const indexedItems = items.map((item, index) => ({ index, item }));
-
-  // 현재 화면의 아이템 및 위, 아래의 아이템을 표시한다
-  const visibleItems = enableRolling
-    ? [
-        indexedItems.at(focusedIndex - 1), // 현재에서 상단 (혹은 끝) 아이템
-        indexedItems.at(focusedIndex), // 현재 아이템
-        indexedItems.at((focusedIndex + 1) % indexedItems.length), // 현재에서 하단 (혹은 첫) 아이템
-      ]
-    : [
-        indexedItems[focusedIndex - 1], // 현재에서 상단 아이템
-        indexedItems[focusedIndex], // 현재 아이템
-        indexedItems[focusedIndex + 1], // 현재에서 하단 아이템
-      ];
-  const visiblePosition = mod(scrollPosition, 1);
-
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'grid',
-      }}
-    >
-      {([0, 1, -1] as const)
-        .map((visibleIndex) => ({ ...visibleItems[1 + visibleIndex], visibleIndex }))
-        .map(({ item, index, visibleIndex }) =>
-          item && typeof index === 'number' ? (
-            <ScrollSnapVirtualItem key={index} offset={visibleIndex} position={visiblePosition}>
-              {itemRenderer(item, index)}
-            </ScrollSnapVirtualItem>
-          ) : (
-            <ScrollSnapVirtualItem key={index} offset={visibleIndex} position={visiblePosition} />
-          ),
-        )}
-    </div>
-  );
-};
-
-type ScrollSnapContainerProps<Item> = HTMLAttributes<HTMLDivElement> & {
-  // position of currently active item. (equiv with index)
-  // always 0..items.length (positive integer)
-  activeIndex: number;
-  onActiveIndexChange: (activeIndex: number) => void;
-  // scroll position of container
-  scrollPosition: number;
-  onScrollPositionChange: (scrollPosition: number) => void;
-  timingFn: TimingFn;
-  items: Item[];
-  itemRenderer: (item: Item, index: number) => React.ReactNode;
-  // enable continuity scrolling at the end of item
-  enableRolling?: boolean;
-};
-
-const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
+const ScrollSnapImpl = <Item,>(props: ScrollSnapProps<Item>) => {
   const {
     activeIndex,
     onActiveIndexChange,
@@ -168,7 +68,7 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
     items,
     itemRenderer,
     enableRolling,
-    timingFn,
+    timingFn = easeOutExpo,
     ...divProps
   } = props;
 
@@ -385,29 +285,6 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
     onTouchEnd();
   };
 
-  const handleWheel: WheelEventHandler = (event) => {
-    if (event.shiftKey) return;
-
-    event.stopPropagation();
-
-    // wheel moved while snap-ing
-    if (machineState.label === 'snap') {
-      const { startedPosition } = machineState;
-      const transitionDistance = activeIndex - scrollPosition;
-
-      if (
-        // check wheel direction is same with transitioning direction
-        transitionDistance * event.deltaY > 0 &&
-        // determines how fast swipe rolls when wheel move
-        // larger value rolls more faster
-        Math.abs(transitionDistance) > SWIPE_WHEEL_SCROLL_VALID_RATIO
-      )
-        return;
-    }
-    setActiveIndex(activeIndex + (event.deltaY > 0 ? 1 : -1));
-    onSnapStart();
-  };
-
   const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
     switch (event.key) {
       case 'ArrowUp':
@@ -438,9 +315,11 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
-      onWheel={handleWheel}
+      // Disable wheel
+      // see https://github.com/woowacourse-teams/2023-yozm-cafe/issues/480)
+      // onWheel={handleWheel}
     >
-      <ScrollSnapVirtualItems
+      <ScrollSnapImplItemList
         scrollPosition={scrollPosition}
         items={items}
         itemRenderer={itemRenderer}
@@ -453,7 +332,8 @@ const ScrollSnapContainer = <Item,>(props: ScrollSnapContainerProps<Item>) => {
 const Container = styled.div`
   cursor: grab;
   user-select: none;
+  position: relative;
   overflow-y: hidden;
 `;
 
-export default ScrollSnapContainer;
+export default ScrollSnapImpl;

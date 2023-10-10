@@ -2,11 +2,11 @@ import { Suspense, useEffect } from 'react';
 import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
-import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import CafeMenuMiniList from './CafeMenuMiniList';
 import OpeningHoursDetail from './OpeningHoursDetail';
+import useScrollSnapGuard from './ScrollSnap/hooks/useScrollSnapGuard';
 
 type CafeDetailBottomSheetProps = {
   cafe: Cafe;

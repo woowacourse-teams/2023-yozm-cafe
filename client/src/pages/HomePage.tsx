@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import CafeCard from '../components/CafeCard';
-import ScrollSnapContainer from '../components/ScrollSnapContainer';
+import ScrollSnap from '../components/ScrollSnap';
 import useCafes from '../hooks/useCafes';
 import type { Cafe } from '../types';
 import { easeOutExpo } from '../utils/timingFunctions';
@@ -25,7 +25,7 @@ const HomePage = () => {
   const itemRenderer = (cafe: Cafe) => <CafeCard key={cafe.id} cafe={cafe} />;
 
   return (
-    <ScrollSnapContainer
+    <ScrollSnap
       style={{ height: '100%' }}
       scrollPosition={scrollPosition}
       onScrollPositionChange={setScrollPosition}

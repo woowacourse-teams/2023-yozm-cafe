@@ -3,12 +3,12 @@ import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
-import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import Resource from '../utils/Resource';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
+import useScrollSnapGuard from './ScrollSnap/hooks/useScrollSnapGuard';
 
 type CafeMenuBottomSheetProps = {
   cafe: Cafe;
