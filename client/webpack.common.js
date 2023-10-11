@@ -11,6 +11,9 @@ export default {
   // https://github.com/TypeStrong/fork-ts-checker-webpack-plugin#installation
   context: dirname(fileURLToPath(import.meta.url)),
   entry: './src/index',
+  output: {
+    publicPath: '/',
+  },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
