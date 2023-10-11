@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import ErrorPage from './pages/ErrorPage';
 import Root from './pages/Root';
 
 const SearchPage = React.lazy(() => import('./pages/SearchPage'));
@@ -18,35 +19,44 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <NotFoundPage />,
-    children: [
-      { index: true, element: <HomePage /> },
-      { path: 'my-profile', element: <MyProfilePage /> },
-      { path: 'cafes/:cafeId', element: <CafePage /> },
-      { path: 'rank', element: <RankPage /> },
-      { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetailPage /> },
-      { path: 'search', element: <SearchPage /> },
-      { path: 'map', element: <CafeMapPage /> },
-    ],
-  },
-  {
-    path: '/auth/:provider',
-    element: (
-      <Suspense fallback={<LoadingPage />}>
-        <AuthPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: '/test',
     children: [
       {
-        path: 'auth/:provider',
-        element: (
-          <Suspense>
-            <TestAuthorizationCodePage />
-          </Suspense>
-        ),
+        path: '*',
+        errorElement: <ErrorPage />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: 'cafes/:cafeId', element: <CafePage /> },
+          { path: 'rank', element: <RankPage /> },
+          { path: 'my-profile', element: <MyProfilePage /> },
+          { path: 'my-profile/cafes/:cafeId', element: <LikedCafeDetailPage /> },
+          { path: 'search', element: <SearchPage /> },
+          { path: 'map', element: <CafeMapPage /> },
+          {
+            path: 'auth/:provider',
+            element: (
+              <Suspense fallback={<LoadingPage />}>
+                <AuthPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'test',
+            children: [
+              {
+                path: 'auth/:provider',
+                element: (
+                  <Suspense>
+                    <TestAuthorizationCodePage />
+                  </Suspense>
+                ),
+              },
+            ],
+          },
+          {
+            path: '*',
+            element: <NotFoundPage />,
+          },
+        ],
       },
     ],
   },
