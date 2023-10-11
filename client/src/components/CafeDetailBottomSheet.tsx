@@ -117,7 +117,7 @@ const LocationDetail = styled.div`
   color: ${({ theme }) => theme.color.secondary};
 `;
 
-const NaverMapIcon = styled.img.attrs({ src: '/assets/naver-map-icon.jpeg', alt: '네이버 지도 아이콘' })`
+const NaverMapIcon = styled.img.attrs({ src: '/assets/naver-map-icon.png', alt: '네이버 지도 아이콘' })`
   width: 16px;
   height: 16px;
 `;
