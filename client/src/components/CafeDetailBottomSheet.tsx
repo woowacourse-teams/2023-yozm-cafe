@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
+import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
 import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
@@ -39,11 +39,9 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
       </Suspense>
       <InfoContainer>
         <LocationDetail>
-          <BsGeoAlt />
+          <NaverMapIcon />
           <a href={cafe.detail.mapUrl} target="_blank" rel="noopener noreferrer">
-            <LocationName>
-              {cafe.address} <BsBoxArrowUpRight />
-            </LocationName>
+            <LocationName>{cafe.address}</LocationName>
           </a>
         </LocationDetail>
         <OpeningHoursDetails>
@@ -116,6 +114,12 @@ const LocationDetail = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: center;
+  color: ${({ theme }) => theme.color.secondary};
+`;
+
+const NaverMapIcon = styled.img.attrs({ src: '/assets/naver-map-icon.jpeg', alt: '카페마커' })`
+  width: 16px;
+  height: 16px;
 `;
 
 const LocationName = styled.h3`
