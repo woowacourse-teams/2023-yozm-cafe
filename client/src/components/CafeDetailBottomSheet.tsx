@@ -2,12 +2,12 @@ import { Suspense, useEffect } from 'react';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
-import useScrollSnapGuard from '../hooks/useScrollSnapGuard';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import CafeMenuMiniList from './CafeMenuMiniList';
 import OpeningHoursDetail from './OpeningHoursDetail';
 import QueryErrorBoundary from './QueryErrorBoundary';
+import useScrollSnapGuard from './ScrollSnap/hooks/useScrollSnapGuard';
 
 type CafeDetailBottomSheetProps = {
   cafe: Cafe;
