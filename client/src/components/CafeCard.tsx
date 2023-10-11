@@ -32,30 +32,40 @@ const CafeCard = (props: CardProps) => {
           {`${currentImageIndex + 1}`}/{cafe.images.length}
         </CardQuantityContents>
       </CardQuantityContainer>
+
       <CarouselImageList onScroll={handleScroll}>
         {cafe.images.map((image, index) => (
           <CarouselImage
             key={index}
             src={Resource.getImageUrl({ size: '500', filename: image })}
-            alt={`${cafe}의 이미지`}
+            alt={`${cafe.name}의 ${index + 1}번째 이미지`}
             loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
           />
         ))}
       </CarouselImageList>
+
+      <Bottom>
+        <BottomItem $fullWidth>
+          <CafeSummary
+            title={cafe.name}
+            address={cafe.address}
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsShowDetail(true);
+            }}
+          />
+        </BottomItem>
+        <BottomItem $align="right">
+          <CafeActionBar cafe={cafe} />
+        </BottomItem>
+      </Bottom>
+
       <DotsContainer>
         {cafe.images.map((_, index) => (
           <Dot key={index} $active={index === currentImageIndex} />
         ))}
       </DotsContainer>
-      <CafeSummary
-        title={cafe.name}
-        address={cafe.address}
-        onClick={(event) => {
-          event.stopPropagation();
-          setIsShowDetail(true);
-        }}
-      />
-      <CafeActionBar cafe={cafe} />
+
       {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
     </Container>
   );
@@ -137,4 +147,19 @@ const CardQuantityContents = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xs};
   background-color: ${({ theme }) => theme.color.background.secondary};
   border-radius: 10px;
+`;
+
+const Bottom = styled.div`
+  position: absolute;
+  bottom: 40px;
+  display: flex;
+  width: 100%;
+`;
+
+const BottomItem = styled.div<{ $fullWidth?: boolean; $align?: 'left' | 'right' }>`
+  position: absolute;
+  bottom: 0;
+  ${({ $align }) => $align === 'left' && 'left: 0;'}
+  ${({ $align }) => $align === 'right' && 'right: 0;'}
+  ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
 `;
