@@ -1,11 +1,12 @@
 import { Suspense, useEffect } from 'react';
-import { BsBoxArrowUpRight, BsGeoAlt, BsX } from 'react-icons/bs';
+import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import useCafeMenus from '../hooks/useCafeMenus';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
 import CafeMenuMiniList from './CafeMenuMiniList';
 import OpeningHoursDetail from './OpeningHoursDetail';
+import QueryErrorBoundary from './QueryErrorBoundary';
 import useScrollSnapGuard from './ScrollSnap/hooks/useScrollSnapGuard';
 
 type CafeDetailBottomSheetProps = {
@@ -34,16 +35,16 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
       </CloseButton>
       <Title>{cafe.name}</Title>
       <Spacer $size={'4'} />
-      <Suspense>
-        <CafeMenu cafeId={cafe.id} />
-      </Suspense>
+      <QueryErrorBoundary>
+        <Suspense>
+          <CafeMenu cafeId={cafe.id} />
+        </Suspense>
+      </QueryErrorBoundary>
       <InfoContainer>
         <LocationDetail>
-          <BsGeoAlt />
+          <NaverMapIcon />
           <a href={cafe.detail.mapUrl} target="_blank" rel="noopener noreferrer">
-            <LocationName>
-              {cafe.address} <BsBoxArrowUpRight />
-            </LocationName>
+            <LocationName>{cafe.address}</LocationName>
           </a>
         </LocationDetail>
         <OpeningHoursDetails>
@@ -116,6 +117,12 @@ const LocationDetail = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: center;
+  color: ${({ theme }) => theme.color.secondary};
+`;
+
+const NaverMapIcon = styled.img.attrs({ src: '/assets/naver-map-icon.png', alt: '네이버 지도 아이콘' })`
+  width: 16px;
+  height: 16px;
 `;
 
 const LocationName = styled.h3`

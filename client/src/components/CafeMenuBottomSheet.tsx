@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
@@ -8,6 +8,7 @@ import type { Cafe } from '../types';
 import Resource from '../utils/Resource';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
+import QueryErrorBoundary from './QueryErrorBoundary';
 import useScrollSnapGuard from './ScrollSnap/hooks/useScrollSnapGuard';
 
 type CafeMenuBottomSheetProps = {
@@ -17,10 +18,6 @@ type CafeMenuBottomSheetProps = {
 
 const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   const { cafe, onClose } = props;
-  const {
-    data: { menus, menuBoards },
-  } = useCafeMenus(cafe.id);
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   useEffect(() => {
@@ -32,10 +29,6 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   const handlePreventClickPropagation: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
   };
-
-  const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
-  const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
-
   return (
     <>
       {createPortal(
@@ -44,39 +37,66 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
             <CloseIcon onClick={onClose} />
           </CloseButton>
 
-          {menuBoards.length > 0 && (
-            <>
-              <ShowMenuBoardButton $imageUrl={menuBoards[0].imageUrl} onClick={() => setIsImageModalOpen(true)}>
-                메뉴판 이미지로 보기 ({menuBoards.length})
-              </ShowMenuBoardButton>
-              <Spacer $size={'8'} />
-            </>
-          )}
-
-          {recommendedMenus.length > 0 && (
-            <>
-              <CafeMenuListTitle>대표 메뉴</CafeMenuListTitle>
-              <CafeMenuList menus={recommendedMenus} />
-              <Spacer $size={'8'} />
-            </>
-          )}
-
-          {otherMenus.length > 0 && (
-            <>
-              <CafeMenuListTitle>메뉴</CafeMenuListTitle>
-              <CafeMenuList menus={otherMenus} />
-              <Spacer $size={'8'} />
-            </>
-          )}
-
-          {menus.length === 0 && (
-            <>
-              <Spacer $size={'4'} />
-              <Placeholder>등록된 메뉴가 없습니다</Placeholder>
-            </>
-          )}
+          <QueryErrorBoundary>
+            <Suspense>
+              <CafeMenuBottomSheetContent cafe={cafe} />
+            </Suspense>
+          </QueryErrorBoundary>
         </Container>,
         document.bodyRoot,
+      )}
+    </>
+  );
+};
+
+export default CafeMenuBottomSheet;
+
+type CafeMenuBottomSheetContentProps = {
+  cafe: Cafe;
+};
+
+const CafeMenuBottomSheetContent = (props: CafeMenuBottomSheetContentProps) => {
+  const { cafe } = props;
+  const {
+    data: { menus, menuBoards },
+  } = useCafeMenus(cafe.id);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
+  const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
+  const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
+
+  return (
+    <>
+      {menuBoards.length > 0 && (
+        <>
+          <ShowMenuBoardButton $imageUrl={menuBoards[0].imageUrl} onClick={() => setIsImageModalOpen(true)}>
+            메뉴판 이미지로 보기 ({menuBoards.length})
+          </ShowMenuBoardButton>
+          <Spacer $size={'8'} />
+        </>
+      )}
+
+      {recommendedMenus.length > 0 && (
+        <>
+          <CafeMenuListTitle>대표 메뉴</CafeMenuListTitle>
+          <CafeMenuList menus={recommendedMenus} />
+          <Spacer $size={'8'} />
+        </>
+      )}
+
+      {otherMenus.length > 0 && (
+        <>
+          <CafeMenuListTitle>메뉴</CafeMenuListTitle>
+          <CafeMenuList menus={otherMenus} />
+          <Spacer $size={'8'} />
+        </>
+      )}
+
+      {menus.length === 0 && (
+        <>
+          <Spacer $size={'4'} />
+          <Placeholder>등록된 메뉴가 없습니다</Placeholder>
+        </>
       )}
 
       {isImageModalOpen &&
@@ -90,8 +110,6 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
     </>
   );
 };
-
-export default CafeMenuBottomSheet;
 
 const Container = styled.div`
   position: absolute;

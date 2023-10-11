@@ -1,31 +1,36 @@
 import { MdOutlineErrorOutline } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useRouteError } from 'react-router-dom';
 import { keyframes, styled } from 'styled-components';
 import Button from '../components/Button';
+import AppError from '../errors/AppError';
 
 const ErrorPage = () => {
+  const error = useRouteError();
+  const message = error instanceof Error ? error.message : '알 수 없는 에러';
+  const isExpectedError = error instanceof AppError;
+
   return (
-    <Contaienr>
+    <Container>
       <SentenceContainer>
-        <MainSentence>다시 확인해주세요</MainSentence>
-        <Sentence>요청하신 내용을 찾을 수 없어요</Sentence>
+        <MainSentence>{isExpectedError ? '다시 확인해주세요' : '예기치 못한 에러가 발생하였습니다'}</MainSentence>
+        {isExpectedError && <Sentence>{message}</Sentence>}
         <ButtonContainer to="/">
           <Button $fullWidth>홈으로 돌아가기</Button>
         </ButtonContainer>
       </SentenceContainer>
       <Icon />
-    </Contaienr>
+    </Container>
   );
 };
 
 export default ErrorPage;
 
-const Contaienr = styled.section`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  height: 100vh;
+  height: 100%;
   padding-top: 150px;
 `;
 
@@ -49,6 +54,7 @@ const MainSentence = styled.h1`
 const Sentence = styled.span`
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.color.text.secondary};
+  text-align: center;
 `;
 
 const bounce = keyframes`
