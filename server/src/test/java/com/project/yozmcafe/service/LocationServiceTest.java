@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeLocationResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
@@ -19,7 +18,7 @@ import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
 import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.fixture.Fixture;
 
-class LocationServiceTest extends BaseTest {
+class LocationServiceTest extends BaseServiceTest {
 
     @Autowired
     private LocationService locationService;

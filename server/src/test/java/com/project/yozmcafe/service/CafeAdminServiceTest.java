@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
@@ -29,7 +28,7 @@ import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
 import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 
-class CafeAdminServiceTest extends BaseTest {
+class CafeAdminServiceTest extends BaseServiceTest {
 
     @Autowired
     private CafeAdminService cafeAdminService;
