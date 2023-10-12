@@ -9,6 +9,7 @@ import useCafeLikes from '../hooks/useCafeLikes';
 import useClipboard from '../hooks/useClipboard';
 import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
+import { withGAEvent } from '../utils/GoogleAnalytics';
 import Resource from '../utils/Resource';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
 import CafeMenuBottomSheet from './CafeMenuBottomSheet';
@@ -42,34 +43,34 @@ const CafeCard = (props: CardProps) => {
     setCurrentImageIndex(index);
   }, []);
 
-  const handleShare = async () => {
+  const handleShare = withGAEvent('share', { cafeName: cafe.name }, async () => {
     try {
       await clipboard.copyToClipboard(`https://yozm.cafe/cafes/${cafe.id}`);
       showToast('success', 'URL이 복사되었습니다!');
     } catch (error) {
       showToast('error', `URL 복사 실패: ${error}`);
     }
-  };
+  });
 
-  const handleLikeCountIncrease = () => {
+  const handleLikeCountIncrease = withGAEvent('click_like_button', { cafeName: cafe.name }, () => {
     if (!user) {
       showToast('error', '로그인이 필요합니다!');
       return;
     }
     setLiked({ isLiked: !isLiked });
-  };
+  });
 
-  const handleDetailOpen = () => {
+  const handleDetailOpen = withGAEvent('click_detail_button', { cafeName: cafe.name }, () => {
     setIsShowDetail(true);
-  };
+  });
 
   const handleDetailClose = () => {
     setIsShowDetail(false);
   };
 
-  const handleMenuOpen = () => {
+  const handleMenuOpen = withGAEvent('click_menu_button', { cafeName: cafe.name }, () => {
     setIsMenuOpened(true);
-  };
+  });
 
   const handleMenuClose = () => {
     setIsMenuOpened(false);
