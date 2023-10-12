@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
+    scrollbar-width: none;
     font-family: 'Pretendard', sans-serif;
 
     &::-webkit-scrollbar {
