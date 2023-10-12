@@ -1,12 +1,15 @@
-import { Suspense, useState, type PropsWithChildren } from 'react';
-import { PiReadCvLogoFill } from 'react-icons/pi';
-import { styled } from 'styled-components';
+import { Suspense, useState } from 'react';
+import { BiSolidInfoCircle } from 'react-icons/bi';
+import { FaShare } from 'react-icons/fa';
+import { PiHeartFill, PiReadCvLogoFill } from 'react-icons/pi';
+import { styled, useTheme } from 'styled-components';
+import { useToast } from '../context/ToastContext';
 import useCafeLikes from '../hooks/useCafeLikes';
+import useClipboard from '../hooks/useClipboard';
 import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
 import CafeMenuBottomSheet from './CafeMenuBottomSheet';
-import LikeButton from './LikeButton';
-import ShareButton from './ShareButton';
+import IconButton from './IconButton';
 
 type CafeActionBarProps = {
   cafe: Cafe;
@@ -14,42 +17,62 @@ type CafeActionBarProps = {
 
 const CafeActionBar = (props: CafeActionBarProps) => {
   const { cafe } = props;
+  const theme = useTheme();
+  const showToast = useToast();
+  const clipboard = useClipboard();
+
   const { isLiked, setLiked } = useCafeLikes(cafe);
   const { data: user } = useUser();
   const [isMenuOpened, setIsMenuOpened] = useState(false);
 
+  const likeCount = cafe.likeCount + (isLiked ? 1 : 0);
+
+  const handleShare = async () => {
+    try {
+      await clipboard.copyToClipboard(`https://yozm.cafe/cafes/${cafe.id}`);
+      showToast('success', 'URL이 복사되었습니다!');
+    } catch (error) {
+      showToast('error', `URL 복사 실패: ${error}`);
+    }
+  };
+
   const handleLikeCountIncrease = () => {
     if (!user) {
-      alert('로그인이 필요합니다!');
+      showToast('error', '로그인이 필요합니다!');
       return;
     }
-
     setLiked({ isLiked: !isLiked });
   };
 
-  const handlePreventClickPropagation: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    event.stopPropagation();
+  const handleMenuOpen = () => {
+    setIsMenuOpened(true);
+  };
+
+  const handleMenuClose = () => {
+    setIsMenuOpened(false);
   };
 
   return (
-    <Container onClick={handlePreventClickPropagation}>
-      <Action>
-        <ShareButton url={`https://yozm.cafe/cafes/${cafe.id}`} />
-        <LikeButton
-          likeCount={cafe.likeCount + (isLiked ? 1 : 0)}
-          active={isLiked}
-          onChange={handleLikeCountIncrease}
-        />
-      </Action>
-      <Action onClick={() => setIsMenuOpened(true)}>
-        <ActionButton label="메뉴">
-          <PiReadCvLogoFill />
-        </ActionButton>
-      </Action>
+    <Container>
+      <IconButton label="공유" onClick={handleShare}>
+        <FaShare />
+      </IconButton>
+
+      <IconButton label={String(likeCount)} onClick={handleLikeCountIncrease}>
+        <PiHeartFill fill={isLiked ? theme.color.primary : theme.color.white} />
+      </IconButton>
+
+      <IconButton label="메뉴" onClick={handleMenuOpen}>
+        <PiReadCvLogoFill />
+      </IconButton>
+
+      <IconButton label="더보기">
+        <BiSolidInfoCircle />
+      </IconButton>
 
       {isMenuOpened && (
         <Suspense>
-          <CafeMenuBottomSheet cafe={cafe} onClose={() => setIsMenuOpened(false)} />
+          <CafeMenuBottomSheet cafe={cafe} onClose={handleMenuClose} />
         </Suspense>
       )}
     </Container>
@@ -59,51 +82,12 @@ const CafeActionBar = (props: CafeActionBarProps) => {
 export default CafeActionBar;
 
 const Container = styled.aside`
-  position: absolute;
-  right: 0;
-  bottom: 133px;
-
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.space[3]};
+  gap: ${({ theme }) => theme.space[5]};
   align-self: flex-end;
 
-  padding-right: ${({ theme }) => theme.space[3]};
-`;
+  padding: ${({ theme }) => theme.space[3]};
 
-const Action = styled.button`
-  padding: 0;
   color: white;
-  background: none;
-  border: none;
-`;
-
-type ActionButtonProps = PropsWithChildren<{
-  label: string;
-}>;
-
-const ActionButton = (props: ActionButtonProps) => {
-  const { label, children } = props;
-
-  return (
-    <ActionButtonContainer>
-      <ActionButtonIcon>{children}</ActionButtonIcon>
-      {label}
-    </ActionButtonContainer>
-  );
-};
-
-const ActionButtonContainer = styled.button`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ActionButtonIcon = styled.div`
-  font-size: ${({ theme }) => theme.fontSize['4xl']};
-
-  & > svg {
-    display: block;
-  }
 `;

@@ -1,4 +1,3 @@
-import { BiSolidInfoCircle } from 'react-icons/bi';
 import { SlLocationPin } from 'react-icons/sl';
 import { styled } from 'styled-components';
 
@@ -20,26 +19,14 @@ const CafeSummary = (props: CafeSummaryProps) => {
           {address}
         </Address>
       </Summary>
-      <ButtonList>
-        <Button>
-          <SolidInfoCircleIcon />
-          <ButtonText>더보기</ButtonText>
-        </Button>
-      </ButtonList>
     </Container>
   );
 };
 
 const Container = styled.div`
   cursor: pointer;
-
-  position: absolute;
-  bottom: 0;
-
   display: flex;
-
   width: 100%;
-  margin-bottom: 40px;
   padding: ${({ theme }) => theme.space[3]};
 `;
 
@@ -61,23 +48,6 @@ const Address = styled.h2`
 const LocationPinIcon = styled(SlLocationPin)`
   margin-right: ${({ theme }) => theme.space[1]};
   font-size: ${({ theme }) => theme.fontSize.sm};
-`;
-
-const ButtonList = styled.div`
-  margin-left: auto;
-  font-size: ${({ theme }) => theme.fontSize.sm};
-`;
-
-const ButtonText = styled.span``;
-
-const Button = styled.button`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-`;
-
-const SolidInfoCircleIcon = styled(BiSolidInfoCircle)`
-  font-size: ${({ theme }) => theme.fontSize['4xl']};
 `;
 
 export default CafeSummary;
