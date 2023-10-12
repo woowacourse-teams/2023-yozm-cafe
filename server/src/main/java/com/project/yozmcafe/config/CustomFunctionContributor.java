@@ -1,4 +1,4 @@
-package com.project.yozmcafe.domain.cafe;
+package com.project.yozmcafe.config;
 
 import org.hibernate.boot.model.FunctionContributions;
 import org.hibernate.boot.model.FunctionContributor;
