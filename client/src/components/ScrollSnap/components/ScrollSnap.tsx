@@ -2,7 +2,9 @@ import type { ScrollSnapProps } from '../types';
 import ScrollSnapCSS from './ScrollSnapCSS/ScrollSnapCSS';
 import ScrollSnapImpl from './ScrollSnapImpl/ScrollSnapImpl';
 
-const isMobile = window.navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
+const isMobile = /(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i.test(window.navigator.userAgent);
+
+const isIOS = /(iPad)|(iPhone)|(iPod)/i.test(window.navigator.userAgent);
 
 type ScrollSnapWithMode<Item> = ScrollSnapProps<Item> & {
   // auto일 시 userAgent의 값에 따라 mode를 결정
@@ -15,7 +17,10 @@ const ScrollSnap = <Item,>(props: ScrollSnapWithMode<Item>) => {
   const { mode = 'auto', ...restProps } = props;
 
   if (mode === 'auto') {
-    return isMobile ? <ScrollSnapImpl {...restProps} /> : <ScrollSnapCSS {...restProps} />;
+    if (isIOS) return <ScrollSnapCSS {...restProps} />;
+    if (isMobile) return <ScrollSnapImpl {...restProps} />;
+
+    return <ScrollSnapCSS {...restProps} />;
   }
   if (mode === 'css') {
     return <ScrollSnapCSS {...restProps} />;
