@@ -193,6 +193,15 @@ const DotsContainer = styled.div`
   position: absolute;
   bottom: ${({ theme }) => theme.space[5]};
   left: 50%;
+
+  /**
+   * Safari에서 overflow: hidden + position: absolute 조합으로 사용했을 때
+   * 화면에서 깜빡거리거나 사라지는 버그가 있다. 이를 해결하기 위해
+   * -webkit-transform: translateZ(0) 을 사용하여야 한다.
+   * * https://stackoverflow.com/questions/44948735/overflow-hidden-is-not-working-with-absolute-element-in-safari
+   * * https://bugs.webkit.org/show_bug.cgi?id=98538
+   */
+  -webkit-transform: translateZ(0);
   transform: translateX(-50%);
 
   display: flex;
@@ -211,6 +220,16 @@ const Dot = styled.div<{ $active: boolean }>`
 
 const CardQuantityContainer = styled.div`
   position: absolute;
+  z-index: 1;
+
+  /**
+   * Safari에서 overflow: hidden + position: absolute 조합으로 사용했을 때
+   * 화면에서 깜빡거리거나 사라지는 버그가 있다. 이를 해결하기 위해
+   * -webkit-transform: translateZ(0) 을 사용하여야 한다.
+   * * https://stackoverflow.com/questions/44948735/overflow-hidden-is-not-working-with-absolute-element-in-safari
+   * * https://bugs.webkit.org/show_bug.cgi?id=98538
+   */
+  -webkit-transform: translateZ(0);
 
   display: flex;
   justify-content: flex-end;
@@ -231,7 +250,17 @@ const CardQuantityContents = styled.div`
 const Bottom = styled.div`
   position: absolute;
   bottom: 40px;
+  /**
+   * Safari에서 overflow: hidden + position: absolute 조합으로 사용했을 때
+   * 화면에서 깜빡거리거나 사라지는 버그가 있다. 이를 해결하기 위해
+   * -webkit-transform: translateZ(0) 을 사용하여야 한다.
+   * * https://stackoverflow.com/questions/44948735/overflow-hidden-is-not-working-with-absolute-element-in-safari
+   * * https://bugs.webkit.org/show_bug.cgi?id=98538
+   */
+  -webkit-transform: translateZ(0);
+
   display: flex;
+
   width: 100%;
 `;
 
