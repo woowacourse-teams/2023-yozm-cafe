@@ -109,5 +109,6 @@ const Container = styled.div`
 
   & > * {
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 `;
