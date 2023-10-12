@@ -11,6 +11,21 @@
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/assets/thumbnail-image.png" />
     <meta property="og:description" content="트렌디한 성수 지역의 카페를 손쉽게 탐색하는 서비스, 요즘카페" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.GOOGLE_ANALYTICS_TRACKING_ID %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', '<%= process.env.GOOGLE_ANALYTICS_TRACKING_ID %>');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <%= process.env.META_PIXEL_CODE %>
+    <!-- End Meta Pixel Code -->
   </head>
   <body>
     <div id="root"></div>
