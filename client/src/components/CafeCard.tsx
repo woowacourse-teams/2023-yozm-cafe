@@ -90,12 +90,13 @@ const CafeCard = (props: CardProps) => {
 
       <CarouselImageList onScroll={handleScroll}>
         {cafe.images.map((image, index) => (
-          <CarouselImage
-            key={index}
-            src={Resource.getImageUrl({ size: '500', filename: image })}
-            alt={`${cafe.name}의 ${index + 1}번째 이미지`}
-            loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
-          />
+          <CarouselImageFrame key={index}>
+            <CarouselImage
+              src={Resource.getImageUrl({ size: '500', filename: image })}
+              alt={`${cafe.name}의 ${index + 1}번째 이미지`}
+              loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
+            />
+          </CarouselImageFrame>
         ))}
       </CarouselImageList>
 
@@ -169,15 +170,22 @@ const CarouselImageList = styled.div`
   height: 100%;
 `;
 
-const CarouselImage = styled.img.attrs({ draggable: false })`
+const CarouselImageFrame = styled.div`
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
+  position: relative;
+
   flex: 0 0 100%;
 
-  min-width: 100%;
+  width: 100%;
   height: 100%;
+`;
 
+const CarouselImage = styled.img.attrs({ draggable: false })`
+  position: absolute;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 `;
 
