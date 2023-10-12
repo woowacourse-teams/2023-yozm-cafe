@@ -1,11 +1,19 @@
-import type { UIEventHandler } from 'react';
-import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
+import type { MouseEventHandler, UIEventHandler } from 'react';
+import { Suspense, useCallback, useState } from 'react';
+import { BiSolidInfoCircle } from 'react-icons/bi';
+import { FaShare } from 'react-icons/fa';
+import { PiHeartFill, PiReadCvLogoFill } from 'react-icons/pi';
+import { styled, useTheme } from 'styled-components';
+import { useToast } from '../context/ToastContext';
+import useCafeLikes from '../hooks/useCafeLikes';
+import useClipboard from '../hooks/useClipboard';
+import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
 import Resource from '../utils/Resource';
-import CafeActionBar from './CafeActionBar';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
+import CafeMenuBottomSheet from './CafeMenuBottomSheet';
 import CafeSummary from './CafeSummary';
+import IconButton from './IconButton';
 
 type CardProps = {
   cafe: Cafe;
@@ -14,8 +22,17 @@ type CardProps = {
 const CafeCard = (props: CardProps) => {
   const { cafe } = props;
 
+  const theme = useTheme();
+  const showToast = useToast();
+  const clipboard = useClipboard();
+  const { isLiked, setLiked } = useCafeLikes(cafe);
+  const { data: user } = useUser();
+
   const [isShowDetail, setIsShowDetail] = useState(false);
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const likeCount = cafe.likeCount + (isLiked ? 1 : 0);
 
   const handleScroll: UIEventHandler = useCallback((event) => {
     if (!(event.target instanceof HTMLDivElement)) return;
@@ -24,6 +41,43 @@ const CafeCard = (props: CardProps) => {
     const index = Math.round(scrollLeft / clientWidth);
     setCurrentImageIndex(index);
   }, []);
+
+  const handleShare = async () => {
+    try {
+      await clipboard.copyToClipboard(`https://yozm.cafe/cafes/${cafe.id}`);
+      showToast('success', 'URL이 복사되었습니다!');
+    } catch (error) {
+      showToast('error', `URL 복사 실패: ${error}`);
+    }
+  };
+
+  const handleLikeCountIncrease = () => {
+    if (!user) {
+      showToast('error', '로그인이 필요합니다!');
+      return;
+    }
+    setLiked({ isLiked: !isLiked });
+  };
+
+  const handleDetailOpen = () => {
+    setIsShowDetail(true);
+  };
+
+  const handleDetailClose = () => {
+    setIsShowDetail(false);
+  };
+
+  const handleMenuOpen = () => {
+    setIsMenuOpened(true);
+  };
+
+  const handleMenuClose = () => {
+    setIsMenuOpened(false);
+  };
+
+  const handleStopPropagation: MouseEventHandler = (event) => {
+    event.stopPropagation();
+  };
 
   return (
     <Container>
@@ -44,19 +98,29 @@ const CafeCard = (props: CardProps) => {
         ))}
       </CarouselImageList>
 
-      <Bottom>
+      <Bottom onClick={handleStopPropagation}>
         <BottomItem $fullWidth>
-          <CafeSummary
-            title={cafe.name}
-            address={cafe.address}
-            onClick={(event) => {
-              event.stopPropagation();
-              setIsShowDetail(true);
-            }}
-          />
+          <CafeSummary title={cafe.name} address={cafe.address} onClick={handleDetailOpen} />
         </BottomItem>
+
         <BottomItem $align="right">
-          <CafeActionBar cafe={cafe} />
+          <ActionBar>
+            <IconButton label="공유" onClick={handleShare}>
+              <FaShare />
+            </IconButton>
+
+            <IconButton label={String(likeCount)} onClick={handleLikeCountIncrease}>
+              <PiHeartFill fill={isLiked ? theme.color.primary : theme.color.white} />
+            </IconButton>
+
+            <IconButton label="메뉴" onClick={handleMenuOpen}>
+              <PiReadCvLogoFill />
+            </IconButton>
+
+            <IconButton label="더보기" onClick={handleDetailOpen}>
+              <BiSolidInfoCircle />
+            </IconButton>
+          </ActionBar>
         </BottomItem>
       </Bottom>
 
@@ -66,7 +130,13 @@ const CafeCard = (props: CardProps) => {
         ))}
       </DotsContainer>
 
-      {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
+      {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={handleDetailClose} />}
+
+      {isMenuOpened && (
+        <Suspense>
+          <CafeMenuBottomSheet cafe={cafe} onClose={handleMenuClose} />
+        </Suspense>
+      )}
     </Container>
   );
 };
@@ -162,4 +232,15 @@ const BottomItem = styled.div<{ $fullWidth?: boolean; $align?: 'left' | 'right' 
   ${({ $align }) => $align === 'left' && 'left: 0;'}
   ${({ $align }) => $align === 'right' && 'right: 0;'}
   ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
+`;
+
+const ActionBar = styled.aside`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space[5]};
+  align-self: flex-end;
+
+  padding: ${({ theme }) => theme.space[3]};
+
+  color: white;
 `;
