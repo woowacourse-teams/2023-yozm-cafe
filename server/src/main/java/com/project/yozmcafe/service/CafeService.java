@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
+import static com.project.yozmcafe.service.UnViewedCafeService.DEFAULT_UNVIEWED_CAFE_SIZE_CONDITION;
 import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Service
@@ -27,13 +28,13 @@ public class CafeService {
 
     private final CafeRepository cafeRepository;
     private final MemberRepository memberRepository;
-    private final UnViewedCafeService unViewedCafeService;
+    private final CafeRefillEventPublisher eventPublisher;
 
     public CafeService(final CafeRepository cafeRepository, final MemberRepository memberRepository,
-                       final UnViewedCafeService unViewedCafeService) {
+                       final CafeRefillEventPublisher eventPublisher) {
         this.cafeRepository = cafeRepository;
         this.memberRepository = memberRepository;
-        this.unViewedCafeService = unViewedCafeService;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<CafeResponse> getCafesForUnLoginMember(final Pageable pageable) {
@@ -61,8 +62,12 @@ public class CafeService {
     @Transactional
     public List<CafeResponse> getCafesForLoginMember(final String memberId, final int size) {
         final Member member = getMemberByIdOrThrow(memberId);
+
+        if (member.isUnViewedCafesSizeUnder(DEFAULT_UNVIEWED_CAFE_SIZE_CONDITION)) {
+            eventPublisher.publishCafeRefillEvent(member);
+        }
+
         final List<UnViewedCafe> cafes = member.getNextUnViewedCafes(size);
-        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
 
         return cafes.stream()
                 .map(UnViewedCafe::getCafe)
