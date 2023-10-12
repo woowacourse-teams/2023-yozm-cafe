@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CafeCard from '../components/CafeCard';
 import ScrollSnap from '../components/ScrollSnap';
 import useCafes from '../hooks/useCafes';
 import type { Cafe } from '../types';
+import { withGAEvent } from '../utils/GoogleAnalytics';
 import { easeOutExpo } from '../utils/timingFunctions';
 
 const PREFETCH_OFFSET = 2;
@@ -23,6 +24,8 @@ const HomePage = () => {
   }
 
   const itemRenderer = (cafe: Cafe) => <CafeCard key={cafe.id} cafe={cafe} />;
+
+  useEffect(withGAEvent('cafe_view', { cafeName: cafes[activeIndex].name }), [activeIndex]);
 
   return (
     <ScrollSnap
