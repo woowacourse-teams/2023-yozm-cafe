@@ -180,4 +180,3 @@ class CafeCustomRepositoryImplTest extends BaseTest {
                 .containsOnly(cafe1.getName(), cafe2.getName(), cafe3.getName(), cafe4.getName());
     }
 }
-
