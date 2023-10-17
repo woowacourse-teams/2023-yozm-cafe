@@ -25,7 +25,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.14.1",
-    "styled-components": "^6.0.2"
+    "styled-components": "^6.0.2",
+    "yozm-cafe-react-scroll-snap": "^0.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",
