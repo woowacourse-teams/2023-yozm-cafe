@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
+import { ScrollSnap, ScrollSnapProvider, easeOutExpo } from 'yozm-cafe-react-scroll-snap';
 import CafeCard from '../components/CafeCard';
-import ScrollSnap from '../components/ScrollSnap';
 import useCafes from '../hooks/useCafes';
 import type { Cafe } from '../types';
 import { withGAEvent } from '../utils/GoogleAnalytics';
-import { easeOutExpo } from '../utils/timingFunctions';
 
 const PREFETCH_OFFSET = 2;
 
@@ -28,16 +27,17 @@ const HomePage = () => {
   useEffect(withGAEvent('cafe_view', { cafeName: cafes[activeIndex].name }), [activeIndex]);
 
   return (
-    <ScrollSnap
-      style={{ height: '100%' }}
+    <ScrollSnapProvider
       scrollPosition={scrollPosition}
       onScrollPositionChange={setScrollPosition}
       activeIndex={activeIndex}
       onActiveIndexChange={setActiveIndex}
       items={cafes}
-      timingFn={easeOutExpo}
+      easingFunction={easeOutExpo}
       itemRenderer={itemRenderer}
-    />
+    >
+      <ScrollSnap style={{ height: '100%' }} />
+    </ScrollSnapProvider>
   );
 };
 

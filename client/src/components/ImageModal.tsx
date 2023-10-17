@@ -1,8 +1,8 @@
 import type { MouseEventHandler } from 'react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { useScrollSnapGuard } from 'yozm-cafe-react-scroll-snap';
 import Resource from '../utils/Resource';
-import useScrollSnapGuard from './ScrollSnap/hooks/useScrollSnapGuard';
 
 type ImageModalProps = {
   imageUrls: string[];
