@@ -1,7 +1,20 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.BaseTest;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+
+import java.time.LocalTime;
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.project.yozmcafe.controller.dto.cafe.AvailableTimeRequest;
+import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
@@ -11,25 +24,18 @@ import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Detail;
 import com.project.yozmcafe.domain.cafe.Images;
 import com.project.yozmcafe.domain.cafe.available.Days;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.exception.BadRequestException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalTime;
-import java.util.List;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-class CafeAdminServiceTest extends BaseTest {
+class CafeAdminServiceTest extends BaseServiceTest {
 
     @Autowired
     private CafeAdminService cafeAdminService;
     @Autowired
     private CafeRepository cafeRepository;
+    @Autowired
+    private CafeCoordinateRepository cafeCoordinateRepository;
 
     @Test
     @DisplayName("카페 생성 테스트")
@@ -179,6 +185,26 @@ class CafeAdminServiceTest extends BaseTest {
 
         //then
         assertThat(imagesByCafeId).containsExactly("image");
+    }
+
+    @Test
+    @DisplayName("카페 좌표 정보를 저장한다.")
+    void saveCafeCoordinate() {
+        //given
+        final Cafe cafe = saveCafe();
+        final double latitude = 20;
+        final double longitude = 10;
+        final CafeCoordinateRequest cafeCoordinateRequest = new CafeCoordinateRequest(latitude, longitude);
+        final Long savedId = cafeAdminService.saveCafeCoordinate(cafe.getId(), cafeCoordinateRequest);
+
+        //when
+        final CafeCoordinate cafeCoordinate = cafeCoordinateRepository.findById(savedId).get();
+
+        //then
+        assertSoftly(softAssertions -> {
+            assertThat(cafeCoordinate.getLatitude()).isEqualTo(latitude);
+            assertThat(cafeCoordinate.getLongitude()).isEqualTo(longitude);
+        });
     }
 
     private Cafe saveCafe() {

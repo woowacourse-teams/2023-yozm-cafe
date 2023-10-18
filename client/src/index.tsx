@@ -18,7 +18,7 @@ Object.assign(document, { bodyRoot: document.getElementById('root') });
 
 const main = async () => {
   if (MSW) {
-    const { worker } = await import('./mocks/worker');
+    const { default: worker } = await import('./mocks/worker');
     await worker.start();
   }
 

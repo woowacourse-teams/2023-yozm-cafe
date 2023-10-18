@@ -1,9 +1,10 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.BaseTest;
 import com.project.yozmcafe.domain.RandomCafeShuffleStrategy;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
+import com.project.yozmcafe.domain.cafe.UnViewedCafe;
+import com.project.yozmcafe.domain.cafe.UnViewedCafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.fixture.Fixture;
@@ -12,12 +13,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UnViewedCafeServiceTest extends BaseTest {
+class UnViewedCafeServiceTest extends BaseServiceTest {
 
     private UnViewedCafeService unViewedCafeService;
 
@@ -25,15 +25,19 @@ class UnViewedCafeServiceTest extends BaseTest {
     private CafeRepository cafeRepository;
 
     @Autowired
+    UnViewedCafeRepository unViewedCafeRepository;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
-        unViewedCafeService = new UnViewedCafeService(cafeRepository, new RandomCafeShuffleStrategy());
+        unViewedCafeService = new UnViewedCafeService(cafeRepository, unViewedCafeRepository,
+                new RandomCafeShuffleStrategy());
     }
 
     @Test
-    @DisplayName("사용자의 UnViewedCafe가 20개 미만일 때 모든 카페를 다시 채운다")
+    @DisplayName("사용자의 UnViewedCafe에 모든 카페를 다시 채운다")
     void refillWhenUnViewedCafesSizeUnderTwenty() {
         //given
         final Member member = memberRepository.save(new Member("id", "연어", "image"));
@@ -42,29 +46,33 @@ class UnViewedCafeServiceTest extends BaseTest {
         cafeRepository.save(Fixture.getCafe("cafe3", "address", 5));
 
         //when
-        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
+        unViewedCafeService.refillUnViewedCafes(member);
 
         //then
-        assertThat(member.getUnViewedCafes()).hasSize(3);
+        final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
+        assertThat(refilledMember.getUnViewedCafes()).hasSize(3);
     }
 
     @Test
-    @DisplayName("사용자의 UnViewedCafe가 20개 이상이면 다시 채우지 않는다")
-    void refillWhenUnViewedCafesSizeUnderTwenty2() {
+    @DisplayName("사용자의 UnViewedCafe에 카페를 채울 때, 이미 가진 unViewedCafe는 제외하고 채운다.")
+    void refillNotDuplicatedUnViewedCafesWhenUnViewedCafesSizeUnderTwenty() {
         //given
         final Member member = memberRepository.save(new Member("id", "연어", "image"));
-
-        final int initialUnViewedCafesSize = 20;
-        final List<Cafe> allCafes = new ArrayList<>();
-        for (int i = 0; i < initialUnViewedCafesSize; i++) {
-            allCafes.add(Fixture.getCafe((long) i, "카페", "주소", 3));
-        }
-        member.addUnViewedCafes(allCafes);
+        final Cafe saved1 = cafeRepository.save(Fixture.getCafe("cafe1", "address", 5));
+        cafeRepository.save(Fixture.getCafe("cafe2", "address", 5));
+        cafeRepository.save(Fixture.getCafe("cafe3", "address", 5));
+        member.addUnViewedCafes(List.of(saved1));
+        memberRepository.save(member);
 
         //when
-        unViewedCafeService.refillWhenUnViewedCafesSizeUnderTwenty(member);
+        unViewedCafeService.refillUnViewedCafes(member);
 
         //then
-        assertThat(member.getUnViewedCafes()).hasSize(initialUnViewedCafesSize);
+        final Member refilledMember = memberRepository.findWithUnViewedCafesById(member.getId()).get();
+        final List<Cafe> unViewedCafes = refilledMember.getUnViewedCafes().stream()
+                .map(UnViewedCafe::getCafe)
+                .toList();
+        assertThat(unViewedCafes).extracting("name")
+                .containsOnly("cafe1", "cafe2", "cafe3");
     }
 }

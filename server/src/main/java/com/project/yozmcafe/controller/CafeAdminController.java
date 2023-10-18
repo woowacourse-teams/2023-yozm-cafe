@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
@@ -106,6 +108,13 @@ public class CafeAdminController {
         final String uploadedFileName = imageService.resizeToMobileSizeAndUpload(image);
         menuService.saveMenuBoard(cafeId, menuBoardRequest, uploadedFileName);
 
+        return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
+    }
+
+    @PostMapping("/{cafeId}/coordinate")
+    public ResponseEntity<String> saveCoordinate(@PathVariable("cafeId") final Long cafeId,
+                                                 @RequestBody final CafeCoordinateRequest cafeCoordinateRequest) {
+        cafeAdminService.saveCafeCoordinate(cafeId, cafeCoordinateRequest);
         return ResponseEntity.created(URI.create("/admin/cafes/" + cafeId)).build();
     }
 }

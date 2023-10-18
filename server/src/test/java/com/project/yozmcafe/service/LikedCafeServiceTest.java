@@ -1,28 +1,29 @@
 package com.project.yozmcafe.service;
 
-import com.project.yozmcafe.BaseTest;
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+
+import com.project.yozmcafe.controller.dto.cafe.CafeThumbnailResponse;
 import com.project.yozmcafe.controller.dto.cafe.LikedCafeResponse;
-import com.project.yozmcafe.controller.dto.cafe.LikedCafeThumbnailResponse;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.member.Member;
 import com.project.yozmcafe.domain.member.MemberRepository;
 import com.project.yozmcafe.exception.BadRequestException;
 import com.project.yozmcafe.fixture.Fixture;
+
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_MEMBER;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-class LikedCafeServiceTest extends BaseTest {
+class LikedCafeServiceTest extends BaseServiceTest {
 
     @Autowired
     private LikedCafeService likedCafeService;
@@ -42,7 +43,8 @@ class LikedCafeServiceTest extends BaseTest {
         memberRepository.save(member);
 
         //when
-        final List<LikedCafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
+        final List<CafeThumbnailResponse> likedCafes = likedCafeService.findLikedCafeThumbnailsByMemberId(
+                member.getId(), pageRequest);
 
         //then
         assertThat(likedCafes.get(0).cafeId()).isEqualTo(savedCafe.getId());
@@ -56,7 +58,8 @@ class LikedCafeServiceTest extends BaseTest {
 
         //when
         //then
-        assertThatThrownBy(() -> likedCafeService.findLikedCafeThumbnailsByMemberId("findLikedCafesById_fail", pageRequest))
+        assertThatThrownBy(
+                () -> likedCafeService.findLikedCafeThumbnailsByMemberId("findLikedCafesById_fail", pageRequest))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTED_MEMBER.getMessage());
     }
@@ -65,15 +68,19 @@ class LikedCafeServiceTest extends BaseTest {
     @DisplayName("좋아요 목록 수를 초과한 page 요청 시 빈 list를 반환한다.")
     void findLikedCafesById_empty() {
         //given
-        final Member member = memberRepository.save(new Member("1234", "오션", "오션사진"));
         final Cafe cafe1 = Fixture.getCafe(1L, "카페1", "주소1", 3);
         final Cafe cafe2 = Fixture.getCafe(2L, "카페2", "주소2", 3);
-        final PageRequest pageRequest = PageRequest.of(1, 2);
+        cafeRepository.save(cafe1);
+        cafeRepository.save(cafe2);
+        Member member = new Member("1234", "오션", "오션사진");
         member.updateLikedCafesBy(cafe1, true);
         member.updateLikedCafesBy(cafe2, true);
+        memberRepository.save(member);
+        final PageRequest pageRequest = PageRequest.of(1, 2);
 
         //when
-        final List<LikedCafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsByMemberId(member.getId(), pageRequest);
+        final List<CafeThumbnailResponse> likedCafesById = likedCafeService.findLikedCafeThumbnailsByMemberId(
+                member.getId(), pageRequest);
 
         //then
         assertThat(likedCafesById).isEmpty();
@@ -127,7 +134,7 @@ class LikedCafeServiceTest extends BaseTest {
         final Cafe cafe = cafeRepository.save(Fixture.getCafe("카페", "카페주소", 10));
 
         //when
-        likedCafeService.updateLike(member, cafe.getId(), true);
+        likedCafeService.updateLike(member.getId(), cafe.getId(), true);
         final Member updatedMember = memberRepository.findById(member.getId()).get();
 
         //then
@@ -148,7 +155,7 @@ class LikedCafeServiceTest extends BaseTest {
         member.updateLikedCafesBy(cafe, true);
 
         //when
-        likedCafeService.updateLike(member, cafe.getId(), false);
+        likedCafeService.updateLike(member.getId(), cafe.getId(), false);
         final Member updatedMember = memberRepository.findById(member.getId()).get();
 
         //then
@@ -169,7 +176,7 @@ class LikedCafeServiceTest extends BaseTest {
         member.updateLikedCafesBy(cafe, true);
 
         //when
-        likedCafeService.updateLike(member, cafe.getId(), true);
+        likedCafeService.updateLike(member.getId(), cafe.getId(), true);
         final Member updatedMember = memberRepository.findById(member.getId()).get();
 
         //then
@@ -189,8 +196,8 @@ class LikedCafeServiceTest extends BaseTest {
 
         //when & then
         final long cafeId = cafe.getId();
-        assertThatThrownBy(() -> likedCafeService.updateLike(member, cafeId, true))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당하는 카페가 존재하지 않습니다.");
+        assertThatThrownBy(() -> likedCafeService.updateLike(member.getId(), cafeId, true))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("카페가 존재하지 않습니다.");
     }
 }

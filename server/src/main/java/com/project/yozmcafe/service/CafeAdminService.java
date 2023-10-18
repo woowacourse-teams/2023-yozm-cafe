@@ -1,34 +1,43 @@
 package com.project.yozmcafe.service;
 
+import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.project.yozmcafe.controller.dto.cafe.CafeCoordinateRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeRequest;
 import com.project.yozmcafe.controller.dto.cafe.CafeResponse;
 import com.project.yozmcafe.controller.dto.cafe.CafeUpdateRequest;
 import com.project.yozmcafe.domain.cafe.Cafe;
 import com.project.yozmcafe.domain.cafe.CafeRepository;
 import com.project.yozmcafe.domain.cafe.Images;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinate;
+import com.project.yozmcafe.domain.cafe.coordinate.CafeCoordinateRepository;
 import com.project.yozmcafe.exception.BadRequestException;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.project.yozmcafe.exception.ErrorCode.NOT_EXISTED_CAFE;
 
 @Service
 @Transactional(readOnly = true)
 public class CafeAdminService {
 
     private final CafeRepository cafeRepository;
+    private final CafeCoordinateRepository cafeCoordinateRepository;
     @PersistenceContext
     private final EntityManager entityManager;
 
-    public CafeAdminService(final CafeRepository cafeRepository, final EntityManager entityManager) {
+    public CafeAdminService(final CafeRepository cafeRepository,
+                            final CafeCoordinateRepository cafeCoordinateRepository,
+                            final EntityManager entityManager) {
         this.cafeRepository = cafeRepository;
+        this.cafeCoordinateRepository = cafeCoordinateRepository;
         this.entityManager = entityManager;
     }
 
@@ -40,13 +49,13 @@ public class CafeAdminService {
 
     @Transactional
     public void update(final long cafeId, final CafeUpdateRequest request, List<String> images) {
-        final Cafe cafe = getOrThrow(cafeId);
+        final Cafe cafe = getCafeOrThrow(cafeId);
         final Cafe requestedCafe = request.toCafeWithId(cafeId, images);
 
         cafe.update(requestedCafe);
     }
 
-    private Cafe getOrThrow(final long cafeId) {
+    private Cafe getCafeOrThrow(final long cafeId) {
         return cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTED_CAFE));
     }
@@ -58,7 +67,7 @@ public class CafeAdminService {
     }
 
     public CafeResponse findById(final long cafeId) {
-        final Cafe cafe = getOrThrow(cafeId);
+        final Cafe cafe = getCafeOrThrow(cafeId);
         return CafeResponse.fromUnLoggedInUser(cafe);
     }
 
@@ -75,7 +84,15 @@ public class CafeAdminService {
     }
 
     public List<String> findImagesByCafeId(final Long cafeId) {
-        final Images images = getOrThrow(cafeId).getImages();
+        final Images images = getCafeOrThrow(cafeId).getImages();
         return images.getUrls();
+    }
+
+    @Transactional
+    public Long saveCafeCoordinate(final Long cafeId, final CafeCoordinateRequest cafeCoordinateRequest) {
+        final Cafe cafe = getCafeOrThrow(cafeId);
+        final CafeCoordinate cafeCoordinate = cafeCoordinateRequest.toCafeCoordinateWithCafe(cafe);
+        cafeCoordinateRepository.save(cafeCoordinate);
+        return cafeCoordinate.getId();
     }
 }

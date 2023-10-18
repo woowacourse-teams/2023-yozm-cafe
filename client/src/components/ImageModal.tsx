@@ -1,7 +1,8 @@
 import type { MouseEventHandler } from 'react';
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import Image from '../utils/Image';
+import { useScrollSnapGuard } from 'yozm-cafe-react-scroll-snap';
+import Resource from '../utils/Resource';
 
 type ImageModalProps = {
   imageUrls: string[];
@@ -11,6 +12,7 @@ type ImageModalProps = {
 const ImageModal = (props: ImageModalProps) => {
   const { imageUrls, onClose } = props;
   const [activeImage, setActiveImage] = useState(imageUrls[0]);
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   const handleContainerClick: MouseEventHandler = (event) => {
     if (event.currentTarget !== event.target) return;
@@ -19,15 +21,15 @@ const ImageModal = (props: ImageModalProps) => {
   };
 
   return (
-    <Container>
+    <Container {...scrollSnapGuardHandlers}>
       <ActiveImageContainer onClick={handleContainerClick}>
-        <ActiveImage src={Image.getUrl({ size: 'original', filename: activeImage })} />
+        <ActiveImage src={Resource.getImageUrl({ size: 'original', filename: activeImage })} />
       </ActiveImageContainer>
       <ImageList>
         {imageUrls.map((imageUrl, index) => (
           <ImageListItem key={index}>
             <ImageListItemButton onClick={() => setActiveImage(imageUrl)}>
-              <ImageListItemImage src={Image.getUrl({ size: 'original', filename: imageUrl })} />
+              <ImageListItemImage src={Resource.getImageUrl({ size: 'original', filename: imageUrl })} />
             </ImageListItemButton>
           </ImageListItem>
         ))}
@@ -78,7 +80,6 @@ const ImageListItem = styled.li`
 `;
 
 const ImageListItemButton = styled.button`
-  cursor: pointer;
   width: 100%;
   height: 100%;
 `;

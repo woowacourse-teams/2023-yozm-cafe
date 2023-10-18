@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
+    scrollbar-width: none;
     font-family: 'Pretendard', sans-serif;
 
     &::-webkit-scrollbar {
@@ -19,16 +20,24 @@ const GlobalStyle = createGlobalStyle`
   body {
     position: fixed;
 
+    overflow: hidden;
     display: flex;
     justify-content: center;
 
     width: 100vw;
     height: 100svh;
+
+  }
+
+  button {
+    cursor: pointer;
   }
 
   #root {
     position: relative;
 
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
     display: flex;
     flex-direction: column;
 
@@ -36,6 +45,8 @@ const GlobalStyle = createGlobalStyle`
     max-width: 495px;
 
     box-shadow: ${({ theme }) => theme.shadow['2']};
+
+    -webkit-overflow-scrolling: touch;
   }
 `;
 

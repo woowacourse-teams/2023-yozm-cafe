@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
+import { useScrollSnapGuard } from 'yozm-cafe-react-scroll-snap';
 import useCafeMenus from '../hooks/useCafeMenus';
 import type { Theme } from '../styles/theme';
 import type { Cafe } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 import CafeMenuList from './CafeMenuList';
 import ImageModal from './ImageModal';
+import QueryErrorBoundary from './QueryErrorBoundary';
 
 type CafeMenuBottomSheetProps = {
   cafe: Cafe;
@@ -16,10 +18,7 @@ type CafeMenuBottomSheetProps = {
 
 const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   const { cafe, onClose } = props;
-  const {
-    data: { menus, menuBoards },
-  } = useCafeMenus(cafe.id);
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const scrollSnapGuardHandlers = useScrollSnapGuard();
 
   useEffect(() => {
     document.addEventListener('click', onClose);
@@ -30,35 +29,78 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
   const handlePreventClickPropagation: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
   };
+  return (
+    <>
+      {createPortal(
+        <Container onClick={handlePreventClickPropagation} {...scrollSnapGuardHandlers}>
+          <CloseButton>
+            <CloseIcon onClick={onClose} />
+          </CloseButton>
+
+          <QueryErrorBoundary>
+            <Suspense>
+              <CafeMenuBottomSheetContent cafe={cafe} />
+            </Suspense>
+          </QueryErrorBoundary>
+        </Container>,
+        document.bodyRoot,
+      )}
+    </>
+  );
+};
+
+export default CafeMenuBottomSheet;
+
+type CafeMenuBottomSheetContentProps = {
+  cafe: Cafe;
+};
+
+const CafeMenuBottomSheetContent = (props: CafeMenuBottomSheetContentProps) => {
+  const { cafe } = props;
+  const {
+    data: { menus, menuBoards },
+  } = useCafeMenus(cafe.id);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   const recommendedMenus = menus.filter((menuItem) => menuItem.isRecommended);
   const otherMenus = menus.filter((menuItem) => !menuItem.isRecommended);
 
   return (
     <>
+<<<<<<< HEAD
       {createPortal(
         <Container data-testid="menuBottomSheet" onClick={handlePreventClickPropagation}>
           <CloseButton data-testid="close-button">
             <CloseIcon onClick={onClose} />
           </CloseButton>
+=======
+      {menuBoards.length > 0 && (
+        <>
+          <ShowMenuBoardButton $imageUrl={menuBoards[0].imageUrl} onClick={() => setIsImageModalOpen(true)}>
+            메뉴판 이미지로 보기 ({menuBoards.length})
+          </ShowMenuBoardButton>
+          <Spacer $size={'8'} />
+        </>
+      )}
+>>>>>>> main
 
-          {menuBoards.length > 0 && (
-            <>
-              <ShowMenuBoardButton $imageUrl={menuBoards[0].imageUrl} onClick={() => setIsImageModalOpen(true)}>
-                메뉴판 이미지로 보기 ({menuBoards.length})
-              </ShowMenuBoardButton>
-              <Spacer $size={'8'} />
-            </>
-          )}
+      {recommendedMenus.length > 0 && (
+        <>
+          <CafeMenuListTitle>대표 메뉴</CafeMenuListTitle>
+          <CafeMenuList menus={recommendedMenus} />
+          <Spacer $size={'8'} />
+        </>
+      )}
 
-          {recommendedMenus.length > 0 && (
-            <>
-              <CafeMenuListTitle>대표 메뉴</CafeMenuListTitle>
-              <CafeMenuList menus={recommendedMenus} />
-              <Spacer $size={'8'} />
-            </>
-          )}
+      {otherMenus.length > 0 && (
+        <>
+          <CafeMenuListTitle>메뉴</CafeMenuListTitle>
+          <CafeMenuList menus={otherMenus} />
+          <Spacer $size={'8'} />
+        </>
+      )}
 
+<<<<<<< HEAD
           {otherMenus.length > 0 && (
             <>
               <CafeMenuListTitle data-testid="menu">메뉴</CafeMenuListTitle>
@@ -75,6 +117,13 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
           )}
         </Container>,
         document.bodyRoot,
+=======
+      {menus.length === 0 && (
+        <>
+          <Spacer $size={'4'} />
+          <Placeholder>등록된 메뉴가 없습니다</Placeholder>
+        </>
+>>>>>>> main
       )}
 
       {isImageModalOpen &&
@@ -88,8 +137,6 @@ const CafeMenuBottomSheet = (props: CafeMenuBottomSheetProps) => {
     </>
   );
 };
-
-export default CafeMenuBottomSheet;
 
 const Container = styled.div`
   position: absolute;
@@ -123,7 +170,6 @@ const CloseButton = styled.button`
 `;
 
 const CloseIcon = styled(BsX)`
-  cursor: pointer;
   font-size: ${({ theme }) => theme.fontSize['2xl']};
 `;
 
@@ -142,15 +188,13 @@ const Placeholder = styled.div`
 `;
 
 const ShowMenuBoardButton = styled.button<{ $imageUrl: string }>`
-  cursor: pointer;
-
   padding: ${({ theme }) => theme.space[5]} ${({ theme }) => theme.space[10]};
 
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.color.white};
 
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${({ $imageUrl }) => Image.getUrl({ size: 'original', filename: $imageUrl })});
+    url(${({ $imageUrl }) => Resource.getImageUrl({ size: 'original', filename: $imageUrl })});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;

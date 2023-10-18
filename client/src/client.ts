@@ -1,10 +1,17 @@
-import type { AuthProvider, AuthUrl, Cafe, CafeMenu, LikedCafe, Rank, User } from './types';
-
-export class ClientNetworkError extends Error {
-  constructor() {
-    super('인터넷에 연결할 수 없습니다');
-  }
-}
+import APIError from './errors/APIError';
+import NetworkError from './errors/NetworkError';
+import type {
+  AuthProvider,
+  AuthUrl,
+  Cafe,
+  CafeMapLocation,
+  CafeMenu,
+  LikedCafe,
+  MapBounds,
+  Rank,
+  SearchedCafe,
+  User,
+} from './types';
 
 class Client {
   isAccessTokenRefreshing = false;
@@ -20,40 +27,48 @@ class Client {
   }
 
   async fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    const fetchFn: () => Promise<Response> = () =>
+      fetch(`/api${input}`, {
+        ...init,
+        headers: {
+          ...init?.headers,
+          ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
+        },
+      });
+    let response: Response;
+
     try {
-      const fetchFn = () =>
-        fetch(`/api${input}`, {
-          ...init,
-          headers: {
-            ...init?.headers,
-            ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
-          },
-        });
-
-      let response = await fetchFn();
-      if (!response.ok) {
-        if (response.status === 401 && !this.isAccessTokenRefreshing) {
-          // this.refreshAccessToken() 을 호출하기 전,
-          // this.isAccessTokenRefreshing을 true로 설정해줘야 잠재적인 recursion loop를 방지할 수 있습니다.
-          this.isAccessTokenRefreshing = true;
-          const accessToken = await this.refreshAccessToken();
-          this.accessToken = accessToken;
-          this.accessTokenRefreshListener?.(accessToken);
-          this.isAccessTokenRefreshing = false;
-
-          response = await fetchFn();
-        }
-
-        if (!response.ok) {
-          // access token 재발급이 불가하기 때문에 access token을 삭제한다.
-          this.accessTokenRefreshListener?.(null);
-          throw response;
-        }
-      }
-      return response;
+      response = await fetchFn();
     } catch (error) {
-      throw new ClientNetworkError();
+      throw new NetworkError();
     }
+
+    if (!response.ok) {
+      if (response.status === 401 && !this.isAccessTokenRefreshing) {
+        // this.refreshAccessToken() 을 호출하기 전,
+        // this.isAccessTokenRefreshing을 true로 설정해줘야 잠재적인 recursion loop를 방지할 수 있습니다.
+        this.isAccessTokenRefreshing = true;
+        const accessToken = await this.refreshAccessToken();
+        this.accessToken = accessToken;
+        this.accessTokenRefreshListener?.(accessToken);
+        this.isAccessTokenRefreshing = false;
+
+        response = await fetchFn();
+      }
+
+      if (!response.ok) {
+        // access token 재발급이 불가하기 때문에 access token을 삭제한다.
+        this.accessTokenRefreshListener?.(null);
+        let body: unknown;
+        try {
+          body = await response.json();
+        } catch (error) {
+          body = await response.text();
+        }
+        throw new APIError(response, body);
+      }
+    }
+    return response;
   }
 
   async fetchJson<TData>(input: RequestInfo | URL, init?: RequestInit): Promise<TData> {
@@ -102,6 +117,31 @@ class Client {
 
   getCafeMenu(cafeId: Cafe['id']) {
     return this.fetchJson<CafeMenu>(`/cafes/${cafeId}/menus`);
+  }
+
+  searchCafes(searchParams: { name: string; menu?: string; address?: string }) {
+    const sanitizedSearchParams = Object.fromEntries(
+      Object.entries({
+        cafeName: searchParams.name.trim(),
+        menu: searchParams.menu?.trim() ?? '',
+        address: searchParams.address?.trim() ?? '',
+      }).filter(([, value]) => (value?.length ?? 0) >= 2),
+    );
+    if (Object.keys(sanitizedSearchParams).length === 0) {
+      return Promise.resolve([]);
+    }
+    return this.fetchJson<SearchedCafe[]>(`/cafes/search?${new URLSearchParams(sanitizedSearchParams).toString()}`);
+  }
+
+  getCafesNearLocation(
+    longitude: MapBounds['longitude'],
+    latitude: MapBounds['latitude'],
+    longitudeDelta: MapBounds['longitudeDelta'],
+    latitudeDelta: MapBounds['latitudeDelta'],
+  ) {
+    return this.fetchJson<CafeMapLocation[]>(
+      `/cafes/location?longitude=${longitude}&latitude=${latitude}&longitudeDelta=${longitudeDelta}&latitudeDelta=${latitudeDelta}`,
+    );
   }
 
   /**

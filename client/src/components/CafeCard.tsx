@@ -1,46 +1,84 @@
-import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
-import useIntersection from '../hooks/useIntersection';
+import type { MouseEventHandler, UIEventHandler } from 'react';
+import { Suspense, useCallback, useState } from 'react';
+import { BiSolidInfoCircle } from 'react-icons/bi';
+import { FaShare } from 'react-icons/fa';
+import { PiHeartFill, PiReadCvLogoFill } from 'react-icons/pi';
+import { styled, useTheme } from 'styled-components';
+import { useToast } from '../context/ToastContext';
+import useCafeLikes from '../hooks/useCafeLikes';
+import useClipboard from '../hooks/useClipboard';
+import useUser from '../hooks/useUser';
 import type { Cafe } from '../types';
-import Image from '../utils/Image';
-import CafeActionBar from './CafeActionBar';
+import { withGAEvent } from '../utils/GoogleAnalytics';
+import Resource from '../utils/Resource';
 import CafeDetailBottomSheet from './CafeDetailBottomSheet';
+import CafeMenuBottomSheet from './CafeMenuBottomSheet';
 import CafeSummary from './CafeSummary';
+import IconButton from './IconButton';
 
 type CardProps = {
   cafe: Cafe;
-  onIntersect?: (intersection: IntersectionObserverEntry) => void;
 };
 
 const CafeCard = (props: CardProps) => {
-  const { cafe, onIntersect } = props;
+  const { cafe } = props;
+
+  const theme = useTheme();
+  const showToast = useToast();
+  const clipboard = useClipboard();
+  const { isLiked, setLiked } = useCafeLikes(cafe);
+  const { data: user } = useUser();
 
   const [isShowDetail, setIsShowDetail] = useState(false);
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const ref = useRef<HTMLDivElement>(null);
-  const intersection = useIntersection(ref, { threshold: 0.7 });
+  const likeCount = cafe.likeCount + (isLiked ? 1 : 0);
 
-  useEffect(() => {
-    if (intersection) {
-      onIntersect?.(intersection);
-    }
-  }, [intersection?.isIntersecting]);
+  const handleScroll: UIEventHandler = useCallback((event) => {
+    if (!(event.target instanceof HTMLDivElement)) return;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (ref.current) {
-        const { scrollLeft, clientWidth } = ref.current;
-        const index = Math.round(scrollLeft / clientWidth);
-        setCurrentImageIndex(index);
-      }
-    };
-
-    ref.current?.addEventListener('scroll', handleScroll);
-    return () => {
-      ref.current?.removeEventListener('scroll', handleScroll);
-    };
+    const { scrollLeft, clientWidth } = event.target;
+    const index = Math.round(scrollLeft / clientWidth);
+    setCurrentImageIndex(index);
   }, []);
+
+  const handleShare = withGAEvent('share', { cafeName: cafe.name }, async () => {
+    try {
+      await clipboard.copyToClipboard(`https://yozm.cafe/cafes/${cafe.id}`);
+      showToast('success', 'URL이 복사되었습니다!');
+    } catch (error) {
+      showToast('error', `URL 복사 실패: ${error}`);
+    }
+  });
+
+  const handleLikeCountIncrease = withGAEvent('click_like_button', { cafeName: cafe.name }, () => {
+    if (!user) {
+      showToast('error', '로그인이 필요합니다!');
+      return;
+    }
+    setLiked({ isLiked: !isLiked });
+  });
+
+  const handleDetailOpen = withGAEvent('click_detail_button', { cafeName: cafe.name }, () => {
+    setIsShowDetail(true);
+  });
+
+  const handleDetailClose = () => {
+    setIsShowDetail(false);
+  };
+
+  const handleMenuOpen = withGAEvent('click_menu_button', { cafeName: cafe.name }, () => {
+    setIsMenuOpened(true);
+  });
+
+  const handleMenuClose = () => {
+    setIsMenuOpened(false);
+  };
+
+  const handleStopPropagation: MouseEventHandler = (event) => {
+    event.stopPropagation();
+  };
 
   return (
     <Container>
@@ -49,6 +87,7 @@ const CafeCard = (props: CardProps) => {
           {`${currentImageIndex + 1}`}/{cafe.images.length}
         </CardQuantityContents>
       </CardQuantityContainer>
+<<<<<<< HEAD
       <CarouselImageList data-testid="cafe-card" ref={ref}>
         {cafe.images.map((image, index) => (
           <CarouselImage
@@ -60,20 +99,60 @@ const CafeCard = (props: CardProps) => {
         ))}
       </CarouselImageList>
       <DotsContainer data-testid="carousel-dots">
+=======
+
+      <CarouselImageList onScroll={handleScroll}>
+        {cafe.images.map((image, index) => (
+          <CarouselImageFrame key={index}>
+            <CarouselImage
+              src={Resource.getImageUrl({ size: '500', filename: image })}
+              alt={`${cafe.name}의 ${index + 1}번째 이미지`}
+              loading={Math.abs(currentImageIndex - index) <= 1 ? 'eager' : 'lazy'}
+            />
+          </CarouselImageFrame>
+        ))}
+      </CarouselImageList>
+
+      <Bottom onClick={handleStopPropagation}>
+        <BottomItem $fullWidth>
+          <CafeSummary title={cafe.name} address={cafe.address} onClick={handleDetailOpen} />
+        </BottomItem>
+
+        <BottomItem $align="right">
+          <ActionBar>
+            <IconButton label="공유" onClick={handleShare}>
+              <FaShare />
+            </IconButton>
+
+            <IconButton label={String(likeCount)} onClick={handleLikeCountIncrease}>
+              <PiHeartFill fill={isLiked ? theme.color.primary : theme.color.white} />
+            </IconButton>
+
+            <IconButton label="메뉴" onClick={handleMenuOpen}>
+              <PiReadCvLogoFill />
+            </IconButton>
+
+            <IconButton label="더보기" onClick={handleDetailOpen}>
+              <BiSolidInfoCircle />
+            </IconButton>
+          </ActionBar>
+        </BottomItem>
+      </Bottom>
+
+      <DotsContainer>
+>>>>>>> main
         {cafe.images.map((_, index) => (
           <Dot data-testid="dot" key={index} $active={index === currentImageIndex} />
         ))}
       </DotsContainer>
-      <CafeSummary
-        title={cafe.name}
-        address={cafe.address}
-        onClick={(event) => {
-          event.stopPropagation();
-          setIsShowDetail(true);
-        }}
-      />
-      <CafeActionBar cafe={cafe} />
-      {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={() => setIsShowDetail(false)} />}
+
+      {isShowDetail && <CafeDetailBottomSheet cafe={cafe} onClose={handleDetailClose} />}
+
+      {isMenuOpened && (
+        <Suspense>
+          <CafeMenuBottomSheet cafe={cafe} onClose={handleMenuClose} />
+        </Suspense>
+      )}
     </Container>
   );
 };
@@ -105,15 +184,22 @@ const CarouselImageList = styled.div`
   height: 100%;
 `;
 
-const CarouselImage = styled.img`
+const CarouselImageFrame = styled.div`
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
+  position: relative;
+
   flex: 0 0 100%;
 
-  min-width: 100%;
+  width: 100%;
   height: 100%;
+`;
 
+const CarouselImage = styled.img.attrs({ draggable: false })`
+  position: absolute;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 `;
 
@@ -121,6 +207,15 @@ const DotsContainer = styled.div`
   position: absolute;
   bottom: ${({ theme }) => theme.space[5]};
   left: 50%;
+
+  /**
+   * Safari에서 overflow: hidden + position: absolute 조합으로 사용했을 때
+   * 화면에서 깜빡거리거나 사라지는 버그가 있다. 이를 해결하기 위해
+   * -webkit-transform: translateZ(0) 을 사용하여야 한다.
+   * * https://stackoverflow.com/questions/44948735/overflow-hidden-is-not-working-with-absolute-element-in-safari
+   * * https://bugs.webkit.org/show_bug.cgi?id=98538
+   */
+  -webkit-transform: translateZ(0);
   transform: translateX(-50%);
 
   display: flex;
@@ -139,6 +234,16 @@ const Dot = styled.div<{ $active: boolean }>`
 
 const CardQuantityContainer = styled.div`
   position: absolute;
+  z-index: 1;
+
+  /**
+   * Safari에서 overflow: hidden + position: absolute 조합으로 사용했을 때
+   * 화면에서 깜빡거리거나 사라지는 버그가 있다. 이를 해결하기 위해
+   * -webkit-transform: translateZ(0) 을 사용하여야 한다.
+   * * https://stackoverflow.com/questions/44948735/overflow-hidden-is-not-working-with-absolute-element-in-safari
+   * * https://bugs.webkit.org/show_bug.cgi?id=98538
+   */
+  -webkit-transform: translateZ(0);
 
   display: flex;
   justify-content: flex-end;
@@ -154,4 +259,40 @@ const CardQuantityContents = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xs};
   background-color: ${({ theme }) => theme.color.background.secondary};
   border-radius: 10px;
+`;
+
+const Bottom = styled.div`
+  position: absolute;
+  bottom: 40px;
+  /**
+   * Safari에서 overflow: hidden + position: absolute 조합으로 사용했을 때
+   * 화면에서 깜빡거리거나 사라지는 버그가 있다. 이를 해결하기 위해
+   * -webkit-transform: translateZ(0) 을 사용하여야 한다.
+   * * https://stackoverflow.com/questions/44948735/overflow-hidden-is-not-working-with-absolute-element-in-safari
+   * * https://bugs.webkit.org/show_bug.cgi?id=98538
+   */
+  -webkit-transform: translateZ(0);
+
+  display: flex;
+
+  width: 100%;
+`;
+
+const BottomItem = styled.div<{ $fullWidth?: boolean; $align?: 'left' | 'right' }>`
+  position: absolute;
+  bottom: 0;
+  ${({ $align }) => $align === 'left' && 'left: 0;'}
+  ${({ $align }) => $align === 'right' && 'right: 0;'}
+  ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
+`;
+
+const ActionBar = styled.aside`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space[5]};
+  align-self: flex-end;
+
+  padding: ${({ theme }) => theme.space[3]};
+
+  color: white;
 `;

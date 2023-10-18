@@ -25,6 +25,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation "org.testcontainers:junit-jupiter:1.19.0"
     testImplementation 'org.testcontainers:mysql'
+    implementation 'org.hibernate:hibernate-spatial:6.2.5.Final'
 
     //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -50,6 +51,26 @@ dependencies {
     //Flyway
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
+
+    //QueryDsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+}
+
+def generatedQueryDsl = 'build/generated/querydsl'
+
+sourceSets {
+    main.java.srcDirs += [generatedQueryDsl]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(generatedQueryDsl))
+}
+
+clean.doLast {
+    file(generatedQueryDsl).deleteDir()
 }
 
 ext {

@@ -1,7 +1,7 @@
 import { PiCoffeeFill } from 'react-icons/pi';
 import { styled } from 'styled-components';
 import type { CafeMenuItem } from '../types';
-import Image from '../utils/Image';
+import Resource from '../utils/Resource';
 
 type CafeMenuListProps = {
   menus: CafeMenuItem[];
@@ -43,7 +43,7 @@ const MenuListItem = (props: MenuListItemProps) => {
   return (
     <MenuListItemContainer>
       {menuItem.imageUrl ? (
-        <MenuItemImage src={Image.getUrl({ size: '100', filename: menuItem.imageUrl })} />
+        <MenuItemImage src={Resource.getImageUrl({ size: '100', filename: menuItem.imageUrl })} />
       ) : (
         <MenuItemImageAlt>
           <MenuItemImageAltIcon />

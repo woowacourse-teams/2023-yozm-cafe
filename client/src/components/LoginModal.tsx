@@ -3,6 +3,7 @@ import { CgClose } from 'react-icons/cg';
 import { styled } from 'styled-components';
 import useAuthUrls from '../hooks/useAuthUrls';
 import type { Theme } from '../styles/theme';
+import Resource from '../utils/Resource';
 import LoginButton from './LoginButton';
 
 const brandColors: Record<string, keyof Theme['color']> = {
@@ -35,7 +36,7 @@ const LoginModal = (props: ModalProps) => {
           {urls.map(({ provider, authorizationUrl }) => (
             <a href={authorizationUrl} key={provider}>
               <LoginButton $color={brandColors[provider] ?? 'white'} aria-label={`${provider} 로그인`}>
-                <img src={`/assets/${provider}.svg`} alt={`${provider} 로고`} />
+                <img src={Resource.getAssetUrl({ filename: `${provider}.svg` })} alt={`${provider} 로고`} />
               </LoginButton>
             </a>
           ))}
@@ -90,9 +91,7 @@ const CloseButtonContainer = styled.button`
   color: ${({ theme }) => theme.color.gray};
 `;
 
-const CloseIcon = styled(CgClose)`
-  cursor: pointer;
-`;
+const CloseIcon = styled(CgClose)``;
 
 const LoginTitle = styled.div`
   display: flex;
@@ -129,6 +128,6 @@ const ButtonContainer = styled.section`
   width: 100%;
 `;
 
-const Logo = styled.img.attrs({ src: '/assets/logo.svg' })`
+const Logo = styled.img.attrs({ src: Resource.getAssetUrl({ filename: 'logo.svg' }) })`
   height: ${({ theme }) => theme.fontSize['5xl']};
 `;

@@ -1,43 +1,53 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import { keyframes, styled } from 'styled-components';
+=======
+import { useEffect, useState } from 'react';
+import { ScrollSnap, ScrollSnapProvider, easeOutExpo } from 'yozm-cafe-react-scroll-snap';
+>>>>>>> main
 import CafeCard from '../components/CafeCard';
 import useCafes from '../hooks/useCafes';
-import useUser from '../hooks/useUser';
+import type { Cafe } from '../types';
+import { withGAEvent } from '../utils/GoogleAnalytics';
 
 const PREFETCH_OFFSET = 2;
 
 const HomePage = () => {
-  const { data: user } = useUser();
   const { cafes, fetchNextPage, isFetching, hasNextPage } = useCafes();
-  const [activeCafe, setActiveCafe] = useState(cafes[0]);
+
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const shouldFetch =
     hasNextPage &&
     !isFetching &&
-    cafes.findIndex((cafe) => cafe.id === activeCafe.id) + PREFETCH_OFFSET >= cafes.length;
+    cafes.findIndex((cafe) => cafe.id === cafes[activeIndex].id) + PREFETCH_OFFSET >= cafes.length;
 
   if (shouldFetch) {
     fetchNextPage();
   }
 
+  const itemRenderer = (cafe: Cafe) => <CafeCard key={cafe.id} cafe={cafe} />;
+
+  useEffect(withGAEvent('cafe_view', { cafeName: cafes[activeIndex].name }), [activeIndex]);
+
   return (
-    <CardList>
-      {cafes.map((cafe) => (
-        <CafeCard
-          key={cafe.id}
-          cafe={cafe}
-          onIntersect={(intersection: IntersectionObserverEntry) => {
-            if (intersection.isIntersecting) {
-              setActiveCafe(cafe);
-            }
-          }}
-        />
-      ))}
-    </CardList>
+    <ScrollSnapProvider
+      scrollPosition={scrollPosition}
+      onScrollPositionChange={setScrollPosition}
+      activeIndex={activeIndex}
+      onActiveIndexChange={setActiveIndex}
+      items={cafes}
+      easingFunction={easeOutExpo}
+      itemRenderer={itemRenderer}
+    >
+      <ScrollSnap style={{ height: '100%' }} />
+    </ScrollSnapProvider>
   );
 };
 
 export default HomePage;
+<<<<<<< HEAD
 
 const Bounce = keyframes`
   from {
@@ -64,3 +74,5 @@ const CardList = styled.ul`
     scroll-snap-stop: always;
   }
 `;
+=======
+>>>>>>> main
