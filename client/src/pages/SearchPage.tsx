@@ -49,9 +49,7 @@ const SearchPage = () => {
 
         <Spacer $size="2" />
 
-        <SearchDetailsButton onClick={() => setIsDetailEnabled(!isDetailEnabled)}>
-          주소나 메뉴 이름으로 검색하기
-        </SearchDetailsButton>
+        <SearchDetailsButton onClick={() => setIsDetailEnabled(!isDetailEnabled)}>검색 옵션</SearchDetailsButton>
         <Spacer $size="4" />
         <SearchDetails $show={isDetailEnabled}>
           <FormGroup>
@@ -128,9 +126,13 @@ const SearchButton = styled.button`
 
 const SearchDetailsButton = styled.button.attrs({ type: 'button' })`
   cursor: pointer;
+
   font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.color.gray};
+  font-weight: 600;
+  color: ${({ theme }) => theme.color.primary};
+
   background: none;
+  border-bottom: solid 1px ${({ theme }) => theme.color.primary};
 `;
 
 const SearchDetails = styled.div<{ $show: boolean }>`
