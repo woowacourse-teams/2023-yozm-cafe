@@ -64,15 +64,18 @@ const OpeningHoursDetail = (props: OpeningHoursDetailProps) => {
 
 export default OpeningHoursDetail;
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+`;
 
 const Summary = styled.h3``;
 
 const Details = styled.ul`
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space[1]};
-  align-items: flex-end;
+  align-self: end;
 
   color: ${({ theme }) => theme.color.gray};
 `;
