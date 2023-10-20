@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { SEONGSU_BOUNDS_LOCATION, SEONGSU_CAFE_STREET_LOCATION, SEONGSU_MAP_INITIAL_ZOOM_SIZE } from '../constants';
+import { useToast } from '../context/ToastContext';
 import useCafesNearLocation from '../hooks/useCafesNearLocation';
 import useCurrentPosition from '../hooks/useCurrentPosition';
 import CafeMarkersContainer from './CafeMarkersContainer';
@@ -43,6 +44,7 @@ type CafeMapContentProps = {
 
 const CafeMapContent = (props: CafeMapContentProps) => {
   const { map } = props;
+  const showToast = useToast();
 
   const currentPosition = useCurrentPosition();
   const { refetch } = useCafesNearLocation(map);
@@ -62,7 +64,7 @@ const CafeMapContent = (props: CafeMapContentProps) => {
       setPosition(currentPosition);
     } else {
       // 경고 메시지를 표시합니다.
-      alert('서비스는 성수 지역에서만 이용 가능합니다.');
+      showToast('warning', '서비스는 성수 지역에서만 이용 가능합니다.');
       map.panTo(SEONGSU_CAFE_STREET_LOCATION);
       setPosition(SEONGSU_CAFE_STREET_LOCATION);
     }
