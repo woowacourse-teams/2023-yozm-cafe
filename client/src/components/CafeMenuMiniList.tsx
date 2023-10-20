@@ -63,7 +63,6 @@ const MenuListItemContainer = styled.li`
 
 const MenuItemImageContainer = styled.div`
   width: 100%;
-  height: 100%;
   padding: ${({ theme }) => theme.space[2]};
 
   & > * {
@@ -92,8 +91,9 @@ const MenuItemImageAltIcon = styled(PiCoffeeFill)`
   height: 50%;
 `;
 
-const MenuItemName = styled.div`
+const MenuItemName = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
+  text-align: center;
 `;
 
 const Divider = styled.hr`

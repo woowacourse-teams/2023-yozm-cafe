@@ -1,5 +1,6 @@
 import type { MouseEventHandler } from 'react';
 import { useState } from 'react';
+import { CgClose } from 'react-icons/cg';
 import { styled } from 'styled-components';
 import { useScrollSnapGuard } from 'yozm-cafe-react-scroll-snap';
 import Resource from '../utils/Resource';
@@ -22,6 +23,11 @@ const ImageModal = (props: ImageModalProps) => {
 
   return (
     <Container {...scrollSnapGuardHandlers}>
+      <Actions>
+        <button onClick={onClose}>
+          <CloseIcon />
+        </button>
+      </Actions>
       <ActiveImageContainer onClick={handleContainerClick}>
         <ActiveImage src={Resource.getImageUrl({ size: 'original', filename: activeImage })} />
       </ActiveImageContainer>
@@ -54,17 +60,34 @@ const Container = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
+const Actions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: ${({ theme }) => theme.space[4]};
+`;
+
+const CloseIcon = styled(CgClose)`
+  font-size: ${({ theme }) => theme.fontSize['4xl']};
+  color: white;
+`;
+
 const ActiveImageContainer = styled.div`
   touch-action: pan-x pan-y;
+
+  position: relative;
 
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
+
+  margin-top: ${({ theme }) => theme.space[4]};
+  margin-bottom: ${({ theme }) => theme.space[4]};
 `;
 
 const ActiveImage = styled.img`
-  width: 100%;
+  position: absolute;
+  max-height: 100%;
 `;
 
 const ImageList = styled.ul`

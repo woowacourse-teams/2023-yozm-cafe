@@ -1,4 +1,5 @@
 import { Suspense, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 import { styled } from 'styled-components';
 import { useScrollSnapGuard } from 'yozm-cafe-react-scroll-snap';
@@ -29,41 +30,46 @@ const CafeDetailBottomSheet = (props: CafeDetailBottomSheetProps) => {
   };
 
   return (
-    <Container onClick={handlePreventClickPropagation} role="dialog" aria-modal="true" {...scrollSnapGuardHandlers}>
-      <CloseButton>
-        <CloseIcon onClick={onClose} />
-      </CloseButton>
-      <Title>{cafe.name}</Title>
-      <Spacer $size={'4'} />
-      <QueryErrorBoundary>
-        <Suspense>
-          <CafeMenu cafeId={cafe.id} />
-        </Suspense>
-      </QueryErrorBoundary>
-      <InfoContainer>
-        <LocationDetail>
-          <NaverMapIcon />
-          <a href={cafe.detail.mapUrl} target="_blank" rel="noopener noreferrer">
-            <LocationName>{cafe.address}</LocationName>
-          </a>
-        </LocationDetail>
-        <OpeningHoursDetails>
-          <OpeningHoursDetail openingHours={cafe.detail.openingHours} />
-        </OpeningHoursDetails>
-        {/* <Info>
+    <>
+      {createPortal(
+        <Container onClick={handlePreventClickPropagation} role="dialog" aria-modal="true" {...scrollSnapGuardHandlers}>
+          <CloseButton>
+            <CloseIcon onClick={onClose} />
+          </CloseButton>
+          <Title>{cafe.name}</Title>
+          <Spacer $size={'4'} />
+          <QueryErrorBoundary>
+            <Suspense>
+              <CafeMenu cafeId={cafe.id} />
+            </Suspense>
+          </QueryErrorBoundary>
+          <InfoContainer>
+            <LocationDetail>
+              <NaverMapIcon />
+              <a href={cafe.detail.mapUrl} target="_blank" rel="noopener noreferrer">
+                <LocationName>{cafe.address}</LocationName>
+              </a>
+            </LocationDetail>
+            <OpeningHoursDetails>
+              <OpeningHoursDetail openingHours={cafe.detail.openingHours} />
+            </OpeningHoursDetails>
+            {/* <Info>
           <BsTelephone />
           <h3>000-000-000</h3>
         </Info> */}
-      </InfoContainer>
-      <Spacer $size={'6'} />
-      <Content>
-        {cafe.detail.description.split('\n').map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
-      </Content>
+          </InfoContainer>
+          <Spacer $size={'6'} />
+          <Content>
+            {cafe.detail.description.split('\n').map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </Content>
 
-      <MoreContentHintGradient />
-    </Container>
+          <MoreContentHintGradient />
+        </Container>,
+        document.bodyRoot,
+      )}
+    </>
   );
 };
 
@@ -79,6 +85,7 @@ const Container = styled.div`
 
   width: 100%;
   height: 450px;
+  max-height: 100vh;
   padding: ${({ theme }) => theme.space[4]};
   padding-bottom: 0;
 
