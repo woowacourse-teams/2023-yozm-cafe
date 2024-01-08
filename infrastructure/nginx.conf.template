@@ -1,0 +1,10 @@
+server {
+  listen 80;
+
+  client_max_body_size 0;
+
+  location /api {
+    rewrite ^/api(.*)$ $1 break;
+    proxy_pass http://server:8080;
+  }
+}
