@@ -74,8 +74,8 @@ services:
       - ./webhook-broker:/app
     command: run --allow-net --allow-read --allow-env /app/app.js
     environment:
-      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:?'SLACK_WEBHOOK_URL required'}
-      - SLACK_CHANNEL=${SLACK_CHANNEL:?'SLACK_CHANNEL required'}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:?}
+      - SLACK_CHANNEL=${SLACK_CHANNEL:?}
       - SLACK_USERNAME=TeamCity
       - 'SLACK_ICON_EMOJI=:teamcity:'
 
